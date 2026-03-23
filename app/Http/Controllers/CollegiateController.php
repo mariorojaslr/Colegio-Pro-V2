@@ -154,6 +154,8 @@ class CollegiateController extends Controller
         }
 
         return redirect()->route('collegiates.index')->with('success', "¡Proceso terminado! Se han importado/actualizado $count colegiados exitosamente.");
+    }
+
     /**
      * Exporta el padrón completo a CSV (Compatible con Excel).
      */
