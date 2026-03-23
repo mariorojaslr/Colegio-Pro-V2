@@ -17,7 +17,7 @@
                         La infraestructura definitiva para Colegios Profesionales que exigen seguridad, velocidad y una experiencia de usuario sin precedentes.
                     </p>
                     <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                        <a href="{{ route('demo.register') }}" class="btn btn-premium btn-lg px-5 py-3 shadow-lg fs-5">Únete como Probador (1/100)</a>
+                        <a href="{{ route('demo.fast') }}" class="btn btn-premium btn-lg px-5 py-3 shadow-lg fs-5">Entrar como Probador (Demo)</a>
                         <a href="#ventajas" class="btn btn-white btn-lg px-5 py-3 shadow-sm border border-light-subtle" style="background: white; border-radius: var(--border-radius)">Explorar Ventajas</a>
                     </div>
                 </div>
