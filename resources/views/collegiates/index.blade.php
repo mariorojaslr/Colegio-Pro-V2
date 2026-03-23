@@ -116,11 +116,9 @@
                             <span class="badge bg-primary bg-opacity-10 text-primary x-small border border-primary border-opacity-25" style="font-size: 0.65rem; width: 100px;">{{ $col->registration_number }}</span>
                         </td>
                         <td class="py-1 searchable" data-field="contact">
-                            <span class="x-small text-muted fw-bold me-2">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
-                            <span class="mx-1 text-muted opacity-25">|</span>
-                            <span class="x-small text-muted me-2">{{ $col->email }}</span>
+                            <span class="x-small text-muted fw-bold me-3">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
+                            <span class="x-small text-muted me-3">{{ $col->email }}</span>
                             @if($col->phone)
-                                <span class="mx-1 text-muted opacity-25">|</span>
                                 <span class="x-small text-secondary"><i class="bi bi-phone me-1"></i>{{ $col->phone }}</span>
                             @endif
                         </td>
