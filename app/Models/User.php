@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Lesson::class)->withPivot('status', 'paid_amount')->withTimestamps();
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
     public function isOwner()
     {
         return $this->role === 'OWNER';

@@ -201,8 +201,8 @@
             @endphp
             <div class="col text-center academy-item" data-category="{{ $lesson->category ?? 'General' }}">
                 <div class="course-poster-wrapper shadow-sm mx-auto" 
-                     onclick='showCourseDetails(JSON.parse(this.dataset.course))' 
-                     data-course='@json($courseData)'>
+                     onclick="showCourseDetails(JSON.parse(this.dataset.course))" 
+                     data-course="{{ json_encode($courseData) }}">
                     <div class="course-poster-inner" style="background-image: url('{{ $lesson->thumbnail_url ?? "https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop" }}');"></div>
                     <div class="course-overlay text-start">
                         <div class="course-category-pill">{{ $lesson->category ?? "GENERAL" }}</div>
