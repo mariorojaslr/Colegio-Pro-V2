@@ -16,4 +16,12 @@ class SubscriptionPlan extends Model
     {
         return $this->hasMany(Subscription::class);
     }
+
+    /**
+     * Retorna el precio para ser mostrado en la landing page.
+     */
+    public function getDisplayPrice()
+    {
+        return $this->price;
+    }
 }
