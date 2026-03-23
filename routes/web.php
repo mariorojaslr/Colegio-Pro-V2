@@ -43,7 +43,6 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     
     // Rutas para la "Visión Omnisciente" y retorno al rol original
     Route::get('/admin/impersonate/{schoolId}', [App\Http\Controllers\Admin\DashboardController::class, 'impersonate'])->name('admin.impersonate');
-    Route::get('/admin/leave-impersonation', [App\Http\Controllers\Admin\DashboardController::class, 'leaveImpersonation'])->name('admin.leave_impersonation');
     
     // Gestión de Colegios (Tenants)
     Route::get('/admin/colegios', [App\Http\Controllers\Admin\SchoolController::class, 'index'])->name('admin.schools.index');
@@ -161,6 +160,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/soporte/nuevo', [App\Http\Controllers\TicketController::class, 'store'])->name('tickets.store');
     Route::get('/soporte/{ticket}', [App\Http\Controllers\TicketController::class, 'show'])->name('tickets.show');
     Route::post('/soporte/{ticket}/reply', [App\Http\Controllers\TicketController::class, 'reply'])->name('tickets.reply');
+
+    // Retorno al OWNER (Liberado de rol para permitir escape desde modo ADMIN)
+    Route::get('/admin/leave-original-owner', [\App\Http\Controllers\Admin\DashboardController::class, 'leaveImpersonation'])->name('admin.leave_impersonation');
 
     // Portal del Colegiado: Gestión de Legajo Digital
     Route::get('/mi-legajo', [\App\Http\Controllers\ComplianceController::class, 'index'])->name('compliance.index');

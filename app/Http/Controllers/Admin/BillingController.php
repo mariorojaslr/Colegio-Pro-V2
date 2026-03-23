@@ -36,11 +36,15 @@ class BillingController extends Controller
             });
         }
 
-        // Filtro por Estado (Moroso / Al Día)
+        // Filtro por Estado (Moroso / Al Día) - Basado en DEUDAS REALES
         if ($statusFilter === 'overdue') {
-            $query->where('is_fees_compliant', false);
+            $query->whereHas('dues', function($q) {
+                $q->where('status', 'overdue');
+            });
         } elseif ($statusFilter === 'compliant') {
-            $query->where('is_fees_compliant', true);
+            $query->whereDoesntHave('dues', function($q) {
+                $q->whereIn('status', ['overdue', 'pending']);
+            });
         }
 
         $collegiates = $query->paginate(30)->withQueryString();

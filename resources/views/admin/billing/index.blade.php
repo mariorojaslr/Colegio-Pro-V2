@@ -105,11 +105,11 @@
                                             <i class="bi-three-dots"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-3">
-                                            <li><a class="dropdown-item py-2" href="#"><i class="bi-eye me-2"></i> Ver Detalle</a></li>
-                                            <li><a class="dropdown-item py-2" href="#"><i class="bi-receipt me-2"></i> Historial Pagos</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item py-2 text-primary" href="#"><i class="bi-send me-2"></i> Avisar por WhatsApp</a></li>
-                                        </ul>
+                                             <li><a class="dropdown-item py-2" href="{{ route('collegiates.show', $collegiate->id) }}"><i class="bi-eye me-2"></i> Ver Detalle</a></li>
+                                             <li><a class="dropdown-item py-2" href="{{ route('admin.billing.history', $collegiate->id) }}"><i class="bi-receipt me-2"></i> Historial Pagos</a></li>
+                                             <li><hr class="dropdown-divider"></li>
+                                             <li><a class="dropdown-item py-2 text-primary" href="https://wa.me/{{ $collegiate->phone }}?text=Hola%20{{ $collegiate->first_name }},%20te%20escribimos%20del%20Colegio%20para..." target="_blank"><i class="bi-send me-2"></i> Avisar por WhatsApp</a></li>
+                                         </ul>
                                     </div>
                                 </td>
                             </tr>
