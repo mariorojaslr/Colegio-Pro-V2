@@ -1,0 +1,98 @@
+:root {
+    /* Primary Colors - Deep Institutional Blue */
+    --primary-color: #0F172A;
+    --primary-light: #1E293B;
+    --primary-dark: #020617;
+    
+    /* Secondary/Accent - Gold/Amber for Excellence */
+    --accent-color: #EAB308;
+    --accent-hover: #CA8A04;
+    
+    /* Neutral Palette */
+    --bg-light: #F8FAFC;
+    --bg-dark: #000000;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --text-on-dark: #F8FAFC;
+    
+    /* Glassmorphism & UI Elements */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-light);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Light Mode Styles */
+.light-mode {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+}
+
+/* Dark Mode - Simplified (B/W as requested) */
+.dark-mode {
+    background-color: var(--bg-dark);
+    color: white;
+}
+
+.dark-mode .card, 
+.dark-mode .navbar, 
+.dark-mode .footer {
+    background-color: #111 !important;
+    border-color: #333 !important;
+}
+
+.dark-mode .text-muted {
+    color: #999 !important;
+}
+
+/* Premium Buttons */
+.btn-premium {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+.btn-premium:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(15, 23, 42, 0.3);
+    color: white;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    transition: var(--transition);
+}
+
+.btn-accent:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+}

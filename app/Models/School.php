@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class School extends Model
+{
+    /** @use HasFactory<\Database\Factories\SchoolFactory> */
+    use HasFactory;
+
+    protected $fillable = [
+        'name', 'slug', 'logo', 
+        'primary_color', 'secondary_color', 'tertiary_color',
+        'is_active', 'storage_used', 'traffic_used', 'user_count', 'plan_category',
+        'currency_code', 'currency_symbol', 'locale', 'has_academy'
+    ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->hasOne(Subscription::class)->where('status', 'active')->latest();
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(PaymentRecord::class);
+    }
+
+    public function collegiates()
+    {
+        return $this->hasMany(Collegiate::class);
+    }
+
+    public function amenities()
+    {
+        return $this->hasMany(Amenity::class);
+    }
+}
