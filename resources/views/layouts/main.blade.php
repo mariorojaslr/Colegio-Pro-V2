@@ -45,7 +45,19 @@
     </style>
 </head>
 <body class="light-mode">
-    <nav class="navbar navbar-expand-lg py-2 sticky-top bg-white border-bottom border-light shadow-sm" style="transition: all 0.4s ease;">
+    {{-- Barra de Alerta de Suplantación (Modo Visión Omnisciente) --}}
+    @if(session('impersonator_id'))
+    <div class="bg-warning text-dark py-2 px-4 d-flex justify-content-between align-items-center fw-bold shadow-sm sticky-top" style="z-index: 1060;">
+        <div>
+            <i class="bi bi-eye-fill me-2"></i> MODO VISIÓN OMNISCIENTE: Estás viendo el sistema como <strong>{{ auth()->user()->name }}</strong>
+        </div>
+        <a href="{{ route('admin.leave_impersonation') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">
+            <i class="bi bi-door-open me-1"></i> Salir y Volver a OWNER
+        </a>
+    </div>
+    @endif
+
+    <nav class="navbar navbar-expand-lg py-2 sticky-top bg-white border-bottom border-light shadow-sm" style="transition: all 0.4s ease; z-index: 1050;">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="{{ asset('media/logo.png') }}" alt="Colegio-Pro" height="32" class="me-2 opacity-75">
