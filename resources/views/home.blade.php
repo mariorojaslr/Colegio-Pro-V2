@@ -129,20 +129,29 @@
                         </a>
                     </div>
                     <div class="col-md-4">
+                        <a href="{{ route('admin.billing.index') }}" class="text-decoration-none text-center">
+                            <div class="card-prestige p-4 border-0 bg-white shadow-sm h-100 d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-currency-dollar fs-1 text-primary mb-3"></i>
+                                <h6 class="fw-bold text-dark mb-1">Cobranzas</h6>
+                                <p class="small text-muted mb-0">Gestión de Cuotas</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ route('admin.ethics.index') }}" class="text-decoration-none text-center">
+                            <div class="card-prestige p-4 border-0 bg-white shadow-sm h-100 d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-shield-check fs-1 text-primary mb-3"></i>
+                                <h6 class="fw-bold text-dark mb-1">Cámara de Ética</h6>
+                                <p class="small text-muted mb-0">Tribunal Disciplinario</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
                         <a href="{{ route('ai.index') }}" class="text-decoration-none text-center">
                             <div class="card-prestige p-4 border-0 bg-white shadow-sm h-100 d-flex flex-column align-items-center justify-content-center">
                                 <i class="bi bi-robot fs-1 text-primary mb-3"></i>
                                 <h6 class="fw-bold text-dark mb-1">Asistente AI</h6>
                                 <p class="small text-muted mb-0">Gestión Inteligente</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{{ route('billing.index') }}" class="text-decoration-none text-center">
-                            <div class="card-prestige p-4 border-0 bg-white shadow-sm h-100 d-flex flex-column align-items-center justify-content-center">
-                                <i class="bi bi-credit-card fs-1 text-primary mb-3"></i>
-                                <h6 class="fw-bold text-dark mb-1">Facturación</h6>
-                                <p class="small text-muted mb-0">Estado de Cuenta</p>
                             </div>
                         </a>
                     </div>
@@ -238,6 +247,14 @@
                             <h1 class="display-5 fw-bold mb-1 shadow-text" style="font-family: 'Outfit', sans-serif;">Hola, <span class="text-warning">{{ explode(' ', Auth::user()->name)[0] }}</span></h1>
                             <p class="lead opacity-75 mb-0 fw-medium">Su estado en el <span class="text-white fw-bold">{{ Auth::user()->school->name }}</span></p>
                         </div>
+                        @if($collegiate && $collegiate->isSanctioned())
+                        <div class="col-md-4 text-md-end mt-4 mt-md-0">
+                             <div class="alert alert-danger bg-danger bg-opacity-25 border-0 rounded-4 p-4 text-white shadow-sm animate__animated animate__shakeX">
+                                 <h6 class="fw-bold mb-1"><i class="bi bi-shield-slash-fill me-2"></i> PERFIL INHABILITADO</h6>
+                                 <p class="small opacity-75 mb-0">Su matrícula está suspendida por el Tribunal de Ética.</p>
+                             </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

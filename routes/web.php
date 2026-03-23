@@ -141,8 +141,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/academia/certificado/{certificate}', [\App\Http\Controllers\Student\CertificateController::class, 'download'])->name('student.certificates.download');
 
     // Facturación Institucional (Admin de Colegio)
-    Route::get('/mi-facturacion', [\App\Http\Controllers\BillingController::class, 'index'])->name('billing.index');
-    Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\BillingController::class, 'download'])->name('billing.download');
+    Route::get('/mi-facturacion', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
+    Route::post('/mi-facturacion/cuota', [\App\Http\Controllers\Admin\BillingController::class, 'updateFee'])->name('admin.billing.update_fee');
+    Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'download'])->name('billing.download');
+
+    // Gestión de Ética y Sanciones (Admin de Colegio)
+    Route::get('/gestion-etica', [\App\Http\Controllers\Admin\EthicsController::class, 'index'])->name('admin.ethics.index');
+    Route::post('/gestion-etica/sancion', [\App\Http\Controllers\Admin\EthicsController::class, 'createSanction'])->name('admin.ethics.create_sanction');
+    Route::post('/gestion-etica/levantar/{sanction}', [\App\Http\Controllers\Admin\EthicsController::class, 'liftSanction'])->name('admin.ethics.lift_sanction');
+
+    // Auditoría de Cumplimiento (Admin de Colegio)
+    Route::get('/auditoria-legajos', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'index'])->name('admin.compliance.index');
+    Route::post('/auditoria-legajos/aprobar/{document}', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'approve'])->name('admin.compliance.approve');
+    Route::post('/auditoria-legajos/rechazar/{document}', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'reject'])->name('admin.compliance.reject');
 
     // Tickets
     Route::get('/soporte', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');

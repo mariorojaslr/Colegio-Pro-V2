@@ -45,6 +45,38 @@ class Collegiate extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function dues()
+    {
+        return $this->hasMany(CollegiateDue::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pendingDues()
+    {
+        return $this->hasMany(CollegiateDue::class)->whereIn('status', ['pending', 'overdue']);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function sanctions()
+    {
+        return $this->hasMany(EthicsSanction::class);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSanctioned()
+    {
+        return $this->sanctions()->where('status', 'active')->exists();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function documents()
     {
         return $this->hasMany(CollegiateDocument::class);

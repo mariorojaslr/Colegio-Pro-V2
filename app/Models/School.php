@@ -23,6 +23,16 @@ class School extends Model
         return $this->hasMany(User::class);
     }
 
+    public function membershipFees()
+    {
+        return $this->hasMany(MembershipFee::class);
+    }
+
+    public function activeFee()
+    {
+        return $this->hasMany(MembershipFee::class)->where('is_active', true)->latest()->first();
+    }
+
     public function events()
     {
         return $this->hasMany(Event::class);

@@ -2,9 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CertificateType extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'school_id',
+        'name',
+        'price',
+        'validity_days',
+        'requirements_notes',
+        'is_active',
+    ];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
 }

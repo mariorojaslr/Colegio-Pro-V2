@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ethics_sanctions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('collegiate_id')->constrained()->onDelete('cascade');
+            $table->foreignId('collegiate_id')->constrained('collegiates')->onDelete('cascade');
             $table->string('type'); // temporary, permanent
             $table->text('reason'); // Motivo resumido
             $table->text('arguments')->nullable(); // Argumentación detallada

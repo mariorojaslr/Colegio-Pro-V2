@@ -141,6 +141,8 @@
                         @if(auth()->user()->role === 'ADMIN_COLEGIO')
                             <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Dashboard') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('Padrón') }}</a></li>
+                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('Finanzas') }}</a></li>
+                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('Ética') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.compliance.index') }}">{{ __('Auditoría') }}</a></li>
                         @elseif(auth()->user()->isOwner())
@@ -190,6 +192,16 @@
             </div>
             <div style="font-size: 10px">Asistente</div>
         </a>
+        @if(auth()->user()->role === 'ADMIN_COLEGIO')
+        <a href="{{ route('admin.billing.index') }}" class="text-center text-decoration-none {{ request()->routeIs('admin.billing.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+            <i class="bi bi-currency-dollar m-0" style="font-size: 1.4rem"></i>
+            <div style="font-size: 10px">Cobranzas</div>
+        </a>
+        <a href="{{ route('admin.ethics.index') }}" class="text-center text-decoration-none {{ request()->routeIs('admin.ethics.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+            <i class="bi bi-shield-check m-0" style="font-size: 1.4rem"></i>
+            <div style="font-size: 10px">Ética</div>
+        </a>
+        @else
         <a href="{{ route('billing.index') }}" class="text-center text-decoration-none {{ request()->routeIs('billing.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <i class="bi bi-credit-card m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">Mi Plan</div>
@@ -198,6 +210,7 @@
             <i class="bi bi-folder2-open m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">Mi Legajo</div>
         </a>
+        @endif
     </div>
     @endif
     @endauth
