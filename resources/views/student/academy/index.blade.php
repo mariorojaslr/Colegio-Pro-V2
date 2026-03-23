@@ -183,26 +183,31 @@
 
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-4 mb-5" id="academyGrid">
         @foreach($lessons as $lesson)
-            <div class="col text-center academy-item" data-category="{{ $lesson->category ?? 'General' }}">
-                <div class="course-poster-wrapper shadow-sm mx-auto" onclick='showCourseDetails(@json([
+            @php
+                $courseData = [
                     "id" => $lesson->id,
                     "title" => $lesson->title,
                     "cat" => $lesson->category ?? "General",
                     "date" => $lesson->start_date ?? "Próximamente",
-                    "price" => "$" . number_format($lesson->price, 0, ",", "."),
+                    "price" => "$" . number_format($lesson->price ?? 0, 0, ",", "."),
                     "lecturer" => $lesson->lecturer ?? "Docente Staff",
-                    "description" => $lesson->description,
+                    "description" => $lesson->description ?? "",
                     "benefit" => $lesson->benefit ?? "Certificación Internacional",
                     "duration" => $lesson->duration ?? "4 Semanas",
                     "img" => $lesson->thumbnail_url ?? "https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop",
                     "enrolled" => in_array($lesson->id, $enrolledLessons),
                     "cert" => isset($certificates[$lesson->id]) ? route('student.certificates.download', $certificates[$lesson->id]->id) : null
-                ]))'>
+                ];
+            @endphp
+            <div class="col text-center academy-item" data-category="{{ $lesson->category ?? 'General' }}">
+                <div class="course-poster-wrapper shadow-sm mx-auto" 
+                     onclick='showCourseDetails(JSON.parse(this.dataset.course))' 
+                     data-course='@json($courseData)'>
                     <div class="course-poster-inner" style="background-image: url('{{ $lesson->thumbnail_url ?? "https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop" }}');"></div>
                     <div class="course-overlay text-start">
                         <div class="course-category-pill">{{ $lesson->category ?? "GENERAL" }}</div>
                         <h6 class="course-title-card">{{ $lesson->title }}</h6>
-                        <div class="course-date-card">{{ $lesson->start_date ?? "Póximamente" }}</div>
+                        <div class="course-date-card">{{ $lesson->start_date ?? "Próximamente" }}</div>
                     </div>
                 </div>
             </div>
