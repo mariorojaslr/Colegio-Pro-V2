@@ -58,6 +58,49 @@
                 </ul>
                 <div class="d-flex gap-2 align-items-center">
                     @auth
+                        <!-- Campana de Notificaciones -->
+                        <div class="dropdown me-1">
+                            <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 position-relative" data-bs-toggle="dropdown" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-bell fs-6"></i>
+                                @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 8px; margin-top: 5px; margin-left: -5px;">
+                                    {{ auth()->user()->unreadNotifications->count() }}
+                                </span>
+                                @endif
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3 mt-2 animate__animated animate__fadeIn" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-bold m-0">Notificaciones</h6>
+                                    @if(auth()->user()->unreadNotifications->count() > 0)
+                                    <a href="#" class="x-small text-decoration-none text-primary fw-bold">Marcar leídas</a>
+                                    @endif
+                                </div>
+                                <div class="notification-list">
+                                    @forelse(auth()->user()->notifications->take(5) as $notification)
+                                    <li class="mb-3">
+                                        <div class="d-flex align-items-start gap-3 p-2 rounded-3 {{ $notification->read_at ? '' : 'bg-light' }}">
+                                            <div class="rounded-circle bg-primary bg-opacity-10 p-2 flex-shrink-0">
+                                                <i class="bi {{ $notification->data['icon'] ?? 'bi-info-circle' }} text-primary"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <p class="small fw-bold mb-0 text-dark" style="font-size: 13px;">{{ $notification->data['title'] }}</p>
+                                                <p class="small text-muted mb-1" style="font-size: 11px; line-height: 1.2;">{{ $notification->data['message'] }}</p>
+                                                <div class="x-small text-muted-opacity">{{ $notification->created_at->diffForHumans() }}</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    @empty
+                                    <div class="text-center py-4">
+                                        <i class="bi bi-bell-slash opacity-25 display-6 mb-2 d-block"></i>
+                                        <p class="small text-muted m-0">No tienes notificaciones</p>
+                                    </div>
+                                    @endforelse
+                                </div>
+                                <li><hr class="dropdown-divider opacity-50"></li>
+                                <li><a class="dropdown-item text-center small text-primary fw-bold py-2" href="#">Ver todo el historial</a></li>
+                            </ul>
+                        </div>
+
                         <div class="dropdown">
                             <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold x-small border-0 shadow-sm dropdown-toggle" data-bs-toggle="dropdown">
                                 {{ explode(' ', auth()->user()->name)[0] }}
