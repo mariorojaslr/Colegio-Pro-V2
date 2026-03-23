@@ -102,7 +102,7 @@
         </a>
         <a href="{{ route('collegiates.index') }}" class="text-center text-decoration-none {{ request()->routeIs('collegiates.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <i class="bi bi-people m-0" style="font-size: 1.4rem"></i>
-            <div style="font-size: 10px">{{ auth()->user()->school->member_plural ?? 'Miembros' }}</div>
+            <div style="font-size: 10px">{{ auth()->user()->school?->member_plural ?? 'Miembros' }}</div>
         </a>
         <a href="{{ route('ai.index') }}" class="text-center text-decoration-none {{ request()->routeIs('ai.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white shadow-sm" style="width: 45px; height: 45px; margin-top: -25px; border: 4px solid white">
@@ -140,16 +140,18 @@
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         
-        // Event listener para el botón de alternar tema
-        themeToggle.addEventListener('click', () => {
-            if (body.classList.contains('light-mode')) {
-                body.classList.replace('light-mode', 'dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                body.classList.replace('dark-mode', 'light-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
+        // Event listener para el botón de alternar tema (si existe)
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                if (body.classList.contains('light-mode')) {
+                    body.classList.replace('light-mode', 'dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.classList.replace('dark-mode', 'light-mode');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
 
         // Load saved theme
         if (localStorage.getItem('theme') === 'dark') {

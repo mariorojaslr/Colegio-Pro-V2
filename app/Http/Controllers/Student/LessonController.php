@@ -17,8 +17,8 @@ class LessonController extends Controller
     {
         $user = Auth::user();
         
-        // Si es OWNER o no tiene colegio, buscamos el primero para la vitrina pública
-        $schoolId = ($user && $user->school_id) ? $user->school_id : (\App\Models\School::first()->id ?? 1);
+        // Si es OWNER o no tiene colegio (o es invitado), buscamos el primero para la vitrina pública
+        $schoolId = ($user && $user->school_id) ? $user->school_id : (\App\Models\School::first()?->id ?? 1);
 
         $lessons = Lesson::where('school_id', $schoolId)
             ->where('is_published', true)
