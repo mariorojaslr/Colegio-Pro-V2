@@ -204,7 +204,7 @@
                         <h5 class="fw-black text-dark text-uppercase ls-2 opacity-50 small mb-4">{{ $plan->name }}</h5>
                         <div class="d-flex align-items-start justify-content-center">
                             <span class="fs-4 fw-bold text-primary mt-2">$</span>
-                            <span class="display-4 fw-black text-primary ls-n2">{{ number_format($plan->price, 0, ',', '.') }}</span>
+                            <span class="display-6 fw-black text-primary ls-n1">{{ number_format($plan->price, 0, ',', '.') }}</span>
                         </div>
                         <p class="text-muted x-small mt-n1 fw-bold">PAGO POR MES</p>
                     </div>

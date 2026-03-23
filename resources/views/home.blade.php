@@ -57,8 +57,8 @@
                 </a>
             </div>
             <div class="col">
-                <a href="{{ route('collegiates.index', ['filter' => 'morosos']) }}" class="text-decoration-none h-100 d-block">
-                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-danger" style="border-radius: 12px;">
+                <a href="{{ route('admin.billing.index', ['status' => 'overdue']) }}" class="text-decoration-none h-100 d-block">
+                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-danger" style="border-radius: 12px; transition: transform 0.3s ease;">
                         <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Mora Arancelaria</span>
                         <h2 class="fw-black mb-1 text-danger ls-n1">{{ $morososCuotas }}</h2>
                         <div class="x-small fw-bold text-danger opacity-75">Acciones pendientes</div>

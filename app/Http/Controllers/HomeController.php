@@ -38,7 +38,12 @@ class HomeController extends Controller
                                            ->where('is_fully_documented', true)
                                            ->count();
         
-        $morososCuotas = $school->collegiates()->where('is_fees_compliant', false)->count();
+        // Mora Arancelaria (Basado en deudas reales exigibles)
+        $morososCuotas = $school->collegiates()->whereHas('dues', function($q) {
+            $q->where('status', 'overdue');
+        })->count();
+
+        // Legajos con auditoría pendiente
         $morososDocs = $school->collegiates()->where('is_fully_documented', false)->count();
 
         // 2. Ranking de Gestión (Top 5 con problemas)
