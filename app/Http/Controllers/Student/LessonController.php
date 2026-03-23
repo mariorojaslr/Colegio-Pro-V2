@@ -16,9 +16,15 @@ class LessonController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $isPublic = request()->routeIs('academy.public');
         
-        // Si es OWNER o no tiene colegio (o es invitado), buscamos el primero para la vitrina pública
-        $schoolId = ($user && $user->school_id) ? $user->school_id : (\App\Models\School::first()?->id ?? 1);
+        // Si es la vitrina pública, mostramos el contenido "Master" (Colegio 1) para que nunca salga vacío
+        // Si es el panel privado, filtramos por el colegio del usuario
+        if ($isPublic) {
+            $schoolId = 1; // Priorizamos la vitrina del colegio principal (donde están los 18 cursos)
+        } else {
+            $schoolId = ($user && $user->school_id) ? $user->school_id : (\App\Models\School::first()?->id ?? 1);
+        }
 
         $lessons = Lesson::where('school_id', $schoolId)
             ->where('is_published', true)

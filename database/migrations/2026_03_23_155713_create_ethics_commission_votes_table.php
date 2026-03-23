@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('ethics_commission_votes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('ethics_sanction_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // El miembro de la comisión que vota
+            $table->string('vote'); // approved, rejected
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
