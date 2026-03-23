@@ -29,6 +29,9 @@ Route::get('/', function () {
 Route::get('/demo/unirse', [App\Http\Controllers\DemoRegistrationController::class, 'show'])->name('demo.register');
 Route::post('/demo/register', [App\Http\Controllers\DemoRegistrationController::class, 'register'])->name('demo.register.post');
 
+// Escuela Virtual Pública (Vitrina de Cursos)
+Route::get('/escuela-virtual', [\App\Http\Controllers\Student\LessonController::class, 'index'])->name('academy.public');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

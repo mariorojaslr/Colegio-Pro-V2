@@ -11,19 +11,21 @@ use Illuminate\Support\Facades\Auth;
 class LessonController extends Controller
 {
     /**
-     * Listado de clases disponibles para el alumno.
+     * Listado de clases disponibles (Público y Privado).
      */
     public function index()
     {
         $user = Auth::user();
         
-        // El alumno solo ve las clases de SU institución que estén publicadas
-        $lessons = Lesson::where('school_id', $user->school_id)
+        // Si no hay usuario (acceso público), mostramos la escuela de demo (id:1)
+        $schoolId = $user ? $user->school_id : 1;
+
+        $lessons = Lesson::where('school_id', $schoolId)
             ->where('is_published', true)
             ->latest()
             ->get();
 
-        return view('student.lessons.index', compact('lessons'));
+        return view('student.academy.index', compact('lessons'));
     }
 
     /**

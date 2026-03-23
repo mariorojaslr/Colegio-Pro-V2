@@ -39,14 +39,17 @@
                             {{-- Navegación Estilo Institucional para el Administrador del Colegio --}}
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('home') ? 'active fw-bold text-primary' : '' }}" href="{{ route('home') }}"><i class="bi bi-grid-alt me-1"></i> {{ __('Dashboard') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('collegiates.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('collegiates.index') }}"><i class="bi bi-people me-1"></i> {{ __('Padrón') }}</a></li>
+                            <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('student.lessons.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('student.lessons.index') }}"><i class="bi bi-play-btn me-1"></i> {{ __('Academia') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('admin.compliance.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('admin.compliance.index') }}"><i class="bi bi-patch-check me-1"></i> {{ __('Auditoría') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('amenities.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('amenities.index') }}"><i class="bi bi-buildings me-1"></i> {{ __('Club y Sedes') }}</a></li>
                         @elseif(auth()->user()->isOwner())
                             {{-- Acceso Rápido para el Owner --}}
                             <li class="nav-item"><a class="nav-link px-3 active fw-bold text-primary" href="{{ route('admin.dashboard') }}"><i class="bi bi-shield-lock me-1"></i> {{ __('Panel Global') }}</a></li>
+                            <li class="nav-item"><a class="nav-link px-3" href="{{ route('student.lessons.index') }}"><i class="bi bi-play-btn me-1"></i> {{ __('Ver Academia') }}</a></li>
                         @else
                             {{-- Navegación para el Colegiado --}}
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('home') ? 'active fw-bold text-primary' : '' }}" href="{{ route('home') }}"><i class="bi bi-speedometer2 me-1"></i> {{ __('Mi Panel') }}</a></li>
+                            <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('student.lessons.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('student.lessons.index') }}"><i class="bi bi-play-btn me-1"></i> {{ __('Mis Cursos') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('compliance.index') ? 'active fw-bold text-primary' : '' }}" href="{{ route('compliance.index') }}"><i class="bi bi-file-earmark-lock me-1"></i> {{ __('Mi Legajo') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('amenities.index') ? 'active fw-bold text-primary' : '' }}" href="{{ route('amenities.index') }}"><i class="bi bi-buildings me-1"></i> {{ __('Deportes') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 {{ request()->routeIs('tickets.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('tickets.index') }}"><i class="bi bi-chat-dots me-1"></i> {{ __('Soporte') }}</a></li>
@@ -54,6 +57,7 @@
                     @else
                         <li class="nav-item"><a class="nav-link px-3" href="#ventajas">Ventajas</a></li>
                         <li class="nav-item"><a class="nav-link px-3" href="#servicios">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 fw-bold text-primary" href="/escuela-virtual"><i class="bi bi-mortarboard-fill me-1"></i> ESCUELA VIRTUAL</a></li>
                         <li class="nav-item"><a class="nav-link px-3" href="#demo">Demo</a></li>
                     @endauth
                 </ul>
