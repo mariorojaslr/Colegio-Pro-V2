@@ -2,55 +2,49 @@
 
 @section('content')
 <div class="container-fluid py-4 bg-light-subtle">
-    {{-- Encabezado del Padrón --}}
-    <div class="row mb-5 align-items-end">
-        <div class="col-lg-7">
-            <h1 class="display-6 fw-bold text-dark" style="font-family: 'Outfit', sans-serif;">Padrón <span class="text-primary">Profesional</span></h1>
-            <p class="lead text-muted small fw-medium">Gestión integral de matriculados, estados de deuda y cumplimiento documental.</p>
+    {{-- Encabezado del Padrón y Acciones --}}
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-0" style="font-family: 'Outfit', sans-serif;">Padrón <span class="text-primary">Profesional</span></h1>
+            <p class="x-small text-muted fw-medium mb-0">Gestión integral de matriculados y estados.</p>
         </div>
-        <div class="col-lg-5 text-lg-end">
-            <div class="d-flex gap-2 justify-content-lg-end">
-                <a href="{{ route('collegiates.export') }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold small shadow-sm"><i class="bi bi-download me-2"></i> Descargar Excel</a>
-                <a href="{{ route('collegiates.import') }}" class="btn btn-primary rounded-pill px-4 fw-bold small shadow-sm"><i class="bi bi-file-earmark-arrow-up me-2"></i> Importar Masivo</a>
-            </div>
+        <div class="d-flex gap-2">
+            <a href="{{ route('collegiates.export') }}" class="btn btn-outline-dark rounded-pill px-3 fw-bold x-small shadow-sm"><i class="bi bi-download me-1"></i> Excel</a>
+            <a href="{{ route('collegiates.import') }}" class="btn btn-primary rounded-pill px-3 fw-bold x-small shadow-sm"><i class="bi bi-file-earmark-arrow-up me-1"></i> Importar</a>
         </div>
     </div>
 
-    {{-- Filtros Rápidos (Estilo Auditoría) --}}
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
+    {{-- Filtros Rápidos Compactos --}}
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index') }}" class="text-decoration-none">
-                <div class="card-prestige p-4 border-0 {{ !request('filter') ? 'bg-primary text-white' : 'bg-white text-dark' }} transition-all">
-                    <h2 class="fw-bold mb-0">{{ number_format($stats['total'], 0, ',', '.') }}</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Total</p>
-                    <p class="mb-0 x-small opacity-50">Todos los Matriculados</p>
+                <div class="card-prestige p-2 border-0 {{ !request('filter') ? 'bg-primary text-white' : 'bg-white text-dark' }} transition-all text-center">
+                    <div class="fw-bold h5 mb-0">{{ number_format($stats['total'], 0, ',', '.') }}</div>
+                    <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Total</div>
                 </div>
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'morosos']) }}" class="text-decoration-none">
-                <div class="card-prestige p-4 border-0 {{ request('filter') === 'morosos' ? 'bg-danger text-white' : 'bg-white text-danger' }} transition-all">
-                    <h2 class="fw-bold mb-0">{{ number_format($stats['debt_fees'], 0, ',', '.') }}</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Deuda Cuotas</p>
-                    <p class="mb-0 x-small opacity-50">Pendientes de Pago</p>
+                <div class="card-prestige p-2 border-0 {{ request('filter') === 'morosos' ? 'bg-danger text-white' : 'bg-white text-danger' }} transition-all text-center">
+                    <div class="fw-bold h5 mb-0">{{ number_format($stats['debt_fees'], 0, ',', '.') }}</div>
+                    <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Deuda Cuotas</div>
                 </div>
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'sin_papeles']) }}" class="text-decoration-none">
-                <div class="card-prestige p-4 border-0 {{ request('filter') === 'sin_papeles' ? 'bg-warning text-dark' : 'bg-white text-warning' }} transition-all">
-                    <h2 class="fw-bold mb-0">{{ number_format($stats['debt_docs'], 0, ',', '.') }}</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Deuda Docs</p>
-                    <p class="mb-0 x-small opacity-50">Faltan Requisitos</p>
+                <div class="card-prestige p-2 border-0 {{ request('filter') === 'sin_papeles' ? 'bg-warning text-dark' : 'bg-white text-warning' }} transition-all text-center">
+                    <div class="fw-bold h5 mb-0">{{ number_format($stats['debt_docs'], 0, ',', '.') }}</div>
+                    <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Deuda Docs</div>
                 </div>
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'habilitados']) }}" class="text-decoration-none">
-                <div class="card-prestige p-4 border-0 {{ request('filter') === 'habilitados' ? 'bg-success text-white' : 'bg-white text-success' }} transition-all">
-                    <h2 class="fw-bold mb-0">{{ number_format($stats['enabled'], 0, ',', '.') }}</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Habilitados</p>
-                    <p class="mb-0 x-small opacity-50">Cumplimiento 100%</p>
+                <div class="card-prestige p-2 border-0 {{ request('filter') === 'habilitados' ? 'bg-success text-white' : 'bg-white text-success' }} transition-all text-center">
+                    <div class="fw-bold h5 mb-0">{{ number_format($stats['enabled'], 0, ',', '.') }}</div>
+                    <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Habilitados</div>
                 </div>
             </a>
         </div>
@@ -80,10 +74,12 @@
                         <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 filas</option>
                     </select>
                 </div>
-                <div class="col-md-3 text-end">
-                    <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Buscar</button>
-                    @if(request('search') || request('filter') || request('per_page'))
-                        <a href="{{ route('collegiates.index') }}" class="btn btn-outline-secondary rounded-pill px-3 ms-1"><i class="bi bi-x-lg"></i></a>
+                <div class="col-md-3 text-end text-nowrap">
+                    <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">Buscar</button>
+                    @if(request('search') || request('filter'))
+                        <a href="{{ route('collegiates.index') }}" class="btn btn-outline-danger rounded-pill px-3 ms-1 shadow-sm" title="Limpiar Búsqueda">
+                            <i class="bi bi-trash3"></i>
+                        </a>
                     @endif
                 </div>
             </form>
@@ -92,9 +88,10 @@
         <div class="table-responsive" id="tableContainer">
             <table class="table table-hover align-middle m-0" id="collegiateTable">
                 <thead class="bg-light bg-opacity-50">
-                    <tr class="small fw-bold text-muted uppercase ls-1">
-                        <th class="py-1 px-4">Estado</th>
-                        <th class="py-1">Profesional (Matrícula)</th>
+                    <tr class="small fw-bold text-muted uppercase ls-1 text-nowrap">
+                        <th class="py-1 px-4 text-center" style="width: 50px;">Estado</th>
+                        <th class="py-1" style="width: 250px;">Nombre y Apellido</th>
+                        <th class="py-1" style="width: 120px;">Matrícula</th>
                         <th class="py-1">Documento / Contacto</th>
                         <th class="py-1">Ubicación</th>
                         <th class="py-1 text-end px-4">Acciones</th>
@@ -103,25 +100,27 @@
                 <tbody id="tableBody">
                     @forelse($collegiates as $col)
                     <tr class="border-bottom border-light">
-                        <td class="py-1 px-4">
+                        <td class="py-1 px-4 text-center">
                             @if($col->is_fees_compliant && $col->is_fully_documented && $col->is_ethics_compliant)
-                                <div class="bg-success rounded-circle shadow-sm" style="width: 10px; height: 10px" title="Habilitado"></div>
+                                <div class="bg-success rounded-circle shadow-sm mx-auto" style="width: 10px; height: 10px" title="Habilitado"></div>
                             @elseif(!$col->is_fees_compliant)
-                                <div class="bg-danger rounded-circle shadow-sm" style="width: 10px; height: 10px" title="Deuda Cuotas"></div>
+                                <div class="bg-danger rounded-circle shadow-sm mx-auto" style="width: 10px; height: 10px" title="Deuda Cuotas"></div>
                             @else
-                                <div class="bg-warning rounded-circle shadow-sm" style="width: 10px; height: 10px" title="Deuda Documental"></div>
+                                <div class="bg-warning rounded-circle shadow-sm mx-auto" style="width: 10px; height: 10px" title="Deuda Documental"></div>
                             @endif
                         </td>
-                        <td class="py-1 searchable" data-field="name" style="min-width: 250px;">
-                            <span class="fw-bold text-dark me-2" style="font-size: 0.9rem;">{{ $col->last_name }}, {{ $col->first_name }}</span>
-                            <span class="badge bg-primary bg-opacity-10 text-primary x-small border border-primary border-opacity-25" style="font-size: 0.65rem;">MAT: {{ $col->registration_number }}</span>
+                        <td class="py-1 searchable" data-field="name">
+                            <span class="fw-bold text-dark" style="font-size: 0.9rem;">{{ $col->last_name }}, {{ $col->first_name }}</span>
+                        </td>
+                        <td class="py-1">
+                            <span class="badge bg-primary bg-opacity-10 text-primary x-small border border-primary border-opacity-25" style="font-size: 0.65rem; width: 100px;">{{ $col->registration_number }}</span>
                         </td>
                         <td class="py-1 searchable" data-field="contact">
-                            <span class="x-small text-muted fw-medium">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
-                            <span class="mx-2 text-muted opacity-25">|</span>
-                            <span class="x-small text-muted">{{ $col->email }}</span>
+                            <span class="x-small text-muted fw-bold me-2">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
+                            <span class="mx-1 text-muted opacity-25">|</span>
+                            <span class="x-small text-muted me-2">{{ $col->email }}</span>
                             @if($col->phone)
-                                <span class="mx-2 text-muted opacity-25">|</span>
+                                <span class="mx-1 text-muted opacity-25">|</span>
                                 <span class="x-small text-secondary"><i class="bi bi-phone me-1"></i>{{ $col->phone }}</span>
                             @endif
                         </td>
@@ -134,7 +133,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="py-5 text-center">
+                        <td colspan="6" class="py-5 text-center">
                             <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800505.png" alt="Vacío" width="150" class="mb-3 opacity-25">
                             <p class="text-muted fw-bold">No se encontraron resultados del padrón.</p>
                         </td>
