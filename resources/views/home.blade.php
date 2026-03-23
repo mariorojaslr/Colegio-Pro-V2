@@ -1,119 +1,85 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="container-fluid py-4 min-vh-100 bg-light-subtle">
-    {{-- Consola de Simulación para el OWNER (Solo demostración) --}}
+<div class="container-fluid py-3 min-vh-100 bg-light-subtle">
+    {{-- Consola de Simulación Prestigio (Discreta) --}}
     @if(auth()->user()->isOwner() || session('impersonator_id'))
-    <div class="alert alert-dark border-0 shadow-lg mb-4 position-relative overflow-hidden" style="border-radius: 20px; background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);">
-        {{-- Decorative Icon --}}
-        <div class="position-absolute top-0 end-0 p-3 opacity-10">
-            <i class="bi bi-cpu-fill display-1"></i>
+    <div class="d-flex justify-content-end mb-3 gap-2 px-2 animate__animated animate__fadeInDown">
+        <div class="btn-group shadow-sm">
+            <button type="button" class="btn btn-white btn-sm border-0 dropdown-toggle rounded-pill px-3 x-small fw-bold text-muted" data-bs-toggle="dropdown" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);">
+                IDIOMA: <span class="text-dark">{{ strtoupper(app()->getLocale()) }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
+                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><img src="https://flagcdn.com/w20/es.png" class="me-2" width="16"> Español</a></li>
+                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><img src="https://flagcdn.com/w20/us.png" class="me-2" width="16"> English</a></li>
+            </ul>
         </div>
-        <div class="row align-items-center g-3 position-relative">
-            <div class="col-md-auto d-none d-md-block">
-                <div class="bg-primary text-white p-3 rounded-4 shadow-sm">
-                    <i class="bi bi-toggles2 fs-3"></i>
-                </div>
-            </div>
-            <div class="col-md">
-                <h6 class="text-white-50 small fw-bold uppercase ls-2 mb-1">Entorno de Demostración</h6>
-                <h5 class="text-white fw-bold mb-1">Consola de Simulación Global</h5>
-                <p class="text-white-50 small mb-0">Valide la escala internacional y el sistema de descuentos dinámicos.</p>
-            </div>
-            <div class="col-md-auto d-flex flex-wrap gap-2">
-                <div class="btn-group shadow-sm">
-                    <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle px-3" data-bs-toggle="dropdown">
-                        <i class="bi bi-translate me-1 text-info"></i> Idioma: <strong>{{ strtoupper(app()->getLocale()) }}</strong>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-dark rounded-3 shadow border-secondary border-opacity-25">
-                        <li><a class="dropdown-item py-2" href="#" onclick="alert('Cambiando a Español...')"><img src="https://flagcdn.com/w20/es.png" class="me-2" width="16"> Español</a></li>
-                        <li><a class="dropdown-item py-2" href="#" onclick="alert('Cambiando a Inglés...')"><img src="https://flagcdn.com/w20/us.png" class="me-2" width="16"> English</a></li>
-                        <li><a class="dropdown-item py-2" href="#" onclick="alert('Cambiando a Portugués...')"><img src="https://flagcdn.com/w20/br.png" class="me-2" width="16"> Português</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group shadow-sm">
-                    <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle px-3" data-bs-toggle="dropdown">
-                        <i class="bi bi-geo-alt me-1 text-primary"></i> Ubicación: <strong>{{ app(\App\Services\LocationService::class)->isFromArgentina() ? 'Argentina' : 'Exterior' }}</strong>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-dark rounded-3 shadow border-secondary border-opacity-25">
-                        <li><a class="dropdown-item py-2" href="#"><i class="bi bi-check-circle-fill text-success me-2"></i> Argentina (Local: ARS)</a></li>
-                        <li><a class="dropdown-item py-2" href="#"><i class="bi bi-globe me-2 text-info"></i> España (Intl: EUR)</a></li>
-                        <li><a class="dropdown-item py-2" href="#"><i class="bi bi-globe me-2 text-warning"></i> México (Intl: MXN)</a></li>
-                        <li><a class="dropdown-item py-2" href="#"><i class="bi bi-globe me-2 text-primary"></i> USA (Intl: USD)</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group shadow-sm">
-                    <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle px-3" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-badge me-1 text-warning"></i> Rol: <strong>{{ auth()->user()->role }}</strong>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-dark rounded-3 shadow border-secondary border-opacity-25">
-                        <li><a class="dropdown-item py-2" href="#"><i class="bi bi-mortarboard me-2"></i> Estudiante Externo (Público)</a></li>
-                        <li><a class="dropdown-item py-2" href="#"><i class="bi bi-award me-2"></i> {{ __('Matriculado') }} (Descuento)</a></li>
-                    </ul>
-                </div>
-            </div>
+        <div class="btn-group shadow-sm">
+            <button type="button" class="btn btn-dark btn-sm border-0 dropdown-toggle rounded-pill px-3 x-small fw-bold" data-bs-toggle="dropdown" style="background: #0f172a;">
+                SIMULAR: <span class="text-warning">{{ auth()->user()->role }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-x1 p-2 mt-2 animate__animated animate__fadeIn">
+                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-shield-check me-2"></i> Administrador</a></li>
+                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-person me-2"></i> Estudiante</a></li>
+            </ul>
         </div>
     </div>
     @endif
+
     @if(Auth::user()->role === 'ADMIN_COLEGIO')
-        {{-- DASHBOARD PARA ADMINISTRADOR DE COLEGIO --}}
-        
-        {{-- 1. Bienvenida e Identidad --}}
-        <div class="row g-4 mb-4">
+        {{-- 1. Identidad Institucional (Minimalista / Soberana) --}}
+        <div class="row g-4 mb-3">
             <div class="col-lg-12">
-                <div class="card-prestige p-5 border-0 overflow-hidden position-relative shadow-sm" 
-                     style="background: linear-gradient(135deg, {{ Auth::user()->school->primary_color ?? '#020617' }}, #0f172a); border-radius: 40px">
-                    <div class="row align-items-center position-relative" style="z-index: 2">
-                        <div class="col-md-7 text-white">
-                            <h6 class="text-white-50 small fw-bold uppercase ls-2 mb-2">Panel Administrativo</h6>
-                            <h1 class="display-5 fw-bold mb-0" style="font-family: 'Outfit', sans-serif;">{{ Auth::user()->school->name }}</h1>
-                        </div>
-                        <div class="col-md-5 text-md-end">
-                            <div class="d-flex gap-2 justify-content-md-end mt-3 mt-md-0">
-                                <a href="{{ route('collegiates.index') }}" class="btn btn-warning rounded-pill px-4 py-2 fw-bold text-dark border-0 shadow">Ver Padrón</a>
-                                <a href="{{ route('admin.compliance.index') }}" class="btn btn-dark rounded-pill px-4 py-2 fw-bold text-white border-0 shadow">Papeles Pendientes</a>
-                            </div>
-                        </div>
+                <div class="p-3 bg-white border-0 shadow-sm overflow-hidden d-flex align-items-center justify-content-between" 
+                     style="border-radius: 12px; border-left: 4px solid {{ Auth::user()->school->primary_color ?? '#0f172a' }} !important;">
+                    <div>
+                        <h6 class="text-muted x-small fw-bold text-uppercase ls-2 mb-0">Institución Privada</h6>
+                        <h4 class="fw-black mb-0 text-dark" style="font-family: 'Outfit', sans-serif;">{{ Auth::user()->school->name }}</h4>
+                    </div>
+                    <div>
+                        <a href="{{ route('collegiates.index') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3 x-small fw-bold shadow-sm">
+                            EXPLORAR PADRÓN <i class="bi bi-chevron-right ms-1"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- 2. Tarjetas de Acción (Accionables) --}}
-        <div class="row g-4 mb-5">
-            <div class="col-md-3">
+        {{-- 2. Tarjetas de Acción (Lujo Silencioso) --}}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-4">
+            <div class="col">
                 <a href="{{ route('collegiates.index') }}" class="text-decoration-none h-100 d-block">
-                    <div class="card-prestige p-4 border-0 bg-white h-100 shadow-sm border-start border-5 border-primary">
-                        <h6 class="text-muted small fw-bold mb-1 uppercase">Matriculados</h6>
-                        <h2 class="fw-bold mb-1">{{ $totalColegiados }}</h2>
-                        <div class="small fw-medium text-primary">Gestionar listado <i class="bi bi-arrow-right"></i></div>
+                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-primary" style="border-radius: 12px; transition: transform 0.3s ease;">
+                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Matriculados</span>
+                        <h2 class="fw-black mb-1 text-dark ls-n1">{{ $totalColegiados }}</h2>
+                        <div class="x-small fw-bold text-primary opacity-75">Habilitados en padrón</div>
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col">
                 <a href="{{ route('collegiates.index', ['filter' => 'morosos']) }}" class="text-decoration-none h-100 d-block">
-                    <div class="card-prestige p-4 border-0 bg-white h-100 shadow-sm border-start border-5 border-danger">
-                        <h6 class="text-muted small fw-bold mb-1 uppercase">Deben Cuotas</h6>
-                        <h2 class="fw-bold mb-1 text-danger">{{ $morososCuotas }}</h2>
-                        <div class="small fw-medium text-danger">Notificar mora <i class="bi bi-send-exclamation"></i></div>
+                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-danger" style="border-radius: 12px;">
+                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Mora Arancelaria</span>
+                        <h2 class="fw-black mb-1 text-danger ls-n1">{{ $morososCuotas }}</h2>
+                        <div class="x-small fw-bold text-danger opacity-75">Acciones pendientes</div>
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col">
                 <a href="{{ route('collegiates.index', ['filter' => 'sin_papeles']) }}" class="text-decoration-none h-100 d-block">
-                    <div class="card-prestige p-4 border-0 bg-white h-100 shadow-sm border-start border-5 border-warning">
-                        <h6 class="text-muted small fw-bold mb-1 uppercase">Deben Papeles</h6>
-                        <h2 class="fw-bold mb-1 text-warning">{{ $morososDocs }}</h2>
-                        <div class="small fw-medium text-warning">Auditar legajos <i class="bi bi-file-earmark-lock"></i></div>
+                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-warning" style="border-radius: 12px;">
+                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Legajos Pendientes</span>
+                        <h2 class="fw-black mb-1 text-warning ls-n1">{{ $morososDocs }}</h2>
+                        <div class="x-small fw-bold text-warning opacity-75">Auditoría de cumplimiento</div>
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
+            <div class="col">
                 <a href="{{ route('collegiates.index', ['filter' => 'habilitados']) }}" class="text-decoration-none h-100 d-block">
-                    <div class="card-prestige p-4 border-0 bg-white h-100 shadow-sm border-start border-5 border-success">
-                        <h6 class="text-muted small fw-bold mb-1 uppercase">Habilitados OK</h6>
-                        <h2 class="fw-bold mb-1 text-success">{{ $habilitados }}</h2>
-                        <div class="small fw-medium text-success">Institución sana <i class="bi bi-check-circle"></i></div>
+                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-success" style="border-radius: 12px;">
+                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Institución Sana</span>
+                        <h2 class="fw-black mb-1 text-success ls-n1">{{ $habilitados }}</h2>
+                        <div class="x-small fw-bold text-success opacity-75">Cumplimiento total</div>
                     </div>
                 </a>
             </div>

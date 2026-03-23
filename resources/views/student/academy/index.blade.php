@@ -4,194 +4,240 @@
 
 @push('styles')
 <style>
-    :root {
-        --poster-ratio: 2/3;
-    }
+    .ls-1 { letter-spacing: 1px; }
+    .ls-2 { letter-spacing: 2.5px; }
+    .fw-black { font-weight: 900; }
+    .x-small { font-size: 10px; }
+
+    /* ACADEMY HERO */
     .academy-hero {
-        background: linear-gradient(90deg, #0F172A 0%, rgba(15, 23, 42, 0.7) 100%), 
-                    url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80') center/cover;
-        min-height: 180px;
-        border-radius: 12px;
+        background: linear-gradient(90deg, #0F172A 0%, rgba(15, 23, 42, 0.6) 100%), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+        min-height: 220px;
         display: flex;
         align-items: center;
-        padding: 30px;
-        margin-bottom: 20px;
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-    .course-card-wrapper {
-        transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-        cursor: pointer;
-    }
-    .course-card-wrapper:hover {
-        transform: translateY(-8px);
-    }
-    .course-poster {
-        aspect-ratio: var(--poster-ratio);
-        border-radius: 10px;
+        position: relative;
         overflow: hidden;
-        background: #111;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        margin-bottom: 10px;
     }
-    .course-poster img {
+
+    /* COURSE CARD ROLLS-ROYCE STYLE */
+    .course-poster-wrapper {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        background: #000;
+        aspect-ratio: 2/3;
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .course-poster-wrapper:hover {
+        transform: scale(1.03) translateY(-4px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        z-index: 10;
+    }
+
+    .course-poster-inner {
+        position: absolute;
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.8s ease;
     }
-    .course-card-wrapper:hover img {
-        transform: scale(1.1);
+
+    .course-poster-wrapper:hover .course-poster-inner {
+        transform: scale(1.08);
     }
-    .course-info-footer {
-        padding: 0 4px;
+
+    /* GRADIENT OVERLAY (Exacto a la Captura) */
+    .course-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 65%;
+        background: linear-gradient(0deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 20px;
+        color: white;
     }
-    .course-title {
-        font-size: 0.85rem;
-        font-weight: 700;
-        line-height: 1.2;
-        margin-bottom: 2px;
-        color: var(--primary-color);
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        height: 2.1rem;
-    }
-    .course-category {
+
+    .course-category-pill {
+        background: #0D6EFD; /* Azul Vibrante solicitado */
+        color: white;
         font-size: 10px;
         font-weight: 800;
-        text-uppercase: uppercase;
-        color: #64748b;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: 50px;
+        width: fit-content;
+        margin-bottom: 10px;
         letter-spacing: 0.5px;
     }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .course-title-card {
+        font-size: 1.25rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 6px;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .course-date-card {
+        font-size: 14px;
+        color: #94A3B8; /* Plata sutil */
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* FILTER BAR PILLS */
+    .filter-pill {
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        padding: 8px 22px;
+        border-radius: 50px;
+        border: 1px solid #E2E8F0;
+        background: white;
+        color: #64748B;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .filter-pill.active {
+        background: #0F172A;
+        color: white;
+        border-color: #0F172A;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    }
 </style>
 @endpush
 
 @section('content')
-<div class="container-fluid px-4 py-3 bg-light-subtle">
+<div class="container-fluid px-4 py-4 min-vh-100 bg-light-subtle">
     
-    {{-- Hero Slim --}}
-    <div class="academy-hero text-white animate__animated animate__fadeIn">
-        <div class="hero-content">
-            <span class="x-small fw-bold text-primary text-uppercase ls-2 d-block mb-1">Especialización Profesional</span>
-            <h2 class="fw-black mb-2 h3">Academia <span class="text-primary">Virtual</span></h2>
-            <p class="small mb-3 opacity-75" style="max-width: 500px;">Certificaciones oficiales con validación QR y material de consulta permanente.</p>
+    {{-- Hero de Alta Gama --}}
+    <div class="academy-hero p-5 mb-5 shadow-sm">
+        <div class="col-lg-7 animate__animated animate__fadeIn">
+            <h6 class="text-white-50 x-small fw-bold ls-2 uppercase mb-2">ESCUELA VIRTUAL</h6>
+            <h1 class="display-4 fw-black text-white mb-2" style="font-family: 'Outfit', sans-serif; letter-spacing: -2px;">Academia Pro</h1>
+            <p class="text-white-50 lead fs-6 fw-light mb-4 ls-1">Excelencia académica para la judicatura moderna.</p>
+            
             <div class="d-flex gap-2">
-                <button class="btn btn-primary btn-sm rounded-pill px-3 fw-bold shadow-sm">Continuar Taller</button>
+                <a href="#" class="btn btn-primary btn-sm rounded-pill px-4 fw-black shadow-sm">
+                    <i class="bi bi-play-fill me-1"></i> VER AHORA
+                </a>
+                <a href="#" class="btn btn-outline-light btn-sm rounded-pill px-4 fw-bold">
+                   EXPLORAR MÓDULOS
+                </a>
             </div>
         </div>
     </div>
 
-    {{-- Filtros Discretos --}}
-    <div class="mb-4">
-        <div class="d-flex align-items-center gap-2 overflow-auto no-scrollbar">
-            <span class="x-small fw-bold text-muted text-uppercase me-2" style="font-size: 9px;">FILTRAR POR:</span>
-            <button class="btn btn-sm btn-dark rounded-pill px-3 py-1 x-small fw-bold shadow-sm">TODOS</button>
-            <button class="btn btn-sm btn-white text-muted border rounded-pill px-3 py-1 x-small fw-bold">DERECHO CIVIL</button>
-            <button class="btn btn-sm btn-white text-muted border rounded-pill px-3 py-1 x-small fw-bold">PENAL</button>
-            <button class="btn btn-sm btn-white text-muted border rounded-pill px-3 py-1 x-small fw-bold">SALUD</button>
-            <button class="btn btn-sm btn-white text-muted border rounded-pill px-3 py-1 x-small fw-bold">GESTIÓN</button>
-        </div>
+    {{-- Temas Discretos --}}
+    <div class="mb-5 d-flex flex-wrap gap-2 justify-content-center">
+        <span class="filter-pill active">Todos</span>
+        <span class="filter-pill">Gestión Judicial</span>
+        <span class="filter-pill">Tecnología</span>
+        <span class="filter-pill">Mediación</span>
+        <span class="filter-pill">Administración</span>
     </div>
 
-    {{-- Grilla de 6 Columnas en Monitor Grande --}}
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-4 mb-5">
+    {{-- Grid de Cursos (6 Columnas en Monitor Grande) --}}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 mb-5">
         @php
-            $especialidades = [
-                ['SALUD', 'RCP & Primeros Auxilios', 'https://mariorojaslr.github.io/Colegio-Pro-V2/artifacts/flyer_rcp_course_1774222864134.png', 'Dr. Roberto García', '12h', '25.000'],
-                ['LEGAL TECH', 'Arquitectura Legal en Salud', 'https://mariorojaslr.github.io/Colegio-Pro-V2/artifacts/flyer_legal_health_1774222880824.png', 'Dra. Elena Martínez', '15h', '38.000'],
-                ['GESTIÓN', 'Innovación Gestión Judicial', 'https://mariorojaslr.github.io/Colegio-Pro-V2/artifacts/flyer_judicial_innovation_1774222897356.png', 'Dr. Juan Pérez', '8h', '45.000'],
-                ['PENAL', 'Reformas Procesales 2026', 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=500&q=80', 'Dr. Sergio Massa', '20h', '55.000'],
-                ['SUCESIONES', 'Práctica Juicios Sucesorios', 'https://images.unsplash.com/photo-1589994160839-163cd2b5ecce?auto=format&fit=crop&w=500&q=80', 'Dra. María Lopez', '10h', '40.000'],
-                ['TRIBUTARIO', 'Actualización AFIP 2026', 'https://images.unsplash.com/photo-1554224155-16974301755d?auto=format&fit=crop&w=500&q=80', 'Cont. Ana Sosa', '14h', '42.000'],
-                ['COMERCIAL', 'Contratos & Startups', 'https://images.unsplash.com/photo-1454165833767-0275084927ed?auto=format&fit=crop&w=500&q=80', 'Dr. Luis Caputo', '11h', '35.000'],
-                ['ADMIN', 'Proc. Administrativo', 'https://images.unsplash.com/photo-1423592707957-3b212afa6733?auto=format&fit=crop&w=500&q=80', 'Dra. Patricia Bull', '9h', '28.000'],
-                ['MEDIACIÓN', 'Resolución Conflictos', 'https://images.unsplash.com/photo-1573164773501-229ef2159f81?auto=format&fit=crop&w=500&q=80', 'Dr. Jorge Macri', '12h', '30.000'],
-                ['INMOB.', 'Alquileres & Práctica', 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=500&q=80', 'Dra. Victoria V.', '10h', '34.000'],
-                ['CIVIL', 'Resp. Civil Profesional', 'https://images.unsplash.com/photo-1507679799987-c7377ec48696?auto=format&fit=crop&w=500&q=80', 'Dr. Ricardo Darín', '6h', '25.000'],
-                ['IDIOMAS', 'Legal English for Lawyers', 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=500&q=80', 'Prof. Sarah Connor', '30h', '60.000']
+            $cursos = [
+                ['title' => 'Innovación en Gestión Judicial', 'date' => '15 May', 'cat' => 'Tecnología', 'img' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop', 'price' => '$25.000', 'lecturer' => 'Dr. Alberto Ruiz'],
+                ['title' => 'Inteligencia Artificial Legal', 'date' => '22 May', 'cat' => 'Digital', 'img' => 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1932&auto=format&fit=crop', 'price' => '$32.000', 'lecturer' => 'Ing. Marta Sosa'],
+                ['title' => 'Ciberseguridad Notarial', 'date' => '02 Jun', 'cat' => 'Seguridad', 'img' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1770&auto=format&fit=crop', 'price' => '$18.500', 'lecturer' => 'Lic. Pedro Gómez'],
+                ['title' => 'Marketing para Abogados', 'date' => '10 Jun', 'cat' => 'Negocios', 'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026&auto=format&fit=crop', 'price' => '$12.000', 'lecturer' => 'Mag. Lucia Fernández'],
+                ['title' => 'Mediación Digital 2024', 'date' => '18 Jun', 'cat' => 'Legal', 'img' => 'https://images.unsplash.com/photo-1521791136364-758a64045057?q=80&w=1770&auto=format&fit=crop', 'price' => '$21.000', 'lecturer' => 'Escribano Carlos Paz'],
+                ['title' => 'Blockchain en Registros', 'date' => '25 Jun', 'cat' => 'Innovación', 'img' => 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2032&auto=format&fit=crop', 'price' => '$28.000', 'lecturer' => 'Dr. Jorge Lin'],
+                ['title' => 'Contratos Inteligentes', 'date' => '05 Jul', 'cat' => 'Tecnología', 'img' => 'https://images.unsplash.com/photo-1633533405342-6e27161b32de?q=80&w=1964&auto=format&fit=crop', 'price' => '$35.000', 'lecturer' => 'Dr. Alberto Ruiz'],
+                ['title' => 'Ética en Algoritmos', 'date' => '12 Jul', 'cat' => 'Ética', 'img' => 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=1770&auto=format&fit=crop', 'price' => '$15.000', 'lecturer' => 'Marta Sosa'],
+                ['title' => 'Técnicas de Oratoria', 'date' => '20 Jul', 'cat' => 'Habilidades', 'img' => 'https://images.unsplash.com/photo-1475721027187-40247339a3f9?q=80&w=2070&auto=format&fit=crop', 'price' => '$10.500', 'lecturer' => 'Pedro Gómez'],
+                ['title' => 'Gestión de Estudios', 'date' => '01 Ago', 'cat' => 'Adm.', 'img' => 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop', 'price' => '$19.000', 'lecturer' => 'Carlos Paz'],
+                ['title' => 'Liderazgo Estratégico', 'date' => '15 Ago', 'cat' => 'Negocios', 'img' => 'https://images.unsplash.com/photo-1519389950473-4422e4a2e1dc?q=80&w=2070&auto=format&fit=crop', 'price' => '$24.000', 'lecturer' => 'Lucia Fernández'],
+                ['title' => 'Peritaje Informático', 'date' => '30 Ago', 'cat' => 'Peritaje', 'img' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1770&auto=format&fit=crop', 'price' => '$27.500', 'lecturer' => 'Jorge Lin']
             ];
         @endphp
 
-        @foreach($especialidades as $index => $esp)
-        <div class="col">
-            <div class="course-card-wrapper h-100" data-bs-toggle="modal" data-bs-target="#courseModal{{ $index }}">
-                <div class="course-poster">
-                    <img src="{{ $esp[2] }}" alt="{{ $esp[1] }}" 
-                         onerror="this.src='https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=500&q=80'">
-                </div>
-                <div class="course-info-footer">
-                    <div class="course-category">{{ $esp[0] }}</div>
-                    <div class="course-title">{{ $esp[1] }}</div>
+        @foreach($cursos as $curso)
+            <div class="col">
+                <div class="course-poster-wrapper" onclick='showCourseDetails(@json($curso))'>
+                    <div class="course-poster-inner" style="background-image: url('{{ $curso['img'] }}');"></div>
+                    <div class="course-overlay">
+                        <div class="course-category-pill">{{ $curso['cat'] }}</div>
+                        <h5 class="course-title-card">{{ $curso['title'] }}</h5>
+                        <div class="course-date-card">{{ $curso['date'] }}</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endforeach
+    </div>
+</div>
 
-        {{-- Modal Detallado --}}
-        <div class="modal fade" id="courseModal{{ $index }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
-                    <div class="row g-0">
-                        <div class="col-md-5 d-none d-md-block" style="background: url('{{ $esp[2] }}?auto=format&fit=crop&w=800&q=80') center/cover;">
-                            <div class="h-100 min-vh-50 bg-black bg-opacity-25"></div>
-                        </div>
-                        <div class="col-md-7 p-4 p-lg-5 bg-white text-start">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-bold" style="font-size: 10px;">{{ $esp[0] }}</span>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <h3 class="fw-bold text-dark mb-3">{{ $esp[1] }}</h3>
-                            <p class="text-muted mb-4 small">Capacitación académica exclusiva diseñada para profesionales que buscan la excelencia en su práctica diaria.</p>
-                            
-                            <div class="row g-2 mb-4 text-center">
-                                <div class="col-6">
-                                    <div class="bg-light p-2 rounded-3 border">
-                                        <p class="x-small text-muted mb-0 fw-bold">DURACIÓN</p>
-                                        <h6 class="mb-0 fw-bold small text-dark">{{ $esp[4] }}</h6>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="bg-light p-2 rounded-3 border">
-                                        <p class="x-small text-muted mb-0 fw-bold">DOCENTE</p>
-                                        <h6 class="mb-0 fw-bold small text-dark">{{ $esp[3] }}</h6>
-                                    </div>
-                                </div>
-                            </div>
+{{-- MODAL PRESTIGIO --}}
+<div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 overflow-hidden shadow-lg" style="border-radius: 30px; background: #0F172A;">
+            <div class="position-relative" id="modalHeaderImage" style="height: 280px; background-size: cover; background-position: center;">
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4 p-2 bg-dark bg-opacity-50 rounded-circle" data-bs-dismiss="modal" style="font-size: 10px;"></button>
+                <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white" style="background: linear-gradient(to top, #0F172A, transparent);">
+                    <div id="modalCategory" class="course-category-pill mb-1"></div>
+                    <h3 id="modalTitle" class="fw-black mb-0 display-6"></h3>
+                </div>
+            </div>
+            <div class="modal-body p-4 text-white">
+                <div class="row align-items-center mb-4">
+                    <div class="col-6">
+                        <label class="x-small fw-bold text-muted text-uppercase mb-1 d-block ls-1">PRÓXIMO INICIO</label>
+                        <h6 id="modalDate" class="fw-bold mb-0 text-white"></h6>
+                    </div>
+                    <div class="col-6 border-start border-secondary py-1">
+                        <label class="x-small fw-bold text-muted text-uppercase mb-1 d-block ls-1">INVERSIÓN</label>
+                        <h5 id="modalPrice" class="fw-black text-warning mb-0"></h5>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="x-small fw-bold text-muted text-uppercase mb-1 d-block ls-1">DOCENTE A CARGO</label>
+                    <p id="modalLecturer" class="fw-medium text-white-50 mb-0"></p>
+                </div>
 
-                            <div class="d-flex justify-content-between align-items-center mb-0">
-                                <div>
-                                    <p class="x-small text-muted mb-0 fw-bold">VALOR ARANCEL</p>
-                                    <h3 class="mb-0 fw-black text-dark">${{ $esp[5] }}</h3>
-                                </div>
-                                <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Inscribirse <i class="bi bi-arrow-right ms-1"></i></button>
-                            </div>
-                        </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary rounded-pill py-3 fw-black shadow-sm">
+                        INSCRIBIRSE AHORA <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                    <div class="text-center mt-2">
+                        <img src="https://static.cdnlogo.com/logos/v/20/visa.svg" height="15" class="opacity-50 me-2">
+                        <img src="https://static.cdnlogo.com/logos/m/20/mastercard.svg" height="15" class="opacity-50 me-2">
+                        <span class="x-small text-muted fw-bold ls-1">PAGOS SEGUROS</span>
                     </div>
                 </div>
             </div>
         </div>
-        @endforeach
     </div>
-
-    {{-- Certificaciones (Discretas) --}}
-    <div class="section-awards">
-        <h6 class="fw-bold mb-3 text-muted text-uppercase ls-1">Mis Logros Académicos</h6>
-        <div class="bg-white p-3 rounded-4 shadow-sm border border-light-subtle">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 small">
-                    <tbody>
-                        <tr>
-                            <td class="py-2 fw-bold text-dark"><i class="bi bi-award-fill text-warning me-2"></i> Diplomado en Derecho Admin</td>
-                            <td><span class="badge bg-light text-dark border-0 rounded-pill">ADMIN</span></td>
-                            <td class="text-end text-success fw-bold">CARGA QR LISTA</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
 </div>
+
+<script>
+    function showCourseDetails(item) {
+        document.getElementById('modalTitle').innerText = item.title;
+        document.getElementById('modalCategory').innerText = item.cat;
+        document.getElementById('modalDate').innerText = item.date;
+        document.getElementById('modalPrice').innerText = item.price;
+        document.getElementById('modalLecturer').innerText = item.lecturer;
+        document.getElementById('modalHeaderImage').style.backgroundImage = `url('${item.img}')`;
+        
+        var myModal = new bootstrap.Modal(document.getElementById('courseModal'));
+        myModal.show();
+    }
+</script>
 @endsection
