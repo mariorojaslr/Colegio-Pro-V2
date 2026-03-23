@@ -8,15 +8,15 @@
     .ls-2 { letter-spacing: 2px; }
     .fw-black { font-weight: 900; }
     .x-small { font-size: 10px; }
-    .xx-small { font-size: 9px; }
+    .xx-small { font-size: 8px; }
 
     /* ACADEMY HERO SLIM (Negro a la izquierda, imagen natural a la derecha) */
     .academy-hero {
-        background: linear-gradient(90deg, #0f172a 0%, #0f172a 15%, rgba(15, 23, 42, 0.5) 50%, transparent 90%), url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop');
+        background: linear-gradient(90deg, #0f172a 0%, #0f172a 10%, rgba(15, 23, 42, 0.4) 40%, transparent 85%), url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop');
         background-size: cover;
         background-position: center right;
         border-radius: 15px;
-        min-height: 140px; 
+        min-height: 130px; 
         display: flex;
         align-items: center;
         position: relative;
@@ -48,42 +48,41 @@
         height: 100%;
         background-size: cover;
         background-position: center;
-        background-color: #e2e8f0; /* Fallback elegantísimo */
+        background-color: #e2e8f0;
     }
 
-    /* GRADIENT OVERLAY (Más transparente, deja ver la imagen) */
     .course-overlay {
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
         height: 40%; 
-        background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 70%, transparent 100%);
+        background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 70%, transparent 100%);
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        padding: 15px;
+        padding: 12px;
         color: white;
     }
 
     .course-category-pill {
         background: #2563eb !important;
         color: white !important;
-        font-size: 8px; 
+        font-size: 7px; 
         font-weight: 800;
         text-transform: uppercase;
         padding: 2px 8px;
         border-radius: 50px;
         width: fit-content;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
         letter-spacing: 0.5px;
     }
 
     .course-title-card {
-        font-size: 0.9rem; 
+        font-size: 0.85rem; 
         font-weight: 700;
         line-height: 1.1;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
         font-family: 'Outfit', sans-serif;
     }
 
@@ -93,12 +92,12 @@
         font-weight: 600;
     }
 
-    /* FILTER BAR COMPACTA */
+    /* FILTER BAR */
     .filter-pill {
         cursor: pointer;
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 800;
-        letter-spacing: 0.8px;
+        letter-spacing: 1px;
         padding: 6px 16px;
         border-radius: 50px;
         background: #F1F5F9;
@@ -111,63 +110,136 @@
         background: #0F172A;
         color: white;
     }
+
+    /* MODAL SALES STYLE */
+    .modal-sales-header {
+        height: 220px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .modal-sales-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(0deg, #0F172A 0%, transparent 100%);
+    }
+
+    .feature-item {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 10px;
+        border-radius: 12px;
+    }
 </style>
 @endpush
 
 @section('content')
 <div class="container-fluid px-4 py-3 min-vh-100 bg-light-subtle">
     
-    {{-- Hero Sector (Slim & Elegant) --}}
+    {{-- Hero Sector --}}
     <div class="academy-hero p-4 px-5 shadow-sm">
         <div class="animate__animated animate__fadeIn">
             <h6 class="text-white-50 xx-small fw-bold ls-2 uppercase mb-1">ESCUELA VIRTUAL</h6>
-            <h1 class="h3 fw-black text-white mb-1" style="font-family: 'Outfit', sans-serif;">Academia Pro</h1>
-            <p class="text-white-50 x-small fw-light mb-3">Excelencia académica para la judicatura moderna.</p>
+            <h1 class="h4 fw-black text-white mb-0" style="font-family: 'Outfit', sans-serif;">Academia Pro</h1>
+            <p class="text-white-50 xx-small fw-light mb-3">Excelencia académica para la judicatura moderna.</p>
             
             <div class="d-flex gap-2">
-                <a href="#" class="btn btn-primary btn-sm rounded-pill px-3 fw-black x-small shadow-sm">
-                    VER AHORA
-                </a>
-                <a href="#" class="btn btn-outline-light btn-sm rounded-pill px-3 fw-bold x-small">
-                   DETALLES
+                <a href="#" class="btn btn-primary btn-sm rounded-pill px-3 fw-black xx-small shadow-sm">
+                    VER TEMARIO
                 </a>
             </div>
         </div>
     </div>
 
-    {{-- Temas --}}
+    {{-- Filtros --}}
     <div class="mb-4 d-flex flex-wrap gap-2 justify-content-center">
         <span class="filter-pill active">Todos</span>
         <span class="filter-pill">Gestión Judicial</span>
-        <span class="filter-pill">Nuevas Tecnologías</span>
+        <span class="filter-pill">Tecnología</span>
         <span class="filter-pill">Mediación</span>
-        <span class="filter-pill">Administración</span>
     </div>
 
-    {{-- Grid de Cursos (6 Columnas) --}}
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 mb-5">
         @php
             $cursos = [
-                ['title' => 'Gestión Judicial 4.0', 'date' => '15 May', 'cat' => 'Tecnología', 'img' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop'],
-                ['title' => 'I.A. en Tribunales', 'date' => '22 May', 'cat' => 'Digital', 'img' => 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1932&auto=format&fit=crop'],
-                ['title' => 'Ciberseguridad Legal', 'date' => '02 Jun', 'cat' => 'Seguridad', 'img' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Marketing Jurídico', 'date' => '10 Jun', 'cat' => 'Negocios', 'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026&auto=format&fit=crop'],
-                ['title' => 'Mediación 2024', 'date' => '18 Jun', 'cat' => 'Legal', 'img' => 'https://images.unsplash.com/photo-1521791136364-758a64045057?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Blockchain Público', 'date' => '25 Jun', 'cat' => 'Innovación', 'img' => 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2032&auto=format&fit=crop'],
-                ['title' => 'Contratos Smart', 'date' => '05 Jul', 'cat' => 'Tecnología', 'img' => 'https://images.unsplash.com/photo-1525547718571-a71440c936ee?q=80&w=1928&auto=format&fit=crop'],
-                ['title' => 'Ética Algorítmica', 'date' => '12 Jul', 'cat' => 'Ética', 'img' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Oratoria Forense', 'date' => '20 Jul', 'cat' => 'Habilidades', 'img' => 'https://images.unsplash.com/photo-1475721027187-40247339a3f9?q=80&w=2070&auto=format&fit=crop'],
-                ['title' => 'Liderazgo 360', 'date' => '15 Ago', 'cat' => 'Gestión', 'img' => 'https://images.unsplash.com/photo-1519389950473-4422e4a2e1dc?q=80&w=2070&auto=format&fit=crop'],
-                ['title' => 'Peritaje Digital', 'date' => '30 Ago', 'cat' => 'Peritaje', 'img' => 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Acuerdos Digitales', 'date' => '10 Oct', 'cat' => 'Legal', 'img' => 'https://images.unsplash.com/photo-1521791136364-758a64045057?q=80&w=1770&auto=format&fit=crop']
+                [
+                    'title' => 'Gestión Judicial 4.0', 
+                    'date' => '15 May', 
+                    'duration' => '4 Semanas',
+                    'cat' => 'Tecnología', 
+                    'price' => '$25.000',
+                    'lecturer' => 'Dr. Alberto Ruiz & Ing. Marta Sosa',
+                    'description' => 'Optimice el flujo de expedientes utilizando herramientas de I.A. y metodologías ágiles de gestión.',
+                    'benefit' => 'Reducción de tiempos procesales hasta en un 40%. Certificación oficial del Colegio.',
+                    'img' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop'
+                ],
+                [
+                    'title' => 'I.A. en Tribunales', 
+                    'date' => '22 May', 
+                    'duration' => '6 Semanas',
+                    'cat' => 'Digital', 
+                    'price' => '$32.000',
+                    'lecturer' => 'Mag. Juan Pérez',
+                    'description' => 'Aprenda a implementar sistemas de asistencia inteligente para la redacción de sentencias y análisis de casos.',
+                    'benefit' => 'Dominio de Prompt Engineering para abogados. Acceso a plataforma de I.A. privada.',
+                    'img' => 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1932&auto=format&fit=crop'
+                ],
+                [
+                    'title' => 'Ciberseguridad Legal', 
+                    'date' => '02 Jun', 
+                    'duration' => '3 Semanas',
+                    'cat' => 'Seguridad', 
+                    'price' => '$18.500',
+                    'lecturer' => 'Lic. Pedro Gómez',
+                    'description' => 'Proteja la información sensible de sus clientes y cumpla con las normativas de protección de datos.',
+                    'benefit' => 'Kit de herramientas de protección digital. Certificado de Especialista en Seguridad.',
+                    'img' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1770&auto=format&fit=crop'
+                ],
+                [
+                    'title' => 'Marketing Jurídico', 
+                    'date' => '10 Jun', 
+                    'duration' => '8 Semanas',
+                    'cat' => 'Negocios', 
+                    'price' => '$12.000',
+                    'lecturer' => 'Lic. Elena Blanco',
+                    'description' => 'Cómo posicionar su estudio jurídico en la era digital y atraer clientes de alto valor.',
+                    'benefit' => 'Plan de marketing personalizado al finalizar. Herramientas de automatización de ventas.',
+                    'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026&auto=format&fit=crop'
+                ],
+                [
+                    'title' => 'Mediación 2024', 
+                    'date' => '18 Jun', 
+                    'duration' => '5 Semanas',
+                    'cat' => 'Legal', 
+                    'price' => '$21.000',
+                    'lecturer' => 'Escribano Carlos Paz',
+                    'description' => 'Nuevas técnicas de mediación virtual y resolución alterna de conflictos.',
+                    'benefit' => 'Habilitación para mediación remota. Material didáctico descargable.',
+                    'img' => 'https://images.unsplash.com/photo-1521791136364-758a64045057?q=80&w=1770&auto=format&fit=crop'
+                ],
+                [
+                    'title' => 'Blockchain Público', 
+                    'date' => '25 Jun', 
+                    'duration' => '4 Semanas',
+                    'cat' => 'Innovación', 
+                    'price' => '$28.000',
+                    'lecturer' => 'Dr. Jorge Lin',
+                    'description' => 'Aplicaciones del registro distribuido en la fe pública y registros oficiales.',
+                    'benefit' => 'Entendimiento técnico y legal del Blockchain. Caso práctico incluido.',
+                    'img' => 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2032&auto=format&fit=crop'
+                ]
             ];
         @endphp
 
         @foreach($cursos as $curso)
-            <div class="col">
-                <div class="course-poster-wrapper" onclick='showCourseDetails(@json($curso))'>
+            <div class="col text-center">
+                <div class="course-poster-wrapper shadow-sm mx-auto" onclick='showCourseDetails(@json($curso))'>
                     <div class="course-poster-inner" style="background-image: url('{{ $curso['img'] }}');"></div>
-                    <div class="course-overlay">
+                    <div class="course-overlay text-start">
                         <div class="course-category-pill">{{ $curso['cat'] }}</div>
                         <h6 class="course-title-card">{{ $curso['title'] }}</h6>
                         <div class="course-date-card">{{ $curso['date'] }}</div>
@@ -178,26 +250,58 @@
     </div>
 </div>
 
-{{-- MODAL REFINADO --}}
+{{-- MODAL SALES ROLLS-ROYCE --}}
 <div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content border-0 overflow-hidden shadow-lg" style="border-radius: 15px; background: #0F172A;">
-            <div class="position-relative" id="modalHeaderImage" style="height: 180px; background-size: cover; background-position: center;">
-                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 p-2 bg-dark bg-opacity-50 rounded-circle" data-bs-dismiss="modal" style="font-size: 8px;"></button>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 overflow-hidden shadow-lg" style="border-radius: 20px; background: #0F172A;">
+            <div id="modalHeaderImage" class="modal-sales-header">
+                <div class="modal-sales-overlay"></div>
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4 p-2 bg-dark bg-opacity-50 rounded-circle" data-bs-dismiss="modal" style="font-size: 8px;"></button>
+                <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white">
+                    <span id="modalCategory" class="badge bg-primary rounded-pill px-3 py-1 xx-small fw-black mb-2"></span>
+                    <h2 id="modalTitle" class="fw-black mb-0 display-6" style="font-family: 'Outfit', sans-serif;"></h2>
+                </div>
             </div>
-            <div class="modal-body p-4 text-white">
-                <h6 id="modalTitle" class="fw-bold mb-3"></h6>
-                <div class="d-flex justify-content-between mb-4 border-top border-secondary pt-3">
-                    <div>
-                        <small class="text-white-50 xx-small d-block uppercase ls-1 mb-1">INICIO</small>
-                        <strong id="modalDate" class="x-small"></strong>
+            <div class="modal-body p-4 p-lg-5 text-white">
+                <div class="row g-4">
+                    <div class="col-lg-7">
+                        <section class="mb-4">
+                            <h6 class="text-primary x-small fw-bold ls-2 uppercase mb-3">¿DE QUÉ TRATA EL CURSO?</h6>
+                            <p id="modalDescription" class="text-white-50 small fw-light"></p>
+                        </section>
+                        <section class="mb-4">
+                            <h6 class="text-primary x-small fw-bold ls-2 uppercase mb-3">PRINCIPALES BENEFICIOS</h6>
+                            <p id="modalBenefit" class="text-white-50 small fw-light"></p>
+                        </section>
+                        <section>
+                            <h6 class="text-primary x-small fw-bold ls-2 uppercase mb-3">DOCENTES ACADÉMICOS</h6>
+                            <p id="modalLecturer" class="fw-bold text-white small"></p>
+                        </section>
                     </div>
-                    <div class="text-end">
-                        <small class="text-white-50 xx-small d-block uppercase ls-1 mb-1">TEMA</small>
-                        <strong id="modalCategory" class="x-small text-primary"></strong>
+                    <div class="col-lg-5">
+                        <div class="bg-white bg-opacity-5 p-4 rounded-4 border border-white border-opacity-10 shadow-sm">
+                            <div class="d-flex justify-content-between mb-3 feature-item">
+                                <span class="xx-small text-white-50 fw-bold">DURACIÓN</span>
+                                <span id="modalDuration" class="x-small fw-bold text-white"></span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 feature-item">
+                                <span class="xx-small text-white-50 fw-bold">CERTIFICACIÓN</span>
+                                <span class="x-small fw-bold text-white text-end">OFICIAL CON VALOR INTERNACIONAL</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-4 feature-item">
+                                <span class="xx-small text-white-50 fw-bold">INVERSIÓN</span>
+                                <span id="modalPrice" class="h5 fw-black text-warning mb-0"></span>
+                            </div>
+
+                            <button class="btn btn-primary w-100 rounded-pill py-3 fw-black shadow-sm mb-3">
+                                INSCRIBIRSE AHORA <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                            <div class="text-center">
+                                <span class="xx-small text-white-50 ls-1 fw-bold">PRÓXIMO INICIO: <span id="modalDate" class="text-white"></span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button class="btn btn-primary w-100 rounded-pill py-2 fw-black x-small">INSCRIBIRSE</button>
             </div>
         </div>
     </div>
@@ -208,6 +312,11 @@
         document.getElementById('modalTitle').innerText = item.title;
         document.getElementById('modalCategory').innerText = item.cat;
         document.getElementById('modalDate').innerText = item.date;
+        document.getElementById('modalPrice').innerText = item.price;
+        document.getElementById('modalLecturer').innerText = item.lecturer;
+        document.getElementById('modalDescription').innerText = item.description;
+        document.getElementById('modalBenefit').innerText = item.benefit;
+        document.getElementById('modalDuration').innerText = item.duration;
         document.getElementById('modalHeaderImage').style.backgroundImage = `url('${item.img}')`;
         
         var myModal = new bootstrap.Modal(document.getElementById('courseModal'));
