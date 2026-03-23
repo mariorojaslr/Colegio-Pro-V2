@@ -96,92 +96,224 @@
     <div class="section-courses mb-5">
         <div class="d-flex justify-content-between align-items-end mb-4 px-2">
             <div>
-                <h4 class="fw-bold mb-0">Lo más nuevo en <span class="text-primary">Derecho</span></h4>
-                <p class="text-muted small mb-0">Especializaciones actualizadas para el ciclo 2026</p>
+                <h4 class="fw-bold mb-0">Catálogo de <span class="text-primary">Especializaciones</span></h4>
+                <p class="text-muted small mb-0">Formación continua con certificación oficial</p>
             </div>
-            <a href="#" class="text-primary fw-bold text-decoration-none small ls-1">VER TODO <i class="bi bi-chevron-right"></i></a>
+            <a href="#" class="text-primary fw-bold text-decoration-none small ls-1">FILTRAR POR ÁREA <i class="bi bi-funnel"></i></a>
         </div>
 
         <div class="row g-4 mb-5">
-            {{-- Tarjeta de Curso 1 --}}
+            {{-- Curso 1: Civil --}}
             <div class="col-md-3">
                 <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
-                    <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Curso" class="img-fluid" style="height: 180px; width: 100%; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
                     <div class="p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="x-small fw-bold text-primary text-uppercase">Derecho Civil</span>
-                            <span class="x-small text-muted fw-bold">12h 45m</span>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-primary text-uppercase">Civil</span>
+                            <span class="x-small text-muted fw-bold">12h</span>
                         </div>
-                        <h6 class="fw-bold text-dark mb-2">Estrategia en Gestión Judicial Predictiva</h6>
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <div class="bg-success rounded-circle" style="width: 8px; height: 8px;"></div>
-                            <span class="x-small text-success fw-bold">Actualizado hoy</span>
-                        </div>
-                        <div class="d-grid">
-                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Empezar ahora</button>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Gestión Judicial Predictiva</h6>
+                        <span class="x-small text-success fw-bold"><i class="bi bi-check-circle-fill"></i> Actualizado</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Tarjeta de Curso 2 --}}
+            {{-- Curso 2: Familia --}}
             <div class="col-md-3">
                 <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
-                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Curso" class="img-fluid" style="height: 180px; width: 100%; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
                     <div class="p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="x-small fw-bold text-warning text-uppercase">Legal Tech</span>
-                            <span class="x-small text-muted fw-bold">8h 20m</span>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-danger text-uppercase">Familia</span>
+                            <span class="x-small text-muted fw-bold">15h</span>
                         </div>
-                        <h6 class="fw-bold text-dark mb-2">IA Aplicada al Ejercicio Profesional</h6>
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <div class="bg-primary rounded-circle" style="width: 8px; height: 8px;"></div>
-                            <span class="x-small text-primary fw-bold">Nuevo Lanzamiento</span>
-                        </div>
-                        <div class="d-grid">
-                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Empezar ahora</button>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Procesos de Alimentos y Cuidado</h6>
+                        <span class="x-small text-primary fw-bold">Certificado Incluído</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Tarjeta de Curso 3 --}}
+            {{-- Curso 3: Laboral --}}
             <div class="col-md-3">
                 <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
-                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Curso" class="img-fluid" style="height: 180px; width: 100%; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2923216?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
                     <div class="p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="x-small fw-bold text-danger text-uppercase">Penal</span>
-                            <span class="x-small text-muted fw-bold">15h 00m</span>
-                        </div>
-                        <h6 class="fw-bold text-dark mb-2">Reformas Procesales 2026: Guía Práctica</h6>
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <div class="bg-secondary rounded-circle" style="width: 8px; height: 8px;"></div>
-                            <span class="x-small text-muted fw-bold">Ciclo Regular</span>
-                        </div>
-                        <div class="d-grid">
-                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Empezar ahora</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Tarjeta de Curso 4 --}}
-            <div class="col-md-3">
-                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
-                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2923216?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Curso" class="img-fluid" style="height: 180px; width: 100%; object-fit: cover;">
-                    <div class="p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="x-small fw-bold text-success text-uppercase">Laboral</span>
-                            <span class="x-small text-muted fw-bold">6h 10m</span>
+                            <span class="x-small text-muted fw-bold">8h</span>
                         </div>
-                        <h6 class="fw-bold text-dark mb-2">Negociación Colectiva y Teletrabajo</h6>
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <div class="bg-success rounded-circle" style="width: 8px; height: 8px;"></div>
-                            <span class="x-small text-success fw-bold">Certificado QR incluído</span>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Teletrabajo y Nuevas Normas</h6>
+                        <span class="x-small text-muted fw-bold">Nivel Intermedio</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
                         </div>
-                        <div class="d-grid">
-                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Empezar ahora</button>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 4: Penal --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-dark text-uppercase">Penal</span>
+                            <span class="x-small text-muted fw-bold">20h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Reformas Procesales 2026</h6>
+                        <span class="x-small text-danger fw-bold">Tendencia</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 5: Sucesiones --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-warning text-uppercase">Sucesiones</span>
+                            <span class="x-small text-muted fw-bold">10h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Práctica en Juicios Sucesorios</h6>
+                        <span class="x-small text-muted fw-bold">Guía Práctica</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 6: Tributario --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1554224155-16974301755d?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-info text-uppercase">Tributario</span>
+                            <span class="x-small text-muted fw-bold">14h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Actualización Impositiva AFIP</h6>
+                        <span class="x-small text-info fw-bold">Imprescindible</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 7: Comercial --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1454165833767-0275084927ed?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-primary text-uppercase">Comercial</span>
+                            <span class="x-small text-muted fw-bold">11h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Contratos Modernos y Startups</h6>
+                        <span class="x-small text-primary fw-bold">Nueva Era</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 8: Administrativo --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1423592707957-3b212afa6733?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-secondary text-uppercase">Administrativo</span>
+                            <span class="x-small text-muted fw-bold">9h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Procedimiento Administrativo Local</h6>
+                        <span class="x-small text-muted fw-bold">Nivel Básico</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 9: Mediación --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1573164773501-229ef2159f81?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-success text-uppercase">Mediación</span>
+                            <span class="x-small text-muted fw-bold">12h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Taller de Resolución de Conflictos</h6>
+                        <span class="x-small text-success fw-bold">Certificado QR</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 10: Inmobiliario --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-warning text-uppercase">Inmobiliario</span>
+                            <span class="x-small text-muted fw-bold">10h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Ley de Alquileres y Práctica</h6>
+                        <span class="x-small text-muted fw-bold">Actualidad</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 11: Ética --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-dark text-uppercase">Ética</span>
+                            <span class="x-small text-muted fw-bold">6h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Responsabilidad Profesional</h6>
+                        <span class="x-small text-primary fw-bold">Obligatorio</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Curso 12: Inglés Jurídico --}}
+            <div class="col-md-3">
+                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="x-small fw-bold text-info text-uppercase">Idiomas</span>
+                            <span class="x-small text-muted fw-bold">30h</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">Legal English for Lawyers</h6>
+                        <span class="x-small text-info fw-bold">Internacional</span>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-outline-dark btn-sm rounded-pill fw-bold">Ver más</button>
                         </div>
                     </div>
                 </div>
