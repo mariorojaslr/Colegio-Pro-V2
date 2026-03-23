@@ -17,9 +17,9 @@
                     Mostrar: <span class="text-primary">{{ request('per_page', 10) }}</span>
                 </button>
                 <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
-                    <li><a class="dropdown-item rounded-3 x-small fw-bold" href="{{ request()->fullUrlWithQuery(['per_page' => 10]) }}">10 registros</a></li>
-                    <li><a class="dropdown-item rounded-3 x-small fw-bold" href="{{ request()->fullUrlWithQuery(['per_page' => 25]) }}">25 registros</a></li>
-                    <li><a class="dropdown-item rounded-3 x-small fw-bold" href="{{ request()->fullUrlWithQuery(['per_page' => 50]) }}">50 registros</a></li>
+                    <li><a class="dropdown-item rounded-3 x-small fw-bold {{ request('per_page') == 10 ? 'active' : '' }}" href="{{ url()->current() }}?per_page=10">10 registros</a></li>
+                    <li><a class="dropdown-item rounded-3 x-small fw-bold {{ request('per_page') == 25 ? 'active' : '' }}" href="{{ url()->current() }}?per_page=25">25 registros</a></li>
+                    <li><a class="dropdown-item rounded-3 x-small fw-bold {{ request('per_page') == 50 ? 'active' : '' }}" href="{{ url()->current() }}?per_page=50">50 registros</a></li>
                 </ul>
             </div>
             <a href="{{ route('admin.schools.create') }}" class="btn btn-dark btn-sm rounded-pill px-4 fw-black shadow-sm">
@@ -115,7 +115,6 @@
     .ls-2 { letter-spacing: 2px; }
     .x-small { font-size: 10px; }
     
-    /* Reset de Paginador */
     .pagination { margin: 0; }
     .page-link { 
         padding: 5px 12px;
@@ -127,12 +126,6 @@
         margin: 0 2px;
         border-radius: 50px !important;
     }
-    .page-item.active .page-link {
-        background: #0F172A;
-        color: white;
-    }
-    .table-hover tbody tr:hover {
-        background-color: rgba(15, 23, 42, 0.02);
-    }
+    .page-item.active .page-link { background: #0F172A; color: white; }
 </style>
 @endsection

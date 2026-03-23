@@ -10,19 +10,19 @@
     .x-small { font-size: 10px; }
     .xx-small { font-size: 9px; }
 
-    /* ACADEMY HERO SLIM (Fino y delicado) */
+    /* ACADEMY HERO SLIM (Negro a la izquierda, imagen natural a la derecha) */
     .academy-hero {
-        background: linear-gradient(90deg, #0F172A 0%, rgba(15, 23, 42, 0.4) 100%), url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop');
+        background: linear-gradient(90deg, #0f172a 0%, #0f172a 15%, rgba(15, 23, 42, 0.5) 50%, transparent 90%), url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop');
         background-size: cover;
-        background-position: center;
+        background-position: center right;
         border-radius: 15px;
-        min-height: 140px; /* Reducción drástica de altura */
+        min-height: 140px; 
         display: flex;
         align-items: center;
         position: relative;
         overflow: hidden;
         border: 1px solid rgba(0,0,0,0.05);
-        margin-bottom: 25px; /* Menos derroche de espacio */
+        margin-bottom: 25px; 
     }
 
     /* COURSE CARD ROLLS-ROYCE SLIM */
@@ -31,7 +31,7 @@
         border-radius: 10px;
         overflow: hidden;
         cursor: pointer;
-        background: #f8fafc;
+        background: #f1f5f9;
         aspect-ratio: 2/3;
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -48,6 +48,7 @@
         height: 100%;
         background-size: cover;
         background-position: center;
+        background-color: #e2e8f0; /* Fallback elegantísimo */
     }
 
     /* GRADIENT OVERLAY (Más transparente, deja ver la imagen) */
@@ -56,8 +57,8 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 45%; /* Menor altura para no tapar la imagen */
-        background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+        height: 40%; 
+        background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 70%, transparent 100%);
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -68,26 +69,26 @@
     .course-category-pill {
         background: #2563eb !important;
         color: white !important;
-        font-size: 8.5px; /* Más pequeño */
+        font-size: 8px; 
         font-weight: 800;
         text-transform: uppercase;
-        padding: 3px 10px;
+        padding: 2px 8px;
         border-radius: 50px;
         width: fit-content;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
         letter-spacing: 0.5px;
     }
 
     .course-title-card {
-        font-size: 0.95rem; /* Más pequeño y fino */
+        font-size: 0.9rem; 
         font-weight: 700;
         line-height: 1.1;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
         font-family: 'Outfit', sans-serif;
     }
 
     .course-date-card {
-        font-size: 11px;
+        font-size: 10px;
         color: rgba(255, 255, 255, 0.7);
         font-weight: 600;
     }
@@ -117,7 +118,7 @@
 <div class="container-fluid px-4 py-3 min-vh-100 bg-light-subtle">
     
     {{-- Hero Sector (Slim & Elegant) --}}
-    <div class="academy-hero p-4 px-5">
+    <div class="academy-hero p-4 px-5 shadow-sm">
         <div class="animate__animated animate__fadeIn">
             <h6 class="text-white-50 xx-small fw-bold ls-2 uppercase mb-1">ESCUELA VIRTUAL</h6>
             <h1 class="h3 fw-black text-white mb-1" style="font-family: 'Outfit', sans-serif;">Academia Pro</h1>
@@ -134,7 +135,7 @@
         </div>
     </div>
 
-    {{-- Temas (Compacto) --}}
+    {{-- Temas --}}
     <div class="mb-4 d-flex flex-wrap gap-2 justify-content-center">
         <span class="filter-pill active">Todos</span>
         <span class="filter-pill">Gestión Judicial</span>
@@ -153,12 +154,12 @@
                 ['title' => 'Marketing Jurídico', 'date' => '10 Jun', 'cat' => 'Negocios', 'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026&auto=format&fit=crop'],
                 ['title' => 'Mediación 2024', 'date' => '18 Jun', 'cat' => 'Legal', 'img' => 'https://images.unsplash.com/photo-1521791136364-758a64045057?q=80&w=1770&auto=format&fit=crop'],
                 ['title' => 'Blockchain Público', 'date' => '25 Jun', 'cat' => 'Innovación', 'img' => 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2032&auto=format&fit=crop'],
-                ['title' => 'Contratos Smart', 'date' => '05 Jul', 'cat' => 'Tecnología', 'img' => 'https://images.unsplash.com/photo-1510511459019-5dee9954889c?q=80&w=1770&auto=format&fit=crop'],
+                ['title' => 'Contratos Smart', 'date' => '05 Jul', 'cat' => 'Tecnología', 'img' => 'https://images.unsplash.com/photo-1525547718571-a71440c936ee?q=80&w=1928&auto=format&fit=crop'],
                 ['title' => 'Ética Algorítmica', 'date' => '12 Jul', 'cat' => 'Ética', 'img' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1770&auto=format&fit=crop'],
                 ['title' => 'Oratoria Forense', 'date' => '20 Jul', 'cat' => 'Habilidades', 'img' => 'https://images.unsplash.com/photo-1475721027187-40247339a3f9?q=80&w=2070&auto=format&fit=crop'],
                 ['title' => 'Liderazgo 360', 'date' => '15 Ago', 'cat' => 'Gestión', 'img' => 'https://images.unsplash.com/photo-1519389950473-4422e4a2e1dc?q=80&w=2070&auto=format&fit=crop'],
-                ['title' => 'Peritaje Digital', 'date' => '30 Ago', 'cat' => 'Peritaje', 'img' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Derecho de Autor', 'date' => '10 Sep', 'cat' => 'Legal', 'img' => 'https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=1770&auto=format&fit=crop']
+                ['title' => 'Peritaje Digital', 'date' => '30 Ago', 'cat' => 'Peritaje', 'img' => 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1770&auto=format&fit=crop'],
+                ['title' => 'Acuerdos Digitales', 'date' => '10 Oct', 'cat' => 'Legal', 'img' => 'https://images.unsplash.com/photo-1521791136364-758a64045057?q=80&w=1770&auto=format&fit=crop']
             ];
         @endphp
 
@@ -185,15 +186,15 @@
                 <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 p-2 bg-dark bg-opacity-50 rounded-circle" data-bs-dismiss="modal" style="font-size: 8px;"></button>
             </div>
             <div class="modal-body p-4 text-white">
-                <h5 id="modalTitle" class="fw-bold mb-3"></h5>
+                <h6 id="modalTitle" class="fw-bold mb-3"></h6>
                 <div class="d-flex justify-content-between mb-4 border-top border-secondary pt-3">
                     <div>
                         <small class="text-white-50 xx-small d-block uppercase ls-1 mb-1">INICIO</small>
-                        <strong id="modalDate" class="small"></strong>
+                        <strong id="modalDate" class="x-small"></strong>
                     </div>
                     <div class="text-end">
                         <small class="text-white-50 xx-small d-block uppercase ls-1 mb-1">TEMA</small>
-                        <strong id="modalCategory" class="small text-primary"></strong>
+                        <strong id="modalCategory" class="x-small text-primary"></strong>
                     </div>
                 </div>
                 <button class="btn btn-primary w-100 rounded-pill py-2 fw-black x-small">INSCRIBIRSE</button>
