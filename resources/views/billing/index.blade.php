@@ -28,40 +28,41 @@
             </div>
 
             <!-- Tabla de Precios -->
-            <div class="row g-4 mb-5">
+            <div class="row flex-nowrap overflow-auto pb-4 custom-scrollbar g-4 mb-5" style="margin-right: -15px; margin-left: -15px; padding-left: 15px; padding-right: 15px;">
                 @foreach($plans as $plan)
-                <div class="col-lg-3">
-                    <div class="card-prestige h-100 p-5 bg-white border-0 shadow-lg text-center position-relative transition-all hover-up {{ $activeSubscription && $activeSubscription->subscription_plan_id == $plan->id ? 'border-primary border-top' : '' }}" 
-                         style="border-radius: 40px; border-top-width: 8px !important;">
+                <div class="col-11 col-sm-8 col-md-6 col-lg-3 flex-shrink-0">
+                    <div class="card-prestige h-100 p-4 p-xl-5 bg-white border-0 shadow-lg text-center position-relative transition-all hover-up {{ $activeSubscription && $activeSubscription->subscription_plan_id == $plan->id ? 'border-primary border-top' : '' }}" 
+                         style="border-radius: 30px; border-top-width: 8px !important;">
                         
                         @if($activeSubscription && $activeSubscription->subscription_plan_id == $plan->id)
                         <span class="badge bg-primary rounded-pill px-3 py-2 position-absolute top-0 start-50 translate-middle shadow-sm">Plan Actual</span>
                         @endif
 
-                        <h4 class="fw-bold mb-4" style="color: var(--primary-color)">{{ $plan->name }}</h4>
-                        <div class="mb-5">
-                            <span class="display-5 fw-bold text-dark">${{ number_format($plan->price, 0, ',', '.') }}</span>
+                        <h4 class="fw-bold mb-3 mb-xl-4 text-truncate" style="color: var(--primary-color)">{{ $plan->name }}</h4>
+                        <div class="mb-4 mb-xl-5">
+                            <span class="display-6 fw-bold text-dark">${{ number_format($plan->price, 0, ',', '.') }}</span>
                             <span class="text-muted small">/ mes</span>
                         </div>
 
-                        <ul class="list-unstyled d-grid gap-3 mb-5 text-start px-3">
-                            <!-- Característica: Límite de alumnos registrados -->
-                            <li class="small fw-bold"><i class="bi bi-mortarboard text-primary me-2"></i> Hasta {{ number_format($plan->max_users, 0, ',', '.') }} alumnos registrados</li>
-                            <li class="small fw-bold"><i class="bi bi-hdd-network text-primary me-2"></i> {{ $plan->max_storage }} GB Almacenamiento</li>
-                            <li class="small fw-bold"><i class="bi bi-broadcast text-info me-2"></i> {{ $plan->max_traffic }} GB Tráfico CDN</li>
-                            <li class="small fw-bold"><i class="bi bi-play-circle text-danger me-2"></i> {{ $plan->max_streaming }} min Streaming</li>
+                        <ul class="list-unstyled d-grid gap-2 mb-4 mb-xl-5 text-start px-2">
+                            <li class="small fw-bold d-flex align-items-center"><i class="bi bi-mortarboard text-primary me-2"></i> <span>Hasta {{ number_format($plan->max_users, 0, ',', '.') }} alumnos</span></li>
+                            <li class="small fw-bold d-flex align-items-center"><i class="bi bi-hdd-network text-primary me-2"></i> <span>{{ $plan->max_storage }} GB Almacenamiento</span></li>
+                            <li class="small fw-bold d-flex align-items-center"><i class="bi bi-broadcast text-info me-2"></i> <span>{{ $plan->max_traffic }} GB Tráfico CDN</span></li>
+                            <li class="small fw-bold d-flex align-items-center"><i class="bi bi-play-circle text-danger me-2"></i> <span>{{ $plan->max_streaming }} min Streaming</span></li>
                             @foreach($plan->features as $feature)
-                            <li class="small text-muted"><i class="bi bi-check2 text-success me-2"></i> {{ $feature }}</li>
+                            <li class="small text-muted d-flex align-items-start"><i class="bi bi-check2 text-success me-2 mt-1"></i> <span class="lh-sm">{{ $feature }}</span></li>
                             @endforeach
                         </ul>
 
-                        <form method="POST" action="{{ route('billing.upgrade') }}">
-                            @csrf
-                            <input type="hidden" name="plan_id" value="{{ $plan->id }}">
-                            <button type="submit" class="btn {{ $activeSubscription && $activeSubscription->subscription_plan_id == $plan->id ? 'btn-outline-secondary disabled' : 'btn-prestige' }} w-100 rounded-pill py-3 fw-bold shadow-lg">
-                                {{ $activeSubscription && $activeSubscription->subscription_plan_id == $plan->id ? 'Plan Actual' : 'Seleccionar Plan' }}
-                            </button>
-                        </form>
+                        <div class="mt-auto">
+                            <form method="POST" action="{{ route('billing.upgrade') }}">
+                                @csrf
+                                <input type="hidden" name="plan_id" value="{{ $plan->id }}">
+                                <button type="submit" class="btn {{ $activeSubscription && $activeSubscription->subscription_plan_id == $plan->id ? 'btn-outline-secondary disabled' : 'btn-prestige' }} w-100 rounded-pill py-3 fw-bold shadow">
+                                    {{ $activeSubscription && $activeSubscription->subscription_plan_id == $plan->id ? 'Plan Actual' : 'Seleccionar Plan' }}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 @endforeach

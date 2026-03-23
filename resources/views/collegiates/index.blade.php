@@ -10,7 +10,7 @@
         </div>
         <div class="col-lg-5 text-lg-end">
             <div class="d-flex gap-2 justify-content-lg-end">
-                <a href="#" class="btn btn-outline-dark rounded-pill px-4 fw-bold small shadow-sm"><i class="bi bi-download me-2"></i> Descargar Excel</a>
+                <a href="{{ route('collegiates.export') }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold small shadow-sm"><i class="bi bi-download me-2"></i> Descargar Excel</a>
                 <a href="{{ route('collegiates.import') }}" class="btn btn-primary rounded-pill px-4 fw-bold small shadow-sm"><i class="bi bi-file-earmark-arrow-up me-2"></i> Importar Masivo</a>
             </div>
         </div>
@@ -21,32 +21,36 @@
         <div class="col-md-3">
             <a href="{{ route('collegiates.index') }}" class="text-decoration-none">
                 <div class="card-prestige p-4 border-0 {{ !request('filter') ? 'bg-primary text-white' : 'bg-white text-dark' }} transition-all">
-                    <h2 class="fw-bold mb-0">Total</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Todos los Matriculados</p>
+                    <h2 class="fw-bold mb-0">{{ number_format($stats['total'], 0, ',', '.') }}</h2>
+                    <p class="mb-0 small opacity-75 fw-bold">Total</p>
+                    <p class="mb-0 x-small opacity-50">Todos los Matriculados</p>
                 </div>
             </a>
         </div>
         <div class="col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'morosos']) }}" class="text-decoration-none">
                 <div class="card-prestige p-4 border-0 {{ request('filter') === 'morosos' ? 'bg-danger text-white' : 'bg-white text-danger' }} transition-all">
-                    <h2 class="fw-bold mb-0">Deuda Cuotas</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Pendientes de Pago</p>
+                    <h2 class="fw-bold mb-0">{{ number_format($stats['debt_fees'], 0, ',', '.') }}</h2>
+                    <p class="mb-0 small opacity-75 fw-bold">Deuda Cuotas</p>
+                    <p class="mb-0 x-small opacity-50">Pendientes de Pago</p>
                 </div>
             </a>
         </div>
         <div class="col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'sin_papeles']) }}" class="text-decoration-none">
                 <div class="card-prestige p-4 border-0 {{ request('filter') === 'sin_papeles' ? 'bg-warning text-dark' : 'bg-white text-warning' }} transition-all">
-                    <h2 class="fw-bold mb-0">Deuda Docs</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Faltan Requisitos</p>
+                    <h2 class="fw-bold mb-0">{{ number_format($stats['debt_docs'], 0, ',', '.') }}</h2>
+                    <p class="mb-0 small opacity-75 fw-bold">Deuda Docs</p>
+                    <p class="mb-0 x-small opacity-50">Faltan Requisitos</p>
                 </div>
             </a>
         </div>
         <div class="col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'habilitados']) }}" class="text-decoration-none">
                 <div class="card-prestige p-4 border-0 {{ request('filter') === 'habilitados' ? 'bg-success text-white' : 'bg-white text-success' }} transition-all">
-                    <h2 class="fw-bold mb-0">Habilitados</h2>
-                    <p class="mb-0 small opacity-75 fw-bold">Cumplimiento 100%</p>
+                    <h2 class="fw-bold mb-0">{{ number_format($stats['enabled'], 0, ',', '.') }}</h2>
+                    <p class="mb-0 small opacity-75 fw-bold">Habilitados</p>
+                    <p class="mb-0 x-small opacity-50">Cumplimiento 100%</p>
                 </div>
             </a>
         </div>
@@ -55,21 +59,31 @@
     {{-- Buscador y Listado --}}
     <div class="card-prestige p-0 border-0 bg-white shadow-sm overflow-hidden" style="border-radius: 40px">
         <div class="p-4 border-bottom bg-light">
-            <form action="{{ route('collegiates.index') }}" method="GET" class="row g-3">
+            <form action="{{ route('collegiates.index') }}" method="GET" class="row g-3 align-items-center">
                 @if(request('filter'))
                     <input type="hidden" name="filter" value="{{ request('filter') }}">
                 @endif
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0 rounded-start-pill"><i class="bi bi-search text-muted"></i></span>
+                        <span class="input-group-text bg-white border-end-0 rounded-start-pill paddinc-lc"><i class="bi bi-search text-muted"></i></span>
                         <input type="text" name="search" class="form-control border-start-0 rounded-end-pill py-2" 
                                placeholder="Buscar por Nombre, DNI o Matrícula..." value="{{ request('search') }}">
                     </div>
                 </div>
-                <div class="col-md-4 text-end">
-                    <button type="submit" class="btn btn-dark rounded-pill px-5 fw-bold">Buscar</button>
-                    @if(request('search') || request('filter'))
-                        <a href="{{ route('collegiates.index') }}" class="btn btn-light rounded-pill px-3 ms-2"><i class="bi bi-x-lg"></i></a>
+                <div class="col-md-2">
+                    <select name="per_page" class="form-select rounded-pill" onchange="this.form.submit()">
+                        <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 filas</option>
+                        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 filas</option>
+                        <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 filas</option>
+                        <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 filas</option>
+                        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 filas</option>
+                        <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 filas</option>
+                    </select>
+                </div>
+                <div class="col-md-3 text-end">
+                    <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Buscar</button>
+                    @if(request('search') || request('filter') || request('per_page'))
+                        <a href="{{ route('collegiates.index') }}" class="btn btn-outline-secondary rounded-pill px-3 ms-1"><i class="bi bi-x-lg"></i></a>
                     @endif
                 </div>
             </form>
@@ -137,11 +151,13 @@
 <style>
     .ls-1 { letter-spacing: 1px; }
     .uppercase { text-transform: uppercase; }
+    .x-small { font-size: 0.75rem; }
     .card-prestige { border-radius: 25px; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
     .card-prestige:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
     mark { background: #fff3cd !important; padding: 0.1em 0 !important; color: #856404; font-weight: 800; border-radius: 2px; }
     #collegiateTable tr { transition: background 0.2s ease; }
     #collegiateTable tr:hover { background-color: rgba(248, 250, 252, 0.8) !important; }
+    .paddinc-lc { padding-left: 1rem !important; }
 </style>
 
 <script>
@@ -156,11 +172,12 @@ document.addEventListener('DOMContentLoaded', function() {
         timeout = setTimeout(() => {
             const searchTerm = this.value;
             const filter = new URLSearchParams(window.location.search).get('filter') || '';
+            const perPage = document.querySelector('select[name="per_page"]').value;
             
             // Animación de carga sutil
             tableBody.style.opacity = '0.5';
             
-            fetch(`{{ route('collegiates.index') }}?search=${searchTerm}&filter=${filter}`, {
+            fetch(`{{ route('collegiates.index') }}?search=${searchTerm}&filter=${filter}&per_page=${perPage}`, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(response => response.text())
@@ -174,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 paginationLinks.innerHTML = newPagination.innerHTML;
                 tableBody.style.opacity = '1';
                 
-                // Aplicar Resaltado Amarillo
-                if (searchTerm.length > 2) {
+                // Aplicar Resaltado Amarillo - ¡Ahora desde el primer carácter!
+                if (searchTerm.length > 0) {
                     highlightText(searchTerm);
                 }
             });

@@ -14,7 +14,20 @@ class CollegiateController extends Controller
         $user = Auth::user();
         if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
 
-        $query = $user->isOwner() ? Collegiate::query() : $user->school->collegiates();
+        $baseQuery = $user->isOwner() ? Collegiate::query() : $user->school->collegiates();
+
+        // 📊 Calculamos Métricas para las Tarjetas Superiores
+        $stats = [
+            'total' => (clone $baseQuery)->count(),
+            'debt_fees' => (clone $baseQuery)->where('is_fees_compliant', false)->count(),
+            'debt_docs' => (clone $baseQuery)->where('is_fully_documented', false)->count(),
+            'enabled' => (clone $baseQuery)->where('is_fees_compliant', true)
+                                          ->where('is_fully_documented', true)
+                                          ->where('is_ethics_compliant', true)
+                                          ->count(),
+        ];
+
+        $query = clone $baseQuery;
 
         // 🔍 Búsqueda General por Texto (Nombre, Apellido, Matrícula, DNI, Email, Teléfono)
         if ($request->has('search') && $request->search != '') {
@@ -46,7 +59,7 @@ class CollegiateController extends Controller
 
         $collegiates = $query->orderBy('last_name')->paginate($perPage);
         
-        return view('collegiates.index', compact('collegiates'));
+        return view('collegiates.index', compact('collegiates', 'stats', 'perPage'));
     }
 
     public function show(Collegiate $collegiate)
@@ -141,5 +154,52 @@ class CollegiateController extends Controller
         }
 
         return redirect()->route('collegiates.index')->with('success', "¡Proceso terminado! Se han importado/actualizado $count colegiados exitosamente.");
+    /**
+     * Exporta el padrón completo a CSV (Compatible con Excel).
+     */
+    public function export()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+
+        $query = $user->isOwner() ? Collegiate::query() : $user->school->collegiates();
+        $collegiates = $query->orderBy('last_name')->get();
+
+        $fileName = 'padron_profesional_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('Matricula', 'Apellido', 'Nombre', 'DNI', 'Email', 'Telefono', 'Situacion', 'Caja Etica', 'Cuotas');
+
+        $callback = function() use($collegiates, $columns) {
+            $file = fopen('php://output', 'w');
+            // Añadir BOM para soporte de acentos en Excel
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+            fputcsv($file, $columns, ';');
+
+            foreach ($collegiates as $col) {
+                $row['Matricula']  = $col->registration_number;
+                $row['Apellido']   = $col->last_name;
+                $row['Nombre']     = $col->first_name;
+                $row['DNI']        = $col->dni;
+                $row['Email']      = $col->email;
+                $row['Telefono']   = $col->phone;
+                $row['Situacion']  = $col->professional_situation ?? 'Activo';
+                $row['Caja Etica'] = $col->is_ethics_compliant ? 'OK' : 'DEUDA';
+                $row['Cuotas']     = $col->is_fees_compliant ? 'AL DIA' : 'MOROSO';
+
+                fputcsv($file, array($row['Matricula'], $row['Apellido'], $row['Nombre'], $row['DNI'], $row['Email'], $row['Telefono'], $row['Situacion'], $row['Caja Etica'], $row['Cuotas']), ';');
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }
