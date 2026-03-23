@@ -23,7 +23,7 @@
                     </div>
                 @else
                     <div style="position:relative;padding-top:56.25%;">
-                        <iframe src="https://iframe.mediadelivery.net/embed/{{ env('BUNNY_LIBRARY_ID', '216543') }}/{{ $lesson->bunny_video_id }}?autoplay=false&loop=false&muted=false&preload=true&responsive=true" 
+                        <iframe src="https://iframe.mediadelivery.net/embed/{{ config('services.bunny.stream.library_id') }}/{{ $lesson->bunny_video_id }}?autoplay=false&loop=false&muted=false&preload=true&responsive=true" 
                                 loading="lazy" 
                                 style="border:0;position:absolute;top:0;left:0;width:100%;height:100%;" 
                                 allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
