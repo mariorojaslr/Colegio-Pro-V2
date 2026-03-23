@@ -79,6 +79,10 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::post('/admin/exams/{exam}/questions', [\App\Http\Controllers\Admin\ExamController::class, 'storeQuestion'])->name('admin.exams.questions.store');
     Route::delete('/admin/questions/{question}', [\App\Http\Controllers\Admin\ExamController::class, 'destroyQuestion'])->name('admin.exams.questions.destroy');
     
+    // Gestión de Facturación Global (OWNER)
+    Route::get('/admin/billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
+    Route::get('/admin/billing/download/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'downloadInvoice'])->name('admin.billing.download');
+
     // Gestión de Recursos (PDF, Slides, etc)
     Route::post('/admin/academy/{lesson}/resources', [\App\Http\Controllers\Admin\LessonResourceController::class, 'store'])->name('admin.lesson_resources.store');
     Route::delete('/admin/resources/{resource}', [\App\Http\Controllers\Admin\LessonResourceController::class, 'destroy'])->name('admin.lesson_resources.destroy');

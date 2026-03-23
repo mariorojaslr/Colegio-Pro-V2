@@ -4,31 +4,36 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-use App\Models\Subscription;
 use App\Models\PaymentRecord;
-use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BillingController extends Controller
 {
+    /**
+     * Listado de todas las facturas del sistema global.
+     */
     public function index()
     {
-        $user = Auth::user();
-        if (!$user->isOwner()) {
-            abort(403);
-        }
+        $invoices = PaymentRecord::with('school.activeSubscription.plan')
+            ->latest()
+            ->paginate(20);
 
-        $totalRevenue = PaymentRecord::sum('amount');
-        $activeSubscriptions = Subscription::where('status', 'active')->count();
-        $recentPayments = PaymentRecord::with('school')->latest()->take(20)->get();
-        
-        // Métricas básicas para el Owner
-        $stats = [
-            'revenue' => $totalRevenue,
-            'active_subs' => $activeSubscriptions,
-            'total_payments' => PaymentRecord::count(),
-        ];
+        return view('admin.billing.index', compact('invoices'));
+    }
 
-        return view('admin.billing.index', compact('stats', 'recentPayments'));
+    /**
+     * Descarga de la Factura Institucional en PDF.
+     */
+    public function downloadInvoice(PaymentRecord $invoice)
+    {
+        $invoice->load('school.activeSubscription.plan');
+
+        // Compatibilidad con la plantilla PDF que usa 'total_amount'
+        $invoice->total_amount = $invoice->amount;
+
+        $pdf = Pdf::loadView('admin.billing.invoice_pdf', compact('invoice'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download("Factura_{$invoice->invoice_number}.pdf");
     }
 }

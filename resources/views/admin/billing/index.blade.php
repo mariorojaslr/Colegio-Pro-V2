@@ -1,70 +1,83 @@
 @extends('layouts.admin')
 
-@section('content')
-<div class="container-fluid py-4">
-    <div class="row g-4 mb-5">
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-primary text-white">
-                <div class="small fw-bold text-uppercase ls-1 opacity-75 mb-2">Ingresos Globales</div>
-                <div class="display-6 fw-bold mb-0">${{ number_format($stats['revenue'], 0, ',', '.') }}</div>
-                <div class="small mt-2"><i class="bi bi-graph-up me-1"></i> +15% este mes</div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
-                <div class="small fw-bold text-muted text-uppercase ls-1 mb-2">Suscripciones Activas</div>
-                <div class="display-6 fw-bold mb-0">{{ $stats['active_subs'] }}</div>
-                <div class="small text-primary mt-2">Promedio: $45.000 / suscripción</div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
-                <div class="small fw-bold text-muted text-uppercase ls-1 mb-2">Transacciones Totales</div>
-                <div class="display-6 fw-bold mb-0">{{ $stats['total_payments'] }}</div>
-                <div class="small text-muted mt-2">Procesadas vía Checkout Prestige</div>
-            </div>
-        </div>
-    </div>
+@section('header', 'Gestión de Facturación Global')
 
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="card-header bg-white border-0 py-4 px-5 d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold mb-0">Últimos Pagos Recibidos</h4>
-            <button class="btn btn-outline-primary btn-sm rounded-pill px-4">Exportar Contabilidad</button>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="bg-light border-0">
-                    <tr>
-                        <th class="ps-5 py-3 text-uppercase small fw-bold text-muted ls-1">Institución</th>
-                        <th class="py-3 text-uppercase small fw-bold text-muted ls-1">Monto</th>
-                        <th class="py-3 text-uppercase small fw-bold text-muted ls-1">Método</th>
-                        <th class="py-3 text-uppercase small fw-bold text-muted ls-1">Referencia</th>
-                        <th class="py-3 text-uppercase small fw-bold text-muted ls-1">Fecha</th>
-                        <th class="pe-5 py-4 text-end">Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($recentPayments as $payment)
-                    <tr>
-                        <td class="ps-5 py-4 fw-bold text-primary">{{ $payment->school->name }}</td>
-                        <td class="py-4 fw-bold fs-5">${{ number_format($payment->amount, 0, ',', '.') }}</td>
-                        <td class="py-4">
-                            <span class="small fw-bold"><i class="bi bi-credit-card me-2 opacity-50"></i> TARJETA</span>
-                        </td>
-                        <td class="py-4 font-monospace small text-muted">{{ $payment->transaction_reference }}</td>
-                        <td class="py-4 small">{{ $payment->created_at->format('d M, Y H:i') }}</td>
-                        <td class="pe-5 py-4 text-end">
-                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 fw-bold border-0">CONFIRMADO</span>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center py-5">No existen registros financieros aún.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+@section('content')
+<div class="row mb-5">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="p-4 bg-white border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold m-0" style="font-family: 'Outfit', sans-serif;">Historial de Cobros a Instituciones</h5>
+            </div>
+            <div class="table-responsive p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-muted xx-small fw-bold uppercase ls-1">
+                        <tr>
+                            <th class="ps-4">NRO FACTURA</th>
+                            <th>COLEGIO / CLIENTE</th>
+                            <th>PLAN ACTUAL</th>
+                            <th>FECHA</th>
+                            <th>MÉTODO</th>
+                            <th>TOTAL</th>
+                            <th>ESTADO</th>
+                            <th class="text-end pe-4">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($invoices as $invoice)
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark">#{{ $invoice->invoice_number ?? 'S/N' }}</td>
+                                <td>
+                                    <div class="fw-bold text-dark">{{ $invoice->school->name }}</div>
+                                    <div class="xx-small text-muted text-uppercase">{{ $invoice->school->slug }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1 xx-small fw-bold">
+                                        {{ $invoice->school->activeSubscription->plan->name ?? 'RESERVADO' }}
+                                    </span>
+                                </td>
+                                <td class="small text-muted">{{ $invoice->created_at->format('d/m/Y') }}</td>
+                                <td>
+                                    @if($invoice->payment_method == 'card')
+                                        <i class="bi bi-credit-card me-1"></i> Tarjeta
+                                    @else
+                                        <i class="bi bi-bank me-1"></i> Transferencia
+                                    @endif
+                                </td>
+                                <td class="fw-black text-dark">${{ number_format($invoice->amount, 0, ',', '.') }}</td>
+                                <td>
+                                    @if($invoice->status == 'paid')
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 xx-small fw-bold">PAGADO</span>
+                                    @else
+                                        <span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2 py-1 xx-small fw-bold">{{ strtoupper($invoice->status) }}</span>
+                                    @endif
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a href="{{ route('admin.billing.download', $invoice->id) }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold xx-small shadow-sm">
+                                        <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center py-5 text-muted small">No hay registros de facturación aún.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            @if($invoices->hasPages())
+                <div class="card-footer bg-white p-4">
+                    {{ $invoices->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </div>
+
+<style>
+    .xx-small { font-size: 10px; }
+    .ls-1 { letter-spacing: 1px; }
+    .fw-black { font-weight: 900; }
+</style>
 @endsection
