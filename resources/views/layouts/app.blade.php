@@ -61,6 +61,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    @if(auth()->user()->role == 'ADMIN_COLEGIO')
+                                        <a class="dropdown-item fw-bold" href="{{ route('billing.index') }}">
+                                            <i class="bi bi-wallet2 me-2"></i> Mi Facturación
+                                        </a>
+                                        <hr class="dropdown-divider">
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

@@ -140,6 +140,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/academia/examen/{exam}/submit', [\App\Http\Controllers\Student\ExamController::class, 'submit'])->name('student.exams.submit');
     Route::get('/academia/certificado/{certificate}', [\App\Http\Controllers\Student\CertificateController::class, 'download'])->name('student.certificates.download');
 
+    // Facturación Institucional (Admin de Colegio)
+    Route::get('/mi-facturacion', [\App\Http\Controllers\BillingController::class, 'index'])->name('billing.index');
+    Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\BillingController::class, 'download'])->name('billing.download');
+
     // Tickets
     Route::get('/soporte', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
     Route::get('/soporte/nuevo', [App\Http\Controllers\TicketController::class, 'create'])->name('tickets.create');
