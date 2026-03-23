@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     
     @yield('styles')
+    @stack('styles')
 </head>
 <body class="light-mode">
     <nav class="navbar navbar-expand-lg py-2 sticky-top bg-white border-bottom border-light shadow-sm" style="transition: all 0.4s ease;">
