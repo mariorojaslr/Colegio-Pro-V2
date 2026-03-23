@@ -4,32 +4,54 @@
 <div class="row g-4 mb-4">
     <div class="col-12 col-xl-8">
         <div class="card bg-white border-0 shadow-sm rounded-4 overflow-hidden h-100">
-            <div class="card-header bg-white border-bottom py-4 px-4">
-                <div class="d-flex justify-content-between align-items-center">
+            <div class="card-header bg-white border-bottom py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
-                        <h4 class="mb-1 text-dark fw-bold">Ecosistema de Cobranza</h4>
-                        <p class="text-secondary small mb-0">Gestión de cuotas societarias y estados de cuenta mensuales.</p>
+                        <h4 class="mb-0 text-dark fw-bold">Ecosistema de Cobranza</h4>
+                        <p class="text-secondary xx-small mb-0 text-uppercase ls-1">Gestión de cuotas societarias y estados de cuenta</p>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-outline-dark rounded-pill px-4 btn-sm" data-bs-toggle="modal" data-bs-target="#feesConfigModal">
-                            <i class="bi-gear-fill me-2"></i> Configurar Cuotas
+                        <button class="btn btn-outline-dark rounded-pill px-3 btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#feesConfigModal">
+                            <i class="bi-gear-fill me-1"></i> Cuotas
                         </button>
-                        <button class="btn btn-primary rounded-pill px-4 btn-sm shadow-sm">
-                            <i class="bi-plus-circle-fill me-2"></i> Generar Masivo
+                        <button class="btn btn-primary rounded-pill px-3 btn-sm shadow-sm fw-bold">
+                            <i class="bi-plus-circle-fill me-1"></i> Generar Masivo
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body p-0">
+                <!-- Barra de Herramientas: Búsqueda y Filtros -->
+                <div class="p-3 bg-light-subtle border-bottom">
+                    <form action="{{ route('admin.billing.index') }}" method="GET" class="row g-2">
+                        <div class="col-md-7">
+                            <div class="input-group input-group-sm shadow-none border rounded-pill px-2 bg-white">
+                                <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi-search"></i></span>
+                                <input type="text" name="search" class="form-control border-0 shadow-none py-1" placeholder="Buscar por Nombre, DNI o Matrícula..." value="{{ $search }}">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="status" class="form-select form-select-sm border rounded-pill shadow-none px-3 bg-white" onchange="this.form.submit()">
+                                <option value="">Todos los Estados</option>
+                                <option value="compliant" {{ $statusFilter == 'compliant' ? 'selected' : '' }}>Al Día</option>
+                                <option value="overdue" {{ $statusFilter == 'overdue' ? 'selected' : '' }}>Morosos</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-dark btn-sm rounded-pill w-100 fw-bold">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light border-0">
+                        <thead>
                             <tr>
-                                <th class="border-0 px-3 py-3 rounded-start text-uppercase small text-secondary fw-bold">Colegiado</th>
-                                <th class="border-0 px-3 py-3 text-uppercase small text-secondary fw-bold">Último Pago</th>
-                                <th class="border-0 px-3 py-3 text-uppercase small text-secondary fw-bold text-center">Estado</th>
-                                <th class="border-0 px-3 py-3 text-uppercase small text-secondary fw-bold text-end">Saldo Pendiente</th>
-                                <th class="border-0 px-3 py-3 rounded-end text-uppercase small text-secondary fw-bold text-center">Acciones</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1">Colegiado</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Último Pago</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Estado</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-end">S. Pendiente</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,44 +62,44 @@
                                 $isClean = $pendingAmount == 0;
                             @endphp
                             <tr class="border-bottom">
-                                <td class="px-3 py-3 border-0">
+                                <td class="px-3 py-2 border-0">
                                     <div class="d-flex align-items-center">
-                                        <div class="avatar-sm bg-gradient-primary text-white rounded-pill d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px; font-weight: bold;">
-                                            {{ substr($collegiate->first_name, 0, 1) }}{{ substr($collegiate->last_name, 0, 1) }}
+                                        <div class="avatar-sm bg-primary text-white rounded-pill d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 32px; height: 32px; font-size: 0.75rem; font-weight: 800; min-width: 32px;">
+                                            {{ strtoupper(substr($collegiate->first_name, 0, 1)) }}{{ strtoupper(substr($collegiate->last_name, 0, 1)) }}
                                         </div>
                                         <div>
-                                            <h6 class="mb-0 fw-semibold text-dark">{{ $collegiate->first_name }} {{ $collegiate->last_name }}</h6>
-                                            <span class="text-secondary small">M: {{ $collegiate->registration_number }}</span>
+                                            <h6 class="mb-0 fw-bold text-dark small">{{ $collegiate->first_name }} {{ $collegiate->last_name }}</h6>
+                                            <span class="text-secondary xx-small fw-semibold">MAT: {{ $collegiate->registration_number }}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-3 py-3 border-0">
+                                <td class="px-3 py-2 border-0 text-center">
                                     @if($lastPaid)
-                                        <span class="text-dark d-block fw-semibold">${{ number_format($lastPaid->amount, 0, ',', '.') }}</span>
-                                        <span class="text-secondary small text-lowercase">{{ $lastPaid->paid_at->format('d/m/Y') }}</span>
+                                        <span class="text-dark d-block fw-bold small">${{ number_format($lastPaid->amount, 0, ',', '.') }}</span>
+                                        <span class="text-secondary xx-small">{{ $lastPaid->paid_at->format('d/m/Y') }}</span>
                                     @else
-                                        <span class="text-secondary small">Sin pagos registrados</span>
+                                        <span class="text-secondary xx-small opacity-50">S/P</span>
                                     @endif
                                 </td>
-                                <td class="px-3 py-3 border-0 text-center">
+                                <td class="px-3 py-2 border-0 text-center">
                                     @if($isClean)
-                                        <span class="badge rounded-pill bg-success-soft text-success border border-success-soft px-3" style="background: #e1f5e6;">
-                                            <i class="bi-check-circle-fill me-1"></i> Al Día
+                                        <span class="badge rounded-pill bg-success-soft text-success border border-success-soft px-2 py-1" style="background: #e1f5e6; font-size: 0.65rem;">
+                                            <i class="bi-check-circle-fill me-1"></i> AL DÍA
                                         </span>
                                     @elseif($collegiate->pendingDues->where('status', 'overdue')->count() > 0)
-                                        <span class="badge rounded-pill bg-danger-soft text-danger border border-danger-soft px-3" style="background: #feeaea;">
-                                            <i class="bi-exclamation-triangle-fill me-1"></i> Moroso
+                                        <span class="badge rounded-pill bg-danger-soft text-danger border border-danger-soft px-2 py-1" style="background: #feeaea; font-size: 0.65rem;">
+                                            <i class="bi-exclamation-triangle-fill me-1"></i> MOROSO
                                         </span>
                                     @else
-                                        <span class="badge rounded-pill bg-warning-soft text-warning border border-warning-soft px-3" style="background: #fff8e1;">
-                                            <i class="bi-clock-fill me-1"></i> Pendiente
+                                        <span class="badge rounded-pill bg-warning-soft text-warning border border-warning-soft px-2 py-1" style="background: #fff8e1; font-size: 0.65rem;">
+                                            <i class="bi-clock-fill me-1"></i> PEND.
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-3 py-3 border-0 text-end fw-bold {{ $isClean ? 'text-secondary opacity-50' : 'text-danger' }}">
+                                <td class="px-3 py-2 border-0 text-end fw-bold small {{ $isClean ? 'text-secondary opacity-25' : 'text-danger' }}">
                                     ${{ number_format($pendingAmount, 0, ',', '.') }}
                                 </td>
-                                <td class="px-3 py-3 border-0 text-center">
+                                <td class="px-3 py-2 border-0 text-center">
                                     <div class="dropdown">
                                         <button class="btn btn-link link-secondary dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown">
                                             <i class="bi-three-dots"></i>

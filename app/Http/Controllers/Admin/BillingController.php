@@ -14,29 +14,52 @@ class BillingController extends Controller
     /**
      * Vista general de cobros y estados de cuenta de los colegiados.
      */
-    public function index()
+    public function index(Request $request)
     {
         $schoolId = auth()->user()->school_id;
-        
-        // Métricas rápidas
-        $stats = [
-            'total_to_collect' => CollegiateDue::where('status', 'pending')->sum('amount'),
-            'total_overdue' => CollegiateDue::where('status', 'overdue')->sum('amount'),
-            'total_collected' => CollegiateDue::where('status', 'paid')->sum('amount'),
-            'count_active' => Collegiate::where('school_id', $schoolId)->where('status', 'active')->count(),
-            'count_overdue_users' => CollegiateDue::where('status', 'overdue')->distinct('collegiate_id')->count('collegiate_id'),
-        ];
+        $search = $request->input('search');
+        $statusFilter = $request->input('status');
 
-        // Listado de colegiados con su estado de deuda más reciente
-        $collegiates = Collegiate::where('school_id', $schoolId)
-            ->with(['dues' => function($q) {
-                $q->orderBy('due_date', 'desc');
-            }])
-            ->paginate(20);
+        // Query base para colegiados de esta escuela
+        $query = Collegiate::where('school_id', $schoolId)
+                    ->with(['dues' => function($q) {
+                        $q->orderBy('due_date', 'desc');
+                    }]);
+
+        // Filtro por Búsqueda (Criterio: Nombre, DNI, Matrícula)
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('dni', 'like', "%{$search}%")
+                  ->orWhere('registration_number', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por Estado (Moroso / Al Día)
+        if ($statusFilter === 'overdue') {
+            $query->where('is_fees_compliant', false);
+        } elseif ($statusFilter === 'compliant') {
+            $query->where('is_fees_compliant', true);
+        }
+
+        $collegiates = $query->paginate(30)->withQueryString();
+        
+        // Métricas calculadas para Dashboard (Solo de esta escuela)
+        $stats = [
+            'total_to_collect' => CollegiateDue::whereHas('collegiate', fn($q) => $q->where('school_id', $schoolId))
+                ->where('status', 'pending')->sum('amount'),
+            'total_overdue' => CollegiateDue::whereHas('collegiate', fn($q) => $q->where('school_id', $schoolId))
+                ->where('status', 'overdue')->sum('amount'),
+            'total_collected' => CollegiateDue::whereHas('collegiate', fn($q) => $q->where('school_id', $schoolId))
+                ->where('status', 'paid')->sum('amount'),
+            'count_active' => Collegiate::where('school_id', $schoolId)->where('status', 'active')->count(),
+            'count_overdue_users' => Collegiate::where('school_id', $schoolId)->where('is_fees_compliant', false)->count(),
+        ];
 
         $activeFee = MembershipFee::where('school_id', $schoolId)->where('is_active', true)->latest()->first();
 
-        return view('admin.billing.index', compact('stats', 'collegiates', 'activeFee'));
+        return view('admin.billing.index', compact('stats', 'collegiates', 'activeFee', 'search', 'statusFilter'));
     }
 
     /**
