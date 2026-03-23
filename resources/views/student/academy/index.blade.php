@@ -195,7 +195,7 @@
                     "benefit" => $lesson->benefit ?? "Certificación Internacional",
                     "duration" => $lesson->duration ?? "4 Semanas",
                     "img" => $lesson->thumbnail_url ?? "https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop",
-                    "enrolled" => in_array($lesson->id, $enrolledLessons),
+                    "enrolled" => in_array($lesson->id, $enrolledLessons ?? []),
                     "cert" => isset($certificates[$lesson->id]) ? route('student.certificates.download', $certificates[$lesson->id]->id) : null
                 ];
             @endphp
