@@ -72,6 +72,16 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
 
     // Finanzas Globales (Owner side)
     Route::get('/finanzas', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
+
+    // Gestión Global de Academia (Cursos/Lecciones)
+    Route::resource('/admin/academy', \App\Http\Controllers\Admin\LessonController::class)->names('admin.academy');
+    Route::resource('/admin/exams', \App\Http\Controllers\Admin\ExamController::class)->names('admin.exams');
+    Route::post('/admin/exams/{exam}/questions', [\App\Http\Controllers\Admin\ExamController::class, 'storeQuestion'])->name('admin.exams.questions.store');
+    Route::delete('/admin/questions/{question}', [\App\Http\Controllers\Admin\ExamController::class, 'destroyQuestion'])->name('admin.exams.questions.destroy');
+    
+    // Gestión de Recursos (PDF, Slides, etc)
+    Route::post('/admin/academy/{lesson}/resources', [\App\Http\Controllers\Admin\LessonResourceController::class, 'store'])->name('admin.lesson_resources.store');
+    Route::delete('/admin/resources/{resource}', [\App\Http\Controllers\Admin\LessonResourceController::class, 'destroy'])->name('admin.lesson_resources.destroy');
 });
 
 // Rutas Generales Autenticadas (Cualquier Rol)
@@ -118,7 +128,13 @@ Route::middleware(['auth'])->group(function () {
 
     // Videoteca y Aprendizaje (Cualquier Usuario / Alumno de Institución)
     Route::get('/mis-clases', [\App\Http\Controllers\Student\LessonController::class, 'index'])->name('student.lessons.index');
+    Route::post('/mis-clases/inscribirse/{lesson}', [\App\Http\Controllers\Student\LessonController::class, 'enroll'])->name('student.lessons.enroll');
     Route::get('/mis-clases/{lesson}', [\App\Http\Controllers\Student\LessonController::class, 'show'])->name('student.lessons.show');
+
+    // Exámenes (Para Estudiantes/Colegiados)
+    Route::get('/academia/examen/{exam}', [\App\Http\Controllers\Student\ExamController::class, 'take'])->name('student.exams.take');
+    Route::post('/academia/examen/{exam}/submit', [\App\Http\Controllers\Student\ExamController::class, 'submit'])->name('student.exams.submit');
+    Route::get('/academia/certificado/{certificate}', [\App\Http\Controllers\Student\CertificateController::class, 'download'])->name('student.certificates.download');
 
     // Tickets
     Route::get('/soporte', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');

@@ -190,7 +190,13 @@
                         </div>
                     </td>
                     <td>
-                        <span class="badge-plan plan-{{ $school->plan_category }}">{{ $school->plan_category }}</span>
+                        @if($school->activeSubscription && $school->activeSubscription->plan)
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 xx-small fw-bold uppercase">
+                                <i class="bi bi-star-fill me-1"></i> {{ $school->activeSubscription->plan->name }}
+                            </span>
+                        @else
+                            <span class="badge bg-light text-muted border rounded-pill px-3 py-2 xx-small fw-bold uppercase">SIN PLAN</span>
+                        @endif
                     </td>
                     <td>
                         <div class="fw-bold text-dark">{{ $school->users_count }}</div>

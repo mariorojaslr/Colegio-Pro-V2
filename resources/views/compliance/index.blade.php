@@ -78,19 +78,32 @@
                     </div>
 
                     @if($status != 'approved')
-                        <form action="{{ route('compliance.upload', $requirement) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="input-group">
-                                <input type="file" name="document" class="form-control rounded-start-pill border-light-subtle" required>
-                                <button type="submit" class="btn btn-dark rounded-end-pill px-4 fw-bold">
-                                    {{ $status == 'missing' ? 'Subir' : 'Corregir' }}
-                                </button>
+                            <input type="file" name="document" id="file-{{ $requirement->id }}" class="d-none" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
+                            
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small" onclick="document.getElementById('file-{{ $requirement->id }}').click()">
+                                        <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <input type="file" name="document" id="camera-{{ $requirement->id }}" class="d-none" accept="image/*" capture="environment" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
+                                    <button type="button" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm" onclick="document.getElementById('camera-{{ $requirement->id }}').click()">
+                                        <i class="bi bi-camera me-2"></i> ESCANEAR
+                                    </button>
+                                </div>
                             </div>
-                            <div class="form-text small opacity-50 ps-3">PDF, JPG o PNG (Máx. 5MB)</div>
+
+                            <div class="mt-3 text-center">
+                                <span class="xx-small text-muted fw-bold ls-1 uppercase">SOPORTA: PDF, EXCEL, WORD, IMÁGENES (MÁX. 10MB)</span>
+                            </div>
                         </form>
                     @else
-                        <div class="text-center py-2 h-100 d-flex align-items-center justify-content-center border border-success border-opacity-10 rounded-pill bg-success bg-opacity-5">
-                            <span class="text-success fw-bold small"><i class="bi bi-check2-all me-2"></i> Documento Correcto</span>
+                        <div class="bg-success bg-opacity-5 border border-success border-opacity-10 rounded-4 p-3 text-center">
+                             <span class="text-success fw-bold small"><i class="bi bi-check2-all me-2"></i> DOCUMENTO VERIFICADO</span>
+                             <div class="xx-small text-success opacity-75 mt-1 uppercase">HABILITADO EN LEGAJO</div>
                         </div>
                     @endif
                 </div>
@@ -110,5 +123,7 @@
     .shadow-accent { box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); }
     .card-prestige { transition: transform 0.3s ease; }
     .card-prestige:hover { transform: translateY(-5px); }
+    .xx-small { font-size: 10px; }
+    .ls-1 { letter-spacing: 1px; }
 </style>
 @endsection

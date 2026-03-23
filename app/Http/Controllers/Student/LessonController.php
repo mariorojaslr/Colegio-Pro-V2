@@ -16,8 +16,6 @@ class LessonController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
-        // Si no hay usuario (acceso público), mostramos la escuela de demo (id:1)
         $schoolId = $user ? $user->school_id : 1;
 
         $lessons = Lesson::where('school_id', $schoolId)
@@ -25,7 +23,10 @@ class LessonController extends Controller
             ->latest()
             ->get();
 
-        return view('student.academy.index', compact('lessons'));
+        $enrolledLessons = $user ? $user->enrolledLessons->pluck('id')->toArray() : [];
+        $certificates = $user ? $user->certificates->keyBy('lesson_id') : collect();
+        
+        return view('student.academy.index', compact('lessons', 'enrolledLessons', 'certificates'));
     }
 
     /**
@@ -44,6 +45,31 @@ class LessonController extends Controller
             abort(404, 'La clase no se encuentra disponible.');
         }
 
+        // Si no está inscrito, lo redirigimos a la academia
+        if (!$user->enrolledLessons->contains($lesson->id)) {
+            return redirect()->route('student.lessons.index')->with('error', 'Debes inscribirte para ver este contenido.');
+        }
+
         return view('student.lessons.show', compact('lesson'));
+    }
+
+    /**
+     * Inscripción a una clase específica.
+     */
+    public function enroll(Lesson $lesson)
+    {
+        $user = Auth::user();
+
+        if ($lesson->school_id !== $user->school_id) {
+            abort(403);
+        }
+
+        // Simulación: Inscribir directamente (Checkout Placeholder)
+        $user->enrolledLessons()->syncWithoutDetaching([$lesson->id => [
+            'status' => 'enrolled',
+            'paid_amount' => $lesson->price
+        ]]);
+
+        return redirect()->route('student.lessons.index')->with('success', "Te has inscrito correctamente en: {$lesson->title}. ¡Bienvenido!");
     }
 }

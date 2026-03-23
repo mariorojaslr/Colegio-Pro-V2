@@ -134,6 +134,14 @@
         padding: 10px;
         border-radius: 12px;
     }
+
+    mark { 
+        background: #fff3cd !important; 
+        padding: 0.1em 0 !important; 
+        color: #856404; 
+        font-weight: 800; 
+        border-radius: 2px; 
+    }
 </style>
 @endpush
 
@@ -155,48 +163,46 @@
         </div>
     </div>
 
-    {{-- Filtros --}}
-    <div class="mb-4 d-flex flex-wrap gap-2 justify-content-center">
-        <span class="filter-pill active">Todos</span>
-        <span class="filter-pill">Gestión Judicial</span>
-        <span class="filter-pill">Tecnología</span>
-        <span class="filter-pill">Mediación</span>
-        <span class="filter-pill">Especialización</span>
-        <span class="filter-pill">Internacional</span>
+    {{-- Buscador Premium --}}
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="input-group input-group-lg shadow-sm" style="border-radius: 50px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); background: white;">
+                <span class="input-group-text bg-white border-0 ps-4"><i class="bi bi-search text-primary"></i></span>
+                <input type="text" id="academySearch" class="form-control border-0 py-3 ps-2" placeholder="Buscar cursos, docentes o especialidades..." style="font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 500;">
+            </div>
+        </div>
     </div>
 
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 mb-5">
-        @php
-            $cursos = [
-                ['title' => 'Gestión Judicial 4.0', 'date' => '15 May', 'duration' => '4 Semanas', 'cat' => 'Gestión', 'price' => '$25.000', 'lecturer' => 'Dr. Alberto Ruiz', 'description' => 'Optimice el flujo de expedientes con herramientas modernas.', 'benefit' => 'Reducción de tiempos procesales.', 'img' => 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop'],
-                ['title' => 'I.A. en Tribunales', 'date' => '22 May', 'duration' => '6 Semanas', 'cat' => 'Tecnología', 'price' => '$32.000', 'lecturer' => 'Mag. Juan Pérez', 'description' => 'Implementación de asistencia inteligente judicial.', 'benefit' => 'Dominio de Prompt Engineering.', 'img' => 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1932&auto=format&fit=crop'],
-                ['title' => 'Ciberseguridad Legal', 'date' => '02 Jun', 'duration' => '3 Semanas', 'cat' => 'Seguridad', 'price' => '$18.500', 'lecturer' => 'Lic. Pedro Gómez', 'description' => 'Protección de datos y normativas de seguridad digital.', 'benefit' => 'Kit de herramientas digitales.', 'img' => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Marketing Jurídico', 'date' => '10 Jun', 'duration' => '8 Semanas', 'cat' => 'Negocios', 'price' => '$12.000', 'lecturer' => 'Lic. Elena Blanco', 'description' => 'Posicionamiento de marca y atracción de clientes.', 'benefit' => 'Plan de marketing personalizado.', 'img' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026&auto=format&fit=crop'],
-                ['title' => 'Mediación 2024', 'date' => '18 Jun', 'duration' => '5 Semanas', 'cat' => 'Mediación', 'price' => '$21.000', 'lecturer' => 'Escribano Carlos Paz', 'description' => 'Técnicas de resolución alterna de conflictos.', 'benefit' => 'Habilitación para mediación remota.', 'img' => 'https://images.unsplash.com/photo-1521791136364-758a64045057?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Blockchain Público', 'date' => '25 Jun', 'duration' => '4 Semanas', 'cat' => 'Tecnología', 'price' => '$28.000', 'lecturer' => 'Dr. Jorge Lin', 'description' => 'Registro distribuido en la fe pública y registros.', 'benefit' => 'Certificado de innovación digital.', 'img' => 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2032&auto=format&fit=crop'],
-                ['title' => 'Peritaje Digital', 'date' => '05 Jul', 'duration' => '4 Semanas', 'cat' => 'Especialización', 'price' => '$19.000', 'lecturer' => 'Mag. Lucia Fern', 'description' => 'Recolección de evidencia digital en procesos legales.', 'benefit' => 'Validación forense avanzada.', 'img' => 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Ética en Algoritmos', 'date' => '12 Jul', 'duration' => '3 Semanas', 'cat' => 'Tecnología', 'price' => '$15.000', 'lecturer' => 'Dr. Mario San', 'description' => 'Desafíos éticos de la I.A. en la justicia civil.', 'benefit' => 'Pensamiento crítico jurídico.', 'img' => 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Oratoria Forense', 'date' => '20 Jul', 'duration' => '5 Semanas', 'cat' => 'Especialización', 'price' => '$16.500', 'lecturer' => 'Dra. Ana López', 'description' => 'Argumentación efectiva en juicios orales modernos.', 'benefit' => 'Técnicas de persuasión jurídica.', 'img' => 'https://images.unsplash.com/photo-1475721027187-40247339a3f9?q=80&w=2070&auto=format&fit=crop'],
-                ['title' => 'Derecho Ambiental', 'date' => '02 Ago', 'duration' => '8 Semanas', 'cat' => 'Especialización', 'price' => '$27.500', 'lecturer' => 'Lic. Clara Montes', 'description' => 'Legislación y protección del medio ambiente.', 'benefit' => 'Diploma de experto ambiental.', 'img' => 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop'],
-                ['title' => 'Liderazgo 360', 'date' => '15 Ago', 'duration' => '4 Semanas', 'cat' => 'Gestión', 'price' => '$22.000', 'lecturer' => 'Dr. Sergio Val', 'description' => 'Habilidades directivas en el ámbito institucional legal.', 'benefit' => 'Mejora en gestión de equipos.', 'img' => 'https://images.unsplash.com/photo-1519389950473-4422e4a2e1dc?q=80&w=2070&auto=format&fit=crop'],
-                ['title' => 'Protección de Datos', 'date' => '05 Sep', 'duration' => '6 Semanas', 'cat' => 'Seguridad', 'price' => '$24.000', 'lecturer' => 'Mag. Carla Rius', 'description' => 'Normativas internacionales de privacidad y GDPR.', 'benefit' => 'Certificación avanzada.', 'img' => 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Derecho Espacial', 'date' => '15 Sep', 'duration' => '4 Semanas', 'cat' => 'Internacional', 'price' => '$35.000', 'lecturer' => 'Dr. Neil Stron', 'description' => 'Nuevas fronteras legales fuera de la atmósfera terrestre.', 'benefit' => 'Certificado de vanguardia legal.', 'img' => 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1772&auto=format&fit=crop'],
-                ['title' => 'Legal Design Think', 'date' => '22 Sep', 'duration' => '3 Semanas', 'cat' => 'Tecnología', 'price' => '$19.500', 'lecturer' => 'Lic. Maria Bold', 'description' => 'Cree documentos legales que el usuario final sí entienda.', 'benefit' => 'Mejora en UX legal y cumplimiento.', 'img' => 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Derecho Marítimo', 'date' => '01 Oct', 'duration' => '10 Semanas', 'cat' => 'Internacional', 'price' => '$55.000', 'lecturer' => 'Mag. Raul Buque', 'description' => 'Legislación de comercio internacional en aguas abiertas.', 'benefit' => 'Especialista en logística global.', 'img' => 'https://images.unsplash.com/photo-1520440229334-962aee11302c?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Sentencias Masivas', 'date' => '10 Oct', 'duration' => '6 Semanas', 'cat' => 'Gestión', 'price' => '$45.000', 'lecturer' => 'Dr. Automation', 'description' => 'Cómo gestionar flujos de sentencias de alta demanda.', 'benefit' => 'Optimización de juzgados de masa.', 'img' => 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Justicia Abierta', 'date' => '15 Oct', 'duration' => '4 Semanas', 'cat' => 'Especialización', 'price' => '$15.000', 'lecturer' => 'Lic. Clara Trasp', 'description' => 'Transparencia y datos abiertos en el poder judicial.', 'benefit' => 'Habilitación de observatorios.', 'img' => 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1770&auto=format&fit=crop'],
-                ['title' => 'Derecho Deportivo', 'date' => '25 Oct', 'duration' => '8 Semanas', 'cat' => 'Especialización', 'price' => '$22.000', 'lecturer' => 'Mag. Leo Gol', 'description' => 'Gestión legal de contratos y federaciones internacionales.', 'benefit' => 'Agente FIFA / Especialista deportivo.', 'img' => 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1770&auto=format&fit=crop']
-            ];
-        @endphp
+    {{-- Filtros --}}
+    <div class="mb-5 d-flex flex-wrap gap-2 justify-content-center">
+        <span class="filter-pill active" onclick="filterAcademy('Todos')">Todos</span>
+        @foreach($lessons->pluck('category')->unique()->filter() as $cat)
+            <span class="filter-pill" onclick="filterAcademy('{{ $cat }}')">{{ $cat }}</span>
+        @endforeach
+    </div>
 
-        @foreach($cursos as $curso)
-            <div class="col text-center">
-                <div class="course-poster-wrapper shadow-sm mx-auto" onclick='showCourseDetails(@json($curso))'>
-                    <div class="course-poster-inner" style="background-image: url('{{ $curso['img'] }}');"></div>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-4 mb-5" id="academyGrid">
+        @foreach($lessons as $lesson)
+            <div class="col text-center academy-item" data-category="{{ $lesson->category ?? 'General' }}">
+                <div class="course-poster-wrapper shadow-sm mx-auto" onclick='showCourseDetails(@json([
+                    "id" => $lesson->id,
+                    "title" => $lesson->title,
+                    "cat" => $lesson->category ?? "General",
+                    "date" => $lesson->start_date ?? "Próximamente",
+                    "price" => "$" . number_format($lesson->price, 0, ",", "."),
+                    "lecturer" => $lesson->lecturer ?? "Docente Staff",
+                    "description" => $lesson->description,
+                    "benefit" => $lesson->benefit ?? "Certificación Internacional",
+                    "duration" => $lesson->duration ?? "4 Semanas",
+                    "img" => $lesson->thumbnail_url ?? "https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop",
+                    "enrolled" => in_array($lesson->id, $enrolledLessons),
+                    "cert" => isset($certificates[$lesson->id]) ? route('student.certificates.download', $certificates[$lesson->id]->id) : null
+                ]))'>
+                    <div class="course-poster-inner" style="background-image: url('{{ $lesson->thumbnail_url ?? "https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop" }}');"></div>
                     <div class="course-overlay text-start">
-                        <div class="course-category-pill">{{ $curso['cat'] }}</div>
-                        <h6 class="course-title-card">{{ $curso['title'] }}</h6>
-                        <div class="course-date-card">{{ $curso['date'] }}</div>
+                        <div class="course-category-pill">{{ $lesson->category ?? "GENERAL" }}</div>
+                        <h6 class="course-title-card">{{ $lesson->title }}</h6>
+                        <div class="course-date-card">{{ $lesson->start_date ?? "Póximamente" }}</div>
                     </div>
                 </div>
             </div>
@@ -247,9 +253,20 @@
                                 <span id="modalPrice" class="h5 fw-black text-warning mb-0"></span>
                             </div>
 
-                            <button class="btn btn-primary w-100 rounded-pill py-3 fw-black shadow-sm mb-3">
-                                INSCRIBIRSE AHORA <i class="bi bi-arrow-right ms-2"></i>
-                            </button>
+                            <div id="enrollmentActions">
+                                <form id="enrollForm" method="POST" action="">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-black shadow-sm mb-3">
+                                        INSCRIBIRSE AHORA <i class="bi bi-arrow-right ms-2"></i>
+                                    </button>
+                                </form>
+                                <a id="viewCourseBtn" href="" class="btn btn-success w-100 rounded-pill py-3 fw-black shadow-sm mb-3" style="display:none;">
+                                    COMENZAR APRENDIZAJE <i class="bi bi-play-fill ms-2"></i>
+                                </a>
+                                <a id="downloadCertBtn" href="" class="btn btn-warning w-100 rounded-pill py-3 fw-black shadow-sm mb-3 text-dark" style="display:none;">
+                                    DESCARGAR CERTIFICADO <i class="bi bi-award-fill ms-2"></i>
+                                </a>
+                            </div>
                             <div class="text-center">
                                 <span class="xx-small text-white-50 ls-1 fw-bold">INICIO: <span id="modalDate" class="text-white"></span></span>
                             </div>
@@ -273,8 +290,82 @@
         document.getElementById('modalDuration').innerText = item.duration;
         document.getElementById('modalHeaderImage').style.backgroundImage = `url('${item.img}')`;
         
+        const enrollForm = document.getElementById('enrollForm');
+        const viewBtn = document.getElementById('viewCourseBtn');
+        const certBtn = document.getElementById('downloadCertBtn');
+
+        if (item.cert) {
+            certBtn.style.display = 'block';
+            certBtn.href = item.cert;
+        } else {
+            certBtn.style.display = 'none';
+        }
+
+        if (item.enrolled) {
+            enrollForm.style.display = 'none';
+            viewBtn.style.display = 'block';
+            viewBtn.href = `/mis-clases/${item.id}`;
+        } else {
+            enrollForm.style.display = 'block';
+            viewBtn.style.display = 'none';
+            enrollForm.action = `/mis-clases/inscribirse/${item.id}`;
+        }
+
         var myModal = new bootstrap.Modal(document.getElementById('courseModal'));
         myModal.show();
     }
+
+    function filterAcademy(cat) {
+        // Update pills
+        document.querySelectorAll('.filter-pill').forEach(p => {
+            p.classList.remove('active');
+            if(p.innerText === cat) p.classList.add('active');
+        });
+
+        // Filter items
+        const searchTerm = document.getElementById('academySearch').value.toLowerCase();
+        document.querySelectorAll('.academy-item').forEach(item => {
+            const category = item.getAttribute('data-category');
+            const title = item.querySelector('.course-title-card').innerText.toLowerCase();
+            
+            const matchCategory = (cat === 'Todos' || category === cat);
+            const matchSearch = title.includes(searchTerm) || category.toLowerCase().includes(searchTerm);
+
+            if(matchCategory && matchSearch) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('academySearch').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const activeCat = document.querySelector('.filter-pill.active').innerText;
+        
+        document.querySelectorAll('.academy-item').forEach(item => {
+            const titleEl = item.querySelector('.course-title-card');
+            const catEl = item.querySelector('.course-category-pill');
+            const titleText = titleEl.innerText;
+            const catText = catEl.innerText;
+
+            const matchCategory = (activeCat === 'Todos' || item.getAttribute('data-category') === activeCat);
+            const matchSearch = titleText.toLowerCase().includes(searchTerm) || catText.toLowerCase().includes(searchTerm);
+
+            if(matchCategory && matchSearch) {
+                item.style.display = 'block';
+                // Highlight search term
+                if(searchTerm.length > 0) {
+                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                    titleEl.innerHTML = titleText.replace(regex, '<mark>$1</mark>');
+                } else {
+                    titleEl.innerHTML = titleText;
+                }
+            } else {
+                item.style.display = 'none';
+                titleEl.innerHTML = titleText;
+            }
+        });
+    });
 </script>
 @endsection

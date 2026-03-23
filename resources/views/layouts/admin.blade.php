@@ -50,6 +50,8 @@
         <nav class="nav flex-column mb-auto">
             <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-grid me-2"></i> Vista General</a>
             <a class="nav-link {{ request()->routeIs('admin.schools.*') ? 'active' : '' }}" href="{{ route('admin.schools.index') }}"><i class="bi bi-building me-2"></i> Empresas</a>
+            <a class="nav-link {{ request()->routeIs('admin.academy.*') ? 'active' : '' }}" href="{{ route('admin.academy.index') }}"><i class="bi bi-mortarboard me-2"></i> Academia</a>
+            <a class="nav-link {{ request()->routeIs('admin.exams.*') ? 'active' : '' }}" href="{{ route('admin.exams.index') }}"><i class="bi bi-card-checklist me-2"></i> Exámenes</a>
             <a class="nav-link" href="#"><i class="bi bi-people me-2"></i> Usuarios</a>
             <a class="nav-link {{ request()->routeIs('admin.plans.index') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}"><i class="bi bi-credit-card me-2"></i> Suscripciones</a>
             <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2 me-2"></i> Finanzas</a>

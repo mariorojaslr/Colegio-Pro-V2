@@ -48,6 +48,7 @@
                         @else
                             <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Mi Panel') }}</a></li>
                             <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
+                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('Mi Legajo') }}</a></li>
                         @endif
                     @else
                         <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#ventajas">Ventajas</a></li>
@@ -113,9 +114,9 @@
             <i class="bi bi-credit-card m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">Mi Plan</div>
         </a>
-        <a href="{{ route('tickets.index') }}" class="text-center text-decoration-none {{ request()->routeIs('tickets.*') ? 'text-primary fw-bold' : 'text-muted' }}">
-            <i class="bi bi-chat-dots m-0" style="font-size: 1.4rem"></i>
-            <div style="font-size: 10px">Soporte</div>
+        <a href="{{ route('compliance.index') }}" class="text-center text-decoration-none {{ request()->routeIs('compliance.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+            <i class="bi bi-folder2-open m-0" style="font-size: 1.4rem"></i>
+            <div style="font-size: 10px">Mi Legajo</div>
         </a>
     </div>
     @endif

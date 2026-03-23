@@ -43,7 +43,7 @@ class ComplianceController extends Controller
     public function upload(Request $request, ComplianceRequirement $requirement)
     {
         $request->validate([
-            'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120', // Máx 5MB
+            'document' => 'required|file|mimes:jpg,jpeg,png,pdf,xls,xlsx,doc,docx|max:10240', // Máx 10MB
         ]);
 
         $user = Auth::user();
