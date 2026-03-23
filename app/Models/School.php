@@ -12,6 +12,7 @@ class School extends Model
 
     protected $fillable = [
         'name', 'slug', 'logo', 
+        'member_singular', 'member_plural',
         'primary_color', 'secondary_color', 'tertiary_color',
         'is_active', 'storage_used', 'traffic_used', 'user_count', 'plan_category',
         'currency_code', 'currency_symbol', 'locale', 'has_academy'

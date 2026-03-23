@@ -20,7 +20,7 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-x1 p-2 mt-2 animate__animated animate__fadeIn">
                 <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-shield-check me-2"></i> Administrador</a></li>
-                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-person me-2"></i> Estudiante</a></li>
+                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-person me-2"></i> {{ auth()->user()->school->member_singular ?? 'Estudiante' }}</a></li>
             </ul>
         </div>
     </div>
@@ -33,12 +33,12 @@
                 <div class="p-3 bg-white border-0 shadow-sm overflow-hidden d-flex align-items-center justify-content-between" 
                      style="border-radius: 12px; border-left: 4px solid {{ Auth::user()->school->primary_color ?? '#0f172a' }} !important;">
                     <div>
-                        <h6 class="text-muted x-small fw-bold text-uppercase ls-2 mb-0">Institución Privada</h6>
+                        <h6 class="text-muted x-small fw-bold text-uppercase ls-2 mb-0">Gestión Institucional</h6>
                         <h4 class="fw-black mb-0 text-dark" style="font-family: 'Outfit', sans-serif;">{{ Auth::user()->school->name }}</h4>
                     </div>
                     <div>
                         <a href="{{ route('collegiates.index') }}" class="btn btn-outline-dark btn-sm rounded-pill px-3 x-small fw-bold shadow-sm">
-                            EXPLORAR PADRÓN <i class="bi bi-chevron-right ms-1"></i>
+                            VER {{ strtoupper(Auth::user()->school->member_plural ?? 'Colegiados') }} <i class="bi bi-chevron-right ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <div class="col">
                 <a href="{{ route('collegiates.index') }}" class="text-decoration-none h-100 d-block">
                     <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-primary" style="border-radius: 12px; transition: transform 0.3s ease;">
-                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Matriculados</span>
+                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">{{ Auth::user()->school->member_plural ?? 'Matriculados' }}</span>
                         <h2 class="fw-black mb-1 text-dark ls-n1">{{ $totalColegiados }}</h2>
                         <div class="x-small fw-bold text-primary opacity-75">Habilitados en padrón</div>
                     </div>

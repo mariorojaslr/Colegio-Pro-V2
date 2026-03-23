@@ -30,12 +30,13 @@
                     </div>
 
                     <div class="row g-4 mb-4">
-                        <div class="col-md-12">
-                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Slug (Subdominio)</label>
-                            <div class="input-group">
-                                <input type="text" name="slug" value="{{ $school->slug }}" class="form-control rounded-start-pill px-4 py-3 border-light shadow-none" required>
-                                <span class="input-group-text bg-light border-light text-muted px-3">.colegio-pro.cl</span>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Nombre Singular del Miembro</label>
+                            <input type="text" name="member_singular" value="{{ $school->member_singular }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="Ej: Colegiado">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Nombre Plural del Miembro</label>
+                            <input type="text" name="member_plural" value="{{ $school->member_plural }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="Ej: Colegiados">
                         </div>
                     </div>
 

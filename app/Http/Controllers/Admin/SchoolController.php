@@ -120,6 +120,8 @@ class SchoolController extends Controller
         $school->update([
             'name' => $request->name,
             'slug' => Str::slug($request->slug),
+            'member_singular' => $request->member_singular,
+            'member_plural' => $request->member_plural,
             'primary_color' => $request->primary_color,
             'secondary_color' => $request->secondary_color,
             'accent_color' => $request->accent_color,
