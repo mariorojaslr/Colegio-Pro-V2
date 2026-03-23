@@ -31,7 +31,7 @@
                                 <select name="school_id" class="form-select rounded-3 border-light-subtle shadow-none" required>
                                     <option value="">Seleccione una institución...</option>
                                     @foreach($schools as $school)
-                                        <option value="{{ $school->id }}" {{ old('school_id', $lesson->school_id ?? '') == $school.id ? 'selected' : '' }}>
+                                        <option value="{{ $school->id }}" {{ (old('school_id', $lesson->school_id ?? '') == $school->id) ? 'selected' : '' }}>
                                             {{ $school->name }}
                                         </option>
                                     @endforeach
