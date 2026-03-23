@@ -21,6 +21,24 @@
     
     @yield('styles')
     @stack('styles')
+    <style>
+        @media (max-width: 991.98px) {
+            .notification-dropdown {
+                width: calc(100vw - 32px) !important;
+                position: fixed !important;
+                left: 16px !important;
+                right: 16px !important;
+                top: 70px !important;
+                margin: 0 !important;
+                transform: none !important;
+            }
+        }
+        @media (min-width: 992px) {
+            .notification-dropdown {
+                width: 350px;
+            }
+        }
+    </style>
 </head>
 <body class="light-mode">
     <nav class="navbar navbar-expand-lg py-2 sticky-top bg-white border-bottom border-light shadow-sm" style="transition: all 0.4s ease;">
@@ -30,11 +48,78 @@
                 <span class="d-none d-sm-inline fw-black ls-n1" style="color: #0f172a; font-size: 1.1rem;">COLEGIO</span>
                 <span class="d-none d-sm-inline fw-light" style="color: #64748b; font-size: 1.1rem; margin-left: 1px;">PRO</span>
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+            <button class="navbar-toggler border-0 order-last" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <span class="navbar-toggler-icon" style="width: 20px;"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+            <!-- Área de Usuario y Notificaciones (Siempre Visible) -->
+            <div class="d-flex gap-2 align-items-center ms-auto me-2 me-lg-0 order-2 order-lg-last">
+                @auth
+                    <!-- Campana de Notificaciones -->
+                    <div class="dropdown me-1">
+                        <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 position-relative" data-bs-toggle="dropdown" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-bell fs-6"></i>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 8px; margin-top: 5px; margin-left: -5px;">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                            </span>
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3 mt-2 animate__animated animate__fadeIn notification-dropdown">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold m-0">Notificaciones</h6>
+                                @if(auth()->user()->unreadNotifications->count() > 0)
+                                <a href="#" class="x-small text-decoration-none text-primary fw-bold">Marcar leídas</a>
+                                @endif
+                            </div>
+                            <div class="notification-list" style="max-height: 300px; overflow-y: auto;">
+                                @forelse(auth()->user()->notifications->take(5) as $notification)
+                                <li class="mb-3">
+                                    <div class="d-flex align-items-start gap-3 p-2 rounded-3 {{ $notification->read_at ? '' : 'bg-light' }}">
+                                        <div class="rounded-circle bg-primary bg-opacity-10 p-2 flex-shrink-0">
+                                            <i class="bi {{ $notification->data['icon'] ?? 'bi-info-circle' }} text-primary"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="small fw-bold mb-0 text-dark" style="font-size: 13px;">{{ $notification->data['title'] }}</p>
+                                            <p class="small text-muted mb-1" style="font-size: 11px; line-height: 1.2;">{{ $notification->data['message'] }}</p>
+                                            <div class="x-small text-muted-opacity">{{ $notification->created_at->diffForHumans() }}</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                @empty
+                                <div class="text-center py-4">
+                                    <i class="bi bi-bell-slash opacity-25 display-6 mb-2 d-block"></i>
+                                    <p class="small text-muted m-0">No tienes notificaciones</p>
+                                </div>
+                                @endforelse
+                            </div>
+                            <li><hr class="dropdown-divider opacity-50"></li>
+                            <li><a class="dropdown-item text-center small text-primary fw-bold py-2" href="#">Ver todo el historial</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold x-small border-0 shadow-sm dropdown-toggle" data-bs-toggle="dropdown">
+                            {{ explode(' ', auth()->user()->name)[0] }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('home') }}"><i class="bi bi-person me-2"></i> Perfil</a></li>
+                            <li><hr class="dropdown-divider opacity-50"></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item rounded-3 py-2 x-small fw-bold text-danger"><i class="bi bi-box-arrow-right me-2"></i> {{ __('Salir') }}</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-dark btn-sm rounded-pill px-4 fw-black x-small shadow-sm">Acceso Institucional</a>
+                @endauth
+            </div>
+
+            <div class="collapse navbar-collapse order-3" id="navContent">
+                <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0">
                     @auth
                         @php $currentRoute = request()->route()->getName(); @endphp
                         @if(auth()->user()->role === 'ADMIN_COLEGIO')
@@ -56,70 +141,6 @@
                         <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="/escuela-virtual">Escuela Virtual</a></li>
                     @endauth
                 </ul>
-                <div class="d-flex gap-2 align-items-center">
-                    @auth
-                        <!-- Campana de Notificaciones -->
-                        <div class="dropdown me-1">
-                            <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 position-relative" data-bs-toggle="dropdown" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
-                                <i class="bi bi-bell fs-6"></i>
-                                @if(auth()->user()->unreadNotifications->count() > 0)
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 8px; margin-top: 5px; margin-left: -5px;">
-                                    {{ auth()->user()->unreadNotifications->count() }}
-                                </span>
-                                @endif
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3 mt-2 animate__animated animate__fadeIn" style="width: 300px; max-height: 400px; overflow-y: auto;">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h6 class="fw-bold m-0">Notificaciones</h6>
-                                    @if(auth()->user()->unreadNotifications->count() > 0)
-                                    <a href="#" class="x-small text-decoration-none text-primary fw-bold">Marcar leídas</a>
-                                    @endif
-                                </div>
-                                <div class="notification-list">
-                                    @forelse(auth()->user()->notifications->take(5) as $notification)
-                                    <li class="mb-3">
-                                        <div class="d-flex align-items-start gap-3 p-2 rounded-3 {{ $notification->read_at ? '' : 'bg-light' }}">
-                                            <div class="rounded-circle bg-primary bg-opacity-10 p-2 flex-shrink-0">
-                                                <i class="bi {{ $notification->data['icon'] ?? 'bi-info-circle' }} text-primary"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <p class="small fw-bold mb-0 text-dark" style="font-size: 13px;">{{ $notification->data['title'] }}</p>
-                                                <p class="small text-muted mb-1" style="font-size: 11px; line-height: 1.2;">{{ $notification->data['message'] }}</p>
-                                                <div class="x-small text-muted-opacity">{{ $notification->created_at->diffForHumans() }}</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @empty
-                                    <div class="text-center py-4">
-                                        <i class="bi bi-bell-slash opacity-25 display-6 mb-2 d-block"></i>
-                                        <p class="small text-muted m-0">No tienes notificaciones</p>
-                                    </div>
-                                    @endforelse
-                                </div>
-                                <li><hr class="dropdown-divider opacity-50"></li>
-                                <li><a class="dropdown-item text-center small text-primary fw-bold py-2" href="#">Ver todo el historial</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold x-small border-0 shadow-sm dropdown-toggle" data-bs-toggle="dropdown">
-                                {{ explode(' ', auth()->user()->name)[0] }}
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
-                                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('home') }}"><i class="bi bi-person me-2"></i> Perfil</a></li>
-                                <li><hr class="dropdown-divider opacity-50"></li>
-                                <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item rounded-3 py-2 x-small fw-bold text-danger"><i class="bi bi-box-arrow-right me-2"></i> {{ __('Salir') }}</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-dark btn-sm rounded-pill px-4 fw-black x-small shadow-sm">Acceso Institucional</a>
-                    @endauth
-                </div>
             </div>
         </div>
     </nav>
