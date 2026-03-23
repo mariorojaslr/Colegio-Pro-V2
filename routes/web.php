@@ -71,7 +71,7 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::get('/auditoria', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.activity_logs.index');
 
     // Finanzas Globales (Owner side)
-    Route::get('/finanzas', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
+    Route::get('/admin/global-billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.global');
 
     // Gestión Global de Academia (Cursos/Lecciones)
     Route::resource('/admin/academy', \App\Http\Controllers\Admin\LessonController::class)->names('admin.academy');
@@ -80,8 +80,8 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::delete('/admin/questions/{question}', [\App\Http\Controllers\Admin\ExamController::class, 'destroyQuestion'])->name('admin.exams.questions.destroy');
     
     // Gestión de Facturación Global (OWNER)
-    Route::get('/admin/billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
-    Route::get('/admin/billing/download/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'downloadInvoice'])->name('admin.billing.download');
+    Route::get('/admin/billing-history', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.history');
+    Route::get('/admin/billing-download/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'downloadInvoice'])->name('admin.billing.download_global');
 
     // Gestión de Recursos (PDF, Slides, etc)
     Route::post('/admin/academy/{lesson}/resources', [\App\Http\Controllers\Admin\LessonResourceController::class, 'store'])->name('admin.lesson_resources.store');
@@ -141,7 +141,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/academia/certificado/{certificate}', [\App\Http\Controllers\Student\CertificateController::class, 'download'])->name('student.certificates.download');
 
     // Facturación Institucional (Admin de Colegio)
-    Route::get('/mi-facturacion', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
+    Route::get('/finanzas', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
     Route::post('/mi-facturacion/cuota', [\App\Http\Controllers\Admin\BillingController::class, 'updateFee'])->name('admin.billing.update_fee');
     Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'download'])->name('billing.download');
 

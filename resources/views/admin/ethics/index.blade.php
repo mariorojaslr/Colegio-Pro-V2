@@ -7,8 +7,8 @@
             <div class="card-header bg-white border-bottom py-4 px-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h4 class="mb-1 text-dark fw-bold">Tribunal de Ética Profesional</h4>
-                        <p class="text-secondary small mb-0">Gestión de sanciones disciplinarias, inhabilitaciones y dictámenes.</p>
+                        <h4 class="mb-1 text-dark fw-bold">Comisión de Ética Profesional</h4>
+                        <p class="text-secondary small mb-0">Gestión de sanciones disciplinarias, inhabilitaciones y dictámenes vinculantes.</p>
                     </div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-danger rounded-pill px-4 btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#newSanctionModal">
@@ -42,8 +42,8 @@
                                     <span class="text-secondary small text-lowercase">{{ $sanction->type == 'temporary' ? 'Temporal' : 'Permanente' }}</span>
                                 </td>
                                 <td class="px-3 py-3 border-0">
-                                    <span class="text-secondary small d-block">{{ $sanction->start_date->format('d/m/Y') }}</span>
-                                    <span class="text-secondary small d-block">al {{ $sanction->end_date ? $sanction->end_date->format('d/m/Y') : 'Indefinido' }}</span>
+                                    <span class="text-secondary small d-block">Desde: {{ $sanction->start_date->format('d/m/Y') }}</span>
+                                    <span class="text-secondary small d-block">Hasta: {{ $sanction->end_date ? $sanction->end_date->format('d/m/Y') : 'Permanente' }}</span>
                                 </td>
                                 <td class="px-3 py-3 border-0 text-center">
                                     <span class="badge rounded-pill bg-danger-soft text-danger border border-danger-soft px-3" style="background: #feeaea;">
@@ -101,15 +101,17 @@
                         <i class="bi-people-fill text-white fs-4 px-1"></i>
                     </div>
                     <div>
-                        <h6 class="mb-0 fw-bold">Cámara de Ética</h6>
-                        <span class="small opacity-50">Cuerpo de Veedores</span>
+                        <h6 class="mb-0 fw-bold">Comisión de Ética</h6>
+                        <span class="small opacity-50">Cuerpo de Veedores y Auditores</span>
                     </div>
                 </div>
             </div>
             <div class="card-body p-4">
-                <p class="text-secondary small mb-4 font-italic border-start border-primary border-4 ps-3">"Los fallos de esta comisión son vinculantes y restringen automáticamente la emisión de certificados de libre deuda y ética profesional."</p>
+                <p class="text-secondary small mb-4 fst-italic border-start border-primary border-4 ps-3">
+                    "Los fallos de esta comisión rigen la ética institucional. El número de veedores es variable según lo determine el consejo."
+                </p>
                 
-                <h6 class="text-dark small fw-bold text-uppercase mb-3">Veedores Activos</h6>
+                <h6 class="text-dark small fw-bold text-uppercase mb-3">Veedores Activos de la Comisión</h6>
                 @foreach($commissionMembers as $member)
                 <div class="d-flex align-items-center mb-3">
                     <div class="avatar-sm bg-light text-dark rounded-pill d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 32px; height: 32px;">
@@ -153,18 +155,22 @@
                                 <option value="{{ $c->id }}">{{ $c->first_name }} {{ $c->last_name }} ({{ $c->registration_number }})</option>
                              @endforeach
                         </select>
-                    </div>
                     <div class="row mb-3">
-                        <div class="col-6">
-                             <label class="form-label text-dark fw-bold small text-uppercase">Tipo de Sanción</label>
+                        <div class="col-4">
+                             <label class="form-label text-dark fw-bold small text-uppercase">Tipo</label>
                              <select name="type" class="form-select border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
                                  <option value="temporary">Temporal</option>
                                  <option value="permanent">Permanente</option>
                              </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                              <label class="form-label text-dark fw-bold small text-uppercase">Fecha Inicio</label>
                              <input type="date" name="start_date" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
+                        </div>
+                        <div class="col-4">
+                             <label class="form-label text-dark fw-bold small text-uppercase">Fecha Fin</label>
+                             <input type="date" name="end_date" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none">
+                             <span class="xx-small text-muted">Vacio = Perm.</span>
                         </div>
                     </div>
                     <div class="mb-3">

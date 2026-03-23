@@ -55,7 +55,10 @@ class EthicsController extends Controller
             'end_date' => 'nullable|date|after:start_date',
         ]);
 
-        EthicsSanction::create($request->all());
+        EthicsSanction::create(array_merge($request->all(), [
+            'status' => 'active',
+            // Si no hay end_date, es permanente por defecto en la lógica de negocio
+        ]));
 
         return back()->with('success', 'Sanción ética registrada correctamente.');
     }
