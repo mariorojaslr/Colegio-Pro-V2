@@ -15,6 +15,10 @@
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
     <!-- Custom Design System -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -57,8 +61,8 @@
                 @auth
                     <!-- Campana de Notificaciones -->
                     <div class="dropdown me-1">
-                        <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 position-relative" data-bs-toggle="dropdown" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
-                            <i class="bi bi-bell fs-6"></i>
+                        <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 position-relative" data-bs-toggle="dropdown" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: #f1f5f9;">
+                            <i class="bi bi-bell-fill fs-5 text-primary"></i>
                             @if(auth()->user()->unreadNotifications->count() > 0)
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 8px; margin-top: 5px; margin-left: -5px;">
                                 {{ auth()->user()->unreadNotifications->count() }}
