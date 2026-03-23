@@ -112,41 +112,56 @@
             <a href="#" class="text-primary fw-bold text-decoration-none small ls-1">FILTRAR ÁREAS <i class="bi bi-funnel"></i></a>
         </div>
 
+    {{-- Categorías y Cursos --}}
+    <div class="section-courses mb-5">
+        <div class="d-flex justify-content-between align-items-end mb-4 px-2">
+            <div>
+                <h4 class="fw-bold mb-0">Catálogo de <span class="text-primary">Especializaciones</span></h4>
+                <p class="text-muted small mb-0">Haga clic en el póster para ver detalles y aranceles</p>
+            </div>
+            <a href="#" class="text-primary fw-bold text-decoration-none small ls-1 text-uppercase">Áreas de Estudio <i class="bi bi-funnel ms-1"></i></a>
+        </div>
+
         <div class="row g-4 mb-5">
             @php
                 $especialidades = [
-                    ['Civil', 'Gestión Judicial Predictiva', 'https://images.unsplash.com/photo-1505664194779-8beaceb93744', 'Dr. Roberto García', '12h', '45.000'],
-                    ['Familia', 'Procesos de Alimentos y Cuidado', 'https://images.unsplash.com/photo-1511174511562-5f7f18b874f8', 'Dra. Elena Martínez', '15h', '38.000'],
-                    ['Laboral', 'Teletrabajo y Nuevas Normas', 'https://images.unsplash.com/photo-1521791136064-7986c2923216', 'Dr. Juan Pérez', '8h', '32.000'],
+                    ['Salud', 'RCP & Primeros Auxilios', 'https://mariorojaslr.github.io/Colegio-Pro-V2/artifacts/flyer_rcp_course_1774222864134.png', 'Dr. Roberto García', '12h', '25.000'],
+                    ['Legal Tech', 'Arquitectura Legal en Salud', 'https://mariorojaslr.github.io/Colegio-Pro-V2/artifacts/flyer_legal_health_1774222880824.png', 'Dra. Elena Martínez', '15h', '38.000'],
+                    ['Gestión', 'Innovación en Gestión Judicial', 'https://mariorojaslr.github.io/Colegio-Pro-V2/artifacts/flyer_judicial_innovation_1774222897356.png', 'Dr. Juan Pérez', '8h', '45.000'],
                     ['Penal', 'Reformas Procesales 2026', 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f', 'Dr. Sergio Massa', '20h', '55.000'],
                     ['Sucesiones', 'Práctica en Juicios Sucesorios', 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85', 'Dra. María Lopez', '10h', '40.000'],
-                    ['Tributario', 'Actualización Impositiva AFIP', 'https://images.unsplash.com/photo-1554224155-16974301755d', 'Cont. Ana Sosa', '14h', '42.000'],
+                    ['Tributario', 'Actualización AFIP 2026', 'https://images.unsplash.com/photo-1554224155-16974301755d', 'Cont. Ana Sosa', '14h', '42.000'],
                     ['Comercial', 'Contratos Modernos y Startups', 'https://images.unsplash.com/photo-1454165833767-0275084927ed', 'Dr. Luis Caputo', '11h', '35.000'],
                     ['Admin', 'Procedimiento Administrativo', 'https://images.unsplash.com/photo-1423592707957-3b212afa6733', 'Dra. Patricia Bull', '9h', '28.000'],
                     ['Mediación', 'Resolución de Conflictos', 'https://images.unsplash.com/photo-1573164773501-229ef2159f81', 'Dr. Jorge Macri', '12h', '30.000'],
-                    ['Inmobiliario', 'Ley de Alquileres Práctica', 'https://images.unsplash.com/photo-1560518883-ce09059eeffa', 'Dra. Victoria V.', '10h', '34.000'],
-                    ['Ética', 'Responsabilidad Profesional', 'https://images.unsplash.com/photo-1505664194779-8beaceb93744', 'Dr. Ricardo Darín', '6h', '25.000'],
+                    ['Inmobiliario', 'Inmobiliario y Práctica', 'https://images.unsplash.com/photo-1560518883-ce09059eeffa', 'Dra. Victoria V.', '10h', '34.000'],
+                    ['Civil', 'Responsabilidad Civil Prof.', 'https://images.unsplash.com/photo-1505664194779-8beaceb93744', 'Dr. Ricardo Darín', '6h', '25.000'],
                     ['Idiomas', 'Legal English for Lawyers', 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b', 'Prof. Sarah Connor', '30h', '60.000'],
                 ];
             @endphp
 
             @foreach($especialidades as $index => $esp)
             <div class="col-md-3">
-                <div class="course-card-netflix shadow-sm bg-white h-100 p-0 border-0">
-                    <img src="{{ $esp[2] }}?auto=format&fit=crop&w=600&q=80" alt="Curso" class="img-fluid" style="height: 160px; width: 100%; object-fit: cover;">
-                    <div class="p-3 text-center">
-                        <span class="x-small fw-bold text-primary text-uppercase mb-2 d-block ls-1">{{ $esp[0] }}</span>
-                        <h6 class="fw-bold text-dark mb-3" style="font-size: 1rem; min-height: 2.5rem;">{{ $esp[1] }}</h6>
-                        <div class="d-grid mt-2">
-                            <button class="btn btn-outline-dark rounded-pill fw-bold small py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#courseModal{{ $index }}">
-                                <i class="bi bi-info-circle me-1"></i> Más Información
-                            </button>
+                <div class="course-poster-wrapper cursor-pointer shadow-hover transition-all" 
+                     data-bs-toggle="modal" data-bs-target="#courseModal{{ $index }}" 
+                     style="border-radius: 20px; overflow: hidden; aspect-ratio: 2/3;">
+                    <div class="position-relative h-100 poster-zoom-container">
+                        <img src="{{ Str::startsWith($esp[2], 'http') ? $esp[2] : asset($esp[2]) }}?auto=format&fit=crop&w=800&q=80" 
+                             alt="{{ $esp[1] }}" class="img-fluid h-100 w-100 object-fit-cover transition-all">
+                        
+                        {{-- Overlay con información básica (estilo Netflix) --}}
+                        <div class="poster-overlay p-4 d-flex flex-column justify-content-end text-white">
+                            <span class="badge bg-primary rounded-pill x-small px-3 py-1 mb-2 d-inline-block">{{ $esp[0] }}</span>
+                            <h6 class="fw-bold mb-0 ls-n1">{{ $esp[1] }}</h6>
+                            <div class="mt-2 opacity-0 hover-opacity-100 transition-all">
+                                <span class="x-small fw-bold"><i class="bi bi-play-circle-fill text-white"></i> Ver Detalles</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Modal para cada curso --}}
+            {{-- Modal detallado (se mantiene la lógica que ya funciona) --}}
             <div class="modal fade" id="courseModal{{ $index }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0 shadow-lg" style="border-radius: 30px; overflow: hidden;">

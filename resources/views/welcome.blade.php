@@ -17,8 +17,10 @@
                         La infraestructura definitiva para Colegios Profesionales que exigen seguridad, velocidad y una experiencia de usuario sin precedentes.
                     </p>
                     <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                        <a href="{{ route('demo.fast') }}" class="btn btn-premium btn-lg px-5 py-3 shadow-lg fs-5">Entrar como Probador (Demo)</a>
-                        <a href="#ventajas" class="btn btn-white btn-lg px-5 py-3 shadow-sm border border-light-subtle" style="background: white; border-radius: var(--border-radius)">Explorar Ventajas</a>
+                        <a href="{{ route('demo.fast') }}" class="btn btn-premium btn-lg px-5 py-3 shadow-lg fs-5">Acceso Demo</a>
+                        <a href="/escuela-virtual" class="btn btn-outline-dark btn-lg px-5 py-3 shadow-sm border border-light-subtle d-flex align-items-center gap-2" style="background: white; border-radius: var(--border-radius)">
+                            <i class="bi bi-play-circle-fill text-primary"></i> Escuela Virtual
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-6 mt-lg-0 mt-5 position-relative">
@@ -191,44 +193,53 @@
         <div class="row g-4">
             @foreach($plans as $plan)
             <div class="col-md-3">
-                <div class="feature-card p-5 h-100 border-0 glass-card text-center d-flex flex-column {{ $plan->slug === 'professional' ? 'position-relative border-top border-5 border-info' : '' }}" 
-                     style="border-radius: 30px; transition: all 0.3s ease;">
+                <div class="feature-card p-5 h-100 border-0 glass-card text-center d-flex flex-column {{ $plan->slug === 'professional' ? 'border-primary' : 'border border-light-subtle' }}" 
+                     style="border-radius: 40px; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); background: white; border-width: {{ $plan->slug === 'professional' ? '4px' : '1px' }} !important;">
                     
                     @if($plan->slug === 'professional')
-                    <div class="position-absolute top-0 start-50 translate-middle bg-info text-white px-3 py-1 rounded-pill small fw-bold mt-2" style="font-size: 10px">RECOMENDADO</div>
+                    <div class="position-absolute top-0 start-50 translate-middle bg-primary text-white px-4 py-1 rounded-pill small fw-bold mt-2 shadow-sm" style="font-size: 11px; letter-spacing: 1px;">MÁS ELEGIDO</div>
                     @endif
 
-                    <h5 class="fw-bold text-dark mb-4 text-uppercase ls-1 opacity-75">{{ $plan->name }}</h5>
-                    
                     <div class="mb-4">
-                        <span class="display-5 fw-black text-primary">{{ $plan->getDisplayCurrencySymbol() }}</span>
-                        <span class="display-5 fw-black text-primary">{{ number_format($plan->getDisplayPrice(), 0, ',', '.') }}</span>
-                        @if($plan->interval === 'monthly')
-                        <span class="text-muted small">/mes</span>
-                        @endif
+                        <h5 class="fw-black text-dark text-uppercase ls-2 opacity-50 small mb-4">{{ $plan->name }}</h5>
+                        <div class="d-flex align-items-start justify-content-center">
+                            <span class="fs-4 fw-bold text-primary mt-2">$</span>
+                            <span class="display-4 fw-black text-primary ls-n2">{{ number_format($plan->getDisplayPrice(), 0, ',', '.') }}</span>
+                        </div>
+                        <p class="text-muted x-small mt-n1 fw-bold">PAGO POR MES</p>
                     </div>
 
+                    <hr class="my-4 opacity-5">
+
                     <ul class="list-unstyled text-start mb-5 flex-grow-1">
-                        <li class="mb-3 small d-flex gap-2">
-                            <i class="bi bi-person-check text-success"></i>
-                            <strong>Hasta {{ number_format($plan->max_users, 0, ',', '.') }}</strong> usuarios
+                        <li class="mb-3 d-flex align-items-center gap-3">
+                            <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary"><i class="bi bi-people-fill fs-5"></i></div>
+                            <div>
+                                <p class="mb-0 fw-bold text-dark small">Hasta {{ number_format($plan->max_users, 0, ',', '.') }}</p>
+                                <p class="mb-0 x-small text-muted text-uppercase fw-bold">Usuarios activos</p>
+                            </div>
                         </li>
-                        <li class="mb-3 small d-flex gap-2">
-                            <i class="bi bi-hdd text-info"></i>
-                            <strong>{{ $plan->max_storage }} GB</strong> de Almacenamiento
+                        <li class="mb-3 d-flex align-items-center gap-3">
+                            <div class="bg-info bg-opacity-10 p-2 rounded-3 text-info"><i class="bi bi-cloud-check-fill fs-5"></i></div>
+                            <div>
+                                <p class="mb-0 fw-bold text-dark small">{{ $plan->max_storage }} GB</p>
+                                <p class="mb-0 x-small text-muted text-uppercase fw-bold">Almacenamiento</p>
+                            </div>
                         </li>
                         @foreach($plan->features as $feature)
-                        <li class="mb-3 small d-flex gap-2">
-                            <i class="bi bi-check2 text-primary"></i>
-                            {{ $feature }}
+                        <li class="mb-2 d-flex align-items-center gap-3">
+                            <i class="bi bi-check2 text-success fw-bold"></i>
+                            <span class="text-dark opacity-75 small fw-medium">{{ $feature }}</span>
                         </li>
                         @endforeach
                     </ul>
 
-                    <a href="{{ route('demo.register', ['plan' => $plan->slug]) }}" 
-                       class="btn {{ $plan->slug === 'professional' ? 'btn-primary' : 'btn-outline-dark' }} w-100 rounded-pill py-3 fw-bold shadow-sm">
-                       Elegir este Plan
-                    </a>
+                    <div class="mt-auto">
+                        <a href="{{ route('demo.register', ['plan' => $plan->slug]) }}" 
+                           class="btn {{ $plan->slug === 'professional' ? 'btn-primary' : 'btn-outline-dark text-uppercase' }} w-100 rounded-pill py-3 fw-black ls-1 shadow-sm transition-all shadow-hover">
+                           Elegir este Plan
+                        </a>
+                    </div>
                 </div>
             </div>
             @endforeach
@@ -256,6 +267,9 @@
 @section('styles')
 <style>
     .fw-black { font-weight: 900; }
+    .ls-1 { letter-spacing: 1px; }
+    .ls-2 { letter-spacing: 2px; }
+    .ls-n2 { letter-spacing: -2px; }
     .animate-fade-in { animation: fadeIn 1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     
@@ -268,10 +282,14 @@
     
     .feature-card:hover {
         transform: translateY(-10px);
-        background: white !important;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.05) !important;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.1) !important;
     }
     
+    .shadow-hover:hover {
+        box-shadow: 0 15px 30px rgba(var(--primary-rgb), 0.2) !important;
+        transform: translateY(-2px);
+    }
+
     .btn-white:hover {
         background: #f8fafc !important;
     }
