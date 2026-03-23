@@ -93,41 +93,43 @@
             <table class="table table-hover align-middle m-0" id="collegiateTable">
                 <thead class="bg-light bg-opacity-50">
                     <tr class="small fw-bold text-muted uppercase ls-1">
-                        <th class="py-3 px-4">Estado</th>
-                        <th class="py-3">Profesional (Matrícula)</th>
-                        <th class="py-3">Documento / Contacto</th>
-                        <th class="py-3">Ubicación</th>
-                        <th class="py-3 text-end px-4">Acciones</th>
+                        <th class="py-1 px-4">Estado</th>
+                        <th class="py-1">Profesional (Matrícula)</th>
+                        <th class="py-1">Documento / Contacto</th>
+                        <th class="py-1">Ubicación</th>
+                        <th class="py-1 text-end px-4">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     @forelse($collegiates as $col)
-                    <tr>
-                        <td class="py-4 px-4">
+                    <tr class="border-bottom border-light">
+                        <td class="py-1 px-4">
                             @if($col->is_fees_compliant && $col->is_fully_documented && $col->is_ethics_compliant)
-                                <div class="bg-success rounded-circle shadow-sm" style="width: 15px; height: 15px" title="Habilitado"></div>
+                                <div class="bg-success rounded-circle shadow-sm" style="width: 10px; height: 10px" title="Habilitado"></div>
                             @elseif(!$col->is_fees_compliant)
-                                <div class="bg-danger rounded-circle shadow-sm" style="width: 15px; height: 15px" title="Deuda Cuotas"></div>
+                                <div class="bg-danger rounded-circle shadow-sm" style="width: 10px; height: 10px" title="Deuda Cuotas"></div>
                             @else
-                                <div class="bg-warning rounded-circle shadow-sm" style="width: 15px; height: 15px" title="Deuda Documental"></div>
+                                <div class="bg-warning rounded-circle shadow-sm" style="width: 10px; height: 10px" title="Deuda Documental"></div>
                             @endif
                         </td>
-                        <td class="py-4 searchable" data-field="name">
-                            <div class="fw-bold text-dark fs-6">{{ $col->last_name }}, {{ $col->first_name }}</div>
-                            <div class="small fw-bold text-primary">MAT: {{ $col->registration_number }}</div>
+                        <td class="py-1 searchable" data-field="name" style="min-width: 250px;">
+                            <span class="fw-bold text-dark me-2" style="font-size: 0.9rem;">{{ $col->last_name }}, {{ $col->first_name }}</span>
+                            <span class="badge bg-primary bg-opacity-10 text-primary x-small border border-primary border-opacity-25" style="font-size: 0.65rem;">MAT: {{ $col->registration_number }}</span>
                         </td>
-                        <td class="py-4 searchable" data-field="contact">
-                            <div class="small text-muted mb-1">DNI {{ number_format($col->dni, 0, ',', '.') }}</div>
-                            <div class="small text-muted"><i class="bi bi-envelope me-1"></i> {{ $col->email }}</div>
+                        <td class="py-1 searchable" data-field="contact">
+                            <span class="x-small text-muted fw-medium">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
+                            <span class="mx-2 text-muted opacity-25">|</span>
+                            <span class="x-small text-muted">{{ $col->email }}</span>
                             @if($col->phone)
-                                <div class="small text-muted mt-1"><i class="bi bi-phone me-1"></i> {{ $col->phone }}</div>
+                                <span class="mx-2 text-muted opacity-25">|</span>
+                                <span class="x-small text-secondary"><i class="bi bi-phone me-1"></i>{{ $col->phone }}</span>
                             @endif
                         </td>
-                        <td class="py-4">
-                            <div class="small fw-medium">{{ $col->professional_situation ?? 'Activo' }}</div>
+                        <td class="py-1 x-small fw-bold text-muted text-uppercase" style="font-size: 0.65rem;">
+                            {{ $col->professional_situation ?? 'Activo' }}
                         </td>
-                        <td class="py-4 text-end px-4">
-                            <a href="{{ route('collegiates.show', $col) }}" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1 fw-bold">Ficha <i class="bi bi-chevron-right ms-1"></i></a>
+                        <td class="py-1 text-end px-4">
+                            <a href="{{ route('collegiates.show', $col) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold x-small py-0 px-3">Ver Perfil</a>
                         </td>
                     </tr>
                     @empty
