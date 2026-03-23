@@ -25,13 +25,11 @@ class NotificationController extends Controller
         $type = $request->type;
 
         if ($request->school_id) {
-            // Enviar solo a los administradores de un colegio específico
-            $users = User::where('school_id', $request->school_id)
-                        ->where('role', 'ADMIN_COLEGIO')
-                        ->get();
+            // Enviar a todos los usuarios (admins y colegiados) de un colegio específico
+            $users = User::where('school_id', $request->school_id)->get();
         } else {
-            // Enviar a TODOS los administradores de colegios (Owner -> SaaS)
-            $users = User::where('role', 'ADMIN_COLEGIO')->get();
+            // Enviar a ABSOLUTAMENTE TODOS los usuarios del sistema (SaaS Global)
+            $users = User::all();
         }
 
         Notification::send($users, new GlobalNotification($title, $message, $type));
