@@ -23,6 +23,13 @@ class EthicsSanction extends Model
         'approved_by_president',
     ];
 
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'lifted_at' => 'datetime',
+        'approved_by_president' => 'boolean',
+    ];
+
     public function collegiate()
     {
         return $this->belongsTo(Collegiate::class);

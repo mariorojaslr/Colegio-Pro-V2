@@ -18,6 +18,11 @@ class CollegiateDue extends Model
         'payment_reference',
     ];
 
+    protected $casts = [
+        'due_date' => 'date',
+        'paid_at' => 'datetime',
+    ];
+
     public function collegiate()
     {
         return $this->belongsTo(Collegiate::class);

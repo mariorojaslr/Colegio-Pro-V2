@@ -16,6 +16,11 @@ class MembershipFee extends Model
         'is_active',
     ];
 
+    protected $casts = [
+        'effective_date' => 'date',
+        'is_active' => 'boolean',
+    ];
+
     public function school()
     {
         return $this->belongsTo(School::class);

@@ -21,6 +21,11 @@ class ProfessionalCertificate extends Model
         'pdf_url',
     ];
 
+    protected $casts = [
+        'issued_at' => 'datetime',
+        'expires_at' => 'date',
+    ];
+
     protected static function boot()
     {
         parent::boot();
