@@ -30,17 +30,18 @@
         body.dark-mode { background: #000 !important; color: #fff !important; }
         body.dark-mode .navbar, 
         body.dark-mode .card, 
+        body.dark-mode .card-prestige,
         body.dark-mode .offcanvas,
         body.dark-mode .modal-content,
         body.dark-mode .mobile-nav,
         body.dark-mode footer { 
             background: #000 !important; 
-            border: 1px solid #1a1a1a !important; 
+            border: 1px solid rgba(255, 255, 255, 0.15) !important; 
         }
         body.dark-mode .card-header, 
         body.dark-mode .bg-white, 
         body.dark-mode .bg-light,
-        body.dark-mode .bg-light-subtle { background: #000 !important; border-bottom: 1px solid #1a1a1a !important; }
+        body.dark-mode .bg-light-subtle { background: #000 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; }
         
         body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
         body.dark-mode h4, body.dark-mode h5, body.dark-mode h6,
