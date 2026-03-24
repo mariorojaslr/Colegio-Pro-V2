@@ -43,6 +43,9 @@
         body.dark-mode .bg-light,
         body.dark-mode .bg-light-subtle { background: #000 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; }
         
+        body.dark-mode .text-finance-clean { color: #fff !important; opacity: 1 !important; }
+        body:not(.dark-mode) .text-finance-clean { color: #000 !important; opacity: 1 !important; }
+        
         body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
         body.dark-mode h4, body.dark-mode h5, body.dark-mode h6,
         body.dark-mode .text-dark, body.dark-mode p, body.dark-mode span,
