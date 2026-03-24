@@ -89,6 +89,7 @@
                                         <span class="text-secondary xx-small opacity-50">S/P</span>
                                     @endif
                                 </td>
+                                <td class="px-3 py-2 border-0 text-center">
                                     @if($collegiate->isSanctioned())
                                         <span class="badge rounded-pill bg-dark text-white border border-dark px-2 py-1" style="font-size: 0.65rem;">
                                             <i class="bi-shield-x me-1"></i> SUSPENDIDO
