@@ -1,12 +1,12 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="container-fluid py-4 bg-light-subtle">
+<div class="container-fluid py-4 {{ auth()->user()->dark_mode ? 'bg-black' : 'bg-light-subtle' }}">
     {{-- Encabezado del Padrón y Acciones --}}
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
         <div>
-            <h1 class="h3 fw-bold text-dark mb-0" style="font-family: 'Outfit', sans-serif;">Padrón <span class="text-primary">Profesional</span></h1>
-            <p class="x-small text-muted fw-medium mb-0">Gestión integral de matriculados y estados.</p>
+            <h1 class="h3 fw-bold {{ auth()->user()->dark_mode ? 'text-white' : 'text-dark' }} mb-0" style="font-family: 'Outfit', sans-serif;">Padrón <span class="text-primary">Profesional</span></h1>
+            <p class="x-small {{ auth()->user()->dark_mode ? 'text-white-50' : 'text-muted' }} fw-medium mb-0">Gestión integral de matriculados y estados.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('collegiates.export') }}" class="btn btn-outline-dark rounded-pill px-3 fw-bold x-small shadow-sm"><i class="bi bi-download me-1"></i> Excel</a>
@@ -18,7 +18,7 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index') }}" class="text-decoration-none">
-                <div class="card-prestige p-2 border-0 {{ !request('filter') ? 'bg-primary text-white' : 'bg-white text-dark' }} transition-all text-center">
+                <div class="card-prestige p-2 {{ !request('filter') ? 'bg-primary text-white' : (auth()->user()->dark_mode ? 'bg-black text-white' : 'bg-white text-dark') }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['total'], 0, ',', '.') }}</div>
                     <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Total</div>
                 </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'morosos']) }}" class="text-decoration-none">
-                <div class="card-prestige p-2 border-0 {{ request('filter') === 'morosos' ? 'bg-danger text-white' : 'bg-white text-danger' }} transition-all text-center">
+                <div class="card-prestige p-2 {{ request('filter') === 'morosos' ? 'bg-danger text-white' : (auth()->user()->dark_mode ? 'bg-black text-danger' : 'bg-white text-danger') }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['debt_fees'], 0, ',', '.') }}</div>
                     <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Deuda Cuotas</div>
                 </div>
@@ -34,7 +34,7 @@
         </div>
         <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'sin_papeles']) }}" class="text-decoration-none">
-                <div class="card-prestige p-2 border-0 {{ request('filter') === 'sin_papeles' ? 'bg-warning text-dark' : 'bg-white text-warning' }} transition-all text-center">
+                <div class="card-prestige p-2 {{ request('filter') === 'sin_papeles' ? 'bg-warning text-dark' : (auth()->user()->dark_mode ? 'bg-black text-warning' : 'bg-white text-warning') }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['debt_docs'], 0, ',', '.') }}</div>
                     <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Deuda Docs</div>
                 </div>
@@ -42,7 +42,7 @@
         </div>
         <div class="col-6 col-md-3">
             <a href="{{ route('collegiates.index', ['filter' => 'habilitados']) }}" class="text-decoration-none">
-                <div class="card-prestige p-2 border-0 {{ request('filter') === 'habilitados' ? 'bg-success text-white' : 'bg-white text-success' }} transition-all text-center">
+                <div class="card-prestige p-2 {{ request('filter') === 'habilitados' ? 'bg-success text-white' : (auth()->user()->dark_mode ? 'bg-black text-success' : 'bg-white text-success') }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['enabled'], 0, ',', '.') }}</div>
                     <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Habilitados</div>
                 </div>
@@ -51,21 +51,21 @@
     </div>
 
     {{-- Buscador y Listado --}}
-    <div class="card-prestige p-0 border-0 bg-white shadow-sm overflow-hidden" style="border-radius: 40px">
+    <div class="card-prestige p-0 bg-white shadow-sm overflow-hidden" style="border-radius: 40px">
         <div class="p-4 border-bottom bg-light">
             <form action="{{ route('collegiates.index') }}" method="GET" class="row g-3 align-items-center">
                 @if(request('filter'))
                     <input type="hidden" name="filter" value="{{ request('filter') }}">
                 @endif
                 <div class="col-md-7">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0 rounded-start-pill paddinc-lc"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" name="search" class="form-control border-start-0 rounded-end-pill py-2" 
+                    <div class="input-group border border-secondary border-opacity-25 rounded-pill overflow-hidden shadow-sm">
+                        <span class="input-group-text bg-white border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="search" class="form-control border-start-0 py-2" 
                                placeholder="Buscar por Nombre, DNI o Matrícula..." value="{{ request('search') }}">
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <select name="per_page" class="form-select rounded-pill" onchange="this.form.submit()">
+                    <select name="per_page" class="form-select border border-secondary border-opacity-25 rounded-pill shadow-sm" onchange="this.form.submit()">
                         <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 filas</option>
                         <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 filas</option>
                         <option value="15" {{ $perPage == 15 ? 'selected' : '' }}>15 filas</option>
@@ -86,9 +86,10 @@
         </div>
 
         <div class="table-responsive" id="tableContainer">
+            @fragment('membersTable')
             <table class="table table-hover align-middle m-0" id="collegiateTable">
-                <thead class="bg-light bg-opacity-50">
-                    <tr class="small fw-bold text-muted uppercase ls-1 text-nowrap">
+                <thead class="{{ auth()->user()->dark_mode ? 'bg-black border-bottom border-secondary border-opacity-25' : 'bg-light bg-opacity-50' }}">
+                    <tr class="small fw-bold {{ auth()->user()->dark_mode ? 'text-white' : 'text-muted' }} uppercase ls-1 text-nowrap">
                         <th class="py-1 px-4 text-center" style="width: 50px;">Estado</th>
                         <th class="py-1" style="width: 250px;">Nombre y Apellido</th>
                         <th class="py-1" style="width: 120px;">Matrícula</th>
@@ -110,7 +111,7 @@
                             @endif
                         </td>
                         <td class="py-1 searchable" data-field="name">
-                            <span class="fw-bold text-dark" style="font-size: 0.9rem;">{{ $col->last_name }}, {{ $col->first_name }}</span>
+                            <span class="fw-bold {{ auth()->user()->dark_mode ? 'text-white' : 'text-dark' }}" style="font-size: 0.9rem;">{{ $col->last_name }}, {{ $col->first_name }}</span>
                         </td>
                         <td class="py-1">
                             <span class="badge bg-primary bg-opacity-10 text-primary x-small border border-primary border-opacity-25" style="font-size: 0.65rem; width: 100px;">{{ $col->registration_number }}</span>
@@ -144,6 +145,7 @@
         <div class="p-4 border-top bg-light bg-opacity-50" id="paginationLinks">
             {{ $collegiates->onEachSide(1)->appends(request()->query())->links() }}
         </div>
+        @endfragment
     </div>
 </div>
 
@@ -153,6 +155,7 @@
     .x-small { font-size: 0.75rem; }
     .card-prestige { border-radius: 25px; transition: all 0.3s ease; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
     .card-prestige:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    body.dark-mode #collegiateTable tr:hover { background-color: rgba(255, 255, 255, 0.05) !important; }
     mark { background: #fff3cd !important; padding: 0.1em 0 !important; color: #856404; font-weight: 800; border-radius: 2px; }
     #collegiateTable tr { transition: background 0.2s ease; }
     #collegiateTable tr:hover { background-color: rgba(248, 250, 252, 0.8) !important; }
