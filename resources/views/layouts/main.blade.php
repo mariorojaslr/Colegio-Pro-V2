@@ -251,6 +251,57 @@
             body.classList.replace('light-mode', 'dark-mode');
         }
     </script>
+    <!-- Asistente IA 'Carina' (Burbuja Flotante Premium) -->
+    <div class="position-fixed bottom-0 end-0 mb-4 me-4 d-none d-md-block" style="z-index: 1061;">
+        <button class="btn btn-primary rounded-circle shadow-lg p-0 border-4 border-white animate__animated animate__bounceIn" 
+                style="width: 65px; height: 65px; background: linear-gradient(135deg, #0F172A, #2563EB);"
+                data-bs-toggle="offcanvas" data-bs-target="#carinaManual">
+            <i class="bi bi-robot fs-2 text-white"></i>
+        </button>
+    </div>
+
+    <!-- Manual Interactivo de Carina (Offcanvas) -->
+    <div class="offcanvas offcanvas-end border-0 shadow-lg" tabindex="-1" id="carinaManual" style="width: 400px; border-radius: 30px 0 0 30px;">
+        <div class="offcanvas-header bg-dark text-white p-4" style="border-radius: 30px 0 0 0;">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary rounded-circle p-2"><i class="bi bi-robot fs-4"></i></div>
+                <div>
+                    <h5 class="offcanvas-title fw-bold mb-0">Soy Carina</h5>
+                    <small class="opacity-75">Tu Asistente de Gestión Inteligente</small>
+                </div>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4 bg-light-subtle">
+            <div class="chat-bubble bg-white p-3 rounded-4 shadow-sm mb-4 border-start border-4 border-primary">
+                <p class="small mb-0 fw-medium">¡Hola! Estoy aquí para guiarte. En esta sección puedes:</p>
+            </div>
+            <div class="list-group list-group-flush rounded-4 overflow-hidden shadow-sm border">
+                @if(request()->routeIs('home'))
+                    <div class="list-group-item p-3 border-0">
+                        <h6 class="fw-bold mb-1 small text-primary">Panel de Control</h6>
+                        <p class="x-small text-muted mb-0">Monitorea el estado de salud de tu institución en tiempo real.</p>
+                    </div>
+                @elseif(request()->is('finanzas*'))
+                    <div class="list-group-item p-3 border-0">
+                        <h6 class="fw-bold mb-1 small text-primary">Ecosistema de Cobranza</h6>
+                        <p class="x-small text-muted mb-0">Gestiona deudas, planes de pago de "un solo uso" y notifica morosos por WhatsApp.</p>
+                    </div>
+                @else
+                    <div class="list-group-item p-3 border-0">
+                        <h6 class="fw-bold mb-1 small text-primary">Uso General</h6>
+                        <p class="x-small text-muted mb-0">Explora las herramientas de Padrón, Ética y Academia desde el menú superior.</p>
+                    </div>
+                @endif
+            </div>
+            
+            <div class="mt-4 text-center">
+                <img src="{{ asset('media/carina_wave.png') }}" alt="IA wave" class="img-fluid opacity-50" style="max-height: 120px;">
+                <p class="x-small text-muted italic mt-3">"Mi objetivo es que la administración de tu colegio sea invisible y perfecta."</p>
+            </div>
+        </div>
+    </div>
+
     @yield('scripts')
 </body>
 </html>

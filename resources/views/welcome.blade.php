@@ -176,9 +176,9 @@
     </div>
 </section>
 
-<!-- Pricing Section con GeoIP -->
+<!-- Pricing Section con GeoIP (Diseño Expansivo Full-Width) -->
 <section id="pricing" class="py-5 bg-white">
-    <div class="container py-lg-5">
+    <div class="container-fluid px-lg-5 py-lg-5">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold mb-3" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">Planes <span style="color: var(--accent-color)">Hechos a Medida</span></h2>
             <div class="d-inline-flex align-items-center gap-2 bg-light px-4 py-2 rounded-pill mb-4 border shadow-sm">
@@ -220,10 +220,10 @@
                             </div>
                         </li>
                         <li class="mb-3 d-flex align-items-center gap-3">
-                            <div class="bg-info bg-opacity-10 p-2 rounded-3 text-info"><i class="bi bi-cloud-check-fill fs-5"></i></div>
-                            <div>
+                            <div class="bg-info bg-opacity-10 p-1 rounded-3 text-info"><i class="bi bi-cloud-check-fill fs-5"></i></div>
+                            <div class="flex-grow-1">
                                 <p class="mb-0 fw-bold text-dark small">{{ $plan->max_storage }} GB</p>
-                                <p class="mb-0 x-small text-muted text-uppercase fw-bold">Almacenamiento</p>
+                                <p class="mb-0 x-small text-muted text-uppercase fw-bold ls-1" style="font-size: 9px;">ESPACIO DIGITAL</p>
                             </div>
                         </li>
                         @foreach($plan->features as $feature)
