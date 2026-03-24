@@ -107,6 +107,17 @@
             color: #fff !important;
         }
         
+        body.dark-mode .text-success, 
+        body.dark-mode .bi-check, 
+        body.dark-mode .bi-check-circle, 
+        body.dark-mode .bi-check2-all,
+        body.dark-mode .bi-check-all,
+        body.dark-mode .bi-check-lg { 
+            color: #ff9800 !important; 
+        }
+        
+        body.dark-mode .text-primary { color: #3b82f6 !important; }
+        
         mark { background: #ffeb3b !important; color: #000 !important; padding: 0; border-radius: 2px; }
 
         @media (max-width: 991.98px) {
