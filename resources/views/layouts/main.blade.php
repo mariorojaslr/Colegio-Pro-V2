@@ -39,6 +39,14 @@
             background: #000 !important; 
             border: 1px solid rgba(255, 255, 255, 0.25) !important; 
         }
+
+        /* Forzado de icono blanco en modo oscuro */
+        body.dark-mode .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgb(255, 255, 255)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+        body.dark-mode .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
         
         /* Líneas y tablas ultra visibles en OLED - Refuerzo Rolls-Royce */
         body.dark-mode hr { border-top: 3px solid #ffffff !important; opacity: 0.9 !important; }
