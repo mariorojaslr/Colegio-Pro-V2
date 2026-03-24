@@ -27,7 +27,7 @@
                         <div class="col-md-7">
                             <div class="input-group input-group-sm shadow-none border rounded-pill px-2 bg-white">
                                 <span class="input-group-text bg-transparent border-0 text-secondary"><i class="bi-search"></i></span>
-                                <input type="text" name="search" class="form-control border-0 shadow-none py-1" placeholder="Buscar por Nombre, DNI o Matrícula..." value="{{ $search }}">
+                                <input type="text" id="searchInput" name="search" class="form-control border-0 shadow-none py-1" placeholder="Buscar por Nombre, DNI o Matrícula..." value="{{ $search }}" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -54,7 +54,7 @@
                                 <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="membersTable">
                             @foreach($collegiates as $collegiate)
                             @php
                                 $lastPaid = $collegiate->dues->where('status', 'paid')->first();
@@ -241,4 +241,65 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('membersTable');
+    const statusSelect = document.querySelector('select[name="status"]');
+    const instance = new Mark(tableBody);
+
+    let debounceTimer;
+
+    function performSearch() {
+        const query = searchInput.value;
+        const status = statusSelect.value;
+        
+        // Mostrar estado de carga (opcional)
+        tableBody.style.opacity = '0.5';
+
+        fetch(`{{ route('admin.billing.index') }}?search=${encodeURIComponent(query)}&status=${status}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTableBody = doc.getElementById('membersTable');
+            const newPagination = doc.querySelector('.pagination-container');
+            
+            if (newTableBody) {
+                tableBody.innerHTML = newTableBody.innerHTML;
+                
+                // Aplicar Resaltado
+                instance.unmark();
+                if (query.length >= 2) {
+                    instance.mark(query, {
+                        "accuracy": "partially",
+                        "diacritics": true, // IMPORTANTE: Resalta aunque tenga tildes
+                        "synonyms": {"o": "ó", "a": "á", "e": "é", "i": "í", "u": "ú"}
+                    });
+                }
+            }
+            
+            tableBody.style.opacity = '1';
+        })
+        .catch(error => {
+            console.error('Error en búsqueda:', error);
+            tableBody.style.opacity = '1';
+        });
+    }
+
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(performSearch, 300);
+    });
+
+    statusSelect.addEventListener('change', performSearch);
+});
+</script>
 @endsection

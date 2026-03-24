@@ -26,6 +26,31 @@
     @yield('styles')
     @stack('styles')
     <style>
+        /* Dark Mode OLED Styles */
+        body.dark-mode { background: #000 !important; color: #fff !important; }
+        body.dark-mode .navbar, 
+        body.dark-mode .card, 
+        body.dark-mode .offcanvas,
+        body.dark-mode .mobile-nav,
+        body.dark-mode .table-premium, 
+        body.dark-mode footer { 
+            background: #0a0a0a !important; 
+            border: 1px solid #1a1a1a !important; 
+            color: #e5e5e5 !important;
+        }
+        body.dark-mode .bg-light, 
+        body.dark-mode .bg-white,
+        body.dark-mode .bg-light-subtle { background: #050505 !important; }
+        body.dark-mode .text-dark { color: #fff !important; }
+        body.dark-mode .text-secondary, 
+        body.dark-mode .text-muted { color: #a3a3a3 !important; }
+        body.dark-mode table th { background: #111 !important; border-bottom: 2px solid #222 !important; }
+        body.dark-mode .btn-light { background: #1a1a1a !important; color: #fff !important; border: 0; }
+        body.dark-mode .form-control, 
+        body.dark-mode .form-select { background-color: #111 !important; border-color: #222 !important; color: #fff !important; }
+        
+        mark { background: #ffeb3b !important; color: #000 !important; padding: 0; border-radius: 2px; }
+
         @media (max-width: 991.98px) {
             .notification-dropdown {
                 width: calc(100vw - 32px) !important;
@@ -71,6 +96,11 @@
             <!-- Área de Usuario y Notificaciones (Siempre Visible) -->
             <div class="d-flex gap-2 align-items-center ms-auto me-2 me-lg-0 order-2 order-lg-last">
                 @auth
+                    <!-- Dark Mode Toggle -->
+                    <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 d-flex align-items-center justify-content-center me-1" id="themeToggle" style="width: 38px; height: 38px;">
+                        <i class="bi bi-moon-stars-fill text-dark" id="themeIcon"></i>
+                    </button>
+
                     <!-- Campana de Notificaciones -->
                     <div class="dropdown me-1">
                         <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 position-relative" data-bs-toggle="dropdown" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: #f1f5f9;">
@@ -237,27 +267,39 @@
 
     <!-- JS dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
     <script>
         const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
         const body = document.body;
         
-        // Event listener para el botón de alternar tema (si existe)
+        function updateThemeElements(isDark) {
+            if (isDark) {
+                body.classList.replace('light-mode', 'dark-mode');
+                if(themeIcon) {
+                    themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+                    themeIcon.classList.replace('text-dark', 'text-warning');
+                }
+            } else {
+                body.classList.replace('dark-mode', 'light-mode');
+                if(themeIcon) {
+                    themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+                    themeIcon.classList.replace('text-warning', 'text-dark');
+                }
+            }
+        }
+
         if (themeToggle) {
             themeToggle.addEventListener('click', () => {
-                if (body.classList.contains('light-mode')) {
-                    body.classList.replace('light-mode', 'dark-mode');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    body.classList.replace('dark-mode', 'light-mode');
-                    localStorage.setItem('theme', 'light');
-                }
+                const isDark = body.classList.contains('light-mode');
+                updateThemeElements(isDark);
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
             });
         }
 
         // Load saved theme
-        if (localStorage.getItem('theme') === 'dark') {
-            body.classList.replace('light-mode', 'dark-mode');
-        }
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        updateThemeElements(savedTheme === 'dark');
     </script>
     <!-- Asistente IA 'Carina' (Burbuja Flotante Premium) -->
     <div class="position-fixed bottom-0 end-0 mb-4 me-4 d-none d-md-block" style="z-index: 1061;">
