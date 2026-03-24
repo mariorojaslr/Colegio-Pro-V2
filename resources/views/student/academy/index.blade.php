@@ -100,15 +100,22 @@
         letter-spacing: 1px;
         padding: 6px 16px;
         border-radius: 50px;
-        background: #F1F5F9;
-        color: #475569;
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: white !important;
         transition: all 0.3s ease;
         text-transform: uppercase;
     }
 
     .filter-pill.active {
-        background: #0F172A;
-        color: white;
+        background: white !important;
+        color: black !important;
+        border-color: white !important;
+    }
+    
+    .filter-pill:hover {
+        border-color: white !important;
+        background: rgba(255, 255, 255, 0.1) !important;
     }
 
     /* MODAL SALES STYLE */
