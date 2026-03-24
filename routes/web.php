@@ -19,6 +19,7 @@ Route::get('/demo-fast', function(\Illuminate\Http\Request $request) {
 
 // Rutas Públicas de Validación (Escaneo de QR)
 Route::get('/v/{uuid}', [\App\Http\Controllers\ValidationController::class, 'show'])->name('validation.show');
+Route::post('/v/{uuid}/burn', [\App\Http\Controllers\ValidationController::class, 'burn'])->name('validation.burn');
 
 Route::get('/', function () {
     $plans = \App\Models\SubscriptionPlan::all();

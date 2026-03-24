@@ -92,11 +92,13 @@ class Collegiate extends Model
 
     /**
      * Verifica si el colegiado está plenamente habilitado para emitir certificados.
+     * Cruza datos de ética (sanciones), aportes y legajo digital.
      */
     public function isEnabledForCertificates()
     {
         return $this->is_ethics_compliant && 
                $this->is_fees_compliant && 
-               $this->is_fully_documented;
+               $this->is_fully_documented &&
+               !$this->isSanctioned();
     }
 }

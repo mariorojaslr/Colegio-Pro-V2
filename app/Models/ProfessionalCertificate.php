@@ -19,11 +19,15 @@ class ProfessionalCertificate extends Model
         'expires_at',
         'status', // active, expired, revoked
         'pdf_url',
+        'used_at',
+        'used_for_expedient',
+        'used_by_info',
     ];
 
     protected $casts = [
         'issued_at' => 'datetime',
         'expires_at' => 'date',
+        'used_at' => 'datetime',
     ];
 
     protected static function boot()
