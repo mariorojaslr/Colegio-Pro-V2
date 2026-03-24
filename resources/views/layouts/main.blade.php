@@ -34,8 +34,17 @@
         body.dark-mode .offcanvas,
         body.dark-mode .modal-content,
         body.dark-mode .mobile-nav,
+        body.dark-mode .dropdown-menu,
         body.dark-mode footer { 
             background: #000 !important; 
+            border: 1px solid rgba(255, 255, 255, 0.15) !important; 
+        }
+        body.dark-mode .dropdown-item { color: #fff !important; }
+        body.dark-mode .dropdown-item:hover { background: rgba(255, 255, 255, 0.1) !important; }
+        
+        body.dark-mode .btn-light { 
+            background: rgba(255, 255, 255, 0.1) !important; 
+            color: #fff !important; 
             border: 1px solid rgba(255, 255, 255, 0.15) !important; 
         }
         body.dark-mode .card-header, 
@@ -192,7 +201,7 @@
                     <!-- Language Selector -->
                     <div class="dropdown me-1">
                         <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" style="width: 38px; height: 38px;">
-                            <span class="fw-bold x-small text-dark text-uppercase">{{ app()->getLocale() }}</span>
+                            <span class="fw-bold x-small text-uppercase">{{ app()->getLocale() }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
                             <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'es' ? 'active text-white' : 'text-dark' }}" href="{{ route('lang.switch', 'es') }}"><span class="me-2">🇪🇸</span> Español</a></li>
