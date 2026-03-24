@@ -96,3 +96,46 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--card-shadow);
 }
+
+/* Premium "Rolls-Royce" Card System */
+.card-premium {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.card-premium:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .card-premium {
+    background: #000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .card-premium:hover {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* Crystalline Effect for Borders */
+.border-crystalline {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .border-crystalline {
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Typography Enhancements */
+.fw-black { font-weight: 900; }
+.ls-1 { letter-spacing: 0.5px; }
+.ls-2 { letter-spacing: 1px; }
+.uppercase { text-transform: uppercase; }
+.x-small { font-size: 0.75rem; }
+.xx-small { font-size: 0.65rem; }

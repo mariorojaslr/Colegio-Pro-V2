@@ -12,34 +12,48 @@
 
     /* ACADEMY HERO SLIM (Negro a la izquierda, imagen natural a la derecha) */
     .academy-hero {
-        background: linear-gradient(90deg, #0f172a 0%, #0f172a 10%, rgba(15, 23, 42, 0.4) 40%, transparent 85%), url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop');
+        background: linear-gradient(90deg, #020617 0%, #020617 10%, rgba(2, 6, 23, 0.6) 40%, transparent 85%), url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070&auto=format&fit=crop');
         background-size: cover;
         background-position: center right;
-        border-radius: 15px;
-        min-height: 130px; 
+        border-radius: 24px;
+        min-height: 160px; 
         display: flex;
         align-items: center;
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(0,0,0,0.05);
-        margin-bottom: 25px; 
+        border: 1px solid rgba(255,255,255,0.05);
+        margin-bottom: 30px; 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     }
 
     /* COURSE CARD ROLLS-ROYCE SLIM */
     .course-poster-wrapper {
         position: relative;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
         cursor: pointer;
-        background: #f1f5f9;
+        background: #f8fafc;
         aspect-ratio: 2/3;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    body.dark-mode .course-poster-wrapper {
+        background: #000;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important; /* Crystalline Border */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .course-poster-wrapper:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        border-color: #2563eb;
+    }
+
+    body.dark-mode .course-poster-wrapper:hover {
+        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        border-color: rgba(255, 255, 255, 0.3) !important;
     }
 
     .course-poster-inner {
@@ -49,6 +63,11 @@
         background-size: cover;
         background-position: center;
         background-color: #e2e8f0;
+        transition: transform 0.8s ease;
+    }
+
+    .course-poster-wrapper:hover .course-poster-inner {
+        transform: scale(1.1);
     }
 
     .course-overlay {
@@ -56,71 +75,114 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 40%; 
-        background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
+        height: 50%; 
+        background: linear-gradient(0deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        padding: 12px;
+        padding: 15px;
         color: white;
     }
 
     .course-category-pill {
         background: #2563eb !important;
         color: white !important;
-        font-size: 7px; 
+        font-size: 8px; 
         font-weight: 800;
         text-transform: uppercase;
-        padding: 2px 8px;
+        padding: 2px 10px;
         border-radius: 50px;
         width: fit-content;
-        margin-bottom: 4px;
-        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        letter-spacing: 0.8px;
     }
 
     .course-title-card {
-        font-size: 0.85rem; 
+        font-size: 0.9rem; 
         font-weight: 700;
-        line-height: 1.1;
-        margin-bottom: 1px;
+        line-height: 1.2;
+        margin-bottom: 2px;
         font-family: 'Outfit', sans-serif;
     }
 
     .course-date-card {
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.6);
         font-weight: 600;
     }
 
-    /* FILTER BAR */
+    /* FILTER BAR PRIVACY/OLED */
     .filter-pill {
         cursor: pointer;
-        font-size: 9px;
+        font-size: 10px;
         font-weight: 800;
         letter-spacing: 1px;
-        padding: 6px 16px;
+        padding: 8px 20px;
         border-radius: 50px;
         background: transparent !important;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        color: white !important;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #64748b !important;
         transition: all 0.3s ease;
         text-transform: uppercase;
     }
 
+    body.dark-mode .filter-pill {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
     .filter-pill.active {
+        background: #0f172a !important;
+        color: white !important;
+        border-color: #0f172a !important;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    }
+
+    body.dark-mode .filter-pill.active {
         background: white !important;
         color: black !important;
         border-color: white !important;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
     
     .filter-pill:hover {
+        border-color: #0f172a !important;
+        color: #0f172a !important;
+    }
+
+    body.dark-mode .filter-pill:hover {
         border-color: white !important;
-        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    /* SEARCH INPUT OLED */
+    .academy-search-group {
+        border-radius: 50px; 
+        overflow: hidden; 
+        border: 1px solid rgba(0,0,0,0.08); 
+        background: white;
+        transition: all 0.3s ease;
+    }
+
+    body.dark-mode .academy-search-group {
+        background: #000 !important;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .academy-search-group:focus-within {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    body.dark-mode .academy-search-group:focus-within {
+        border-color: white;
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
     }
 
     /* MODAL SALES STYLE */
     .modal-sales-header {
-        height: 220px;
+        height: 280px;
         background-size: cover;
         background-position: center;
         position: relative;
@@ -132,22 +194,33 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(0deg, #0f172a 0%, transparent 100%);
+        background: linear-gradient(0deg, #020617 0%, rgba(2, 6, 23, 0.4) 60%, transparent 100%);
     }
 
     .feature-item {
         background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.05);
-        padding: 10px;
-        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.06);
+        padding: 12px;
+        border-radius: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+        background: rgba(255,255,255,0.06);
+        border-color: rgba(255,255,255,0.12);
     }
 
     mark { 
         background: #fff3cd !important; 
-        padding: 0.1em 0 !important; 
+        padding: 0.1em 0.2em !important; 
         color: #856404; 
         font-weight: 800; 
-        border-radius: 2px; 
+        border-radius: 4px; 
+    }
+
+    body.dark-mode mark {
+        background: #2563eb !important;
+        color: white !important;
     }
 </style>
 @endpush
@@ -173,9 +246,9 @@
     {{-- Buscador Premium --}}
     <div class="row justify-content-center mb-5">
         <div class="col-md-6 col-lg-5">
-            <div class="input-group input-group-lg shadow-sm" style="border-radius: 50px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); background: white;">
-                <span class="input-group-text bg-white border-0 ps-4"><i class="bi bi-search text-primary"></i></span>
-                <input type="text" id="academySearch" class="form-control border-0 py-3 ps-2" placeholder="Buscar cursos, docentes o especialidades..." style="font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 500;">
+            <div class="input-group input-group-lg shadow-sm academy-search-group">
+                <span class="input-group-text bg-transparent border-0 ps-4"><i class="bi bi-search text-primary"></i></span>
+                <input type="text" id="academySearch" class="form-control border-0 py-3 ps-2 bg-transparent" placeholder="Buscar cursos, docentes o especialidades..." style="font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 500;">
             </div>
         </div>
     </div>
