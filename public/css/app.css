@@ -140,6 +140,11 @@ body.dark-mode .border-crystalline {
 .x-small { font-size: 0.75rem; }
 .xx-small { font-size: 0.65rem; }
 
+/* Hamburger Menu Visibility in Dark Mode */
+body.dark-mode .navbar-toggler-icon {
+    filter: invert(1) brightness(1.5);
+}
+
 /* OLED Separators & Borders */
 body.dark-mode hr {
     border-top: 2px solid rgba(255, 255, 255, 0.4) !important;
