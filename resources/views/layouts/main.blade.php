@@ -38,6 +38,14 @@
             border: 1px solid #1a1a1a !important; 
             color: #e5e5e5 !important;
         }
+        body.dark-mode table, 
+        body.dark-mode table tr, 
+        body.dark-mode table td,
+        body.dark-mode table th { 
+            background: #0a0a0a !important; 
+            color: #fff !important; 
+            border-color: #1a1a1a !important; 
+        }
         body.dark-mode .bg-light, 
         body.dark-mode .bg-white,
         body.dark-mode .bg-light-subtle { background: #050505 !important; }
