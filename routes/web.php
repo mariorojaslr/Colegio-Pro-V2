@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LanguageController;
+
+Route::get('change-language/{lang}', [LanguageController::class, 'switch'])->name('lang.switch');
 
 // Ruta de Acceso Rápido a la Demo (Cero Fricción)
 Route::get('/demo-fast', function(\Illuminate\Http\Request $request) {

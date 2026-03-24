@@ -186,6 +186,18 @@
             <!-- Área de Usuario y Notificaciones (Siempre Visible) -->
             <div class="d-flex gap-2 align-items-center ms-auto me-2 me-lg-0 order-2 order-lg-last">
                 @auth
+                    <!-- Language Selector -->
+                    <div class="dropdown me-1">
+                        <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" style="width: 38px; height: 38px;">
+                            <span class="fw-bold x-small text-dark text-uppercase">{{ app()->getLocale() }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'es' ? 'active text-white' : 'text-dark' }}" href="{{ route('lang.switch', 'es') }}"><span class="me-2">🇪🇸</span> Español</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'en' ? 'active text-white' : 'text-dark' }}" href="{{ route('lang.switch', 'en') }}"><span class="me-2">🇺🇸</span> English</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'pt' ? 'active text-white' : 'text-dark' }}" href="{{ route('lang.switch', 'pt') }}"><span class="me-2">🇧🇷</span> Português</a></li>
+                        </ul>
+                    </div>
+
                     <!-- Dark Mode Toggle -->
                     <button class="btn btn-sm btn-light rounded-circle shadow-sm border-0 d-flex align-items-center justify-content-center me-1" id="themeToggle" style="width: 38px; height: 38px;">
                         <i class="bi bi-moon-stars-fill text-dark" id="themeIcon"></i>
@@ -261,19 +273,19 @@
                         {{-- Solo mostramos el menú interno si NO estamos en la Landing Page pública --}}
                         @if(!request()->is('/'))
                             @if(auth()->user()->role === 'ADMIN_COLEGIO')
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Dashboard') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('Padrón') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('Finanzas') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('Ética') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.compliance.index') }}">{{ __('Auditoría') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('ui.padron') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('ui.finances') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('ui.ethics') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.compliance.index') }}">{{ __('ui.audit') }}</a></li>
                             @elseif(auth()->user()->isOwner())
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="{{ route('admin.dashboard') }}">{{ __('Panel Global') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="{{ route('student.lessons.index') }}">{{ __('Ver Academia') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="{{ route('admin.dashboard') }}">{{ __('ui.dashboard') }} (Owner)</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
                             @else
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Mi Panel') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('Mi Legajo') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('ui.compliance') }}</a></li>
                             @endif
                         @else
                             {{-- En la Landing Page, incluso logueado, mostramos info del producto --}}
