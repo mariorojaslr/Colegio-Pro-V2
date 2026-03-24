@@ -113,10 +113,17 @@
         body.dark-mode .bi-check2-all,
         body.dark-mode .bi-check-all,
         body.dark-mode .bi-check-lg { 
-            color: #ff9800 !important; 
+            color: #a3e635 !important; /* Verde Manzana Vibrante */
         }
         
-        body.dark-mode .text-primary { color: #3b82f6 !important; }
+        body.dark-mode .text-primary,
+        body.dark-mode .bi-search { color: #3b82f6 !important; } /* Azul Eléctrico */
+        
+        body.dark-mode .btn-primary {
+            background-color: #2563eb !important;
+            border-color: #3b82f6 !important;
+            color: #fff !important;
+        }
         
         mark { background: #ffeb3b !important; color: #000 !important; padding: 0; border-radius: 2px; }
 
