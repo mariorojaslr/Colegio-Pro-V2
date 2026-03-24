@@ -37,16 +37,17 @@ class SetLocale
             return \App\Models\Translation::all();
         });
 
-        $grouped = [];
+        $lines = [];
         foreach($dbTranslations as $t) {
             $value = $t->{$locale} ?: $t->es;
             if ($t->group && $t->key) {
-                $grouped[$t->group][$t->key] = $value;
+                // Inyectamos con formato 'grupo.clave' para compatibilidad total con __('grupo.clave')
+                $lines["{$t->group}.{$t->key}"] = $value;
             }
         }
 
-        foreach($grouped as $group => $lines) {
-            \Illuminate\Support\Facades\Lang::addLines($lines, $locale, $group);
+        if (!empty($lines)) {
+            \Illuminate\Support\Facades\Lang::addLines($lines, $locale);
         }
 
         return $next($request);
