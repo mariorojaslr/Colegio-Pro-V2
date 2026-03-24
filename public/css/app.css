@@ -140,9 +140,9 @@ body.dark-mode .border-crystalline {
 .x-small { font-size: 0.75rem; }
 .xx-small { font-size: 0.65rem; }
 
-/* Hamburger Menu Visibility in Dark Mode */
+/* Hamburger Menu Visibility in Dark Mode (Indestructible SVG fix) */
 body.dark-mode .navbar-toggler-icon {
-    filter: invert(1) brightness(1.5);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 }
 
 /* OLED Separators & Borders */
