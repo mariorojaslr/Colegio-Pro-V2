@@ -39,8 +39,12 @@
             background: #000 !important; 
             border: 1px solid rgba(255, 255, 255, 0.15) !important; 
         }
-        body.dark-mode .dropdown-item { color: #fff !important; }
-        body.dark-mode .dropdown-item:hover { background: rgba(255, 255, 255, 0.1) !important; }
+        body.dark-mode .dropdown-item { color: #fff !important; background: transparent !important; }
+        body.dark-mode .dropdown-item:hover,
+        body.dark-mode .dropdown-item.active { 
+            background: rgba(255, 255, 255, 0.15) !important; 
+            color: #fff !important; 
+        }
         
         body.dark-mode .btn-light { 
             background: rgba(255, 255, 255, 0.1) !important; 
@@ -204,9 +208,9 @@
                             <span class="fw-bold x-small text-uppercase">{{ app()->getLocale() }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
-                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'es' ? 'active text-white' : 'text-dark' }}" href="{{ route('lang.switch', 'es') }}"><span class="me-2">🇪🇸</span> Español</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'en' ? 'active text-white' : 'text-dark' }}" href="{{ route('lang.switch', 'en') }}"><span class="me-2">🇺🇸</span> English</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'pt' ? 'active text-white' : 'text-dark' }}" href="{{ route('lang.switch', 'pt') }}"><span class="me-2">🇧🇷</span> Português</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'es' ? 'active' : '' }}" href="{{ route('lang.switch', 'es') }}"><span class="me-2">🇪🇸</span> Español</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ route('lang.switch', 'en') }}"><span class="me-2">🇺🇸</span> English</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold {{ app()->getLocale() == 'pt' ? 'active' : '' }}" href="{{ route('lang.switch', 'pt') }}"><span class="me-2">🇧🇷</span> Português</a></li>
                         </ul>
                     </div>
 
