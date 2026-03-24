@@ -37,8 +37,22 @@
         body.dark-mode .dropdown-menu,
         body.dark-mode footer { 
             background: #000 !important; 
-            border: 1px solid rgba(255, 255, 255, 0.15) !important; 
+            border: 1px solid rgba(255, 255, 255, 0.25) !important; 
         }
+        
+        /* Líneas y tablas ultra visibles en OLED - Refuerzo Rolls-Royce */
+        body.dark-mode hr { border-top: 3px solid #ffffff !important; opacity: 0.9 !important; }
+        body.dark-mode .table, 
+        body.dark-mode table,
+        body.dark-mode .table-responsive,
+        body.dark-mode .table td, 
+        body.dark-mode .table th,
+        body.dark-mode table td,
+        body.dark-mode table th { 
+            border-bottom: 2.5px solid rgba(255, 255, 255, 0.6) !important; 
+            border-top: 0 !important;
+        }
+        
         body.dark-mode .dropdown-item { color: #fff !important; background: transparent !important; }
         body.dark-mode .dropdown-item:hover,
         body.dark-mode .dropdown-item.active { 
@@ -394,14 +408,25 @@
         const body = document.body;
         
         function updateThemeElements(isDark) {
+            const navbar = document.querySelector('.navbar');
             if (isDark) {
                 body.classList.replace('light-mode', 'dark-mode');
+                if(navbar) {
+                    navbar.classList.remove('navbar-light', 'bg-white');
+                    navbar.classList.add('navbar-dark');
+                    navbar.style.backgroundColor = '#000';
+                }
                 if(themeIcon) {
                     themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
                     themeIcon.classList.replace('text-dark', 'text-warning');
                 }
             } else {
                 body.classList.replace('dark-mode', 'light-mode');
+                if(navbar) {
+                    navbar.classList.add('navbar-light', 'bg-white');
+                    navbar.classList.remove('navbar-dark');
+                    navbar.style.backgroundColor = '';
+                }
                 if(themeIcon) {
                     themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
                     themeIcon.classList.replace('text-warning', 'text-dark');
