@@ -217,8 +217,8 @@
                 <span class="d-none d-sm-inline fw-black ls-n1" style="color: #0f172a; font-size: 1.1rem;">COLEGIO</span>
                 <span class="d-none d-sm-inline fw-light" style="color: #64748b; font-size: 1.1rem; margin-left: 1px;">PRO</span>
             </a>
-            <button class="navbar-toggler border-0 order-last" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
-                <span class="navbar-toggler-icon" style="width: 20px;"></span>
+            <button class="navbar-toggler border-0 order-last shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <i class="bi bi-list fs-1" id="mobileMenuIcon"></i>
             </button>
 
             <!-- Área de Usuario y Notificaciones (Siempre Visible) -->
@@ -417,12 +417,17 @@
         
         function updateThemeElements(isDark) {
             const navbar = document.querySelector('.navbar');
+            const menuIcon = document.getElementById('mobileMenuIcon');
             if (isDark) {
                 body.classList.replace('light-mode', 'dark-mode');
                 if(navbar) {
                     navbar.classList.remove('navbar-light', 'bg-white');
                     navbar.classList.add('navbar-dark');
                     navbar.style.backgroundColor = '#000';
+                }
+                if(menuIcon) {
+                    menuIcon.classList.remove('text-dark');
+                    menuIcon.classList.add('text-white');
                 }
                 if(themeIcon) {
                     themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
@@ -434,6 +439,10 @@
                     navbar.classList.add('navbar-light', 'bg-white');
                     navbar.classList.remove('navbar-dark');
                     navbar.style.backgroundColor = '';
+                }
+                if(menuIcon) {
+                    menuIcon.classList.remove('text-white');
+                    menuIcon.classList.add('text-dark');
                 }
                 if(themeIcon) {
                     themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
