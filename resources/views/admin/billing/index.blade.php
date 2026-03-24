@@ -50,7 +50,7 @@
                                 <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1">Colegiado</th>
                                 <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Último Pago</th>
                                 <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Estado</th>
-                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-end">S. Pendiente</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">S. Pendiente</th>
                                 <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -88,7 +88,7 @@
                                     @else
                                         <span class="text-secondary xx-small opacity-50">S/P</span>
                                     @endif
-                                <                                 <td class="px-3 py-2 border-0 text-center">
+                                </td>
                                     @if($collegiate->isSanctioned())
                                         <span class="badge rounded-pill bg-dark text-white border border-dark px-2 py-1" style="font-size: 0.65rem;">
                                             <i class="bi-shield-x me-1"></i> SUSPENDIDO
@@ -111,8 +111,7 @@
                                         </span>
                                     @endif
                                 </td>
-</td>
-                                <td class="px-3 py-2 border-0 text-end fw-bold small {{ $isClean ? 'text-secondary opacity-25' : 'text-danger' }}">
+                                <td class="px-3 py-2 border-0 text-center fw-bold small {{ $isClean ? 'text-secondary opacity-25' : 'text-danger' }}">
                                     ${{ number_format($pendingAmount, 0, ',', '.') }}
                                 </td>
                                 <td class="px-3 py-2 border-0 text-center">
