@@ -87,7 +87,7 @@
                                         <span class="text-dark d-block fw-bold small">${{ number_format($lastPaid->amount, 0, ',', '.') }}</span>
                                         <span class="text-secondary xx-small">{{ $lastPaid->paid_at->format('d/m/Y') }}</span>
                                     @else
-                                        <span class="text-secondary xx-small opacity-50">S/P</span>
+                                        <span class="text-white small fw-bold">S/P</span>
                                     @endif
                                 </td>
                                 <td class="px-3 py-2 border-0 text-center">
@@ -113,7 +113,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-3 py-2 border-0 text-center fw-bold small {{ $isClean ? 'text-secondary opacity-25' : 'text-danger' }}">
+                                <td class="px-3 py-2 border-0 text-center fw-bold small {{ $isClean ? 'text-white' : 'text-danger' }}">
                                     ${{ number_format($pendingAmount, 0, ',', '.') }}
                                 </td>
                                 <td class="px-3 py-2 border-0 text-center">
