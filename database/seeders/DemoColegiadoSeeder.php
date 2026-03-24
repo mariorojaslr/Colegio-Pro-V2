@@ -19,25 +19,32 @@ class DemoColegiadoSeeder extends Seeder
         $school = School::where('slug', 'abogados')->first();
         if (!$school) return;
 
-        // Limpiar datos previos para este colegio
+        // Limpiar datos previos de este colegio para evitar duplicidad de relaciones
+        // Desactivamos FK checks para una limpieza profunda de la demo
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        $collegiateIds = $school->collegiates()->pluck('id');
+        CollegiateDue::whereIn('collegiate_id', $collegiateIds)->delete();
+        EthicsSanction::whereIn('collegiate_id', $collegiateIds)->delete();
+        PaymentAgreement::whereIn('collegiate_id', $collegiateIds)->delete();
         $school->collegiates()->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         // CASO 1: Dr. Juan Pérez (Deudor Crónico - Moroso Permanente)
-        $perez = Collegiate::create([
-            'school_id' => $school->id,
-            'registration_number' => 'MAT-1001',
-            'first_name' => 'Juan',
-            'last_name' => 'Pérez',
-            'email' => 'juan.perez@example.com',
-            'dni' => '11.222.333',
-            'phone' => '1155551111',
-            'status' => 'active',
-            'is_fees_compliant' => false,
-            'is_ethics_compliant' => true,
-            'is_fully_documented' => true,
-        ]);
+        $perez = Collegiate::updateOrCreate(
+            ['registration_number' => 'MAT-1001', 'school_id' => $school->id],
+            [
+                'first_name' => 'Juan',
+                'last_name' => 'Pérez',
+                'email' => 'juan.perez@example.com',
+                'dni' => '11.222.333',
+                'phone' => '1155551111',
+                'status' => 'active',
+                'is_fees_compliant' => false,
+                'is_ethics_compliant' => true,
+                'is_fully_documented' => true,
+            ]
+        );
 
-        // Crear 12 cuotas adeudadas (un año de mora)
         for ($i = 1; $i <= 12; $i++) {
             CollegiateDue::create([
                 'collegiate_id' => $perez->id,
@@ -48,21 +55,21 @@ class DemoColegiadoSeeder extends Seeder
         }
 
         // CASO 2: Dra. Elena Gómez (Habilitada en Pagos, Sancionada en Ética)
-        $gomez = Collegiate::create([
-            'school_id' => $school->id,
-            'registration_number' => 'MAT-2002',
-            'first_name' => 'Elena',
-            'last_name' => 'Gómez',
-            'email' => 'elena.gomez@example.com',
-            'dni' => '22.333.444',
-            'phone' => '1155552222',
-            'status' => 'active',
-            'is_fees_compliant' => true,
-            'is_ethics_compliant' => false, // Bloqueada por ética
-            'is_fully_documented' => true,
-        ]);
+        $gomez = Collegiate::updateOrCreate(
+            ['registration_number' => 'MAT-2002', 'school_id' => $school->id],
+            [
+                'first_name' => 'Elena',
+                'last_name' => 'Gómez',
+                'email' => 'elena.gomez@example.com',
+                'dni' => '22.333.444',
+                'phone' => '1155552222',
+                'status' => 'active',
+                'is_fees_compliant' => true,
+                'is_ethics_compliant' => false,
+                'is_fully_documented' => true,
+            ]
+        );
 
-        // Pagó todo el año pasado
         for ($i = 1; $i <= 12; $i++) {
             CollegiateDue::create([
                 'collegiate_id' => $gomez->id,
@@ -73,7 +80,6 @@ class DemoColegiadoSeeder extends Seeder
             ]);
         }
 
-        // Sanción Activa por 60 días (Inició hace 15 días)
         EthicsSanction::create([
             'collegiate_id' => $gomez->id,
             'type' => 'temporary',
@@ -86,21 +92,21 @@ class DemoColegiadoSeeder extends Seeder
         ]);
 
         // CASO 3: Lic. Ricardo García (Habilitado Perfecto - Caso de Éxito)
-        $garcia = Collegiate::create([
-            'school_id' => $school->id,
-            'registration_number' => 'MAT-3003',
-            'first_name' => 'Ricardo',
-            'last_name' => 'García',
-            'email' => 'ricardo.garcia@example.com',
-            'dni' => '33.444.555',
-            'phone' => '1155553333',
-            'status' => 'active',
-            'is_fees_compliant' => true,
-            'is_ethics_compliant' => true,
-            'is_fully_documented' => true,
-        ]);
+        $garcia = Collegiate::updateOrCreate(
+            ['registration_number' => 'MAT-3003', 'school_id' => $school->id],
+            [
+                'first_name' => 'Ricardo',
+                'last_name' => 'García',
+                'email' => 'ricardo.garcia@example.com',
+                'dni' => '33.444.555',
+                'phone' => '1155553333',
+                'status' => 'active',
+                'is_fees_compliant' => true,
+                'is_ethics_compliant' => true,
+                'is_fully_documented' => true,
+            ]
+        );
 
-        // Tiene pagos al día
         CollegiateDue::create([
             'collegiate_id' => $garcia->id,
             'amount' => 6000.00,
@@ -110,26 +116,27 @@ class DemoColegiadoSeeder extends Seeder
         ]);
 
         // CASO 4: Ing. Marcos Lopez (Con Convenio de Pago 12x10)
-        $lopez = Collegiate::create([
-            'school_id' => $school->id,
-            'registration_number' => 'MAT-4004',
-            'first_name' => 'Marcos',
-            'last_name' => 'Lopez',
-            'email' => 'marcos.lopez@example.com',
-            'dni' => '44.555.666',
-            'phone' => '1155554444',
-            'status' => 'active',
-            'is_fees_compliant' => false, // Todavía no cumple porque está pagando convenio
-            'is_ethics_compliant' => true,
-            'is_fully_documented' => true,
-        ]);
+        $lopez = Collegiate::updateOrCreate(
+            ['registration_number' => 'MAT-4004', 'school_id' => $school->id],
+            [
+                'first_name' => 'Marcos',
+                'last_name' => 'Lopez',
+                'email' => 'marcos.lopez@example.com',
+                'dni' => '44.555.666',
+                'phone' => '1155554444',
+                'status' => 'active',
+                'is_fees_compliant' => false,
+                'is_ethics_compliant' => true,
+                'is_fully_documented' => true,
+            ]
+        );
 
         $agreement = PaymentAgreement::create([
             'school_id' => $school->id,
             'collegiate_id' => $lopez->id,
             'type' => 'yearly_promo',
             'total_amount_original' => 60000.00,
-            'total_amount_agreement' => 50000.00, // Descuento 12x10
+            'total_amount_agreement' => 50000.00,
             'installment_count' => 12,
             'status' => 'active',
             'metadata' => ['promo_name' => 'Plan Anual 12x10']
@@ -140,27 +147,28 @@ class DemoColegiadoSeeder extends Seeder
                 'payment_agreement_id' => $agreement->id,
                 'due_date' => Carbon::now()->addMonths($i)->day(15),
                 'amount' => 4166.66,
-                'status' => $i < 2 ? 'paid' : 'pending' // Ya pagó 2
+                'status' => $i < 2 ? 'paid' : 'pending'
             ]);
         }
 
-        // Crear 100 colegiados más aleatorios para "masa crítica"
+        // 100 colegiados más aleatorios
         for ($i = 0; $i < 100; $i++) {
-            $c = Collegiate::create([
-                'school_id' => $school->id,
-                'registration_number' => 'MAT-' . (5000 + $i),
-                'first_name' => fake()->firstName(),
-                'last_name' => fake()->lastName(),
-                'email' => fake()->unique()->safeEmail(),
-                'dni' => rand(10, 40) . '.' . rand(100, 999) . '.' . rand(100, 999),
-                'phone' => '11' . rand(40000000, 60000000),
-                'status' => rand(0, 5) > 0 ? 'active' : 'suspended',
-                'is_fees_compliant' => rand(0, 1) == 1,
-                'is_ethics_compliant' => rand(0, 5) > 0,
-                'is_fully_documented' => rand(0, 3) > 0,
-            ]);
+            $regNum = 'MAT-' . (5000 + $i);
+            $c = Collegiate::updateOrCreate(
+                ['registration_number' => $regNum, 'school_id' => $school->id],
+                [
+                    'first_name' => fake()->firstName(),
+                    'last_name' => fake()->lastName(),
+                    'email' => fake()->unique()->safeEmail(),
+                    'dni' => rand(10, 40) . '.' . rand(100, 999) . '.' . rand(100, 999),
+                    'phone' => '11' . rand(40000000, 60000000),
+                    'status' => rand(0, 5) > 0 ? 'active' : 'suspended',
+                    'is_fees_compliant' => rand(0, 1) == 1,
+                    'is_ethics_compliant' => rand(0, 5) > 0,
+                    'is_fully_documented' => rand(0, 3) > 0,
+                ]
+            );
 
-            // Asignar algunas cuotas aleatorias
             CollegiateDue::create([
                 'collegiate_id' => $c->id,
                 'amount' => 5000,
