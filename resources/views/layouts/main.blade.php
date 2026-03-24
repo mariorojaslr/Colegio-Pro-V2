@@ -72,10 +72,17 @@
         }
         
         body.dark-mode .form-control, 
-        body.dark-mode .form-select { 
+        body.dark-mode .form-select,
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea { 
             background-color: #0c0c0c !important; 
-            border-color: #222 !important; 
+            border-color: #333 !important; 
             color: #fff !important; 
+        }
+        
+        body.dark-mode .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
         }
 
         body.dark-mode .pagination .page-link {
