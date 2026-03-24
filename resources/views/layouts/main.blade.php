@@ -26,36 +26,79 @@
     @yield('styles')
     @stack('styles')
     <style>
-        /* Dark Mode OLED Styles */
+        /* Dark Mode OLED Styles (Total Blackout Phase) */
         body.dark-mode { background: #000 !important; color: #fff !important; }
         body.dark-mode .navbar, 
         body.dark-mode .card, 
         body.dark-mode .offcanvas,
+        body.dark-mode .modal-content,
         body.dark-mode .mobile-nav,
-        body.dark-mode .table-premium, 
         body.dark-mode footer { 
-            background: #0a0a0a !important; 
+            background: #000 !important; 
             border: 1px solid #1a1a1a !important; 
-            color: #e5e5e5 !important;
         }
+        body.dark-mode .card-header, 
+        body.dark-mode .bg-white, 
+        body.dark-mode .bg-light,
+        body.dark-mode .bg-light-subtle { background: #000 !important; border-bottom: 1px solid #1a1a1a !important; }
+        
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
+        body.dark-mode h4, body.dark-mode h5, body.dark-mode h6,
+        body.dark-mode .text-dark, body.dark-mode p, body.dark-mode span,
+        body.dark-mode label, body.dark-mode .nav-link, body.dark-mode .dropdown-item { 
+            color: #fff !important; 
+        }
+        
+        body.dark-mode .text-secondary, body.dark-mode .text-muted { 
+            color: #b0b0b0 !important; 
+        }
+        
         body.dark-mode table, 
         body.dark-mode table tr, 
         body.dark-mode table td,
-        body.dark-mode table th { 
-            background: #0a0a0a !important; 
+        body.dark-mode table th,
+        body.dark-mode .table-hover tbody tr:hover { 
+            background: #000 !important; 
             color: #fff !important; 
             border-color: #1a1a1a !important; 
         }
-        body.dark-mode .bg-light, 
-        body.dark-mode .bg-white,
-        body.dark-mode .bg-light-subtle { background: #050505 !important; }
-        body.dark-mode .text-dark { color: #fff !important; }
-        body.dark-mode .text-secondary, 
-        body.dark-mode .text-muted { color: #a3a3a3 !important; }
-        body.dark-mode table th { background: #111 !important; border-bottom: 2px solid #222 !important; }
-        body.dark-mode .btn-light { background: #1a1a1a !important; color: #fff !important; border: 0; }
+        
+        body.dark-mode .btn-light,
+        body.dark-mode .btn-outline-dark,
+        body.dark-mode .btn-outline-primary { 
+            background: #111 !important; 
+            color: #fff !important; 
+            border: 1px solid #333 !important; 
+        }
+        
         body.dark-mode .form-control, 
-        body.dark-mode .form-select { background-color: #111 !important; border-color: #222 !important; color: #fff !important; }
+        body.dark-mode .form-select { 
+            background-color: #0c0c0c !important; 
+            border-color: #222 !important; 
+            color: #fff !important; 
+        }
+
+        body.dark-mode .pagination .page-link {
+            background-color: #000 !important;
+            border-color: #222 !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .dropdown-menu {
+            background-color: #0c0c0c !important;
+            border: 1px solid #222 !important;
+        }
+        
+        body.dark-mode .badge {
+            background-color: #1a1a1a !important;
+            color: #fff !important;
+            border: 1px solid #333 !important;
+        }
+        
+        body.dark-mode .bg-danger-soft, body.dark-mode .bg-success-soft, body.dark-mode .bg-primary-soft {
+            background-color: #222 !important;
+            color: #fff !important;
+        }
         
         mark { background: #ffeb3b !important; color: #000 !important; padding: 0; border-radius: 2px; }
 
