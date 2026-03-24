@@ -47,11 +47,11 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead>
                             <tr>
-                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1">Colegiado</th>
-                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Último Pago</th>
-                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Estado</th>
-                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">S. Pendiente</th>
-                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-secondary fw-bold ls-1 text-center">Acciones</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-white fw-bold ls-1">Colegiado</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-white fw-bold ls-1 text-center">Último Pago</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-white fw-bold ls-1 text-center">Estado</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-white fw-bold ls-1 text-center">S. Pendiente</th>
+                                <th class="border-0 px-3 py-2 text-uppercase xx-small text-white fw-bold ls-1 text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="membersTable">
