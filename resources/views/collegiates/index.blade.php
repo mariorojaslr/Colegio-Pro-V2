@@ -158,7 +158,7 @@
     
     body.dark-mode .card-prestige {
         background: #000 !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.35) !important;
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 

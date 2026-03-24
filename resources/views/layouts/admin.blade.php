@@ -39,7 +39,7 @@
         body[data-bs-theme='dark'] .table-premium, 
         body[data-bs-theme='dark'] footer { 
             background: #0a0a0a !important; 
-            border: 1px solid #1a1a1a !important; 
+            border: 1px solid rgba(255, 255, 255, 0.35) !important; 
             color: #e5e5e5 !important;
         }
         body[data-bs-theme='dark'] .bg-light, 

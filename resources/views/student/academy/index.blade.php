@@ -41,7 +41,7 @@
 
     body.dark-mode .course-poster-wrapper {
         background: #000;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important; /* Crystalline Border */
+        border: 1px solid rgba(255, 255, 255, 0.35) !important; /* Crystalline Border */
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
@@ -127,8 +127,8 @@
     }
 
     body.dark-mode .filter-pill {
-        border-color: rgba(255, 255, 255, 0.2);
-        color: rgba(255, 255, 255, 0.6) !important;
+        border-color: rgba(255, 255, 255, 0.35) !important;
+        color: rgba(255, 255, 255, 0.7) !important;
     }
 
     .filter-pill.active {
