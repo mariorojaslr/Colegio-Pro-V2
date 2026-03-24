@@ -55,6 +55,7 @@
                             </tr>
                         </thead>
                         <tbody id="membersTable">
+                            @fragment('membersTable')
                             @foreach($collegiates as $collegiate)
                             @php
                                 $lastPaid = $collegiate->dues->where('status', 'paid')->first();
@@ -130,6 +131,7 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @endfragment
                         </tbody>
                     </table>
                 </div>
