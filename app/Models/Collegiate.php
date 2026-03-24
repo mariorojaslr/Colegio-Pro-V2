@@ -83,6 +83,14 @@ class Collegiate extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function paymentAgreements()
+    {
+        return $this->hasMany(PaymentAgreement::class);
+    }
+
+    /**
      * Verifica si el colegiado está plenamente habilitado para emitir certificados.
      */
     public function isEnabledForCertificates()

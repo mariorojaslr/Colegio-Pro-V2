@@ -69,7 +69,15 @@
                                         </div>
                                         <div>
                                             <h6 class="mb-0 fw-bold text-dark small">{{ $collegiate->first_name }} {{ $collegiate->last_name }}</h6>
-                                            <span class="text-secondary xx-small fw-semibold">MAT: {{ $collegiate->registration_number }}</span>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="text-secondary xx-small fw-semibold">MAT: {{ $collegiate->registration_number }}</span>
+                                                @if($collegiate->isSanctioned())
+                                                    <span class="badge bg-danger p-0 rounded-circle shadow-sm animate__animated animate__flash animate__infinite" style="width: 8px; height: 8px;" title="SANCIONADO POR ÉTICA"></span>
+                                                @endif
+                                                @if($collegiate->paymentAgreements()->where('status', 'active')->exists())
+                                                    <span class="badge bg-info p-0 rounded-circle shadow-sm" style="width: 8px; height: 8px;" title="CON CONVENIO DE PAGO"></span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -80,11 +88,18 @@
                                     @else
                                         <span class="text-secondary xx-small opacity-50">S/P</span>
                                     @endif
-                                </td>
-                                <td class="px-3 py-2 border-0 text-center">
-                                    @if($isClean)
+                                <                                 <td class="px-3 py-2 border-0 text-center">
+                                    @if($collegiate->isSanctioned())
+                                        <span class="badge rounded-pill bg-dark text-white border border-dark px-2 py-1" style="font-size: 0.65rem;">
+                                            <i class="bi-shield-x me-1"></i> SUSPENDIDO
+                                        </span>
+                                    @elseif($isClean)
                                         <span class="badge rounded-pill bg-success-soft text-success border border-success-soft px-2 py-1" style="background: #e1f5e6; font-size: 0.65rem;">
                                             <i class="bi-check-circle-fill me-1"></i> AL DÍA
+                                        </span>
+                                    @elseif($collegiate->paymentAgreements()->where('status', 'active')->exists())
+                                        <span class="badge rounded-pill bg-info-soft text-info border border-info-soft px-2 py-1" style="background: #e0f2f1; font-size: 0.65rem;">
+                                            <i class="bi-file-earmark-text-fill me-1"></i> CONVENIO
                                         </span>
                                     @elseif($collegiate->pendingDues->where('status', 'overdue')->count() > 0)
                                         <span class="badge rounded-pill bg-danger-soft text-danger border border-danger-soft px-2 py-1" style="background: #feeaea; font-size: 0.65rem;">
@@ -96,6 +111,7 @@
                                         </span>
                                     @endif
                                 </td>
+</td>
                                 <td class="px-3 py-2 border-0 text-end fw-bold small {{ $isClean ? 'text-secondary opacity-25' : 'text-danger' }}">
                                     ${{ number_format($pendingAmount, 0, ',', '.') }}
                                 </td>

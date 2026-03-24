@@ -48,5 +48,7 @@ class DatabaseSeeder extends Seeder
             'school_id' => $school1->id,
             'role' => 'ADMIN_COLEGIO',
         ]);
+        // 4. Cargar Datos de Demostración Realistas (Casos Críticos)
+        $this->call(DemoColegiadoSeeder::class);
     }
 }
