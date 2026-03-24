@@ -138,24 +138,32 @@
                 <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0">
                     @auth
                         @php $currentRoute = request()->route()->getName(); @endphp
-                        @if(auth()->user()->role === 'ADMIN_COLEGIO')
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Dashboard') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('Padrón') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('Finanzas') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('Ética') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.compliance.index') }}">{{ __('Auditoría') }}</a></li>
-                        @elseif(auth()->user()->isOwner())
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="{{ route('admin.dashboard') }}">{{ __('Panel Global') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="{{ route('student.lessons.index') }}">{{ __('Ver Academia') }}</a></li>
+                        {{-- Solo mostramos el menú interno si NO estamos en la Landing Page pública --}}
+                        @if(!request()->is('/'))
+                            @if(auth()->user()->role === 'ADMIN_COLEGIO')
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Dashboard') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('Padrón') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('Finanzas') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('Ética') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.compliance.index') }}">{{ __('Auditoría') }}</a></li>
+                            @elseif(auth()->user()->isOwner())
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="{{ route('admin.dashboard') }}">{{ __('Panel Global') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="{{ route('student.lessons.index') }}">{{ __('Ver Academia') }}</a></li>
+                            @else
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Mi Panel') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('Mi Legajo') }}</a></li>
+                            @endif
                         @else
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('Mi Panel') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('Academia') }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('Mi Legajo') }}</a></li>
+                            {{-- En la Landing Page, incluso logueado, mostramos info del producto --}}
+                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#ventajas">Ventajas</a></li>
+                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#pricing">Planes</a></li>
+                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="/escuela-virtual">Escuela Virtual</a></li>
                         @endif
                     @else
                         <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#ventajas">Ventajas</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#servicios">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#pricing">Planes</a></li>
                         <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="/escuela-virtual">Escuela Virtual</a></li>
                     @endauth
                 </ul>
@@ -267,37 +275,60 @@
                 <div class="bg-primary rounded-circle p-2"><i class="bi bi-robot fs-4"></i></div>
                 <div>
                     <h5 class="offcanvas-title fw-bold mb-0">Soy Carina</h5>
-                    <small class="opacity-75">Tu Asistente de Gestión Inteligente</small>
+                    <small class="opacity-75">Instructora Permanente</small>
                 </div>
             </div>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body p-4 bg-light-subtle">
-            <div class="chat-bubble bg-white p-3 rounded-4 shadow-sm mb-4 border-start border-4 border-primary">
-                <p class="small mb-0 fw-medium">¡Hola! Estoy aquí para guiarte. En esta sección puedes:</p>
+            <div class="chat-bubble bg-white p-3 rounded-4 shadow-sm mb-4 border-start border-4 border-primary animate__animated animate__fadeIn">
+                @if(request()->is('/'))
+                    <p class="small mb-0 fw-bold text-dark">¡Hola! Bienvenido a la vitrina de Colegio-Pro.</p>
+                    <p class="x-small mb-0 mt-2">Aquí puedes explorar las ventajas de nuestra infraestructura SaaS para instituciones profesionales.</p>
+                @elseif(request()->routeIs('home'))
+                    <p class="small mb-0 fw-bold text-dark">Estás en tu Centro de Mando.</p>
+                    <p class="x-small mb-0 mt-2">He analizado los datos: observa las tarjetas de arriba para ver rápidamente la morosidad y las bajas del día.</p>
+                @elseif(request()->is('finanzas*'))
+                    <p class="small mb-0 fw-bold text-dark">Bienvenido al área de Cobranzas.</p>
+                    <p class="x-small mb-0 mt-2">Aquí gestionamos deudas y convenios. Recuerda que un convenio activo suspende temporalmente el estado de morosidad clínica.</p>
+                @elseif(request()->is('gestion-etica*'))
+                    <p class="small mb-0 fw-bold text-dark">Módulo de Disciplina y Ética.</p>
+                    <p class="x-small mb-0 mt-2">Las sanciones aquí registradas bloquean automáticamente la emisión de certificados de habilitación.</p>
+                @else
+                    <p class="small mb-0 fw-medium">Soy tu guía en esta sección. ¿En qué puedo orientarte hoy?</p>
+                @endif
             </div>
-            <div class="list-group list-group-flush rounded-4 overflow-hidden shadow-sm border">
+
+            <h6 class="xx-small text-uppercase ls-2 text-secondary fw-bold mb-3">Guía Rápida</h6>
+            <div class="list-group list-group-flush rounded-4 overflow-hidden shadow-sm border mb-4">
                 @if(request()->routeIs('home'))
-                    <div class="list-group-item p-3 border-0">
-                        <h6 class="fw-bold mb-1 small text-primary">Panel de Control</h6>
-                        <p class="x-small text-muted mb-0">Monitorea el estado de salud de tu institución en tiempo real.</p>
+                    <div class="list-group-item p-3 border-0 bg-white">
+                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-graph-up me-2"></i>Métricas Críticas</h6>
+                        <p class="x-small text-muted mb-0">Haz clic en la tarjeta de "Mora Arancelaria" para ir directo al listado de cobranza.</p>
                     </div>
                 @elseif(request()->is('finanzas*'))
-                    <div class="list-group-item p-3 border-0">
-                        <h6 class="fw-bold mb-1 small text-primary">Ecosistema de Cobranza</h6>
-                        <p class="x-small text-muted mb-0">Gestiona deudas, planes de pago de "un solo uso" y notifica morosos por WhatsApp.</p>
+                    <div class="list-group-item p-3 border-0 bg-white">
+                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-file-earmark-text me-2"></i>Convenios 12x10</h6>
+                        <p class="x-small text-muted mb-0">Esta función permite condonar 2 cuotas a cambio de un compromiso de pago anual.</p>
+                    </div>
+                @elseif(request()->is('gestion-etica*'))
+                    <div class="list-group-item p-3 border-0 bg-white">
+                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-shield-lock me-2"></i>Bloqueo de Certificados</h6>
+                        <p class="x-small text-muted mb-0">Un sancionado no puede descargar su credencial digital ni certificados de libre deuda.</p>
                     </div>
                 @else
-                    <div class="list-group-item p-3 border-0">
-                        <h6 class="fw-bold mb-1 small text-primary">Uso General</h6>
-                        <p class="x-small text-muted mb-0">Explora las herramientas de Padrón, Ética y Academia desde el menú superior.</p>
+                    <div class="list-group-item p-3 border-0 bg-white">
+                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-info-circle me-2"></i>Navegación</h6>
+                        <p class="x-small text-muted mb-0">Usa el menú superior para saltar entre los diferentes subsistemas integrados.</p>
                     </div>
                 @endif
             </div>
             
             <div class="mt-4 text-center">
-                <img src="{{ asset('media/carina_wave.png') }}" alt="IA wave" class="img-fluid opacity-50" style="max-height: 120px;">
-                <p class="x-small text-muted italic mt-3">"Mi objetivo es que la administración de tu colegio sea invisible y perfecta."</p>
+                <div class="p-3 bg-white rounded-4 shadow-sm border mb-2">
+                    <img src="{{ asset('media/carina_wave.png') }}" alt="IA wave" class="img-fluid" style="max-height: 100px;">
+                </div>
+                <p class="x-small text-muted italic mt-3">"Mi objetivo es que la administración de tu institución sea invisible, elegante y perfecta."</p>
             </div>
         </div>
     </div>

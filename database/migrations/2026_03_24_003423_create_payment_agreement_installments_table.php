@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('payment_agreement_installments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('payment_agreement_id')->constrained()->onDelete('cascade');
+            $table->date('due_date');
+            $table->decimal('amount', 12, 2);
+            $table->string('status')->default('pending'); // pending, paid
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
     }

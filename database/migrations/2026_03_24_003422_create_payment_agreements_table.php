@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('payment_agreements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('school_id')->constrained()->onDelete('cascade');
+            $table->foreignId('collegiate_id')->constrained()->onDelete('cascade');
+            $table->string('type'); // yearly_promo, installment_plan, custom
+            $table->decimal('total_amount_original', 12, 2);
+            $table->decimal('total_amount_agreement', 12, 2);
+            $table->integer('installment_count');
+            $table->string('status')->default('active'); // active, completed, void
+            $table->json('metadata')->nullable();
             $table->timestamps();
         });
     }
