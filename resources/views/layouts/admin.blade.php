@@ -21,15 +21,36 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     
     <style>
-        body { background-color: #F8FAFC; font-family: 'Inter', sans-serif; }
-        .sidebar { width: 280px; min-height: 100vh; background: var(--primary-color); color: white; transition: all 0.3s; }
-        .sidebar .nav-link { color: rgba(255,255,255,0.7); font-weight: 500; padding: 12px 20px; border-radius: 12px; margin: 4px 15px; }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(255,255,255,0.1); color: white; }
+        body { background-color: #F8FAFC; font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .sidebar { width: 280px; min-height: 100vh; background: var(--primary-color); color: white; transition: all 0.3s; z-index: 1040; }
+        .sidebar .nav-link { color: rgba(255,255,255,0.7); font-weight: 500; padding: 12px 20px; border-radius: 12px; margin: 4px 15px; border: 1px solid transparent; transition: all 0.2s; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.05); }
         .sidebar-brand { padding: 30px 20px; text-align: center; }
-        .main-content { flex: 1; min-width: 0; }
-        .stat-card { border-radius: 20px; border: 0; transition: transform 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .main-content { flex: 1; min-width: 0; background: #f8fafc; }
+        .stat-card { border-radius: 20px; border: 0; transition: transform 0.2s, background-color 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .stat-card:hover { transform: translateY(-5px); }
-        .table-premium { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .table-premium { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 0 !important; }
+
+        /* Dark Mode OLED Styles */
+        body[data-bs-theme='dark'] { background: #000 !important; color: #fff !important; }
+        body[data-bs-theme='dark'] .main-content { background: #000 !important; }
+        body[data-bs-theme='dark'] .navbar, 
+        body[data-bs-theme='dark'] .card, 
+        body[data-bs-theme='dark'] .table-premium, 
+        body[data-bs-theme='dark'] footer { 
+            background: #0a0a0a !important; 
+            border: 1px solid #1a1a1a !important; 
+            color: #e5e5e5 !important;
+        }
+        body[data-bs-theme='dark'] .bg-light, 
+        body[data-bs-theme='dark'] .bg-white { background: #050505 !important; }
+        body[data-bs-theme='dark'] .text-dark { color: #fff !important; }
+        body[data-bs-theme='dark'] .text-muted { color: #a3a3a3 !important; }
+        body[data-bs-theme='dark'] table th { background: #111 !important; border-bottom: 2px solid #222 !important; }
+        body[data-bs-theme='dark'] .sidebar { border-right: 1px solid #1a1a1a; }
+        body[data-bs-theme='dark'] .btn-light { background: #1a1a1a !important; color: #fff !important; border: 0; }
+        
+        .theme-toggle-btn { width: 40px; height: 40px; }
         .badge-plan { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 5px 10px; border-radius: 30px; }
         .plan-initial { background: #E2E8F0; color: #475569; }
         .plan-professional { background: #DBEAFE; color: #1E40AF; }
@@ -84,11 +105,29 @@
         <!-- Topbar: Barra superior de navegación y perfil -->
         <nav class="navbar navbar-expand bg-white py-3 px-4 sticky-top shadow-sm">
             <div class="container-fluid justify-content-between p-0">
-                <h4 class="m-0 fw-bold" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">@yield('header', 'Dashboard Central')</h4>
+                <div class="d-flex flex-column">
+                    <h4 class="m-0 fw-bold" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">
+                        @yield('header', 'Dashboard Central')
+                    </h4>
+                    @php
+                        $user = auth()->user();
+                        $hour = date('H');
+                        $greeting = $hour < 12 ? 'Buenos días' : ($hour < 19 ? 'Buenas tardes' : 'Buenas noches');
+                    @endphp
+                    <span class="x-small text-muted fw-medium d-none d-sm-block">
+                        {{ $greeting }}, <span class="text-primary fw-bold">{{ $user->name }}</span>. Bienvenido de vuelta al centro de mando.
+                    </span>
+                </div>
                 
-                <div class="d-flex align-items-center gap-3">
+                    {{-- Dark Mode Toggle --}}
+                    <button class="btn btn-light rounded-circle theme-toggle-btn p-0 border-0 shadow-sm d-flex align-items-center justify-content-center" id="themeToggle" title="Cambiar Tema">
+                        <i class="bi bi-moon-stars-fill text-dark fs-5" id="themeIcon"></i>
+                    </button>
+
+                    <div class="vr mx-1"></div>
+                    
                     <div class="dropdown">
-                        <button class="btn btn-light rounded-circle p-2 border-0 position-relative" data-bs-toggle="dropdown">
+                        <button class="btn btn-light rounded-circle p-2 border-0 position-relative shadow-sm" data-bs-toggle="dropdown">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
                                 <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
                             </svg>
@@ -155,9 +194,41 @@
         </div>
 
         <footer class="mt-auto py-3 px-4 bg-white text-center border-top">
-            <p class="m-0 text-muted small">&copy; {{ date('y') }} Colegio-Pro. Visión Omnisciente activada.</p>
+            <p class="m-0 text-muted small">&copy; {{ date('y') }} Colegio-Pro-SaaS. Visión Omnisciente activada.</p>
         </footer>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            // Función para actualizar el icono y tema
+            function setTheme(theme) {
+                if (theme === 'dark') {
+                    body.setAttribute('data-bs-theme', 'dark');
+                    themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+                    themeIcon.classList.replace('text-dark', 'text-warning');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.setAttribute('data-bs-theme', 'light');
+                    themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+                    themeIcon.classList.replace('text-warning', 'text-dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            }
+
+            // Detectar preferencia guardada
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            // Toggle Click
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-bs-theme');
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            });
+        });
+    </script>
 </body>
 </html>
