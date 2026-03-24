@@ -95,6 +95,19 @@
             background-color: #0c0c0c !important;
             border: 1px solid #222 !important;
         }
+
+        body.dark-mode .notification-item {
+            background-color: #000 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 12px;
+            margin: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .notification-item:hover {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            background-color: #0a0a0a !important;
+        }
         
         body.dark-mode .badge {
             background-color: #1a1a1a !important;

@@ -103,42 +103,42 @@
                     {{-- Tab 2: Legajo --}}
                     <div class="tab-pane fade" id="pills-legajo" role="tabpanel">
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="bg-light">
-                                    <tr class="small fw-bold text-muted uppercase">
-                                        <th class="py-3 px-4">Requisito Institucional</th>
-                                        <th class="py-3">Estado</th>
-                                        <th class="py-3">Evolución</th>
-                                        <th class="py-3 text-end px-4">Acción</th>
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light border-0">
+                                    <tr class="xx-small fw-bold text-muted uppercase ls-1">
+                                        <th class="py-2 px-4 border-0">Requisito Institucional</th>
+                                        <th class="py-2 border-0">Estado</th>
+                                        <th class="py-2 border-0">Evolución</th>
+                                        <th class="py-2 text-end px-4 border-0">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($requirements as $req)
                                         @php $doc = $collegiate->documents->where('compliance_requirement_id', $req->id)->first(); @endphp
-                                        <tr>
-                                            <td class="py-4 px-4">
-                                                <div class="fw-bold text-dark">{{ $req->name }}</div>
+                                        <tr class="border-bottom border-white border-opacity-10">
+                                            <td class="py-2 px-4 border-0">
+                                                <div class="fw-bold text-dark small">{{ $req->name }}</div>
                                                 @if($req->is_mandatory) 
-                                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill fw-bold" style="font-size: 9px">OBLIGATORIO</span> 
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill fw-bold" style="font-size: 8px">OBLIGATORIO</span> 
                                                 @endif
                                             </td>
-                                            <td class="py-4">
+                                            <td class="py-2 border-0">
                                                 @if($doc)
-                                                    <span class="badge bg-{{ $doc->status == 'approved' ? 'success' : ($doc->status == 'pending' ? 'warning' : 'danger') }} rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 10px">
+                                                    <span class="badge bg-{{ $doc->status == 'approved' ? 'success' : ($doc->status == 'pending' ? 'warning' : 'danger') }} rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">
                                                         {{ $doc->status }}
                                                     </span>
                                                 @else
-                                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 10px">FALTA</span>
+                                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">FALTA</span>
                                                 @endif
                                             </td>
-                                            <td class="py-4 small text-muted">
+                                            <td class="py-2 xx-small text-muted border-0">
                                                 {{ $doc ? $doc->updated_at->format('d/m/Y') : 'Pendiente' }}
                                             </td>
-                                            <td class="py-4 text-end px-4">
+                                            <td class="py-2 text-end px-4 border-0">
                                                 @if($doc)
-                                                    <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle" style="width: 32px; height: 32px; padding: 0"><i class="bi bi-eye"></i></a>
+                                                    <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle" style="width: 28px; height: 28px; padding: 0; line-height: 26px"><i class="bi bi-eye"></i></a>
                                                 @else
-                                                    <button class="btn btn-sm btn-light border rounded-pill px-3 fw-bold small" onclick="alert('Funcionalidad de carga manual próximamente')">Cargar <i class="bi bi-upload ms-1"></i></button>
+                                                    <button class="btn btn-sm btn-light border rounded-pill px-3 fw-bold xx-small" onclick="alert('Funcionalidad de carga manual próximamente')">Cargar <i class="bi bi-upload"></i></button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -176,6 +176,7 @@
 <style>
     .ls-1 { letter-spacing: 1px }
     .uppercase { text-transform: uppercase; }
+    .xx-small { font-size: 10px }
     .nav-pills .nav-link.active { background-color: var(--primary-color) !important; color: white !important; }
     .nav-pills .nav-link { color: #64748b; }
     .card-prestige { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border-radius: 40px; }
