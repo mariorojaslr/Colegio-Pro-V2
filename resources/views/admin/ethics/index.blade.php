@@ -3,12 +3,12 @@
 @section('content')
 <div class="row g-4 mb-4">
     <div class="col-12 col-xl-8">
-        <div class="card bg-white border-0 shadow-sm rounded-4 overflow-hidden h-100">
-            <div class="card-header bg-white border-bottom py-4 px-4">
+        <div class="card card-premium border-crystalline h-100">
+            <div class="card-header bg-transparent border-bottom py-4 px-4" style="border-bottom: 2px solid rgba(255,255,255,0.4) !important;">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h4 class="mb-1 text-dark fw-bold">Comisión de Ética Profesional</h4>
-                        <p class="text-secondary small mb-0">Gestión de sanciones disciplinarias, inhabilitaciones y dictámenes vinculantes.</p>
+                        <h4 class="mb-1 fw-black ls-n1">Comisión de Ética Profesional</h4>
+                        <p class="text-secondary small mb-0">Gestión de sanciones disciplinarias e inhabilitaciones.</p>
                     </div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-danger rounded-pill px-4 btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#newSanctionModal">
@@ -21,13 +21,13 @@
                 <h6 class="text-uppercase small fw-bold text-secondary mb-3">Sanciones Activas / Inhabilitaciones</h6>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light border-0">
+                        <thead>
                             <tr>
-                                <th class="border-0 px-3 py-3 rounded-start text-uppercase small text-secondary fw-bold">Colegiado</th>
-                                <th class="border-0 px-3 py-3 text-uppercase small text-secondary fw-bold">Motivo</th>
-                                <th class="border-0 px-3 py-3 text-uppercase small text-secondary fw-bold">Período</th>
-                                <th class="border-0 px-3 py-3 text-uppercase small text-secondary fw-bold text-center">Estado</th>
-                                <th class="border-0 px-3 py-3 rounded-end text-uppercase small text-secondary fw-bold text-center">Acciones</th>
+                                <th class="px-3 py-3 text-uppercase xx-small ls-2">Colegiado</th>
+                                <th class="px-3 py-3 text-uppercase xx-small ls-2">Motivo</th>
+                                <th class="px-3 py-3 text-uppercase xx-small ls-2">Período</th>
+                                <th class="px-3 py-3 text-uppercase xx-small ls-2 text-center">Estado</th>
+                                <th class="px-3 py-3 text-uppercase xx-small ls-2 text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,15 +94,15 @@
 
     <!-- Columna Derecha: Comisión -->
     <div class="col-12 col-xl-4">
-        <div class="card border-0 shadow-sm rounded-4 h-100 bg-white overflow-hidden shadow-hover border-hover transition-all">
-            <div class="card-header bg-dark text-white p-4">
+        <div class="card card-premium border-crystalline h-100">
+            <div class="card-header bg-primary text-white p-4 border-0">
                  <div class="d-flex align-items-center">
-                    <div class="bg-primary rounded-pill p-2 me-3 shadow-sm">
+                    <div class="bg-white bg-opacity-20 rounded-pill p-2 me-3 shadow-sm">
                         <i class="bi-people-fill text-white fs-4 px-1"></i>
                     </div>
                     <div>
-                        <h6 class="mb-0 fw-bold">Comisión de Ética</h6>
-                        <span class="small opacity-50">Cuerpo de Veedores y Auditores</span>
+                        <h6 class="mb-0 fw-black ls-1 uppercase small">Comisión de Ética</h6>
+                        <span class="xx-small opacity-75 uppercase ls-1">Cuerpo de Veedores</span>
                     </div>
                 </div>
             </div>

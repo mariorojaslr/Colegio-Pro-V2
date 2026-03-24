@@ -6,12 +6,12 @@
 <div class="container-fluid py-4">
     <div class="row g-4 mb-5">
         <div class="col-lg-3">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white h-100">
-                <div class="rounded-circle bg-primary bg-opacity-10 p-3 mx-auto mb-3" style="width: 60px">
+            <div class="card card-premium border-crystalline p-4 text-center h-100">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 mx-auto mb-3 shadow-sm" style="width: 60px">
                     <i class="bi bi-envelope-open text-primary fs-4"></i>
                 </div>
-                <h6 class="text-muted small uppercase fw-bold ls-1 mb-1">Tickets Abiertos</h6>
-                <h2 class="fw-bold mb-0 text-dark">{{ $tickets->where('status', 'open')->count() }}</h2>
+                <h6 class="text-secondary xx-small uppercase fw-black ls-2 mb-1">Tickets Abiertos</h6>
+                <h2 class="fw-black mb-0 text-finance-clean">{{ $tickets->where('status', 'open')->count() }}</h2>
             </div>
         </div>
         <div class="col-lg-3">
@@ -40,9 +40,9 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="card-header bg-white border-0 py-4 px-5 d-flex justify-content-between align-items-center">
-            <h5 class="m-0 fw-bold">Todas las Solicitudes</h5>
+    <div class="card card-premium border-crystalline overflow-hidden">
+        <div class="card-header bg-transparent border-bottom py-4 px-5 d-flex justify-content-between align-items-center" style="border-bottom: 2px solid rgba(255,255,255,0.4) !important;">
+            <h5 class="m-0 fw-black ls-n1">Todas las Solicitudes</h5>
             <div class="d-flex gap-2">
                 <button class="btn btn-light btn-sm rounded-pill px-3">Filtrar por Colegio</button>
                 <button class="btn btn-light btn-sm rounded-pill px-3">Exportar Logs</button>

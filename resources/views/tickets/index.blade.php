@@ -17,7 +17,7 @@
     <div class="row g-4">
         @forelse($tickets as $ticket)
         <div class="col-md-6 col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white hover-up transition-all">
+            <div class="card card-premium border-crystalline h-100 hover-up transition-all p-4">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <span class="badge bg-{{ $ticket->status == 'open' ? 'primary' : ($ticket->status == 'pending' ? 'warning' : 'success') }} rounded-pill px-3 py-1 fw-bold">
                         {{ strtoupper($ticket->status) }}

@@ -7,41 +7,41 @@
 <div class="row g-4 mb-4">
     {{-- Métrica: Recaudación Global (Financiero) --}}
     <div class="col-md-4">
-        <div class="card stat-card p-4 bg-primary text-white border-0 shadow-sm rounded-4 h-100">
+        <div class="card card-premium p-4 border-crystalline h-100" style="background: linear-gradient(135deg, #0F172A 0%, #000 100%) !important;">
             <div class="d-flex align-items-center mb-2">
-                <div class="rounded-circle bg-white bg-opacity-20 p-2 me-3">
-                    <i class="bi bi-wallet2 fs-4"></i>
+                <div class="rounded-circle bg-white bg-opacity-10 p-2 me-3 shadow-sm">
+                    <i class="bi bi-wallet2 fs-4 text-primary"></i>
                 </div>
-                <h6 class="m-0 small text-uppercase fw-bold ls-1 opacity-75">Recaudación Total</h6>
+                <h6 class="m-0 xx-small text-uppercase fw-black ls-2 opacity-75">Recaudación Total</h6>
             </div>
-            <h2 class="fw-bold m-0">${{ number_format($stats['total_revenue'], 0, ',', '.') }}</h2>
-            <div class="mt-2 small opacity-75">Ingresos acumulados del sistema</div>
+            <h2 class="fw-black m-0 text-finance-clean">${{ number_format($stats['total_revenue'], 0, ',', '.') }}</h2>
+            <div class="mt-2 xx-small uppercase ls-1 opacity-50">Ingresos consolidados</div>
         </div>
     </div>
     {{-- Métrica: Total de Escuelas (Tenants) --}}
     <div class="col-md-4">
-        <div class="card stat-card p-4 bg-white border-0 shadow-sm rounded-4 h-100">
+        <div class="card card-premium p-4 border-crystalline h-100">
             <div class="d-flex align-items-center mb-2">
-                <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-3">
+                <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-3 shadow-sm">
                     <i class="bi bi-building text-warning fs-4"></i>
                 </div>
-                <h6 class="m-0 small text-uppercase fw-bold ls-1 text-muted">Colegios Activos</h6>
+                <h6 class="m-0 xx-small text-uppercase fw-black ls-2 opacity-75">Colegios Activos</h6>
             </div>
-            <h2 class="fw-bold m-0 text-dark">{{ $stats['total_schools'] }}</h2>
-            <div class="mt-2 small text-muted">Instituciones en plataforma</div>
+            <h2 class="fw-black m-0 text-finance-clean">{{ $stats['total_schools'] }}</h2>
+            <div class="mt-2 xx-small uppercase ls-1 opacity-50">Instituciones verificadas</div>
         </div>
     </div>
     {{-- Métrica: Total de Alumnos en el Sistema --}}
     <div class="col-md-4">
-        <div class="card stat-card p-4 bg-white border-0 shadow-sm rounded-4 h-100">
+        <div class="card card-premium p-4 border-crystalline h-100">
             <div class="d-flex align-items-center mb-2">
-                <div class="rounded-circle bg-info bg-opacity-10 p-2 me-3">
+                <div class="rounded-circle bg-info bg-opacity-10 p-2 me-3 shadow-sm">
                     <i class="bi bi-mortarboard text-info fs-4"></i>
                 </div>
-                <h6 class="m-0 small text-uppercase fw-bold ls-1 text-muted">Alumnos Totales</h6>
+                <h6 class="m-0 xx-small text-uppercase fw-black ls-2 opacity-75">Alumnos Totales</h6>
             </div>
-            <h2 class="fw-bold m-0 text-dark">{{ $stats['total_users'] }}</h2>
-            <div class="mt-2 small text-muted">Estudiantes activos globales</div>
+            <h2 class="fw-black m-0 text-finance-clean">{{ $stats['total_users'] }}</h2>
+            <div class="mt-2 xx-small uppercase ls-1 opacity-50">Comunidad global activa</div>
         </div>
     </div>
 </div>
@@ -156,9 +156,9 @@
 </div>
 
 <!-- Schools Table -->
-<div class="table-premium">
-    <div class="p-4 d-flex justify-content-between align-items-center bg-white">
-        <h5 class="fw-bold m-0" style="font-family: 'Outfit', sans-serif;">Gestión de Colegios (Tenants)</h5>
+<div class="card card-premium border-crystalline overflow-hidden">
+    <div class="card-header border-0 py-4 px-4 bg-transparent d-flex justify-content-between align-items-center" style="border-bottom: 2px solid rgba(255,255,255,0.4) !important;">
+        <h5 class="fw-black ls-n1 m-0">Gestión de Colegios (Tenants)</h5>
         <a href="{{ route('admin.schools.create') }}" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold btn-sm">
             <i class="bi bi-plus-lg me-1"></i> Nueva Empresa
         </a>
@@ -184,8 +184,8 @@
                                 {{ substr($school->name, 0, 1) }}
                             </div>
                             <div>
-                                <div class="fw-bold text-dark">{{ $school->name }}</div>
-                                <div class="small text-muted">{{ $school->slug }}.colegio-pro.cl</div>
+                                <div class="fw-bold text-finance-clean">{{ $school->name }}</div>
+                                <div class="xx-small text-secondary uppercase ls-1">{{ $school->slug }}.colegio-pro.cl</div>
                             </div>
                         </div>
                     </td>
@@ -199,8 +199,8 @@
                         @endif
                     </td>
                     <td>
-                        <div class="fw-bold text-dark">{{ $school->users_count }}</div>
-                        <div class="small text-muted">asociados activos</div>
+                        <div class="fw-bold text-finance-clean">{{ $school->users_count }}</div>
+                        <div class="xx-small text-secondary uppercase ls-1">asociados activos</div>
                     </td>
                     <td>
                         @php $sub = $school->activeSubscription; @endphp
