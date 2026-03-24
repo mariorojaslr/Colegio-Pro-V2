@@ -31,14 +31,22 @@ class SetLocale
         app()->setLocale($locale ?: 'es');
         
         // 4. Inyección de traducciones dinámicas desde DB (Prioridad SaaS)
-        // Agrupamos por 'group' para inyectarlas directamente en el motor de Lang de Laravel
-        $dbTranslations = \Illuminate\Support\Facades\Cache::remember("translations_".app()->getLocale(), 3600, function() {
+        // Agrupamos por 'group' para inyectarlas de forma masiva y evitar errores de colisión
+        $locale = app()->getLocale();
+        $dbTranslations = \Illuminate\Support\Facades\Cache::remember("translations_".$locale, 3600, function() {
             return \App\Models\Translation::all();
         });
 
+        $grouped = [];
         foreach($dbTranslations as $t) {
-            $value = $t->{app()->getLocale()} ?: $t->es; // Fallback al español si no existe traducción
-            \Illuminate\Support\Facades\Lang::addLines([$t->key => $value], app()->getLocale(), $t->group);
+            $value = $t->{$locale} ?: $t->es;
+            if ($t->group && $t->key) {
+                $grouped[$t->group][$t->key] = $value;
+            }
+        }
+
+        foreach($grouped as $group => $lines) {
+            \Illuminate\Support\Facades\Lang::addLines($lines, $locale, $group);
         }
 
         return $next($request);
