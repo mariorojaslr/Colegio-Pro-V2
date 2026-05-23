@@ -186,10 +186,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/gestion-etica/sancion', [\App\Http\Controllers\Admin\EthicsController::class, 'createSanction'])->name('admin.ethics.create_sanction');
     Route::post('/gestion-etica/levantar/{sanction}', [\App\Http\Controllers\Admin\EthicsController::class, 'liftSanction'])->name('admin.ethics.lift_sanction');
 
-    // Auditoría de Cumplimiento (Admin de Colegio)
-    Route::get('/auditoria-legajos', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'index'])->name('admin.compliance.index');
-    Route::post('/auditoria-legajos/aprobar/{document}', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'approve'])->name('admin.compliance.approve');
-    Route::post('/auditoria-legajos/rechazar/{document}', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'reject'])->name('admin.compliance.reject');
+
 
     // Tickets
     Route::get('/soporte', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
