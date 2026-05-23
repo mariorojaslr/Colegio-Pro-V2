@@ -40,12 +40,14 @@
             border: 1px solid rgba(255, 255, 255, 0.25) !important; 
         }
 
-        /* Forzado de icono blanco en modo oscuro */
-        body.dark-mode .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgb(255, 255, 255)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        /* Forzado de icono blanco en modo oscuro (Nueva versión Font-Icon) */
+        body.dark-mode #mobileMenuIcon {
+            color: #ffffff !important;
+            opacity: 1 !important;
+            font-size: 1.8rem !important;
         }
         body.dark-mode .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.5) !important;
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
         }
         
         /* Líneas y tablas ultra visibles en OLED - Refuerzo Rolls-Royce */
@@ -212,7 +214,7 @@
 
     <nav class="navbar navbar-expand-lg py-2 sticky-top bg-white border-bottom border-light shadow-sm" style="transition: all 0.4s ease; z-index: 1050;">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
+            <a class="navbar-brand d-flex align-items-center" href="{{ auth()->check() ? route('home') : url('/') }}">
                 <img src="{{ asset('media/logo.png') }}" alt="Colegio-Pro" height="32" class="me-2 opacity-75">
                 <span class="d-none d-sm-inline fw-black ls-n1" style="color: #0f172a; font-size: 1.1rem;">COLEGIO</span>
                 <span class="d-none d-sm-inline fw-light" style="color: #64748b; font-size: 1.1rem; margin-left: 1px;">PRO</span>
@@ -316,7 +318,24 @@
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('ui.finances') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('ui.ethics') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.compliance.index') }}">{{ __('ui.audit') }}</a></li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'news') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownNews" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Prensa
+                                    </a>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownNews">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.news.index') }}"><i class="bi bi-newspaper me-2 text-primary"></i>Gestor de Noticias</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#underConstructionModal"><i class="bi bi-envelope-paper me-2 text-primary"></i>Newsletters</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') || str_contains($currentRoute, 'requisitos') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownDocs" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ __('ui.audit') }}
+                                    </a>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownDocs">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.compliance.index') }}">Auditoría de Legajos</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('compliance_requirements.index') }}">Config. Requisitos</a></li>
+                                    </ul>
+                                </li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'tickets') ? 'text-primary' : 'text-muted' }}" href="{{ route('tickets.index') }}"><i class="bi bi-headset me-1 text-primary"></i> SOPORTE</a></li>
                             @elseif(auth()->user()->isOwner())
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="{{ route('admin.dashboard') }}">{{ __('ui.dashboard') }} (Owner)</a></li>
@@ -328,15 +347,85 @@
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('ui.compliance') }}</a></li>
                             @endif
                         @else
-                            {{-- En la Landing Page, incluso logueado, mostramos info del producto --}}
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#ventajas">Ventajas</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#pricing">Planes</a></li>
-                            <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="/escuela-virtual">Escuela Virtual</a></li>
+                            {{-- En la Landing Page mostramos el menú institucional completo solicitado --}}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#" data-bs-toggle="dropdown">
+                                    Institucional
+                                </a>
+                                <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2 bg-dark">
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Historia</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Qué es el Colegio?</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold text-uppercase" href="#">Normativas</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Asamblea</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Consejo Directivo</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Tribunal de Disciplina</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold text-uppercase" href="#">Boletín Oficial</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Comisiones de Trabajo</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Relaciones Interinstitucionales</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#" data-bs-toggle="dropdown">
+                                    Ejercicio Profesional
+                                </a>
+                                <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2 bg-dark">
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Matriculación</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Honorarios Mínimos Éticos</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Habilitación de Consultorio</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Legislación</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Código de Ética</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Ámbitos de Actuación Profesional</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Incumbencias</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Certificado de Ética</a></li>
+                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Consentimiento informado</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Auxiliares de Justicia</a></li>
+                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ url('escuela-virtual') }}">Capacitaciones</a></li>
+                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Beneficios</a></li>
+                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ route('news.index') }}">Noticias</a></li>
+                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Contacto</a></li>
+                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Denuncias</a></li>
                         @endif
                     @else
-                        <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#ventajas">Ventajas</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="#pricing">Planes</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="/escuela-virtual">Escuela Virtual</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#" data-bs-toggle="dropdown">
+                                Institucional
+                            </a>
+                            <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2 bg-dark">
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Historia</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Qué es el Colegio?</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold text-uppercase" href="#">Normativas</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Asamblea</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Consejo Directivo</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Tribunal de Disciplina</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold text-uppercase" href="#">Boletín Oficial</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Comisiones de Trabajo</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Relaciones Interinstitucionales</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#" data-bs-toggle="dropdown">
+                                Ejercicio Profesional
+                            </a>
+                            <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2 bg-dark">
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Matriculación</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Honorarios Mínimos Éticos</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Habilitación de Consultorio</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Legislación</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Código de Ética</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Ámbitos de Actuación Profesional</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Incumbencias</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Certificado de Ética</a></li>
+                                <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Consentimiento informado</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Auxiliares de Justicia</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ url('escuela-virtual') }}">Capacitaciones</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Beneficios</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Noticias</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Denuncias</a></li>
                     @endauth
                 </ul>
             </div>
@@ -350,9 +439,31 @@
     {{-- El footer ha sido desactivado por solicitud administrativa para optimizar el área de trabajo --}}
 
     <style>
-        .hover-white:hover { color: white !important; padding-left: 5px; }
+        .hover-gold { color: #fde68a !important; transition: all 0.2s ease; }
+        .hover-gold:hover { color: #f59e0b !important; padding-left: 6px; background-color: rgba(255,255,255,0.05) !important; border-radius: 6px; }
+        .dropdown-menu.bg-dark { background-color: #1e2227 !important; border: 1px solid rgba(255,255,255,0.1) !important; }
         .transition-all { transition: all 0.3s ease; }
     </style>
+
+    <!-- Modal En Construcción -->
+    <div class="modal fade" id="underConstructionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg bg-dark text-white">
+                <div class="modal-header border-bottom border-secondary py-3 px-4">
+                    <h5 class="modal-title fw-bold text-warning"><i class="bi bi-cone-striped me-2"></i>Módulo en Construcción</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <i class="bi bi-tools display-1 text-secondary mb-3 opacity-50"></i>
+                    <h4 class="fw-bold mb-2">¡Próximamente!</h4>
+                    <p class="text-white-50 mb-0">Esta funcionalidad está siendo desarrollada por nuestro equipo de ingeniería y estará disponible en las próximas actualizaciones.</p>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0 justify-content-center">
+                    <button type="button" class="btn btn-warning rounded-pill px-5 fw-bold" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Navegación Móvil Estilo App (Solo pantallas pequeñas) -->
     @auth
@@ -462,6 +573,22 @@
         // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'light';
         updateThemeElements(savedTheme === 'dark');
+
+        // Intercept empty links for "Under Construction" modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const emptyLinks = document.querySelectorAll('a[href="#"]');
+            const constructionModal = new bootstrap.Modal(document.getElementById('underConstructionModal'));
+            
+            emptyLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Only intercept if it doesn't have a data-bs-toggle attribute (like dropdowns or collapses)
+                    if (!this.hasAttribute('data-bs-toggle') && !this.classList.contains('dropdown-toggle')) {
+                        e.preventDefault();
+                        constructionModal.show();
+                    }
+                });
+            });
+        });
     </script>
     <!-- Asistente IA 'Carina' (Burbuja Flotante Premium) -->
     <div class="position-fixed bottom-0 end-0 mb-4 me-4 d-none d-md-block" style="z-index: 1061;">

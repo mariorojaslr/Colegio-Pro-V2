@@ -8,6 +8,7 @@
             <p class="text-muted">Accede a tus clases, talleres y material de video exclusivo.</p>
         </div>
         <div class="col-lg-auto d-flex gap-2">
+            <a href="{{ url('/') }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold border-dark shadow-sm"><i class="bi bi-house-door me-2"></i>Inicio</a>
             <button class="btn btn-light rounded-pill px-4 fw-bold border-light shadow-sm">Todas las Clases</button>
             <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-lg">En Vivo <i class="bi bi-circle-fill text-danger ms-1 small animate-pulse"></i></button>
         </div>

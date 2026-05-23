@@ -1,297 +1,242 @@
 @extends('layouts.main')
 
-@section('title', 'Colegio-Pro | La Nueva Era de la Gestión Institucional')
+@section('title', 'Colegio de Terapistas Ocupacionales')
 
 @section('content')
-<!-- Espectacular Hero Section with Mesh Gradient Background -->
-<div class="position-relative overflow-hidden" style="background: radial-gradient(at 0% 0%, rgba(234, 179, 8, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.05) 0px, transparent 50%);">
-    <section class="py-5 pt-lg-5">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-lg-6 text-center text-lg-start animate-fade-in">
-                    <span class="badge rounded-pill mb-3 px-3 py-2 text-uppercase fw-bold" style="background: rgba(234, 119, 8, 0.1); color: #B45309; letter-spacing: 1px;">SaaS de Alto Rendimiento</span>
-                    <h1 class="display-2 fw-black mb-4" style="font-family: 'Outfit', sans-serif; line-height: 1.1; color: var(--primary-color);">
-                        Gestione su Colegio con <span style="background: linear-gradient(90deg, #0F172A, #EAB308); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Excelencia Digital</span>
+<!-- Barra de Navegación Institucional Superior -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 10px; display:flex; justify-content:center; align-items:center;">
+                <i class="bi bi-shield-plus text-white fs-4"></i>
+            </div>
+            <span style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">Colegio de Terapistas <span class="text-primary">Ocupacionales</span></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-medium" style="font-size: 0.9rem;">
+                <li class="nav-item"><a class="nav-link active" href="#institucional">Institucional</a></li>
+                <li class="nav-item"><a class="nav-link" href="#ejercicio">Ejercicio Profesional</a></li>
+                <li class="nav-item"><a class="nav-link" href="#capacitaciones">Capacitaciones</a></li>
+                <li class="nav-item"><a class="nav-link" href="#beneficios">Beneficios</a></li>
+                <li class="nav-item"><a class="nav-link" href="#noticias">Noticias</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="d-flex gap-2">
+                <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-4 shadow-sm" style="font-size: 0.9rem;">Portal de Autogestión</a>
+                <a href="#" class="btn btn-primary rounded-pill px-4 shadow-sm" style="font-size: 0.9rem; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none;">Pagar Cuota</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section Espectacular -->
+<div class="position-relative overflow-hidden" style="min-height: 100vh; background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover fixed;">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%);"></div>
+    <section class="h-100 d-flex align-items-center position-relative pt-5">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-7 text-white">
+                    <span class="badge rounded-pill bg-primary bg-opacity-25 text-info mb-3 px-3 py-2 border border-info border-opacity-25">ASOCIACIÓN PROFESIONAL</span>
+                    <h1 class="display-3 fw-black mb-4" style="font-family: 'Outfit', sans-serif; line-height: 1.1;">
+                        Excelencia y Ética en la <br><span style="background: linear-gradient(120deg, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Terapia Ocupacional</span>
                     </h1>
-                    <p class="lead text-muted mb-5 fs-4 fw-light opacity-90 pe-lg-4">
-                        La infraestructura definitiva para Colegios Profesionales que exigen seguridad, velocidad y una experiencia de usuario sin precedentes.
+                    <p class="lead mb-5 opacity-75 fw-light" style="font-size: 1.25rem; max-width: 600px;">
+                        Promovemos el desarrollo científico, ético y profesional de nuestros colegiados, garantizando la calidad de la atención en salud para toda la comunidad.
                     </p>
-                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                        <a href="{{ route('demo.fast') }}" class="btn btn-premium btn-lg px-5 py-3 shadow-lg fs-5">Acceso Demo</a>
-                        <a href="/escuela-virtual" class="btn btn-outline-dark btn-lg px-5 py-3 shadow-sm border border-light-subtle d-flex align-items-center gap-2" style="background: white; border-radius: var(--border-radius)">
-                            <i class="bi bi-play-circle-fill text-primary"></i> Escuela Virtual
-                        </a>
+                    <div class="d-flex gap-3">
+                        <a href="{{ route('login') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">Ingresar al Portal</a>
+                        <a href="#quienes-somos" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-medium backdrop-blur">Conocer más</a>
                     </div>
-                </div>
-                <div class="col-lg-6 mt-lg-0 mt-5 position-relative">
-                    <div class="hero-image-wrapper p-3 glass-card" style="border-radius: 40px; transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);">
-                        <img src="{{ asset('media/landing_hero.png') }}" alt="Plataforma Colegio-Pro" class="img-fluid rounded-4 shadow-2xl">
-                    </div>
-                    <!-- Decorative Elements -->
-                    <div class="position-absolute d-none d-lg-block" style="top: -20px; right: -20px; width: 100px; height: 100px; background: var(--accent-color); border-radius: 20px; opacity: 0.2; z-index: -1;"></div>
-                    <div class="position-absolute d-none d-lg-block" style="bottom: -10px; left: -10px; width: 60px; height: 60px; border: 4px solid var(--primary-color); border-radius: 15px; opacity: 0.1; z-index: -1;"></div>
                 </div>
             </div>
         </div>
     </section>
 </div>
 
-<!-- Ventajas Section -->
-<section id="ventajas" class="py-5 bg-white">
-    <div class="container py-lg-5">
-        <div class="row mb-5 text-center">
-            <div class="col-lg-8 mx-auto">
-                <h2 class="display-4 fw-bold mb-3" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">Infraestructura <span style="color: var(--accent-color)">Poderosa</span></h2>
-                <p class="text-dark fs-5 fw-medium">Tecnología de punta diseñada para la estabilidad y escalabilidad de su institución.</p>
-            </div>
+<!-- Quiénes Somos & Organigrama -->
+<section id="institucional" class="py-5" style="background-color: #f8fafc;">
+    <div class="container py-5">
+        <div class="text-center mb-5 pb-3">
+            <h6 class="text-primary fw-bold text-uppercase tracking-wider">Nuestro Equipo</h6>
+            <h2 class="display-5 fw-bold text-dark" style="font-family: 'Outfit', sans-serif;">Comisión Directiva</h2>
+            <p class="text-muted fs-5 mx-auto" style="max-width: 700px;">Conozca a los profesionales que lideran nuestra institución, dedicados a fortalecer la práctica de la Terapia Ocupacional.</p>
         </div>
-        <div class="row g-4 overflow-hidden">
-            <div class="col-md-4">
-                <div class="feature-card p-5 h-100 transition-all border-0 glass-card">
-                    <div class="mb-4">
-                        <div class="icon-circle bg-primary-subtle d-flex align-items-center justify-content-center rounded-4" style="width: 64px; height: 64px; background-color: #F1F5F9">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="var(--primary-color)" class="bi bi-hdd-network" viewBox="0 0 16 16">
-                                <path d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1h-1V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v1H0V4zm0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1h-1V7a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v1H0V7zm0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1h-1v-1a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v1H0v-1z"/>
-                                <path d="M2.614 12.614A3 3 0 1 0 0 13h1.614a2 2 0 1 1 1.5.7h1.39a3 3 0 1 0 0-1h-1.39a2 2 0 0 1-1.5-.7z"/>
-                            </svg>
+
+        <!-- Organigrama Glassmorphism -->
+        <div class="row justify-content-center g-4">
+            <!-- Presidenta -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
+                    <div style="height: 120px; background: linear-gradient(135deg, #3b82f6, #8b5cf6);"></div>
+                    <div class="position-absolute w-100 text-center" style="top: 50px;">
+                        @php
+                            $presPhoto = asset('images/presidenta_colegio_1779502458929.png');
+                        @endphp
+                        <img src="{{ $presPhoto }}" alt="Presidenta" class="rounded-circle shadow-lg border border-4 border-white" style="width: 140px; height: 140px; object-fit: cover;">
+                    </div>
+                    <div class="card-body text-center pt-5 mt-4 pb-4 px-4">
+                        <h4 class="fw-bold mb-1 mt-3" style="color: #1e293b;">Dra. Elena Vargas</h4>
+                        <p class="text-primary fw-bold small text-uppercase mb-3" style="letter-spacing: 1px;">Presidenta</p>
+                        <p class="text-muted small mb-4">Especialista en Rehabilitación Neurológica con más de 20 años de trayectoria institucional.</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="#" class="btn btn-sm btn-light text-primary rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="btn btn-sm btn-light text-primary rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-envelope"></i></a>
                         </div>
                     </div>
-                    <h4 class="fw-bold mb-3" style="color: var(--primary-color)">Escalabilidad Ilimitada</h4>
-                    <p class="text-dark opacity-75">Procesamiento de datos optimizado para manejar miles de colegiados con latencia cero.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card p-5 h-100 transition-all border-0 glass-card" style="border-top: 4px solid var(--accent-color) !important;">
-                    <div class="mb-4">
-                        <div class="icon-circle d-flex align-items-center justify-content-center rounded-4" style="width: 64px; height: 64px; background-color: #FFFBEB">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#B45309" class="bi bi-shield-lock" viewBox="0 0 16 16">
-                                <path d="M8 .5c-.662 0-1.77.9-1.77 1.83V3h3.54v-.67C9.77 1.4 8.662.5 8 .5zM5.887 3V1.67C5.887.55 6.78 0 8 0s2.113.55 2.113 1.67V3h1.594a1 1 0 0 1 .951.69l.41 1.25a2 2 0 0 1 .052.46V8.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5.4c0-.156.018-.31.052-.46l.41-1.25a1 1 0 0 1 .951-.69h1.464z"/>
-                                <path d="M3.193 10.735A8.07 8.07 0 0 1 8 10c1.883 0 3.618.63 5.007 1.685l.63-.805C12.188 9.8 10.188 9 8 9s-4.188.8-5.637 1.93l.83.805z"/>
-                            </svg>
+
+            <!-- Secretario -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
+                    <div style="height: 120px; background: linear-gradient(135deg, #0ea5e9, #3b82f6);"></div>
+                    <div class="position-absolute w-100 text-center" style="top: 50px;">
+                        @php
+                            $secPhoto = asset('images/secretario_colegio_1779502476148.png');
+                        @endphp
+                        <img src="{{ $secPhoto }}" alt="Secretario" class="rounded-circle shadow-lg border border-4 border-white" style="width: 140px; height: 140px; object-fit: cover;">
+                    </div>
+                    <div class="card-body text-center pt-5 mt-4 pb-4 px-4">
+                        <h4 class="fw-bold mb-1 mt-3" style="color: #1e293b;">Lic. Martín Rossi</h4>
+                        <p class="text-info fw-bold small text-uppercase mb-3" style="letter-spacing: 1px;">Secretario General</p>
+                        <p class="text-muted small mb-4">Coordinador de políticas públicas y normativas de la práctica profesional y legislación.</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="#" class="btn btn-sm btn-light text-info rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="btn btn-sm btn-light text-info rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-envelope"></i></a>
                         </div>
                     </div>
-                    <h4 class="fw-bold mb-3" style="color: var(--primary-color)">Seguridad Industrial</h4>
-                    <p class="text-dark opacity-75">Aislamiento de bases de datos por cada Colegio, garantizando que su información sensible jamás se exponga.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card p-5 h-100 transition-all border-0 glass-card">
-                    <div class="mb-4">
-                        <div class="icon-circle d-flex align-items-center justify-content-center rounded-4" style="width: 64px; height: 64px; background-color: #F1F5F9">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="var(--primary-color)" class="bi bi-stack" viewBox="0 0 16 16">
-                                <path d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"/>
-                                <path d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"/>
-                            </svg>
+
+            <!-- Tesorera -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
+                    <div style="height: 120px; background: linear-gradient(135deg, #f59e0b, #ef4444);"></div>
+                    <div class="position-absolute w-100 text-center" style="top: 50px;">
+                        @php
+                            $tesPhoto = asset('images/tesorera_colegio_1779502490381.png');
+                        @endphp
+                        <img src="{{ $tesPhoto }}" alt="Tesorera" class="rounded-circle shadow-lg border border-4 border-white" style="width: 140px; height: 140px; object-fit: cover;">
+                    </div>
+                    <div class="card-body text-center pt-5 mt-4 pb-4 px-4">
+                        <h4 class="fw-bold mb-1 mt-3" style="color: #1e293b;">Lic. Valeria Montes</h4>
+                        <p class="text-warning fw-bold small text-uppercase mb-3" style="letter-spacing: 1px;">Tesorera</p>
+                        <p class="text-muted small mb-4">Especialista en administración institucional, encargada del fondo de becas y matriculación.</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="#" class="btn btn-sm btn-light text-warning rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" class="btn btn-sm btn-light text-warning rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-envelope"></i></a>
                         </div>
                     </div>
-                    <h4 class="fw-bold mb-3" style="color: var(--primary-color)">Media de Alta Velocidad</h4>
-                    <p class="text-dark opacity-75">Servidores dedicados para el almacenamiento de trámites, planos y videos, con descarga inmediata.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Expansión Global e Innovación -->
-<section class="py-5" style="background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);">
-    <div class="container py-lg-5 text-center">
-        <h2 class="display-5 fw-bold mb-5" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">Preparado para el <span style="color: var(--accent-color)">Mundo</span></h2>
+<!-- Ubicación y Contáctenos -->
+<section id="contacto" class="py-5 bg-white position-relative">
+    <div class="container py-5">
         <div class="row g-5">
-            <div class="col-lg-6">
-                <div class="glass-card p-5 h-100 border-0 shadow-sm text-start" style="border-radius: 35px;">
-                    <div class="badge bg-primary rounded-pill px-3 py-2 mb-3">GLOBAL READY</div>
-                    <h3 class="fw-bold mb-3">Soporte Multimoneda</h3>
-                    <p class="text-muted fs-5 mb-4">No importa dónde se encuentre su institución. Configure cobros en Pesos, Dólares, Euros o cualquier moneda local con un solo clic.</p>
-                    <div class="d-flex align-items-center gap-2 text-primary fw-bold">
-                        <i class="bi bi-globe2 fs-4"></i>
-                        <span>Venda sus servicios internacionalmente</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="glass-card p-5 h-100 border-0 shadow-sm text-start" style="border-radius: 35px;">
-                    <div class="badge bg-warning text-dark rounded-pill px-3 py-2 mb-3">EXPERIENCIA PREMIUM</div>
-                    <h3 class="fw-bold mb-3">Academia Estilo Netflix</h3>
-                    <p class="text-muted fs-5 mb-4">Ofrezca cursos y capacitaciones con una interfaz visual impactante. Sus asociados disfrutarán de una navegación fluida, profesional y adictiva.</p>
-                    <div class="d-flex align-items-center gap-2 text-warning fw-bold">
-                        <i class="bi bi-play-btn-fill fs-4"></i>
-                        <span>Educar nunca fue tan visual</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-    <div class="container py-lg-5">
-        <div class="row align-items-center mb-5 pb-lg-5">
-            <div class="col-lg-7 order-2 order-lg-1">
-                <div class="glass-card p-2 rounded-4 shadow-2xl">
-                    <img src="{{ asset('media/dashboard_preview.png') }}" alt="Colegio-Pro Dashboard" class="img-fluid rounded-3">
-                </div>
-            </div>
-            <div class="col-lg-5 order-1 order-lg-2 mb-5 mb-lg-0">
-                <h2 class="fw-bold mb-4" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">La <span style="color: var(--accent-color)">experiencia</span> que sus asociados merecen.</h2>
-                <div class="d-flex gap-3 mb-4">
-                    <div class="mt-1 shadow-sm px-2 py-1 bg-accent rounded-circle d-flex align-items-center justify-content-center" style="background-color: var(--accent-color); width: 28px; height: 28px">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="white" viewBox="0 0 16 16">
-                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                        </svg>
+            <!-- Info Contacto -->
+            <div class="col-lg-5">
+                <h2 class="display-6 fw-bold mb-4 text-dark" style="font-family: 'Outfit', sans-serif;">Estamos para <span class="text-primary">Asistirlo</span></h2>
+                <p class="lead text-muted mb-5">Si tiene alguna duda sobre matriculación, tribunal de ética o beneficios, no dude en acercarse o escribirnos.</p>
+                
+                <div class="d-flex align-items-center gap-4 mb-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-geo-alt-fill fs-3"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold" style="color: var(--primary-color)">Instituciones de Formación</h5>
-                        <p class="text-dark opacity-75 fw-medium">Ideal para Colegios Profesionales, Escuelas de Coaching, Centros de PNL y Federaciones de alto nivel.</p>
+                        <h5 class="fw-bold mb-1">Nuestra Sede</h5>
+                        <p class="text-muted mb-0">Av. San Martín 1234, Centro<br>La Rioja, Argentina</p>
                     </div>
                 </div>
-                <div class="d-flex gap-3">
-                    <div class="mt-1 shadow-sm px-2 py-1 bg-accent rounded-circle d-flex align-items-center justify-content-center" style="background-color: var(--accent-color); width: 28px; height: 28px">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="white" viewBox="0 0 16 16">
-                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                        </svg>
+
+                <div class="d-flex align-items-center gap-4 mb-4">
+                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-whatsapp fs-3"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold" style="color: var(--primary-color)">Pagos y Facturación Automática</h5>
-                        <p class="text-dark opacity-75 fw-medium">Sistema integrado para el cobro de cuotas colegiales con historial transparente.</p>
+                        <h5 class="fw-bold mb-1">WhatsApp Institucional</h5>
+                        <p class="text-muted mb-0">+54 9 380 412-3456</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-4 mb-4">
+                    <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-envelope-paper-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-1">Mesa de Entrada Digital</h5>
+                        <p class="text-muted mb-0">contacto@colegioterapistas.org.ar</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row align-items-center">
-            <div class="col-lg-5 mb-5 mb-lg-0">
-                <h2 class="fw-bold mb-4" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">Gestión <span style="color: var(--accent-color)">Móvil</span></h2>
-                <p class="text-dark fs-5 mb-4 fw-medium">Lleve su Colegio en el bolsillo. Una aplicación web diseñada para profesionales modernos.</p>
-                <ul class="list-unstyled">
-                    <li class="mb-3 d-flex align-items-center gap-2 fw-bold text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="var(--accent-color)" class="bi bi-check2-circle" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/><path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/></svg> Acceso a Credencial Digital</li>
-                    <li class="mb-3 d-flex align-items-center gap-2 fw-bold text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="var(--accent-color)" class="bi bi-check2-circle" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/><path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/></svg> Notificaciones de Vencimientos</li>
-                    <li class="mb-3 d-flex align-items-center gap-2 fw-bold text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="var(--accent-color)" class="bi bi-check2-circle" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/><path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/></svg> Inscripción a Eventos</li>
-                </ul>
-            </div>
-            <div class="col-lg-6 offset-lg-1">
-                <div class="text-center">
-                    <img src="{{ asset('media/mobile_app.png') }}" alt="Colegio-Pro App" class="img-fluid" style="max-height: 500px;">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Pricing Section con GeoIP (Diseño Expansivo Full-Width) -->
-<section id="pricing" class="py-5 bg-white">
-    <div class="container-fluid px-lg-5 py-lg-5">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">Planes <span style="color: var(--accent-color)">Hechos a Medida</span></h2>
-            <div class="d-inline-flex align-items-center gap-2 bg-light px-4 py-2 rounded-pill mb-4 border shadow-sm">
-                <i class="bi bi-geo-alt-fill text-primary"></i>
-                <span class="small fw-bold">Precios detectados para: 
-                    <span class="text-primary">{{ app(\App\Services\LocationService::class)->isFromArgentina() ? 'ARGENTINA' : 'EL EXTERIOR' }}</span>
-                </span>
-            </div>
-            <p class="text-muted fs-5 mx-auto" style="max-width: 600px">Escoja la infraestructura que mejor se adapte al volumen de su institución profesional.</p>
-        </div>
-
-        <div class="row g-4">
-            @foreach($plans as $plan)
-            <div class="col-md-3">
-                <div class="feature-card p-5 h-100 border-0 glass-card text-center d-flex flex-column {{ $plan->slug === 'professional' ? 'border-primary' : 'border border-light-subtle' }}" 
-                     style="border-radius: 40px; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); background: white; border-width: {{ $plan->slug === 'professional' ? '4px' : '1px' }} !important;">
-                    
-                    @if($plan->slug === 'professional')
-                    <div class="position-absolute top-0 start-50 translate-middle bg-primary text-white px-4 py-1 rounded-pill small fw-bold mt-2 shadow-sm" style="font-size: 11px; letter-spacing: 1px;">MÁS ELEGIDO</div>
-                    @endif
-
-                    <div class="mb-4">
-                        <h5 class="fw-black text-dark text-uppercase ls-2 opacity-50 small mb-4">{{ $plan->name }}</h5>
-                        <div class="d-flex align-items-start justify-content-center">
-                            <span class="fs-4 fw-bold text-primary mt-2">$</span>
-                            <span class="display-6 fw-black text-primary ls-n1">{{ number_format($plan->price, 0, ',', '.') }}</span>
+            <!-- Mapa Decorativo y Form -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-lg" style="border-radius: 30px; overflow: hidden;">
+                    <div class="row g-0">
+                        <div class="col-md-12 p-5 bg-light">
+                            <h4 class="fw-bold mb-4">Envíenos su consulta</h4>
+                            <form>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control form-control-lg rounded-pill px-4" placeholder="Nombre completo">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="email" class="form-control form-control-lg rounded-pill px-4" placeholder="Correo electrónico">
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="text" class="form-control form-control-lg rounded-pill px-4" placeholder="Asunto (Ej. Matrícula, Certificado Ética)">
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea class="form-control rounded-4 p-4" rows="4" placeholder="Su mensaje..."></textarea>
+                                    </div>
+                                    <div class="col-12 mt-4">
+                                        <button type="button" class="btn btn-primary btn-lg rounded-pill w-100 fw-bold shadow-sm" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none;">Enviar Mensaje Rápidamente</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <p class="text-muted x-small mt-n1 fw-bold">PAGO POR MES</p>
-                    </div>
-
-                    <hr class="my-4 opacity-5">
-
-                    <ul class="list-unstyled text-start mb-5 flex-grow-1">
-                        <li class="mb-3 d-flex align-items-center gap-3">
-                            <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary"><i class="bi bi-people-fill fs-5"></i></div>
-                            <div>
-                                <p class="mb-0 fw-bold text-dark small">Hasta {{ number_format($plan->max_users, 0, ',', '.') }}</p>
-                                <p class="mb-0 x-small text-muted text-uppercase fw-bold">Usuarios activos</p>
-                            </div>
-                        </li>
-                        <li class="mb-3 d-flex align-items-center gap-3">
-                            <div class="bg-info bg-opacity-10 p-1 rounded-3 text-info"><i class="bi bi-cloud-check-fill fs-5"></i></div>
-                            <div class="flex-grow-1">
-                                <p class="mb-0 fw-bold text-dark small">{{ $plan->max_storage }} GB</p>
-                                <p class="mb-0 x-small text-muted text-uppercase fw-bold ls-1" style="font-size: 9px;">ESPACIO DIGITAL</p>
-                            </div>
-                        </li>
-                        @foreach($plan->features as $feature)
-                        <li class="mb-2 d-flex align-items-center gap-3">
-                            <i class="bi bi-check2 text-success fw-bold"></i>
-                            <span class="text-dark opacity-75 small fw-medium">{{ $feature }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-
-                    <div class="mt-auto">
-                        <a href="{{ route('demo.register', ['plan' => $plan->slug]) }}" 
-                           class="btn {{ $plan->slug === 'professional' ? 'btn-primary' : 'btn-outline-dark text-uppercase' }} w-100 rounded-pill py-3 fw-black ls-1 shadow-sm transition-all shadow-hover">
-                           Elegir este Plan
-                        </a>
                     </div>
                 </div>
             </div>
-            @endforeach
-        </div>
-        <p class="text-center mt-5 small text-muted italic">¿Desea un plan a medida o soporte multimoneda específico? <a href="#" class="text-primary fw-bold">Contactar Ventas Globales</a></p>
-    </div>
-</section>
-    <div class="container py-lg-5">
-        <div class="glass-card p-5 p-lg-5 bg-primary text-white text-center position-relative overflow-hidden" style="border-radius: 40px; background-color: var(--primary-color) !important;">
-            <div class="position-absolute opacity-10" style="bottom: -50px; left: -50px; width: 250px; height: 250px; background: white; border-radius: 50%"></div>
-            <div class="position-absolute opacity-10" style="top: -30px; right: -30px; width: 150px; height: 150px; background: var(--accent-color); border-radius: 50%"></div>
-            
-            <h2 class="display-5 fw-bold mb-4 position-relative" style="font-family: 'Outfit', sans-serif;">¿Está listo para dar el salto profesional?</h2>
-            <p class="lead mb-5 opacity-75 position-relative">Únase a las instituciones que ya están digitalizando su futuro con Colegio-Pro.</p>
-            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center position-relative">
-                <button class="btn btn-accent btn-lg px-5 py-3 fs-5">Ver Demo Interactiva</button>
-                <button class="btn btn-outline-light btn-lg px-5 py-3 fs-5" style="border-radius: var(--border-radius)">Contactar a un Consultor</button>
-            </div>
         </div>
     </div>
 </section>
+
+<!-- Footer Simple -->
+<footer class="py-4 text-center text-white" style="background-color: #0f172a;">
+    <div class="container">
+        <p class="mb-0 opacity-75 small">© {{ date('Y') }} Colegio de Terapistas Ocupacionales. Todos los derechos reservados.</p>
+        <p class="mb-0 opacity-50 small mt-1">Desarrollado con ♥ por Terapista SaaS</p>
+    </div>
+</footer>
 
 @endsection
 
 @section('styles')
 <style>
     .fw-black { font-weight: 900; }
-    .ls-1 { letter-spacing: 1px; }
-    .ls-2 { letter-spacing: 2px; }
-    .ls-n2 { letter-spacing: -2px; }
-    .animate-fade-in { animation: fadeIn 1s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .tracking-wider { letter-spacing: 2px; }
     
-    .hero-image-wrapper {
-        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    .organigram-card {
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .hero-image-wrapper:hover {
-        transform: perspective(1000px) rotateY(-2deg) rotateX(2deg) scale(1.02) !important;
+    .organigram-card:hover {
+        transform: translateY(-15px);
     }
     
-    .feature-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 30px 60px rgba(0,0,0,0.1) !important;
+    .backdrop-blur {
+        backdrop-filter: blur(5px);
+        background: rgba(255,255,255,0.1) !important;
     }
-    
-    .shadow-hover:hover {
-        box-shadow: 0 15px 30px rgba(var(--primary-rgb), 0.2) !important;
-        transform: translateY(-2px);
-    }
-
-    .btn-white:hover {
-        background: #f8fafc !important;
+    .backdrop-blur:hover {
+        background: rgba(255,255,255,0.2) !important;
     }
 </style>
 @endsection

@@ -112,96 +112,28 @@ class CollegiateController extends Controller
         if ($user->role !== 'ADMIN_COLEGIO') abort(403);
 
         $request->validate([
-            'file' => 'required|mimes:csv,txt|max:4096', // Aumentamos límite para 5000+ registros
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
         ]);
 
-        $file = $request->file('file');
-        $handle = fopen($file->getRealPath(), "r");
-        
-        $count = 0;
-        $header = true;
-        
-        // Iniciamos transacción para integridad de datos masiva
-        \Illuminate\Support\Facades\DB::beginTransaction();
-
         try {
-            while (($data = fgetcsv($handle, 2000, ";")) !== FALSE) { // Cambiamos a ';' que es estándar en Excel LATAM
-                if ($header) { $header = false; continue; }
-                
-                // Formato CSV esperado: Matricula;Nombre;Apellido;Email;DNI;Telefono;Etica(1/0);Cuotas(1/0)
-                if (count($data) < 5) continue;
-
-                Collegiate::updateOrCreate(
-                    ['registration_number' => $data[0], 'school_id' => $user->school_id],
-                    [
-                        'first_name' => $data[1],
-                        'last_name' => $data[2],
-                        'email' => $data[3],
-                        'dni' => $data[4],
-                        'phone' => $data[5] ?? null,
-                        'is_ethics_compliant' => ($data[6] ?? '1') == '1',
-                        'is_fees_compliant' => ($data[7] ?? '0') == '1',
-                        'status' => 'active',
-                    ]
-                );
-                $count++;
-            }
-            fclose($handle);
-            \Illuminate\Support\Facades\DB::commit();
+            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\CollegiatesImport($user->school_id), $request->file('file'));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\DB::rollBack();
             return redirect()->back()->with('error', "Error en importación masiva: " . $e->getMessage());
         }
 
-        return redirect()->route('collegiates.index')->with('success', "¡Proceso terminado! Se han importado/actualizado $count colegiados exitosamente.");
+        return redirect()->route('collegiates.index')->with('success', "¡Proceso terminado! Se ha importado/actualizado el padrón exitosamente.");
     }
 
     /**
-     * Exporta el padrón completo a CSV (Compatible con Excel).
+     * Exporta el padrón completo a Excel.
      */
     public function export()
     {
         $user = Auth::user();
         if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
 
-        $query = $user->isOwner() ? Collegiate::query() : $user->school->collegiates();
-        $collegiates = $query->orderBy('last_name')->get();
-
-        $fileName = 'padron_profesional_' . date('Y-m-d_H-i-s') . '.csv';
+        $fileName = 'padron_profesional_' . date('Y-m-d_H-i-s') . '.xlsx';
         
-        $headers = array(
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        );
-
-        $columns = array('Matricula', 'Apellido', 'Nombre', 'DNI', 'Email', 'Telefono', 'Situacion', 'Caja Etica', 'Cuotas');
-
-        $callback = function() use($collegiates, $columns) {
-            $file = fopen('php://output', 'w');
-            // Añadir BOM para soporte de acentos en Excel
-            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
-            fputcsv($file, $columns, ';');
-
-            foreach ($collegiates as $col) {
-                $row['Matricula']  = $col->registration_number;
-                $row['Apellido']   = $col->last_name;
-                $row['Nombre']     = $col->first_name;
-                $row['DNI']        = $col->dni;
-                $row['Email']      = $col->email;
-                $row['Telefono']   = $col->phone;
-                $row['Situacion']  = $col->professional_situation ?? 'Activo';
-                $row['Caja Etica'] = $col->is_ethics_compliant ? 'OK' : 'DEUDA';
-                $row['Cuotas']     = $col->is_fees_compliant ? 'AL DIA' : 'MOROSO';
-
-                fputcsv($file, array($row['Matricula'], $row['Apellido'], $row['Nombre'], $row['DNI'], $row['Email'], $row['Telefono'], $row['Situacion'], $row['Caja Etica'], $row['Cuotas']), ';');
-            }
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CollegiatesExport($user->school_id), $fileName);
     }
 }

@@ -2,22 +2,36 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\PublicNewsController;
+use App\Http\Controllers\NewsArticleController;
 
 Route::get('change-language/{lang}', [LanguageController::class, 'switch'])->name('lang.switch');
 
 // Ruta de Acceso Rápido a la Demo (Cero Fricción)
 Route::get('/demo-fast', function(\Illuminate\Http\Request $request) {
-    // Cerramos cualquier sesión previa para asegurar una experiencia limpia
     auth()->logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    $user = \App\Models\User::where('email', 'admin@demo.com')->first();
-    if ($user) {
-        auth()->login($user);
-        return redirect()->route('home')->with('status', '¡Bienvenido a la Experiencia Colegio-Pro!');
-    }
-    return redirect('/')->with('error', 'El entorno de demo no está listo.');
+    // Create a demo school if not exists
+    $school = \App\Models\School::firstOrCreate(
+        ['slug' => 'demo'],
+        ['name' => 'Colegio de Terapistas Ocupacionales', 'status' => 'active']
+    );
+
+    // Create a demo admin user
+    $user = \App\Models\User::firstOrCreate(
+        ['email' => 'admin@demo.com'],
+        [
+            'name' => 'Administrador Demo',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'ADMIN_COLEGIO',
+            'school_id' => $school->id
+        ]
+    );
+
+    auth()->login($user);
+    return redirect()->route('collegiates.index')->with('status', '¡Bienvenido al modo demostración libre!');
 })->name('demo.fast');
 
 // Ruta de Emergencia para Acceso Administrativo (OWNER)
@@ -48,6 +62,10 @@ Route::post('/demo/register', [App\Http\Controllers\DemoRegistrationController::
 
 // Escuela Virtual Pública (Vitrina de Cursos)
 Route::get('/escuela-virtual', [\App\Http\Controllers\Student\LessonController::class, 'index'])->name('academy.public');
+
+// Rutas Públicas Adicionales
+Route::get('/noticias', [PublicNewsController::class, 'index'])->name('news.index');
+Route::get('/noticias/{slug}', [PublicNewsController::class, 'show'])->name('news.show');
 
 Auth::routes();
 
@@ -104,8 +122,10 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::delete('/admin/resources/{resource}', [\App\Http\Controllers\Admin\LessonResourceController::class, 'destroy'])->name('admin.lesson_resources.destroy');
 });
 
-// Rutas Generales Autenticadas (Cualquier Rol)
 Route::middleware(['auth'])->group(function () {
+    // Noticias Administrativas
+    Route::resource('admin/news', NewsArticleController::class)->names('admin.news');
+
     // Facturación y Suscripción (Admin de Colegio)
     Route::get('/mi-plan', [\App\Http\Controllers\BillingController::class, 'index'])->name('billing.index');
     Route::post('/mi-plan/upgrade', [\App\Http\Controllers\BillingController::class, 'upgrade'])->name('billing.upgrade');

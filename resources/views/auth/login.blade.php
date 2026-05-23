@@ -267,6 +267,18 @@
                     <p>Por favor, introduzca sus credenciales para acceder a la plataforma.</p>
                 </div>
 
+                <!-- BOTON DE DEMO RAPIDA -->
+                <div class="mb-4 animate__animated animate__pulse animate__infinite">
+                    <a href="{{ route('demo.fast') }}" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none; font-size: 1.1rem;">
+                        <i class="bi bi-rocket-takeoff-fill me-2"></i> INGRESO LIBRE DE DEMOSTRACIÓN
+                    </a>
+                </div>
+                
+                <div class="text-center mb-4 position-relative">
+                    <hr>
+                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted" style="font-size: 0.8rem; font-weight: 600;">O ingresa con tu cuenta</span>
+                </div>
+
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 
