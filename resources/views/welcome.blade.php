@@ -12,49 +12,109 @@
             </div>
             <span style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">Colegio de Terapistas <span class="text-primary">Ocupacionales</span></span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-medium" style="font-size: 0.9rem;">
-                <li class="nav-item"><a class="nav-link active" href="#institucional">Institucional</a></li>
-                <li class="nav-item"><a class="nav-link" href="#ejercicio">Ejercicio Profesional</a></li>
-                <li class="nav-item"><a class="nav-link" href="#capacitaciones">Capacitaciones</a></li>
-                <li class="nav-item"><a class="nav-link" href="#beneficios">Beneficios</a></li>
-                <li class="nav-item"><a class="nav-link" href="#noticias">Noticias</a></li>
-                <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                @if(isset($mainMenu) && $mainMenu)
+                    @foreach($mainMenu->items as $item)
+                        @if($item->children->count() > 0)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                    {{ $item->title }}
+                                </a>
+                                <ul class="dropdown-menu shadow-lg border-0 bg-dark">
+                                    @foreach($item->children as $child)
+                                        @if($child->is_active)
+                                            <li><a class="dropdown-item text-white hover-gold" href="{{ $child->page_id ? route('public.page', $child->page->slug) : $child->url }}" target="{{ $child->target }}">{{ $child->title }}</a></li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @else
+                            <li class="nav-item"><a class="nav-link" href="{{ $item->page_id ? route('public.page', $item->page->slug) : $item->url }}" target="{{ $item->target }}">{{ $item->title }}</a></li>
+                        @endif
+                    @endforeach
+                @else
+                    <li class="nav-item"><a class="nav-link active" href="#institucional">Institucional</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ejercicio">Ejercicio Profesional</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#capacitaciones">Capacitaciones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                @endif
             </ul>
             <div class="d-flex gap-2">
                 <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-4 shadow-sm" style="font-size: 0.9rem;">Portal de Autogestión</a>
-                <a href="#" class="btn btn-primary rounded-pill px-4 shadow-sm" style="font-size: 0.9rem; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none;">Pagar Cuota</a>
+                <a href="{{ route('login') }}" class="btn btn-primary rounded-pill px-4 shadow-sm" style="font-size: 0.9rem; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none;">Pagar Cuota</a>
             </div>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section Espectacular -->
-<div class="position-relative overflow-hidden" style="min-height: 100vh; background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover fixed;">
-    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%);"></div>
-    <section class="h-100 d-flex align-items-center position-relative pt-5">
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-lg-7 text-white">
-                    <span class="badge rounded-pill bg-primary bg-opacity-25 text-info mb-3 px-3 py-2 border border-info border-opacity-25">ASOCIACIÓN PROFESIONAL</span>
-                    <h1 class="display-3 fw-black mb-4" style="font-family: 'Outfit', sans-serif; line-height: 1.1;">
-                        Excelencia y Ética en la <br><span style="background: linear-gradient(120deg, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Terapia Ocupacional</span>
-                    </h1>
-                    <p class="lead mb-5 opacity-75 fw-light" style="font-size: 1.25rem; max-width: 600px;">
-                        Promovemos el desarrollo científico, ético y profesional de nuestros colegiados, garantizando la calidad de la atención en salud para toda la comunidad.
-                    </p>
-                    <div class="d-flex gap-3">
-                        <a href="{{ route('login') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">Ingresar al Portal</a>
-                        <a href="#quienes-somos" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-medium backdrop-blur">Conocer más</a>
+<!-- Hero Section Espectacular / Slider Dinámico -->
+@if(isset($slider) && $slider->items->count() > 0)
+    <div id="heroSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" style="min-height: 100vh;">
+        <div class="carousel-inner h-100">
+            @foreach($slider->items->where('is_active', true) as $index => $slide)
+                <div class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100 position-relative" style="min-height: 100vh; background: url('{{ $slide->image_url }}') center/cover fixed;">
+                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%);"></div>
+                    <section class="h-100 d-flex align-items-center position-relative pt-5">
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="col-lg-7 text-white">
+                                    <h1 class="display-3 fw-black mb-4 animate__animated animate__fadeInUp" style="font-family: 'Outfit', sans-serif; line-height: 1.1;">
+                                        {{ $slide->title }}
+                                    </h1>
+                                    <p class="lead mb-5 opacity-75 fw-light animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.25rem; max-width: 600px;">
+                                        {{ $slide->subtitle }}
+                                    </p>
+                                    @if($slide->button_text)
+                                        <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s">
+                                            <a href="{{ $slide->button_link }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">{{ $slide->button_text }}</a>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            @endforeach
+        </div>
+        @if($slider->items->where('is_active', true)->count() > 1)
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        @endif
+    </div>
+@else
+    <div class="position-relative overflow-hidden" style="min-height: 100vh; background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover fixed;">
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%);"></div>
+        <section class="h-100 d-flex align-items-center position-relative pt-5">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-lg-7 text-white">
+                        <span class="badge rounded-pill bg-primary bg-opacity-25 text-info mb-3 px-3 py-2 border border-info border-opacity-25">ASOCIACIÓN PROFESIONAL</span>
+                        <h1 class="display-3 fw-black mb-4" style="font-family: 'Outfit', sans-serif; line-height: 1.1;">
+                            Excelencia y Ética en la <br><span style="background: linear-gradient(120deg, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Terapia Ocupacional</span>
+                        </h1>
+                        <p class="lead mb-5 opacity-75 fw-light" style="font-size: 1.25rem; max-width: 600px;">
+                            Promovemos el desarrollo científico, ético y profesional de nuestros colegiados, garantizando la calidad de la atención en salud para toda la comunidad.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="{{ route('login') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">Ingresar al Portal</a>
+                            <a href="#quienes-somos" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-medium backdrop-blur">Conocer más</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
+@endif
 
 <!-- Quiénes Somos & Organigrama -->
 <section id="institucional" class="py-5" style="background-color: #f8fafc;">

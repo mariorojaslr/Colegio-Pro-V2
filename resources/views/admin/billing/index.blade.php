@@ -14,9 +14,12 @@
                         <button class="btn btn-outline-dark rounded-pill px-3 btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#feesConfigModal">
                             <i class="bi-gear-fill me-1"></i> Cuotas
                         </button>
-                        <button class="btn btn-primary rounded-pill px-3 btn-sm shadow-sm fw-bold">
-                            <i class="bi-plus-circle-fill me-1"></i> Generar Masivo
-                        </button>
+                        <form action="{{ route('admin.billing.generate_dues') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-primary rounded-pill px-3 btn-sm shadow-sm fw-bold" onclick="return confirm('¿Generar cuotas societarias para todos los socios activos? Esto generará deuda en sus estados de cuenta.')">
+                                <i class="bi-plus-circle-fill me-1"></i> Generar Masivo
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

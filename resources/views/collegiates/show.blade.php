@@ -43,7 +43,9 @@
                         <p class="small text-danger fw-bold mt-2"><i class="bi bi-exclamation-triangle"></i> Regularizar para habilitar</p>
                     @endif
                     
-                    <button class="btn btn-outline-primary rounded-pill py-2 fw-bold small mt-3">Editar Ficha <i class="bi bi-pencil ms-1"></i></button>
+                    <button type="button" class="btn btn-outline-primary rounded-pill py-2 fw-bold small mt-3" data-bs-toggle="modal" data-bs-target="#editCollegiateModal">
+                        Editar Ficha <i class="bi bi-pencil ms-1"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -169,6 +171,73 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Ficha -->
+<div class="modal fade" id="editCollegiateModal" tabindex="-1" aria-labelledby="editCollegiateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom py-3">
+                <h5 class="modal-title fw-bold text-dark" id="editCollegiateModalLabel">
+                    <i class="bi bi-pencil-square me-2 text-primary"></i> Editar Ficha del Colegiado
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('collegiates.update', $collegiate) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body p-4 bg-light-subtle">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Nombre(s)</label>
+                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name', $collegiate->first_name) }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Apellido(s)</label>
+                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name', $collegiate->last_name) }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">DNI</label>
+                            <input type="text" class="form-control" name="dni" value="{{ old('dni', $collegiate->dni) }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Nro. Matrícula</label>
+                            <input type="text" class="form-control" name="registration_number" value="{{ old('registration_number', $collegiate->registration_number) }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Correo Electrónico</label>
+                            <input type="email" class="form-control" name="email" value="{{ old('email', $collegiate->email) }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Teléfono</label>
+                            <input type="text" class="form-control" name="phone" value="{{ old('phone', $collegiate->phone) }}">
+                        </div>
+                        
+                        <div class="col-12 mt-4 pt-3 border-top">
+                            <h6 class="fw-bold mb-3">Estado Institucional</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Situación / Estado Actual</label>
+                            <select name="professional_situation" class="form-select" required>
+                                <option value="Activo" {{ old('professional_situation', $collegiate->professional_situation ?? 'Activo') == 'Activo' ? 'selected' : '' }}>Activo</option>
+                                <option value="Suspendido" {{ old('professional_situation', $collegiate->professional_situation) == 'Suspendido' ? 'selected' : '' }}>Suspendido</option>
+                                <option value="Retirado" {{ old('professional_situation', $collegiate->professional_situation) == 'Retirado' ? 'selected' : '' }}>Retirado</option>
+                                <option value="Fallecido" {{ old('professional_situation', $collegiate->professional_situation) == 'Fallecido' ? 'selected' : '' }}>Fallecido</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Nota Financiera (Opcional)</label>
+                            <input type="text" class="form-control" name="financial_situation_note" placeholder="Ej. Plan de pagos activo" value="{{ old('financial_situation_note', $collegiate->financial_situation_note) }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Guardar Cambios</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -107,4 +107,44 @@ class BillingController extends Controller
 
         return back()->with('success', 'Monto de cuota societaria actualizado.');
     }
+
+    /**
+     * Generar cuota del mes para todos los colegiados activos.
+     */
+    public function generateMonthlyDues()
+    {
+        $schoolId = auth()->user()->school_id;
+        $activeFee = MembershipFee::where('school_id', $schoolId)->where('is_active', true)->first();
+
+        if (!$activeFee) {
+            return back()->with('error', 'Debe definir un valor de cuota activo primero.');
+        }
+
+        $collegiates = Collegiate::where('school_id', $schoolId)->where('status', 'active')->get();
+        $dueDate = Carbon::now()->endOfMonth(); // Vencimiento a fin de mes
+        $count = 0;
+
+        foreach ($collegiates as $collegiate) {
+            // Evitar duplicados en el mismo mes
+            $exists = CollegiateDue::where('collegiate_id', $collegiate->id)
+                ->whereYear('due_date', $dueDate->year)
+                ->whereMonth('due_date', $dueDate->month)
+                ->exists();
+
+            if (!$exists) {
+                CollegiateDue::create([
+                    'collegiate_id' => $collegiate->id,
+                    'amount' => $activeFee->amount,
+                    'due_date' => clone $dueDate,
+                    'status' => 'pending'
+                ]);
+                
+                // Si se generó deuda, el usuario pasa a no estar al día
+                $collegiate->update(['is_fees_compliant' => false]);
+                $count++;
+            }
+        }
+
+        return back()->with('success', "Se generaron $count cuotas para el mes actual.");
+    }
 }

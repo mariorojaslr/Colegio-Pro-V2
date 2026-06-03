@@ -79,6 +79,30 @@ class CollegiateController extends Controller
         return view('collegiates.show', compact('collegiate', 'requirements'));
     }
 
+    public function update(Request $request, Collegiate $collegiate)
+    {
+        $user = Auth::user();
+        
+        // Seguridad: Solo admin del mismo colegio puede editar
+        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
+
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'dni' => 'required|string|max:20',
+            'registration_number' => 'required|string|max:50',
+            'professional_situation' => 'required|string|max:100',
+            'financial_situation_note' => 'nullable|string'
+        ]);
+
+        $collegiate->update($request->all());
+
+        return back()->with('success', 'Ficha del colegiado actualizada correctamente.');
+    }
+
     /**
      * Genera el Certificado de Habilitación Profesional.
      */

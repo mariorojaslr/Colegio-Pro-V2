@@ -316,6 +316,18 @@
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('ui.padron') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('ui.finances') }}</a></li>
+                                
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'cms') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
+                                        Gestor Web (CMS)
+                                    </a>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.pages.index') }}"><i class="bi bi-file-earmark-richtext me-2 text-primary"></i>Páginas Dinámicas</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.menus.index') }}"><i class="bi bi-list-nested me-2 text-primary"></i>Menús y Navegación</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.sliders.index') }}"><i class="bi bi-images me-2 text-primary"></i>Sliders y Banners</a></li>
+                                    </ul>
+                                </li>
+
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('ui.ethics') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
                                 <li class="nav-item dropdown">
@@ -344,48 +356,32 @@
                             @else
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'payment') ? 'text-primary' : 'text-muted' }}" href="{{ route('payment.index') }}">Mis Pagos</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('ui.compliance') }}</a></li>
                             @endif
                         @else
-                            {{-- En la Landing Page mostramos el menú institucional completo solicitado --}}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#" data-bs-toggle="dropdown">
-                                    Institucional
-                                </a>
-                                <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2 bg-dark">
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-white" href="#">Historia</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Qué es el Colegio?</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold text-uppercase" href="#">Normativas</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Asamblea</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Consejo Directivo</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Tribunal de Disciplina</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold text-uppercase" href="#">Boletín Oficial</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Comisiones de Trabajo</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Relaciones Interinstitucionales</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#" data-bs-toggle="dropdown">
-                                    Ejercicio Profesional
-                                </a>
-                                <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2 bg-dark">
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Matriculación</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Honorarios Mínimos Éticos</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Habilitación de Consultorio</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Legislación</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Código de Ética</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Ámbitos de Actuación Profesional</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Incumbencias</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Certificado de Ética</a></li>
-                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="#">Consentimiento informado</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Auxiliares de Justicia</a></li>
-                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ url('escuela-virtual') }}">Capacitaciones</a></li>
-                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Beneficios</a></li>
-                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ route('news.index') }}">Noticias</a></li>
-                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Contacto</a></li>
-                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Denuncias</a></li>
+                        @if(isset($mainMenu) && $mainMenu)
+                            @foreach($mainMenu->items as $item)
+                                @if($item->children->count() > 0)
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#" data-bs-toggle="dropdown">
+                                            {{ $item->title }}
+                                        </a>
+                                        <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2 bg-dark">
+                                            @foreach($item->children as $child)
+                                                @if($child->is_active)
+                                                    <li><a class="dropdown-item py-2 x-small fw-bold text-white hover-gold" href="{{ $child->page_id ? route('public.page', $child->page->slug) : $child->url }}" target="{{ $child->target }}">{{ $child->title }}</a></li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @else
+                                    <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ $item->page_id ? route('public.page', $item->page->slug) : $item->url }}" target="{{ $item->target }}">{{ $item->title }}</a></li>
+                                @endif
+                            @endforeach
+                        @else
+                            <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Configura tu menú en el CMS</a></li>
+                        @endif
                         @endif
                     @else
                         <li class="nav-item dropdown">
@@ -423,7 +419,7 @@
                         <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Auxiliares de Justicia</a></li>
                         <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ url('escuela-virtual') }}">Capacitaciones</a></li>
                         <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Beneficios</a></li>
-                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Noticias</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="{{ route('news.index') }}">Noticias</a></li>
                         <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Contacto</a></li>
                         <li class="nav-item"><a class="nav-link px-2 x-small fw-bold ls-1 text-uppercase text-dark" href="#">Denuncias</a></li>
                     @endauth
@@ -493,9 +489,9 @@
             <div style="font-size: 10px">Ética</div>
         </a>
         @else
-        <a href="{{ route('billing.index') }}" class="text-center text-decoration-none {{ request()->routeIs('billing.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+        <a href="{{ route('payment.index') }}" class="text-center text-decoration-none {{ request()->routeIs('payment.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <i class="bi bi-credit-card m-0" style="font-size: 1.4rem"></i>
-            <div style="font-size: 10px">Mi Plan</div>
+            <div style="font-size: 10px">Mis Pagos</div>
         </a>
         <a href="{{ route('compliance.index') }}" class="text-center text-decoration-none {{ request()->routeIs('compliance.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <i class="bi bi-folder2-open m-0" style="font-size: 1.4rem"></i>
@@ -590,79 +586,120 @@
             });
         });
     </script>
-    <!-- Asistente IA 'Carina' (Burbuja Flotante Premium) -->
-    <div class="position-fixed bottom-0 end-0 mb-4 me-4 d-none d-md-block" style="z-index: 1061;">
-        <button class="btn btn-primary rounded-circle shadow-lg p-0 border-4 border-white animate__animated animate__bounceIn" 
-                style="width: 65px; height: 65px; background: linear-gradient(135deg, #0F172A, #2563EB);"
-                data-bs-toggle="offcanvas" data-bs-target="#carinaManual">
-            <i class="bi bi-robot fs-2 text-white"></i>
+    <!-- Asistente IA de Voz 'Carina' (Burbuja Flotante Premium) -->
+    @auth
+    <div class="position-fixed bottom-0 end-0 mb-4 me-4" style="z-index: 1061;">
+        <button id="carinaVoiceBtn" class="btn btn-primary rounded-circle shadow-lg p-0 border-4 border-white animate__animated animate__bounceIn" 
+                style="width: 65px; height: 65px; background: linear-gradient(135deg, #0F172A, #2563EB); transition: all 0.3s ease;">
+            <i id="carinaVoiceIcon" class="bi bi-mic-fill fs-2 text-white"></i>
         </button>
     </div>
-
-    <!-- Manual Interactivo de Carina (Offcanvas) -->
-    <div class="offcanvas offcanvas-end border-0 shadow-lg" tabindex="-1" id="carinaManual" style="width: 400px; border-radius: 30px 0 0 30px;">
-        <div class="offcanvas-header bg-dark text-white p-4" style="border-radius: 30px 0 0 0;">
-            <div class="d-flex align-items-center gap-3">
-                <div class="bg-primary rounded-circle p-2"><i class="bi bi-robot fs-4"></i></div>
-                <div>
-                    <h5 class="offcanvas-title fw-bold mb-0">Soy Carina</h5>
-                    <small class="opacity-75">Instructora Permanente</small>
-                </div>
-            </div>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body p-4 bg-light-subtle">
-            <div class="chat-bubble bg-white p-3 rounded-4 shadow-sm mb-4 border-start border-4 border-primary animate__animated animate__fadeIn">
-                @if(request()->is('/'))
-                    <p class="small mb-0 fw-bold text-dark">¡Hola! Bienvenido a la vitrina de Colegio-Pro.</p>
-                    <p class="x-small mb-0 mt-2">Aquí puedes explorar las ventajas de nuestra infraestructura SaaS para instituciones profesionales.</p>
-                @elseif(request()->routeIs('home'))
-                    <p class="small mb-0 fw-bold text-dark">Estás en tu Centro de Mando.</p>
-                    <p class="x-small mb-0 mt-2">He analizado los datos: observa las tarjetas de arriba para ver rápidamente la morosidad y las bajas del día.</p>
-                @elseif(request()->is('finanzas*'))
-                    <p class="small mb-0 fw-bold text-dark">Bienvenido al área de Cobranzas.</p>
-                    <p class="x-small mb-0 mt-2">Aquí gestionamos deudas y convenios. Recuerda que un convenio activo suspende temporalmente el estado de morosidad clínica.</p>
-                @elseif(request()->is('gestion-etica*'))
-                    <p class="small mb-0 fw-bold text-dark">Módulo de Disciplina y Ética.</p>
-                    <p class="x-small mb-0 mt-2">Las sanciones aquí registradas bloquean automáticamente la emisión de certificados de habilitación.</p>
-                @else
-                    <p class="small mb-0 fw-medium">Soy tu guía en esta sección. ¿En qué puedo orientarte hoy?</p>
-                @endif
-            </div>
-
-            <h6 class="xx-small text-uppercase ls-2 text-secondary fw-bold mb-3">Guía Rápida</h6>
-            <div class="list-group list-group-flush rounded-4 overflow-hidden shadow-sm border mb-4">
-                @if(request()->routeIs('home'))
-                    <div class="list-group-item p-3 border-0 bg-white">
-                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-graph-up me-2"></i>Métricas Críticas</h6>
-                        <p class="x-small text-muted mb-0">Haz clic en la tarjeta de "Mora Arancelaria" para ir directo al listado de cobranza.</p>
-                    </div>
-                @elseif(request()->is('finanzas*'))
-                    <div class="list-group-item p-3 border-0 bg-white">
-                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-file-earmark-text me-2"></i>Convenios 12x10</h6>
-                        <p class="x-small text-muted mb-0">Esta función permite condonar 2 cuotas a cambio de un compromiso de pago anual.</p>
-                    </div>
-                @elseif(request()->is('gestion-etica*'))
-                    <div class="list-group-item p-3 border-0 bg-white">
-                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-shield-lock me-2"></i>Bloqueo de Certificados</h6>
-                        <p class="x-small text-muted mb-0">Un sancionado no puede descargar su credencial digital ni certificados de libre deuda.</p>
-                    </div>
-                @else
-                    <div class="list-group-item p-3 border-0 bg-white">
-                        <h6 class="fw-bold mb-1 small text-primary"><i class="bi bi-info-circle me-2"></i>Navegación</h6>
-                        <p class="x-small text-muted mb-0">Usa el menú superior para saltar entre los diferentes subsistemas integrados.</p>
-                    </div>
-                @endif
-            </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const voiceBtn = document.getElementById('carinaVoiceBtn');
+            const voiceIcon = document.getElementById('carinaVoiceIcon');
             
-            <div class="mt-4 text-center">
-                <div class="p-3 bg-white rounded-4 shadow-sm border mb-2">
-                    <img src="{{ asset('media/carina_wave.png') }}" alt="IA wave" class="img-fluid" style="max-height: 100px;">
-                </div>
-                <p class="x-small text-muted italic mt-3">"Mi objetivo es que la administración de tu institución sea invisible, elegante y perfecta."</p>
-            </div>
-        </div>
-    </div>
+            if (!voiceBtn) return;
+            
+            // Verificamos soporte
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                console.warn('Speech Recognition API no soportada en este navegador.');
+                voiceBtn.style.display = 'none';
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'es-ES';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            let isRecording = false;
+
+            voiceBtn.addEventListener('click', () => {
+                if (isRecording) {
+                    recognition.stop();
+                    return;
+                }
+                
+                recognition.start();
+                isRecording = true;
+                
+                // Efecto visual de grabación
+                voiceBtn.classList.add('animate__pulse', 'animate__infinite');
+                voiceBtn.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+                voiceIcon.classList.replace('bi-mic-fill', 'bi-mic-mute-fill');
+            });
+
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                console.log('Detectado:', speechResult);
+                
+                // Efecto de procesamiento
+                voiceBtn.classList.remove('animate__pulse', 'animate__infinite');
+                voiceBtn.classList.add('animate__swing');
+                voiceBtn.style.background = 'linear-gradient(135deg, #eab308, #ca8a04)';
+                voiceIcon.classList.replace('bi-mic-mute-fill', 'bi-hourglass-split');
+
+                // Enviar a nuestro backend
+                fetch('{{ route('ai.voice') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ text: speechResult })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Restaurar botón
+                    voiceBtn.classList.remove('animate__swing');
+                    voiceBtn.style.background = 'linear-gradient(135deg, #0F172A, #2563EB)';
+                    voiceIcon.classList.replace('bi-hourglass-split', 'bi-mic-fill');
+                    
+                    if(data.status === 'success') {
+                        // Reproducir respuesta hablada
+                        const utterance = new SpeechSynthesisUtterance(data.spoken_response);
+                        utterance.lang = 'es-ES';
+                        utterance.rate = 1.0;
+                        utterance.pitch = 1.0;
+                        
+                        // Redirigir si Gemini mandó una URL válida
+                        if(data.action_url) {
+                            utterance.onend = () => {
+                                window.location.href = data.action_url;
+                            };
+                        }
+                        
+                        window.speechSynthesis.speak(utterance);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    voiceBtn.style.background = 'linear-gradient(135deg, #0F172A, #2563EB)';
+                    voiceIcon.classList.replace('bi-hourglass-split', 'bi-mic-fill');
+                });
+                
+                isRecording = false;
+            };
+
+            recognition.onspeechend = () => {
+                recognition.stop();
+                isRecording = false;
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Error de reconocimiento de voz:', event.error);
+                isRecording = false;
+                voiceBtn.classList.remove('animate__pulse', 'animate__infinite');
+                voiceBtn.style.background = 'linear-gradient(135deg, #0F172A, #2563EB)';
+                voiceIcon.classList.replace('bi-mic-mute-fill', 'bi-mic-fill');
+            };
+        });
+    </script>
+    @endauth
 
     @yield('scripts')
 </body>

@@ -51,10 +51,8 @@ Route::get('/force-admin-mario', function() {
 Route::get('/v/{uuid}', [\App\Http\Controllers\ValidationController::class, 'show'])->name('validation.show');
 Route::post('/v/{uuid}/burn', [\App\Http\Controllers\ValidationController::class, 'burn'])->name('validation.burn');
 
-Route::get('/', function () {
-    $plans = \App\Models\SubscriptionPlan::all();
-    return view('welcome', compact('plans'));
-});
+Route::get('/', [\App\Http\Controllers\PublicLandingController::class, 'index']);
+Route::get('/p/{slug}', [\App\Http\Controllers\PublicLandingController::class, 'showPage'])->name('public.page');
 
 // Demo Registration
 Route::get('/demo/unirse', [App\Http\Controllers\DemoRegistrationController::class, 'show'])->name('demo.register');
@@ -130,9 +128,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mi-plan', [\App\Http\Controllers\BillingController::class, 'index'])->name('billing.index');
     Route::post('/mi-plan/upgrade', [\App\Http\Controllers\BillingController::class, 'upgrade'])->name('billing.upgrade');
 
+    // CMS y Constructor de Páginas (Admin de Colegio)
+    Route::get('/cms/paginas', [\App\Http\Controllers\Admin\CmsController::class, 'pagesIndex'])->name('admin.cms.pages.index');
+    Route::get('/cms/paginas/nueva', [\App\Http\Controllers\Admin\CmsController::class, 'pagesCreate'])->name('admin.cms.pages.create');
+    Route::post('/cms/paginas', [\App\Http\Controllers\Admin\CmsController::class, 'pagesStore'])->name('admin.cms.pages.store');
+    Route::get('/cms/paginas/{page}/editar', [\App\Http\Controllers\Admin\CmsController::class, 'pagesEdit'])->name('admin.cms.pages.edit');
+    Route::put('/cms/paginas/{page}', [\App\Http\Controllers\Admin\CmsController::class, 'pagesUpdate'])->name('admin.cms.pages.update');
+    
+    Route::get('/cms/menus', [\App\Http\Controllers\Admin\CmsController::class, 'menusIndex'])->name('admin.cms.menus.index');
+    Route::post('/cms/menus', [\App\Http\Controllers\Admin\CmsController::class, 'menusStore'])->name('admin.cms.menus.store');
+    Route::post('/cms/menus/{menu}/items', [\App\Http\Controllers\Admin\CmsController::class, 'menuItemsStore'])->name('admin.cms.menus.items.store');
+
+    Route::get('/cms/sliders', [\App\Http\Controllers\Admin\CmsController::class, 'slidersIndex'])->name('admin.cms.sliders.index');
+    Route::post('/cms/sliders', [\App\Http\Controllers\Admin\CmsController::class, 'slidersStore'])->name('admin.cms.sliders.store');
+    Route::post('/cms/sliders/{slider}/items', [\App\Http\Controllers\Admin\CmsController::class, 'sliderItemsStore'])->name('admin.cms.sliders.items.store');
+
     // Asistente IA
     Route::get('/ai/asistente', [App\Http\Controllers\AIController::class, 'index'])->name('ai.index');
     Route::post('/ai/query', [App\Http\Controllers\AIController::class, 'query'])->name('ai.query');
+    Route::post('/ai/voice-command', [App\Http\Controllers\AIController::class, 'voiceCommand'])->name('ai.voice');
 
     // Gestión de Colegiados (Admin de Colegio)
     Route::get('/colegiados', [\App\Http\Controllers\CollegiateController::class, 'index'])->name('collegiates.index');
@@ -140,9 +154,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/colegiados/importar', [\App\Http\Controllers\CollegiateController::class, 'import'])->name('collegiates.import');
     Route::post('/colegiados/importar', [\App\Http\Controllers\CollegiateController::class, 'storeImport'])->name('collegiates.import.store');
     Route::get('/colegiados/{collegiate}', [\App\Http\Controllers\CollegiateController::class, 'show'])->name('collegiates.show');
+    Route::put('/colegiados/{collegiate}', [\App\Http\Controllers\CollegiateController::class, 'update'])->name('collegiates.update');
     Route::get('/colegiados/{collegiate}/certificado', [\App\Http\Controllers\CollegiateController::class, 'certificate'])->name('collegiates.certificate');
 
     // Motor de Pagos y Liquidaciones
+    Route::get('/mis-pagos', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
     Route::post('/pagar/cuotas', [\App\Http\Controllers\PaymentController::class, 'payDues'])->name('payment.dues');
     Route::post('/pagar/reserva/{booking}', [\App\Http\Controllers\PaymentController::class, 'payBooking'])->name('payment.booking');
 
@@ -179,6 +195,7 @@ Route::middleware(['auth'])->group(function () {
     // Facturación Institucional (Admin de Colegio)
     Route::get('/finanzas', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
     Route::post('/mi-facturacion/cuota', [\App\Http\Controllers\Admin\BillingController::class, 'updateFee'])->name('admin.billing.update_fee');
+    Route::post('/mi-facturacion/generar-cuotas', [\App\Http\Controllers\Admin\BillingController::class, 'generateMonthlyDues'])->name('admin.billing.generate_dues');
     Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'download'])->name('billing.download');
 
     // Gestión de Ética y Sanciones (Admin de Colegio)

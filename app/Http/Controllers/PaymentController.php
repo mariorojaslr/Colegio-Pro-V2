@@ -10,9 +10,27 @@ use Illuminate\Support\Facades\Auth;
 class PaymentController extends Controller
 {
     /**
-     * Procesa el pago de cuotas societarias (Simulación / Placeholder Pasarela).
+     * Portal del socio: Estado de cuenta y selección de cuotas a pagar.
      */
-    public function payDues()
+    public function index()
+    {
+        $user = Auth::user();
+        $collegiate = Collegiate::where('user_id', $user->id)->first();
+
+        if (!$collegiate) {
+            return back()->with('error', 'No tiene un perfil de colegiado asociado.');
+        }
+
+        $pendingDues = $collegiate->pendingDues;
+        $paidDues = $collegiate->dues()->where('status', 'paid')->orderBy('paid_at', 'desc')->get();
+
+        return view('student.payments.index', compact('collegiate', 'pendingDues', 'paidDues'));
+    }
+
+    /**
+     * Procesa el pago de cuotas societarias (Simulación Sandbox Mercado Pago).
+     */
+    public function payDues(Request $request)
     {
         $user = Auth::user();
         $collegiate = Collegiate::where('user_id', $user->id)->first();
@@ -21,14 +39,32 @@ class PaymentController extends Controller
             return back()->with('error', 'Su perfil no está vinculado a una matrícula activa.');
         }
 
-        // LÓGICA DE PASARELA (Aquí iría la redirección a MercadoPago/Stripe)
-        // Por ahora simulamos el éxito inmediato del pago:
+        $duesIds = $request->input('dues', []);
         
-        $collegiate->update([
-            'is_fees_compliant' => true
-        ]);
+        if (empty($duesIds)) {
+            return back()->with('error', 'Debe seleccionar al menos una cuota para pagar.');
+        }
 
-        return redirect()->route('home')->with('success', '¡Pago recibido exitosamente! Su estado de habilitación ha sido actualizado.');
+        // LÓGICA DE SIMULACIÓN DE PASARELA
+        // Obtenemos las cuotas y marcamos como pagadas.
+        $dues = \App\Models\CollegiateDue::whereIn('id', $duesIds)->where('collegiate_id', $collegiate->id)->get();
+        
+        foreach ($dues as $due) {
+            $due->update([
+                'status' => 'paid',
+                'paid_at' => now(),
+                'payment_reference' => 'MP-SIMULADO-' . uniqid()
+            ]);
+        }
+
+        // Si ya no le quedan cuotas vencidas, lo marcamos al día
+        if ($collegiate->pendingDues->where('status', 'overdue')->count() === 0) {
+            $collegiate->update([
+                'is_fees_compliant' => true
+            ]);
+        }
+
+        return redirect()->route('payment.index')->with('success', '¡Pago simulado exitosamente con Mercado Pago Sandbox! Su cuenta ha sido actualizada.');
     }
 
     /**
