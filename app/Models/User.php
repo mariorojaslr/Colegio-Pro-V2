@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function isOwner()
     {
-        return $this->role === 'OWNER';
+        return strtoupper($this->role) === 'OWNER';
     }
 
     /**

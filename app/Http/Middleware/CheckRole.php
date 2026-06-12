@@ -27,7 +27,10 @@ class CheckRole
         $user = auth()->user();
 
         // Si el rol del usuario está dentro de la lista permitida para la ruta, continuar
-        if (in_array($user->role, $roles)) {
+        $userRole = strtoupper($user->role);
+        $allowedRoles = array_map('strtoupper', $roles);
+        
+        if (in_array($userRole, $allowedRoles)) {
             return $next($request);
         }
 
