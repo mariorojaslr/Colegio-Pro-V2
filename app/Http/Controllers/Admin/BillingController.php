@@ -86,6 +86,59 @@ class BillingController extends Controller
     }
 
     /**
+     * Registrar un pago múltiple de forma presencial.
+     */
+    public function payInPerson(Request $request)
+    {
+        $request->validate([
+            'collegiate_id' => 'required|exists:collegiates,id',
+            'dues_ids' => 'required|array',
+            'dues_ids.*' => 'exists:collegiate_dues,id',
+            'payment_method' => 'required|in:efectivo,transferencia,debito,credito',
+            'notes' => 'nullable|string'
+        ]);
+
+        $collegiate = Collegiate::findOrFail($request->collegiate_id);
+        
+        // Validar seguridad de la escuela
+        if (!auth()->user()->isOwner() && $collegiate->school_id !== auth()->user()->school_id) {
+            abort(403);
+        }
+
+        $dues = CollegiateDue::whereIn('id', $request->dues_ids)
+                             ->where('collegiate_id', $collegiate->id)
+                             ->get();
+
+        $methodNames = [
+            'efectivo' => 'Efectivo',
+            'transferencia' => 'Transferencia',
+            'debito' => 'Tarjeta de Débito',
+            'credito' => 'Tarjeta de Crédito'
+        ];
+        
+        $methodLabel = $methodNames[$request->payment_method] ?? 'Otro';
+        $reference = "Presencial - {$methodLabel}";
+        if ($request->notes) {
+            $reference .= " | Obs: " . $request->notes;
+        }
+
+        foreach ($dues as $due) {
+            $due->update([
+                'status' => 'paid',
+                'paid_at' => now(),
+                'payment_reference' => substr($reference, 0, 255)
+            ]);
+        }
+
+        // Revisar si ya no le quedan cuotas vencidas y marcarlo al día
+        if ($collegiate->pendingDues()->where('status', 'overdue')->count() === 0) {
+            $collegiate->update(['is_fees_compliant' => true]);
+        }
+
+        return back()->with('success', 'Pago presencial de ' . count($dues) . ' cuota(s) registrado correctamente.');
+    }
+
+    /**
      * Ajustar el monto de la cuota societaria para el colegio.
      */
     public function updateFee(Request $request)

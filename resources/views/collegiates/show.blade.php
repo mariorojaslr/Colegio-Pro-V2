@@ -165,8 +165,61 @@
                                 @endif
                             </p>
                             @if(!$collegiate->is_fees_compliant)
-                                <button class="btn btn-danger rounded-pill px-5 py-3 fw-bold shadow-lg">Notificar Deuda Ahora <i class="bi bi-send ms-2"></i></button>
+                                <button class="btn btn-danger rounded-pill px-5 py-3 fw-bold shadow-lg mb-4">Notificar Deuda Ahora <i class="bi bi-send ms-2"></i></button>
                             @endif
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold m-0">Historial de Cuotas</h5>
+                                <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#payInPersonModal">
+                                    <i class="bi bi-cash-coin me-1"></i> Registrar Pago Presencial
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="bg-light border-0">
+                                        <tr class="xx-small fw-bold text-muted uppercase ls-1">
+                                            <th class="py-2 px-4 border-0">Periodo</th>
+                                            <th class="py-2 border-0">Vencimiento</th>
+                                            <th class="py-2 border-0 text-end">Monto</th>
+                                            <th class="py-2 border-0 text-center">Estado</th>
+                                            <th class="py-2 px-4 border-0">Referencia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($collegiate->dues as $due)
+                                            <tr class="border-bottom border-white border-opacity-10">
+                                                <td class="py-3 px-4 border-0 fw-bold small text-dark">
+                                                    {{ \Carbon\Carbon::parse($due->due_date)->translatedFormat('F Y') }}
+                                                </td>
+                                                <td class="py-3 border-0 small text-muted">
+                                                    {{ \Carbon\Carbon::parse($due->due_date)->format('d/m/Y') }}
+                                                </td>
+                                                <td class="py-3 border-0 text-end fw-bold">
+                                                    ${{ number_format($due->amount, 0, ',', '.') }}
+                                                </td>
+                                                <td class="py-3 border-0 text-center">
+                                                    @if($due->status == 'paid')
+                                                        <span class="badge bg-success rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">PAGADO</span>
+                                                    @elseif($due->status == 'pending')
+                                                        <span class="badge bg-warning rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">PENDIENTE</span>
+                                                    @else
+                                                        <span class="badge bg-danger rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">VENCIDO</span>
+                                                    @endif
+                                                </td>
+                                                <td class="py-3 px-4 border-0 xx-small text-muted">
+                                                    {{ $due->payment_reference ?: '-' }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center py-4 text-muted small">No hay cuotas registradas.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -236,6 +289,64 @@
                 <div class="modal-footer border-top py-3">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Pago Presencial -->
+<div class="modal fade" id="payInPersonModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom py-3">
+                <h5 class="modal-title fw-bold text-dark">
+                    <i class="bi bi-cash-coin me-2 text-primary"></i> Registrar Pago Presencial
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('admin.billing.pay_in_person') }}" method="POST">
+                @csrf
+                <input type="hidden" name="collegiate_id" value="{{ $collegiate->id }}">
+                <div class="modal-body p-4 bg-light-subtle">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-muted">Seleccionar Cuotas a Pagar</label>
+                        <div class="list-group rounded-3 shadow-sm border-0">
+                            @forelse($collegiate->dues->whereIn('status', ['pending', 'overdue']) as $due)
+                                <label class="list-group-item d-flex justify-content-between align-items-center py-3 border-0 border-bottom">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input class="form-check-input flex-shrink-0" type="checkbox" name="dues_ids[]" value="{{ $due->id }}" checked>
+                                        <div>
+                                            <div class="fw-bold text-dark small">{{ \Carbon\Carbon::parse($due->due_date)->translatedFormat('F Y') }}</div>
+                                            <div class="text-muted xx-small uppercase">Vence: {{ \Carbon\Carbon::parse($due->due_date)->format('d/m/Y') }}</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-light text-dark border rounded-pill px-3 py-2 fw-bold shadow-sm">${{ number_format($due->amount, 0, ',', '.') }}</span>
+                                </label>
+                            @empty
+                                <div class="p-3 text-center text-muted small">No hay cuotas pendientes.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Método de Pago</label>
+                        <select name="payment_method" class="form-select border-0 shadow-sm rounded-3 py-2" required>
+                            <option value="efectivo">Efectivo en Oficina</option>
+                            <option value="transferencia">Transferencia Bancaria</option>
+                            <option value="debito">Tarjeta de Débito</option>
+                            <option value="credito">Tarjeta de Crédito</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label fw-bold small text-muted">Observaciones Adicionales</label>
+                        <input type="text" class="form-control border-0 shadow-sm rounded-3 py-2" name="notes" placeholder="Ej: Recibo Nro. 1234">
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Confirmar Pago</button>
                 </div>
             </form>
         </div>

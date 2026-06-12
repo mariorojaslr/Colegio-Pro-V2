@@ -22,11 +22,12 @@
     
     <style>
         body { background-color: #F8FAFC; font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
-        .sidebar { width: 280px; min-height: 100vh; background: var(--primary-color); color: white; transition: all 0.3s; z-index: 1040; }
+        .sidebar { width: 280px; min-height: 100vh; background: var(--primary-color); color: white; transition: all 0.3s; z-index: 1040; flex-shrink: 0; }
         .sidebar .nav-link { color: rgba(255,255,255,0.7); font-weight: 500; padding: 12px 20px; border-radius: 12px; margin: 4px 15px; border: 1px solid transparent; transition: all 0.2s; }
         .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.05); }
         .sidebar-brand { padding: 30px 20px; text-align: center; }
-        .main-content { flex: 1; min-width: 0; background: #f8fafc; }
+        .main-content { flex: 1; min-width: 0; background: #f8fafc; width: calc(100% - 280px); }
+        @media (max-width: 991.98px) { .main-content { width: 100%; } }
         .stat-card { border-radius: 20px; border: 0; transition: transform 0.2s, background-color 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .stat-card:hover { transform: translateY(-5px); }
         .table-premium { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 0 !important; }
@@ -63,9 +64,9 @@
     <!-- Sidebar -->
     <div class="sidebar d-none d-lg-block sticky-top h-100">
         <div class="sidebar-brand">
-            <img src="{{ asset('media/logo.png') }}" alt="CP Logo" height="50" class="mb-2">
-            <h5 class="fw-bold m-0" style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">COLEGIO-PRO</h5>
-            <small class="opacity-50">OWNER PANEL</small>
+            <img src="{{ asset('images/logo_cotolar.jpeg') }}" alt="Cotolar Logo" height="80" class="mb-2" style="border-radius: 10px; max-width: 100%; object-fit: contain;">
+            <h5 class="fw-bold m-0 mt-2" style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">COTOLAR</h5>
+            <div class="x-small text-white-50 mt-1">Portal Administrativo</div>
         </div>
         
         <nav class="nav flex-column mb-auto">
@@ -105,8 +106,9 @@
         <!-- Topbar: Barra superior de navegación y perfil -->
         <nav class="navbar navbar-expand bg-white py-3 px-4 sticky-top shadow-sm">
             <div class="container-fluid justify-content-between p-0">
-                <div class="d-flex flex-column">
-                    <h4 class="m-0 fw-bold" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">
+                {{-- Lado izquierdo: Título y saludo --}}
+                <div class="d-flex flex-column me-3" style="min-width: 0;">
+                    <h4 class="m-0 fw-bold text-truncate" style="font-family: 'Outfit', sans-serif; color: var(--primary-color)">
                         @yield('header', 'Dashboard Central')
                     </h4>
                     @php
@@ -114,11 +116,13 @@
                         $hour = date('H');
                         $greeting = $hour < 12 ? 'Buenos días' : ($hour < 19 ? 'Buenas tardes' : 'Buenas noches');
                     @endphp
-                    <span class="x-small text-muted fw-medium d-none d-sm-block">
+                    <span class="x-small text-muted fw-medium d-none d-md-block text-truncate">
                         {{ $greeting }}, <span class="text-primary fw-bold">{{ $user->name }}</span>. Bienvenido de vuelta al centro de mando.
                     </span>
                 </div>
                 
+                {{-- Lado derecho: Controles de la barra superior --}}
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
                     {{-- Dark Mode Toggle --}}
                     <button class="btn btn-light rounded-circle theme-toggle-btn p-0 border-0 shadow-sm d-flex align-items-center justify-content-center" id="themeToggle" title="Cambiar Tema">
                         <i class="bi bi-moon-stars-fill text-dark fs-5" id="themeIcon"></i>
@@ -178,8 +182,8 @@
                             </li>
                         </ul>
                     </div>
-                </div>
-            </div>
+                </div>{{-- Cierre del wrapper d-flex align-items-center (lado derecho) --}}
+            </div>{{-- Cierre del container-fluid --}}
         </nav>
 
         <div class="p-4 p-lg-5">

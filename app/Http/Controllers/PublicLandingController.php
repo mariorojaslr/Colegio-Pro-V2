@@ -11,7 +11,7 @@ class PublicLandingController extends Controller
 {
     public function index()
     {
-        // Obtener el menú principal (suponiendo que hay un colegio por defecto o se usa el primero para demo)
+        // Obtener el colegio activo por dominio (Aquí usamos el primero para Terapistas)
         $school = \App\Models\School::first(); 
         
         $mainMenu = Menu::where('school_id', $school->id ?? 1)
@@ -29,7 +29,7 @@ class PublicLandingController extends Controller
 
         $plans = \App\Models\SubscriptionPlan::all();
 
-        return view('welcome', compact('mainMenu', 'slider', 'plans'));
+        return view('welcome', compact('school', 'mainMenu', 'slider', 'plans'));
     }
 
     public function showPage($slug)

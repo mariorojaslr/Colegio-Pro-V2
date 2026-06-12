@@ -196,6 +196,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/finanzas', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
     Route::post('/mi-facturacion/cuota', [\App\Http\Controllers\Admin\BillingController::class, 'updateFee'])->name('admin.billing.update_fee');
     Route::post('/mi-facturacion/generar-cuotas', [\App\Http\Controllers\Admin\BillingController::class, 'generateMonthlyDues'])->name('admin.billing.generate_dues');
+    Route::post('/mi-facturacion/pago-presencial', [\App\Http\Controllers\Admin\BillingController::class, 'payInPerson'])->name('admin.billing.pay_in_person');
     Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'download'])->name('billing.download');
 
     // Gestión de Ética y Sanciones (Admin de Colegio)

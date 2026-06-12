@@ -45,10 +45,34 @@ class PaymentController extends Controller
             return back()->with('error', 'Debe seleccionar al menos una cuota para pagar.');
         }
 
-        // LÓGICA DE SIMULACIÓN DE PASARELA
-        // Obtenemos las cuotas y marcamos como pagadas.
         $dues = \App\Models\CollegiateDue::whereIn('id', $duesIds)->where('collegiate_id', $collegiate->id)->get();
-        
+        $totalAmount = $dues->sum('amount');
+
+        /* 
+         * INTEGRACIÓN MERCADO PAGO (PREPARADA)
+         * Cuando el cliente provea su ACCESS_TOKEN, se habilita este bloque:
+         * 
+         * \MercadoPago\SDK::setAccessToken(env('MP_ACCESS_TOKEN'));
+         * $preference = new \MercadoPago\Preference();
+         * 
+         * $item = new \MercadoPago\Item();
+         * $item->title = 'Cuotas Societarias - ' . $collegiate->registration_number;
+         * $item->quantity = 1;
+         * $item->unit_price = $totalAmount;
+         * $preference->items = array($item);
+         * 
+         * $preference->back_urls = array(
+         *    "success" => route('payment.success'),
+         *    "failure" => route('payment.failure'),
+         *    "pending" => route('payment.pending')
+         * );
+         * $preference->auto_return = "approved";
+         * $preference->save();
+         * 
+         * return redirect($preference->init_point);
+         */
+
+        // LÓGICA DE SIMULACIÓN DE PASARELA (Fallback temporal hasta cargar credenciales)
         foreach ($dues as $due) {
             $due->update([
                 'status' => 'paid',
@@ -57,14 +81,11 @@ class PaymentController extends Controller
             ]);
         }
 
-        // Si ya no le quedan cuotas vencidas, lo marcamos al día
         if ($collegiate->pendingDues->where('status', 'overdue')->count() === 0) {
-            $collegiate->update([
-                'is_fees_compliant' => true
-            ]);
+            $collegiate->update(['is_fees_compliant' => true]);
         }
 
-        return redirect()->route('payment.index')->with('success', '¡Pago simulado exitosamente con Mercado Pago Sandbox! Su cuenta ha sido actualizada.');
+        return redirect()->route('payment.index')->with('success', '¡Pago procesado exitosamente (Modo Sandbox MP)! Su cuenta ha sido actualizada.');
     }
 
     /**

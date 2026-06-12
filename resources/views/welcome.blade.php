@@ -7,9 +7,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);">
     <div class="container-fluid px-4">
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 10px; display:flex; justify-content:center; align-items:center;">
-                <i class="bi bi-shield-plus text-white fs-4"></i>
-            </div>
+            <img src="{{ asset('images/logo_cotolar.jpeg') }}" alt="Cotolar Logo" height="40" style="border-radius: 8px;">
             <span style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">Colegio de Terapistas <span class="text-primary">Ocupacionales</span></span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +53,7 @@
 @if(isset($slider) && $slider->items->count() > 0)
     <div id="heroSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" style="min-height: 100vh;">
         <div class="carousel-inner h-100">
-            @foreach($slider->items->where('is_active', true) as $index => $slide)
+            @foreach($slider->items as $index => $slide)
                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100 position-relative" style="min-height: 100vh; background: url('{{ $slide->image_url }}') center/cover fixed;">
                     <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%);"></div>
                     <section class="h-100 d-flex align-items-center position-relative pt-5">
@@ -66,11 +64,11 @@
                                         {{ $slide->title }}
                                     </h1>
                                     <p class="lead mb-5 opacity-75 fw-light animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.25rem; max-width: 600px;">
-                                        {{ $slide->subtitle }}
+                                        {{ $slide->description }}
                                     </p>
-                                    @if($slide->button_text)
+                                    @if($slide->link)
                                         <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s">
-                                            <a href="{{ $slide->button_link }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">{{ $slide->button_text }}</a>
+                                            <a href="{{ $slide->link }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">Ingresar al Portal</a>
                                         </div>
                                     @endif
                                 </div>
@@ -80,7 +78,7 @@
                 </div>
             @endforeach
         </div>
-        @if($slider->items->where('is_active', true)->count() > 1)
+        @if($slider->items->count() > 1)
             <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Anterior</span>

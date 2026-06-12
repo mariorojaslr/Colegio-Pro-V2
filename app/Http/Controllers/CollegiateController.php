@@ -70,8 +70,10 @@ class CollegiateController extends Controller
         if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
         if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
 
-        // Cargamos los documentos entregados y los requisitos de este colegio
-        $collegiate->load(['documents.requirement']);
+        // Cargamos los documentos entregados y las cuotas de este colegio
+        $collegiate->load(['documents.requirement', 'dues' => function($q) {
+            $q->orderBy('due_date', 'desc');
+        }]);
         
         $requirements = \App\Models\ComplianceRequirement::where('school_id', $collegiate->school_id)
             ->get();
