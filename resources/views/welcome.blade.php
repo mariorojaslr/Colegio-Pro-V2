@@ -6,15 +6,18 @@
 <!-- Barra de Navegación Institucional Superior -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);">
     <div class="container-fluid px-4">
+        @php
+            $tenant = $currentTenant ?? (\App\Models\School::where('slug', 'cotolar')->first() ?? \App\Models\School::first());
+        @endphp
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-            @if(isset($school) && $school->logo)
-                <img src="{{ asset($school->logo) }}" alt="{{ $school->name }}" height="40" style="border-radius: 8px;">
+            @if($tenant && $tenant->logo)
+                <img src="{{ asset($tenant->logo) }}" alt="{{ $tenant->name }}" style="height: 85px; width: 85px; object-fit: cover;" class="me-2 rounded-circle border border-2 border-primary shadow-sm bg-white">
             @else
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 10px; display:flex; justify-content:center; align-items:center;">
-                    <i class="bi bi-shield-plus text-white fs-4"></i>
+                <div style="width: 85px; height: 85px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; display:flex; justify-content:center; align-items:center;" class="me-2 shadow-sm">
+                    <i class="bi bi-shield-plus text-white fs-2"></i>
                 </div>
             @endif
-            <span style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;" class="d-none d-sm-inline">{{ $school->name ?? 'Colegio de Terapistas' }}</span>
+            <span style="font-family: 'Outfit', sans-serif; letter-spacing: -0.5px; font-size: 1.5rem;" class="d-none d-sm-inline text-truncate">{{ strtoupper($tenant->name ?? 'COLEGIO') }}</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

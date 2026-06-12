@@ -30,7 +30,7 @@ class TenantIsolationSeeder extends Seeder
         $cotolarSchool = \App\Models\School::firstOrCreate(
             ['slug' => 'cotolar'],
             [
-                'name' => 'Colegio de Terapeutas Ocupacionales Cotolar',
+                'name' => 'Cotolar',
                 'logo' => 'images/logo_cotolar.jpeg',
                 'member_singular' => 'Terapeuta Ocupacional',
                 'member_plural' => 'Terapeutas Ocupacionales',
@@ -42,6 +42,8 @@ class TenantIsolationSeeder extends Seeder
                 'has_academy' => true
             ]
         );
+
+        $cotolarSchool->update(['name' => 'Cotolar']);
 
         // 3. Crear el usuario Administrador de Cotolar
         $admin = \App\Models\User::firstOrCreate(
