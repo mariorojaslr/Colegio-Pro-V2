@@ -7,7 +7,7 @@
 <div class="row g-4 mb-4">
     {{-- Métrica: Recaudación Global (Financiero) --}}
     <div class="col-md-4">
-        <div class="card card-premium p-4 border-crystalline h-100" style="background: linear-gradient(135deg, #0F172A 0%, #000 100%) !important;">
+        <div class="card card-premium p-4 border-crystalline h-100 text-white" style="background: linear-gradient(135deg, #0F172A 0%, #000 100%) !important;">
             <div class="d-flex align-items-center mb-2">
                 <div class="rounded-circle bg-white bg-opacity-10 p-2 me-3 shadow-sm">
                     <i class="bi bi-wallet2 fs-4 text-primary"></i>

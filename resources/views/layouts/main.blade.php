@@ -215,9 +215,25 @@
     <nav class="navbar navbar-expand-lg py-2 sticky-top bg-white border-bottom border-light shadow-sm" style="transition: all 0.4s ease; z-index: 1050;">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ auth()->check() ? route('home') : url('/') }}">
-                <img src="{{ asset('media/logo.png') }}" alt="Colegio-Pro" height="32" class="me-2 opacity-75">
-                <span class="d-none d-sm-inline fw-black ls-n1" style="color: #0f172a; font-size: 1.1rem;">COLEGIO</span>
-                <span class="d-none d-sm-inline fw-light" style="color: #64748b; font-size: 1.1rem; margin-left: 1px;">PRO</span>
+                @php
+                    $isOwnerView = auth()->check() && auth()->user()->isOwner() && !session()->has('impersonator_id');
+                    $currentSchool = auth()->check() && !$isOwnerView ? auth()->user()->school : (\App\Models\School::where('slug', 'cotolar')->first() ?? \App\Models\School::first());
+                @endphp
+
+                @if($isOwnerView)
+                    <img src="{{ asset('media/logo.png') }}" alt="Colegio-Pro" height="32" class="me-2 opacity-75">
+                    <span class="d-none d-sm-inline fw-black ls-n1" style="color: #0f172a; font-size: 1.1rem;">COLEGIO</span>
+                    <span class="d-none d-sm-inline fw-light" style="color: #64748b; font-size: 1.1rem; margin-left: 1px;">PRO</span>
+                @else
+                    @if($currentSchool && $currentSchool->logo)
+                        <img src="{{ asset($currentSchool->logo) }}" alt="{{ $currentSchool->name }}" style="height: 40px; width: 40px; object-fit: cover;" class="me-2 rounded-circle border border-2 border-primary shadow-sm">
+                    @else
+                        <div class="me-2 rounded-circle shadow-sm" style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display:flex; justify-content:center; align-items:center;">
+                            <i class="bi bi-shield-plus text-white fs-5"></i>
+                        </div>
+                    @endif
+                    <span class="d-none d-sm-inline fw-black ls-n1 text-truncate" style="color: #0f172a; font-size: 1.1rem; max-width: 250px;">{{ strtoupper($currentSchool->name ?? 'COLEGIO') }}</span>
+                @endif
             </a>
             <button class="navbar-toggler border-0 order-last shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <i class="bi bi-list fs-1" id="mobileMenuIcon"></i>
