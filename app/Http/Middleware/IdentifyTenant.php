@@ -20,11 +20,24 @@ class IdentifyTenant
         
         $tenant = null;
 
-        // If it's a multi-part domain (e.g., cotolar.gentepiola.net)
-        // or just localhost (e.g., we can map it)
+        // 1. Check via subdomain
         if (count($parts) > 1 && $host !== 'localhost' && $host !== '127.0.0.1') {
             $subdomain = $parts[0];
             $tenant = \App\Models\School::where('slug', $subdomain)->first();
+        }
+
+        // 2. Check via query parameter (Pseudo-subdominio para facilitar enlaces temporales)
+        if (!$tenant && $request->has('tenant')) {
+            $tenant = \App\Models\School::where('slug', $request->query('tenant'))->first();
+            // Guardar en sesión para recordarlo
+            if ($tenant) {
+                session(['active_tenant_id' => $tenant->id]);
+            }
+        }
+
+        // 3. Check via session
+        if (!$tenant && session()->has('active_tenant_id')) {
+            $tenant = \App\Models\School::find(session('active_tenant_id'));
         }
 
         // Fallback for local testing or unmapped domains

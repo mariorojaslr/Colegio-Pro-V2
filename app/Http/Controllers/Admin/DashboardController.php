@@ -30,12 +30,16 @@ class DashboardController extends Controller
             'total_images' => School::sum('total_images'),
             'streaming_usage' => School::sum('streaming_usage'), // Minutos de streaming consumidos
             'total_revenue' => PaymentRecord::where('status', 'paid')->sum('amount'), // Ingresos totales confirmados
+            'mrr' => \App\Models\Subscription::where('status', 'active')->join('subscription_plans', 'subscriptions.subscription_plan_id', '=', 'subscription_plans.id')->sum('subscription_plans.price'),
         ];
 
-        // Se obtienen los colegios con el conteo de sus usuarios relacionados
-        $schools = School::withCount('users')->latest()->get();
+        // Se obtienen los colegios con el conteo de sus usuarios y colegiados
+        $schools = School::withCount(['users', 'collegiates'])->with('activeSubscription.plan')->latest()->get();
+        
+        // Obtenemos los logs recientes para el panel lateral de monitoreo
+        $recentLogs = \App\Models\ActivityLog::with('user')->latest()->take(10)->get();
 
-        return view('admin.dashboard', compact('stats', 'schools'));
+        return view('admin.dashboard', compact('stats', 'schools', 'recentLogs'));
     }
 
     /**
