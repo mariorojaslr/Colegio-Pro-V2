@@ -64,9 +64,28 @@
     <!-- Sidebar -->
     <div class="sidebar d-none d-lg-block sticky-top h-100">
         <div class="sidebar-brand">
-            <img src="{{ asset('images/logo_cotolar.jpeg') }}" alt="Cotolar Logo" height="80" class="mb-2" style="border-radius: 10px; max-width: 100%; object-fit: contain;">
-            <h5 class="fw-bold m-0 mt-2" style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">COTOLAR</h5>
-            <div class="x-small text-white-50 mt-1">Portal Administrativo</div>
+            @php
+                $isOwnerView = auth()->user()->isOwner() && !session()->has('impersonator_id');
+                $currentSchool = $isOwnerView ? null : auth()->user()->school;
+            @endphp
+
+            @if($isOwnerView)
+                <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center bg-white text-primary fw-bold mb-2 shadow" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <h5 class="fw-bold m-0 mt-2" style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">COLEGIO-PRO</h5>
+                <div class="x-small text-white-50 mt-1">Panel de Control Global</div>
+            @else
+                @if($currentSchool && $currentSchool->logo)
+                    <img src="{{ asset($currentSchool->logo) }}" alt="{{ $currentSchool->name }}" height="80" class="mb-2" style="border-radius: 10px; max-width: 100%; object-fit: contain;">
+                @else
+                    <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center bg-white text-primary fw-bold mb-2 shadow" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                        {{ substr($currentSchool->name ?? 'C', 0, 1) }}
+                    </div>
+                @endif
+                <h6 class="fw-bold m-0 mt-2 text-wrap" style="font-family: 'Outfit', sans-serif; letter-spacing: 1px; font-size: 0.9rem;">{{ strtoupper($currentSchool->name ?? 'Portal') }}</h6>
+                <div class="x-small text-white-50 mt-1">Administración Institucional</div>
+            @endif
         </div>
         
         <nav class="nav flex-column mb-auto">

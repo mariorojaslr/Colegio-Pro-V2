@@ -11,8 +11,8 @@ class PublicLandingController extends Controller
 {
     public function index()
     {
-        // Obtener el colegio activo por dominio (Aquí usamos el primero para Terapistas)
-        $school = \App\Models\School::first(); 
+        // Obtener el colegio activo por dominio o slug (Priorizamos Cotolar en esta etapa)
+        $school = \App\Models\School::where('slug', 'cotolar')->first() ?? \App\Models\School::first(); 
         
         $mainMenu = Menu::where('school_id', $school->id ?? 1)
                         ->where('location', 'header')
@@ -34,7 +34,7 @@ class PublicLandingController extends Controller
 
     public function showPage($slug)
     {
-        $school = \App\Models\School::first(); 
+        $school = \App\Models\School::where('slug', 'cotolar')->first() ?? \App\Models\School::first();
         
         $page = Page::where('school_id', $school->id ?? 1)
                     ->where('slug', $slug)

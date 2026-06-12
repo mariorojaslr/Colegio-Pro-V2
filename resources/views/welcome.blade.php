@@ -7,8 +7,14 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);">
     <div class="container-fluid px-4">
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-            <img src="{{ asset('images/logo_cotolar.jpeg') }}" alt="Cotolar Logo" height="40" style="border-radius: 8px;">
-            <span style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;">Colegio de Terapistas <span class="text-primary">Ocupacionales</span></span>
+            @if(isset($school) && $school->logo)
+                <img src="{{ asset($school->logo) }}" alt="{{ $school->name }}" height="40" style="border-radius: 8px;">
+            @else
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 10px; display:flex; justify-content:center; align-items:center;">
+                    <i class="bi bi-shield-plus text-white fs-4"></i>
+                </div>
+            @endif
+            <span style="font-family: 'Outfit', sans-serif; letter-spacing: 1px;" class="d-none d-sm-inline">{{ $school->name ?? 'Colegio de Terapistas' }}</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
