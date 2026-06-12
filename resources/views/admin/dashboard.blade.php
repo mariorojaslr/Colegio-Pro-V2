@@ -340,7 +340,7 @@
                     </td>
                     <td>
                         <div class="text-white" style="font-size: 0.8rem;">
-                            {{ $school->activeSubscription ? $school->activeSubscription->ends_at->format('d/m/Y') : '14/06/2026' }}
+                            {{ $school->activeSubscription && $school->activeSubscription->ends_at ? $school->activeSubscription->ends_at->format('d/m/Y') : 'Ilimitado' }}
                         </div>
                     </td>
                     <td class="text-center">
