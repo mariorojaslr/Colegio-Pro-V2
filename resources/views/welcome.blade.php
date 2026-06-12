@@ -11,10 +11,10 @@
         @endphp
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
             @if($tenant && $tenant->logo)
-                <img src="{{ asset($tenant->logo) }}" alt="{{ $tenant->name }}" style="height: 85px; width: 85px; object-fit: cover;" class="me-2 rounded-circle border border-2 border-primary shadow-sm bg-white">
+                <img src="{{ asset($tenant->logo) }}" alt="{{ $tenant->name }}" style="height: 110px; width: 110px; object-fit: cover;" class="me-2 rounded-circle border border-2 border-primary shadow-sm bg-white">
             @else
-                <div style="width: 85px; height: 85px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; display:flex; justify-content:center; align-items:center;" class="me-2 shadow-sm">
-                    <i class="bi bi-shield-plus text-white fs-2"></i>
+                <div style="width: 110px; height: 110px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; display:flex; justify-content:center; align-items:center;" class="me-2 shadow-sm">
+                    <i class="bi bi-shield-plus text-white fs-1"></i>
                 </div>
             @endif
             <span style="font-family: 'Outfit', sans-serif; letter-spacing: -0.5px; font-size: 1.5rem;" class="d-none d-sm-inline text-truncate">{{ strtoupper($tenant->name ?? 'COLEGIO') }}</span>
@@ -128,78 +128,42 @@
     <div class="container py-5">
         <div class="text-center mb-5 pb-3">
             <h6 class="text-primary fw-bold text-uppercase tracking-wider">Nuestro Equipo</h6>
-            <h2 class="display-5 fw-bold text-dark" style="font-family: 'Outfit', sans-serif;">Comisión Directiva</h2>
-            <p class="text-muted fs-5 mx-auto" style="max-width: 700px;">Conozca a los profesionales que lideran nuestra institución, dedicados a fortalecer la práctica de la Terapia Ocupacional.</p>
+            <h2 class="display-5 fw-bold text-dark" style="font-family: 'Outfit', sans-serif;">Autoridades Institucionales</h2>
+            <p class="text-muted fs-5 mx-auto" style="max-width: 700px;">Conozca a los profesionales que lideran nuestra institución y velan por la excelencia en nuestra práctica.</p>
         </div>
 
-        <!-- Organigrama Glassmorphism -->
-        <div class="row justify-content-center g-4">
-            <!-- Presidenta -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
-                    <div style="height: 120px; background: linear-gradient(135deg, #3b82f6, #8b5cf6);"></div>
-                    <div class="position-absolute w-100 text-center" style="top: 50px;">
-                        @php
-                            $presPhoto = asset('images/presidenta_colegio_1779502458929.png');
-                        @endphp
-                        <img src="{{ $presPhoto }}" alt="Presidenta" class="rounded-circle shadow-lg border border-4 border-white" style="width: 140px; height: 140px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-center pt-5 mt-4 pb-4 px-4">
-                        <h4 class="fw-bold mb-1 mt-3" style="color: #1e293b;">Dra. Elena Vargas</h4>
-                        <p class="text-primary fw-bold small text-uppercase mb-3" style="letter-spacing: 1px;">Presidenta</p>
-                        <p class="text-muted small mb-4">Especialista en Rehabilitación Neurológica con más de 20 años de trayectoria institucional.</p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="#" class="btn btn-sm btn-light text-primary rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-linkedin"></i></a>
-                            <a href="#" class="btn btn-sm btn-light text-primary rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-envelope"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Secretario -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
-                    <div style="height: 120px; background: linear-gradient(135deg, #0ea5e9, #3b82f6);"></div>
-                    <div class="position-absolute w-100 text-center" style="top: 50px;">
-                        @php
-                            $secPhoto = asset('images/secretario_colegio_1779502476148.png');
-                        @endphp
-                        <img src="{{ $secPhoto }}" alt="Secretario" class="rounded-circle shadow-lg border border-4 border-white" style="width: 140px; height: 140px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-center pt-5 mt-4 pb-4 px-4">
-                        <h4 class="fw-bold mb-1 mt-3" style="color: #1e293b;">Lic. Martín Rossi</h4>
-                        <p class="text-info fw-bold small text-uppercase mb-3" style="letter-spacing: 1px;">Secretario General</p>
-                        <p class="text-muted small mb-4">Coordinador de políticas públicas y normativas de la práctica profesional y legislación.</p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="#" class="btn btn-sm btn-light text-info rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-linkedin"></i></a>
-                            <a href="#" class="btn btn-sm btn-light text-info rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-envelope"></i></a>
-                        </div>
+        @if(isset($boardMembers) && $boardMembers->count() > 0)
+            @foreach($boardMembers as $department => $members)
+                <div class="mb-5">
+                    <h3 class="fw-bold mb-4 text-center text-secondary" style="font-family: 'Outfit', sans-serif;">{{ $department }}</h3>
+                    <div class="row justify-content-center g-4">
+                        @foreach($members as $member)
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
+                                    <div style="height: 80px; background: linear-gradient(135deg, {{ $member->is_substitute ? '#94a3b8, #cbd5e1' : '#3b82f6, #8b5cf6' }});"></div>
+                                    <div class="position-absolute w-100 text-center" style="top: 30px;">
+                                        @php
+                                            $photo = $member->image_path ? asset($member->image_path) : 'https://ui-avatars.com/api/?name='.urlencode($member->name).'&color=fff&background='.($member->is_substitute ? '94a3b8' : '3b82f6');
+                                        @endphp
+                                        <img src="{{ $photo }}" alt="{{ $member->name }}" class="rounded-circle shadow-sm border border-3 border-white bg-white" style="width: 100px; height: 100px; object-fit: cover;">
+                                    </div>
+                                    <div class="card-body text-center pt-5 mt-3 pb-3 px-3">
+                                        <h5 class="fw-bold mb-1 mt-2" style="color: #1e293b; font-size: 1.1rem;">{{ $member->name }}</h5>
+                                        <p class="fw-bold small text-uppercase mb-2 {{ $member->is_substitute ? 'text-secondary' : 'text-primary' }}" style="letter-spacing: 0.5px; font-size: 0.8rem;">
+                                            {{ $member->role }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
+            @endforeach
+        @else
+            <div class="alert alert-info text-center">
+                Aún no se han configurado las autoridades para este colegio.
             </div>
-
-            <!-- Tesorera -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
-                    <div style="height: 120px; background: linear-gradient(135deg, #f59e0b, #ef4444);"></div>
-                    <div class="position-absolute w-100 text-center" style="top: 50px;">
-                        @php
-                            $tesPhoto = asset('images/tesorera_colegio_1779502490381.png');
-                        @endphp
-                        <img src="{{ $tesPhoto }}" alt="Tesorera" class="rounded-circle shadow-lg border border-4 border-white" style="width: 140px; height: 140px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-center pt-5 mt-4 pb-4 px-4">
-                        <h4 class="fw-bold mb-1 mt-3" style="color: #1e293b;">Lic. Valeria Montes</h4>
-                        <p class="text-warning fw-bold small text-uppercase mb-3" style="letter-spacing: 1px;">Tesorera</p>
-                        <p class="text-muted small mb-4">Especialista en administración institucional, encargada del fondo de becas y matriculación.</p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="#" class="btn btn-sm btn-light text-warning rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-linkedin"></i></a>
-                            <a href="#" class="btn btn-sm btn-light text-warning rounded-circle" style="width: 35px; height:35px;"><i class="bi bi-envelope"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endif
     </div>
 </section>
 

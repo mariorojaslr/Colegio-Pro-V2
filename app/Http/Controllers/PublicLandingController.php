@@ -22,14 +22,19 @@ class PublicLandingController extends Controller
                         }])
                         ->first();
 
-        $slider = Slider::where('school_id', $school->id ?? 1)
+        $slider = \App\Models\Slider::where('school_id', $school->id ?? 1)
                         ->where('is_active', true)
                         ->with('items')
                         ->first();
 
         $plans = \App\Models\SubscriptionPlan::all();
 
-        return view('welcome', compact('school', 'mainMenu', 'slider', 'plans'));
+        $boardMembers = \App\Models\BoardMember::where('school_id', $school->id ?? 1)
+                                               ->orderBy('order')
+                                               ->get()
+                                               ->groupBy('department');
+
+        return view('welcome', compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers'));
     }
 
     public function showPage($slug)

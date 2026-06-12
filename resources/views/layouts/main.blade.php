@@ -226,10 +226,10 @@
                     <span class="d-none d-sm-inline fw-light" style="color: #64748b; font-size: 1.1rem; margin-left: 1px;">PRO</span>
                 @else
                     @if($tenant && $tenant->logo)
-                        <img src="{{ asset($tenant->logo) }}" alt="{{ $tenant->name }}" style="height: 85px; width: 85px; object-fit: cover;" class="me-3 rounded-circle border border-2 border-primary shadow-sm bg-white">
+                        <img src="{{ asset($tenant->logo) }}" alt="{{ $tenant->name }}" style="height: 110px; width: 110px; object-fit: cover;" class="me-3 rounded-circle border border-2 border-primary shadow-sm bg-white">
                     @else
-                        <div class="me-3 rounded-circle shadow-sm" style="width: 85px; height: 85px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display:flex; justify-content:center; align-items:center;">
-                            <i class="bi bi-shield-plus text-white fs-2"></i>
+                        <div class="me-3 rounded-circle shadow-sm" style="width: 110px; height: 110px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display:flex; justify-content:center; align-items:center;">
+                            <i class="bi bi-shield-plus text-white fs-1"></i>
                         </div>
                     @endif
                     <span class="d-none d-sm-inline fw-black ls-n1 text-truncate" style="color: #0f172a; font-size: 1.5rem; max-width: 400px; letter-spacing: -0.5px;">{{ strtoupper($tenant->name ?? 'COLEGIO') }}</span>
