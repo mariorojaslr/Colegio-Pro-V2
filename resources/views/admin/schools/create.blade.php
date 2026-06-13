@@ -30,14 +30,18 @@
                     </div>
 
                     <div class="row g-4 mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Slug (Subdominio)</label>
                             <div class="input-group">
                                 <input type="text" name="slug" class="form-control rounded-start-pill px-4 py-3 border-light shadow-none" placeholder="san-agustin" required>
-                                <span class="input-group-text bg-light border-light text-muted px-3">.colegio-pro.cl</span>
+                                <span class="input-group-text bg-light border-light text-muted px-3">.gentepiola.net</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Dominio Propio (Opcional)</label>
+                            <input type="text" name="custom_domain" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="ej: colegio.cl">
+                        </div>
+                        <div class="col-md-4">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Plan de Suscripción</label>
                             <select name="subscription_plan_id" class="form-select rounded-pill px-4 py-3 border-light shadow-none" required>
                                 <option value="">Seleccione un plan...</option>

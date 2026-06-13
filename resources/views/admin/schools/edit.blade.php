@@ -23,9 +23,17 @@
                     <h5 class="fw-bold mb-4" style="color: var(--primary-color)">Información General</h5>
                     
                     <div class="row g-4 mb-4">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Nombre del Colegio</label>
                             <input type="text" name="name" value="{{ $school->name }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Slug (Subdominio)</label>
+                            <input type="text" name="slug" value="{{ $school->slug }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Dominio Propio (Opcional)</label>
+                            <input type="text" name="custom_domain" value="{{ $school->custom_domain }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="ej: colegio.cl">
                         </div>
                     </div>
 

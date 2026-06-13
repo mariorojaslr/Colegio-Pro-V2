@@ -20,8 +20,11 @@ class IdentifyTenant
         
         $tenant = null;
 
-        // 1. Check via subdomain
-        if (count($parts) > 1 && $host !== 'localhost' && $host !== '127.0.0.1') {
+        // 1. Check via custom domain first
+        $tenant = \App\Models\School::where('custom_domain', $host)->first();
+
+        // 2. Check via subdomain if not found by custom domain
+        if (!$tenant && count($parts) > 1 && $host !== 'localhost' && $host !== '127.0.0.1') {
             $subdomain = $parts[0];
             $tenant = \App\Models\School::where('slug', $subdomain)->first();
         }

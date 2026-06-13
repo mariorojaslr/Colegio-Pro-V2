@@ -45,6 +45,7 @@ class SchoolController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|unique:schools,slug|max:255',
+            'custom_domain' => 'nullable|string|unique:schools,custom_domain|max:255',
             'subscription_plan_id' => 'required|exists:subscription_plans,id',
             'admin_name' => 'required|string|max:255',
             'admin_email' => 'required|email|unique:users,email',
@@ -60,6 +61,7 @@ class SchoolController extends Controller
             $school = School::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->slug),
+                'custom_domain' => $request->custom_domain,
                 'plan_category' => $plan->slug,
                 'primary_color' => $request->primary_color ?? '#0F172A',
                 'secondary_color' => $request->secondary_color ?? '#3B82F6',
@@ -114,12 +116,14 @@ class SchoolController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'slug' => "required|string|unique:schools,slug,{$school->id}|max:255",
+            'custom_domain' => "nullable|string|unique:schools,custom_domain,{$school->id}|max:255",
             'is_active' => 'boolean',
         ]);
 
         $school->update([
             'name' => $request->name,
             'slug' => Str::slug($request->slug),
+            'custom_domain' => $request->custom_domain,
             'member_singular' => $request->member_singular,
             'member_plural' => $request->member_plural,
             'primary_color' => $request->primary_color,
