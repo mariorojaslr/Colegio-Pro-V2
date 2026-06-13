@@ -102,6 +102,14 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     // Módulo de Auditoría y Seguridad Global (Owner side)
     Route::get('/auditoria', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.activity_logs.index');
 
+    // Ajustes Globales (Owner side)
+    Route::post('/admin/global-settings/domain', function (\Illuminate\Http\Request $request) {
+        if (!auth()->user()->isOwner()) abort(403);
+        $request->validate(['base_domain' => 'required|string']);
+        \App\Models\GlobalSetting::setVal('base_domain', $request->base_domain);
+        return back()->with('success', 'Dominio base actualizado correctamente.');
+    })->name('admin.global_settings.update_domain');
+
     // Finanzas Globales (Owner side)
     Route::get('/admin/global-billing', [\App\Http\Controllers\Admin\GlobalBillingController::class, 'index'])->name('admin.billing.global');
 
