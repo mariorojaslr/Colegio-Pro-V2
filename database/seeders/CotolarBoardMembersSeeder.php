@@ -40,8 +40,7 @@ class CotolarBoardMembersSeeder extends Seeder
 
         foreach ($members as $m) {
             BoardMember::create(array_merge($m, [
-                'school_id' => $school->id,
-                'is_active' => true,
+                'school_id' => $school->id
             ]));
         }
     }
