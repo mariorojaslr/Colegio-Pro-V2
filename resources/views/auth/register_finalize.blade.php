@@ -20,28 +20,71 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background-image: radial-gradient(circle at 50% -20%, #1e293b, #0f172a);
+            background: radial-gradient(circle at 50% -20%, #1e293b, #0f172a);
+            overflow: hidden;
         }
+
+        /* Micro-Animations (Piripipí) */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+            50% { box-shadow: 0 0 25px {{ $currentTenant->primary_color ?? '#3b82f6' }}88; }
+            100% { box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        }
+
         .login-box {
-            background-color: #1e293b;
-            border-radius: 12px;
-            padding: 2.5rem;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 3rem 2.5rem 2.5rem;
             width: 100%;
             max-width: 450px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .login-logo-container {
-            background: #000;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 1.5rem;
-            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            margin-top: 40px;
         }
+
+        .login-logo-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid {{ $currentTenant->primary_color ?? '#3b82f6' }};
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 4s ease-in-out infinite, pulseGlow 3s infinite;
+            z-index: 10;
+        }
+
         .login-logo-container img {
-            max-height: 60px;
+            max-height: 80px;
             max-width: 100%;
+            object-fit: contain;
+        }
+
+        .login-logo-container .logo-text {
+            color: #000;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 0;
+            line-height: 1.1;
         }
         .form-control {
             background-color: #0f172a;

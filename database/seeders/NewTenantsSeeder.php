@@ -17,6 +17,7 @@ class NewTenantsSeeder extends Seeder
             ['slug' => 'arquitectos'],
             [
                 'name' => "CAPLaR - Colegio de Arquitectos de La Rioja",
+                'logo' => "img/logo-arquitectos.svg",
                 'primary_color' => "#000000", // Black from their logo
                 'secondary_color' => "#ffffff", // White
                 'is_active' => true,
@@ -29,6 +30,7 @@ class NewTenantsSeeder extends Seeder
             ['slug' => 'trabajosocial'],
             [
                 'name' => "Consejo Profesional de Trabajo Social La Rioja",
+                'logo' => "img/logo-trabajosocial.svg",
                 'primary_color' => "#1E3A8A", // Blue from the logo
                 'secondary_color' => "#DC2626", // Red from the logo
                 'is_active' => true,
