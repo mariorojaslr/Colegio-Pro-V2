@@ -1,339 +1,183 @@
+@if(isset($currentTenant) && view()->exists('tenants.' . $currentTenant->slug . '.auth.login'))
+    @include('tenants.' . $currentTenant->slug . '.auth.login')
+@else
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso | Colegio-Pro</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('media/favicon.png') }}">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap 5 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar sesión - {{ $currentTenant->name ?? 'Colegio-Pro' }}</title>
+    <link rel="manifest" href="/manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #2563eb;
-            --accent: #d4af37;
-            --bg-dark: #0f172a;
-            --font-main: 'Inter', sans-serif;
-            --font-headings: 'Outfit', sans-serif;
-        }
-
         body {
-            font-family: var(--font-main);
-            background-color: #f8fafc;
-            min-height: 100vh;
-            overflow-x: hidden;
-            margin: 0;
+            background-color: #0f172a; /* Slate 900 */
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
             display: flex;
-        }
-
-        /* SPLIT SCREEN DESIGN */
-        .auth-container {
-            display: flex;
-            width: 100%;
-            height: 100vh;
-        }
-
-        /* Lado Izquierdo: Branding & Visuals (Solo visible en Desktop) */
-        .auth-branding {
-            flex: 1;
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 60px;
-            color: white;
-            position: relative;
-        }
-
-        @media (max-width: 991.98px) {
-            .auth-branding { display: none; }
-        }
-
-        /* Lado Derecho: Formulario Estilizado */
-        .auth-form-wrapper {
-            flex: 0 0 500px;
-            background: white;
-            display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding: 60px;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.05);
-            z-index: 10;
+            min-height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at 50% -20%, #1e293b, #0f172a);
         }
-
-        @media (max-width: 991.98px) {
-            .auth-form-wrapper { flex: 1; padding: 40px 30px; }
-        }
-
-        .auth-logo {
-            margin-bottom: 40px;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .auth-logo span {
-            font-family: var(--font-headings);
-            font-weight: 900;
-            font-size: 1.5rem;
-            color: var(--bg-dark);
-            letter-spacing: -1px;
-        }
-        
-        .auth-logo .accent { color: var(--primary); }
-
-        .auth-header h1 {
-            font-family: var(--font-headings);
-            font-weight: 800;
-            font-size: 2rem;
-            letter-spacing: -0.5px;
-            color: var(--bg-dark);
-            margin-bottom: 10px;
-        }
-
-        .auth-header p {
-            color: #64748b;
-            font-weight: 400;
-            margin-bottom: 40px;
-        }
-
-        /* INPUTS ESTILO ROLLS-ROYCE */
-        .form-label {
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #94a3b8;
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            border: 2px solid #f1f5f9;
+        .login-box {
+            background-color: #1e293b; /* Slate 800 */
             border-radius: 12px;
-            padding: 14px 18px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--bg-dark);
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-            background: white;
-        }
-
-        .btn-auth {
-            background: var(--bg-dark);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-weight: 700;
-            font-size: 1rem;
+            padding: 2.5rem;
             width: 100%;
-            margin-top: 20px;
-            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            overflow: hidden;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .btn-auth:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
-            background: #1e293b;
-        }
-
-        .btn-auth:active { transform: translateY(0); }
-
-        .auth-footer-links {
-            margin-top: 40px;
+        .login-logo-container {
+            background: #000;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 2rem;
             text-align: center;
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-
-        .auth-footer-links a {
-            color: var(--primary);
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .auth-footer-links a:hover { text-decoration: underline; }
-
-        /* BRANDING ELEMENTS */
-        .branding-text h2 {
-            font-family: var(--font-headings);
-            font-weight: 900;
-            font-size: 3rem;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-
-        .branding-text p {
-            font-size: 1.15rem;
-            font-weight: 300;
-            opacity: 0.8;
-            max-width: 500px;
-        }
-
-        .branding-badge {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            padding: 15px 25px;
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 40px;
             border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .badge-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 50%;
+        .login-logo-container img {
+            max-height: 60px;
+            max-width: 100%;
+        }
+        .login-logo-container .logo-text {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .form-control {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: #f8fafc;
+            padding: 12px 15px;
+            border-radius: 6px;
+        }
+        .form-control:focus {
+            background-color: #0f172a;
+            border-color: {{ $currentTenant->primary_color ?? '#3b82f6' }};
+            color: #f8fafc;
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+        }
+        .form-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-demo {
+            background-color: transparent;
+            border: 1px solid #f59e0b;
+            color: #f59e0b;
+            padding: 10px;
+            font-weight: 600;
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
         }
-
-        /* CUSTOM CHECKBOX */
-        .custom-check {
-            font-size: 0.85rem;
+        .btn-demo:hover {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        .text-muted-custom {
             color: #64748b;
-            font-weight: 500;
-            cursor: pointer;
+            font-size: 0.85rem;
         }
-
-        .invalid-feedback {
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 5px;
+        .text-muted-custom a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+        .text-muted-custom a:hover {
+            color: #f8fafc;
+        }
+        .form-check-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
         }
     </style>
 </head>
 <body>
 
-    <div class="auth-container">
-        <!-- Lado Izquierdo: Branding & Visuals (Desktop) -->
-        <div class="auth-branding animate__animated animate__fadeIn">
-            <div>
-                <a href="/" class="auth-logo">
-                    <img src="{{ asset('media/logo.png') }}" alt="Colegio-Pro" height="40" class="me-3" style="filter: brightness(0) invert(1);">
-                    <span class="text-white">COLEGIO<span class="accent text-white-50"> PRO</span></span>
-                </a>
-            </div>
-
-            <div class="branding-text">
-                <h2 class="animate__animated animate__fadeInUp animate__delay-1s">Gestión de Élite para Colegios Profesionales</h2>
-                <p class="animate__animated animate__fadeInUp animate__delay-2s">Digitalizamos el prestigio de su institución con herramientas de última generación y diseño sofisticado.</p>
-                
-                <div class="branding-badge animate__animated animate__fadeInUp animate__delay-3s">
-                    <div class="badge-icon"><i class="bi bi-shield-check"></i></div>
-                    <div>
-                        <div class="fw-bold small">Seguridad Garantizada</div>
-                        <div class="x-small opacity-75">Encriptación de grado bancario</div>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <p class="x-small opacity-50 mb-0">© 2026 Colegio-Pro. Experiencia Rolls-Royce en Software.</p>
-            </div>
+    <div class="login-box">
+        <div class="login-logo-container">
+            @if(isset($currentTenant) && $currentTenant->logo)
+                <img src="{{ asset($currentTenant->logo) }}" alt="Logo">
+            @else
+                <p class="logo-text">{{ $currentTenant->name ?? 'MultiPOS' }}</p>
+            @endif
         </div>
 
-        <!-- Lado Derecho: Formulario -->
-        <div class="auth-form-wrapper animate__animated animate__fadeInRight">
-            <div>
-                <div class="auth-header">
-                    <h1>Bienvenido</h1>
-                    <p>Por favor, introduzca sus credenciales para acceder a la plataforma.</p>
+        <h4 class="text-center fw-bold mb-4">Iniciar sesión</h4>
+
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <div class="mb-3">
+                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
+                @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Contraseña">
+                @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="remember">
+                        Recordarme
+                    </label>
                 </div>
+            </div>
 
-                <!-- BOTON DE DEMO RAPIDA -->
-                <div class="mb-4 animate__animated animate__pulse animate__infinite">
-                    <a href="{{ route('demo.fast') }}" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none; font-size: 1.1rem;">
-                        <i class="bi bi-rocket-takeoff-fill me-2"></i> INGRESO LIBRE DE DEMOSTRACIÓN
-                    </a>
-                </div>
-                
-                <div class="text-center mb-4 position-relative">
-                    <hr>
-                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted" style="font-size: 0.8rem; font-weight: 600;">O ingresa con tu cuenta</span>
-                </div>
+            <button type="submit" class="btn btn-primary">
+                Ingresar
+            </button>
+            
+            <a href="{{ route('demo.fast') }}" class="btn-demo">
+                <span class="material-icons" style="font-size: 18px;">auto_awesome</span> ACCESO DEMO (PRUEBA)
+            </a>
 
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-
-                    <div class="mb-4">
-                        <label for="email" class="form-label">Correo Electrónico</label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="nombre@ejemplo.com">
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label for="password" class="form-label">Contraseña</label>
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="text-decoration-none x-small fw-bold text-primary mb-2">¿Olvidó su contraseña?</a>
-                            @endif
-                        </div>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="••••••••">
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                            <label class="form-check-label custom-check" for="remember">
-                                Mantener mi sesión iniciada
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-auth">
-                        INICIAR SESIÓN <i class="bi bi-arrow-right ms-2"></i>
-                    </button>
-                </form>
-
-                <div class="auth-footer-links">
-                    ¿Aún no es cliente? 
-                    <a href="{{ route('demo.register') }}">Solicitar Demo</a>
-                </div>
-                
-                {{-- Opcional: Link a Registro si estuviera habilitado libremente --}}
-                @if (Route::has('register'))
-                <div class="auth-footer-links mt-2">
-                    Si eres un colegiado: 
-                    <a href="{{ route('register') }}">Regístrate aquí</a>
-                </div>
+            <div class="text-center text-muted-custom mt-4">
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
                 @endif
+                <br><br>
+                <a href="{{ route('register') }}" class="text-info fw-bold">No tengo cuenta, quiero Registrararme</a>
             </div>
-        </div>
+        </form>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+@endif

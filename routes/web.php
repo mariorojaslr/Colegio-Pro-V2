@@ -58,6 +58,31 @@ Route::get('/p/{slug}', [\App\Http\Controllers\PublicLandingController::class, '
 Route::get('/demo/unirse', [App\Http\Controllers\DemoRegistrationController::class, 'show'])->name('demo.register');
 Route::post('/demo/register', [App\Http\Controllers\DemoRegistrationController::class, 'register'])->name('demo.register.post');
 
+// PWA Dynamic Manifest
+Route::get('/manifest.json', function (\Illuminate\Http\Request $request) {
+    $tenant = app('tenant');
+    return response()->json([
+        'name' => $tenant->name ?? 'Colegio Profesional',
+        'short_name' => $tenant->slug ?? 'Colegio',
+        'start_url' => '/',
+        'display' => 'standalone',
+        'background_color' => $tenant->secondary_color ?? '#0f172a',
+        'theme_color' => $tenant->primary_color ?? '#3b82f6',
+        'icons' => [
+            [
+                'src' => $tenant->logo ? asset($tenant->logo) : asset('favicon.ico'),
+                'sizes' => '192x192',
+                'type' => 'image/png'
+            ],
+            [
+                'src' => $tenant->logo ? asset($tenant->logo) : asset('favicon.ico'),
+                'sizes' => '512x512',
+                'type' => 'image/png'
+            ]
+        ]
+    ]);
+})->name('pwa.manifest');
+
 // Escuela Virtual Pública (Vitrina de Cursos)
 Route::get('/escuela-virtual', [\App\Http\Controllers\Student\LessonController::class, 'index'])->name('academy.public');
 
@@ -66,6 +91,9 @@ Route::get('/noticias', [PublicNewsController::class, 'index'])->name('news.inde
 Route::get('/noticias/{slug}', [PublicNewsController::class, 'show'])->name('news.show');
 
 Auth::routes();
+
+Route::post('/register/verify', [App\Http\Controllers\Auth\RegisterController::class, 'verify'])->name('register.verify');
+Route::get('/register/finalize', [App\Http\Controllers\Auth\RegisterController::class, 'showFinalizeForm'])->name('register.finalize');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

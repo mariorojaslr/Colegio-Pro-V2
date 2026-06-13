@@ -1,14 +1,14 @@
-@if(isset($currentTenant) && view()->exists('tenants.' . $currentTenant->slug . '.auth.register'))
-    @include('tenants.' . $currentTenant->slug . '.auth.register')
+@if(isset($currentTenant) && view()->exists('tenants.' . $currentTenant->slug . '.auth.register_finalize'))
+    @include('tenants.' . $currentTenant->slug . '.auth.register_finalize')
 @else
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registro - {{ $currentTenant->name ?? 'Colegio-Pro' }}</title>
-    <link rel="manifest" href="/manifest.json">
+    <title>Completar Registro - {{ $currentTenant->name ?? 'Colegio-Pro' }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -35,7 +35,7 @@
             background: #000;
             border-radius: 8px;
             padding: 10px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -56,8 +56,8 @@
             color: #f8fafc;
             box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
         }
-        .btn-primary {
-            background-color: #3b82f6;
+        .btn-success {
+            background-color: #10b981;
             border: none;
             padding: 12px;
             font-weight: 600;
@@ -65,15 +65,8 @@
             border-radius: 6px;
             margin-top: 1rem;
         }
-        .btn-primary:hover {
-            background-color: #2563eb;
-        }
-        .text-muted-custom a {
-            color: #94a3b8;
-            text-decoration: none;
-        }
-        .text-muted-custom a:hover {
-            color: #f8fafc;
+        .btn-success:hover {
+            background-color: #059669;
         }
     </style>
 </head>
@@ -88,46 +81,29 @@
             @endif
         </div>
 
-        <h4 class="text-center fw-bold mb-2">Verificación de Identidad</h4>
-        <p class="text-center text-secondary small mb-4">Para ingresar, primero debemos validar que te encuentras en nuestro padrón oficial.</p>
+        <div class="text-center mb-4">
+            <span class="material-icons text-success" style="font-size: 3rem;">check_circle</span>
+            <h4 class="fw-bold mt-2">¡Identidad Validada!</h4>
+            <p class="text-secondary small">Hola <strong>{{ $collegiate->first_name ?? 'Colegiado' }}</strong>, te hemos encontrado en el padrón. Por favor crea una contraseña para activar tu cuenta digital.</p>
+        </div>
 
-        @if(session('error'))
-            <div class="alert alert-danger p-2 small text-center rounded-3 border-0 bg-danger bg-opacity-25 text-danger fw-bold">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('register.verify') }}">
+        <form method="POST" action="{{ route('register') }}">
             @csrf
-
+            
             <div class="mb-3">
-                <input id="dni" type="text" class="form-control @error('dni') is-invalid @enderror" name="dni" value="{{ old('dni') }}" required autofocus placeholder="Número de Documento (DNI sin puntos)">
-                @error('dni')
+                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required placeholder="Crea una Contraseña (mín. 8 caracteres)">
+                @error('password')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
 
             <div class="mb-3">
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Correo Electrónico">
-                @error('email')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
+                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required placeholder="Confirma tu Contraseña">
             </div>
 
-            <div class="mb-3">
-                <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required placeholder="Teléfono de Contacto (Ej: 3804123456)">
-                @error('phone')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
-            </div>
-
-            <button type="submit" class="btn btn-primary">
-                Verificar Identidad
+            <button type="submit" class="btn btn-success">
+                Finalizar Registro e Ingresar
             </button>
-
-            <div class="text-center text-muted-custom mt-4">
-                <a href="{{ route('login') }}" class="text-info fw-bold">Ya tengo cuenta, quiero Iniciar Sesión</a>
-            </div>
         </form>
     </div>
 
