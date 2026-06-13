@@ -1,6 +1,12 @@
 @extends('layouts.main')
 
 @section('content')
+<style>
+@keyframes fadeSlideDown {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+</style>
 <div class="container-fluid py-4">
     {{-- Encabezado del Padrón y Acciones --}}
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
@@ -161,32 +167,42 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="py-2 text-center">
-                            <button class="btn btn-sm btn-{{ $financeColor }} rounded-pill px-3 py-1 shadow-sm fw-bold x-small w-100 btn-indicator" onclick="togglePanel({{ $col->id }}, 'finanzas')">
+                        <td class="py-2 text-center align-middle">
+                            <button class="btn btn-{{ $financeColor }} rounded-pill px-2 py-0 border-0 shadow-sm fw-bold w-100 btn-indicator" style="font-size: 0.75rem; height: 22px; line-height: 22px;" onclick="togglePanel({{ $col->id }}, 'finanzas')">
                                 <i class="bi bi-currency-dollar me-1"></i> {{ $financeText }}
                             </button>
                         </td>
-                        <td class="py-2 text-center">
-                            <button class="btn btn-sm btn-{{ $docsColor }} rounded-pill px-3 py-1 shadow-sm fw-bold x-small w-100 btn-indicator" onclick="togglePanel({{ $col->id }}, 'docs')">
-                                <i class="bi bi-folder-check me-1"></i> {{ $approvedDocsCount }} de {{ $requiredDocsCount }}
-                            </button>
+                        <td class="py-2 text-center align-middle" style="width: 120px;">
+                            <div class="cursor-pointer px-1" onclick="togglePanel({{ $col->id }}, 'docs')" title="Ver detalle de documentos">
+                                <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.65rem;">
+                                    <span class="text-muted fw-bold">PAPELERÍA</span>
+                                    <span class="fw-bold text-{{ $docsColor }}">{{ $approvedDocsCount }} de {{ $requiredDocsCount }}</span>
+                                </div>
+                                <div class="progress bg-secondary bg-opacity-10 rounded-pill overflow-visible" style="height: 6px;">
+                                    <div class="progress-bar bg-{{ $docsColor }} rounded-pill position-relative" role="progressbar" style="width: {{ $docsProgress }}%;">
+                                        @if($docsProgress == 100)
+                                            <span class="position-absolute end-0 top-50 translate-middle-y me-n2 text-success"><i class="bi bi-check-circle-fill" style="font-size: 10px;"></i></span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </td>
-                        <td class="py-2 text-center">
-                            <button class="btn btn-sm btn-{{ $ethicsColor }} rounded-pill px-3 py-1 shadow-sm fw-bold x-small w-100 btn-indicator" onclick="togglePanel({{ $col->id }}, 'etica')">
+                        <td class="py-2 text-center align-middle">
+                            <button class="btn btn-{{ $ethicsColor }} rounded-pill px-2 py-0 border-0 shadow-sm fw-bold w-100 btn-indicator" style="font-size: 0.75rem; height: 22px; line-height: 22px;" onclick="togglePanel({{ $col->id }}, 'etica')">
                                 <i class="bi bi-shield-check me-1"></i> {{ $ethicsText }}
                             </button>
                         </td>
-                        <td class="py-2 text-end px-4">
-                            <a href="{{ route('collegiates.show', $col) }}" class="btn btn-light btn-sm rounded-circle shadow-sm" title="Ver Perfil Completo">
-                                <i class="bi bi-chevron-right"></i>
+                        <td class="py-2 text-end px-4 align-middle">
+                            <a href="{{ route('collegiates.show', $col) }}" class="btn btn-outline-primary rounded-pill px-3 py-0 fw-bold shadow-sm" style="font-size: 0.75rem; height: 24px; line-height: 22px;">
+                                Ver Perfil
                             </a>
                         </td>
                     </tr>
                     
                     {{-- ACORDEÓN EXPANDIBLE --}}
-                    <tr id="panel-row-{{ $col->id }}" class="collapse panel-row" style="background-color: rgba(0,0,0,0.02);">
-                        <td colspan="7" class="p-0 border-0">
-                            <div class="p-4 border-bottom border-light shadow-inner">
+                    <tr id="panel-row-{{ $col->id }}" class="collapse panel-row border-0">
+                        <td colspan="7" class="p-0 border-0 bg-transparent">
+                            <div class="mx-3 mb-3 mt-1 p-4 rounded-4 shadow bg-white border-start border-4 border-primary position-relative" style="animation: fadeSlideDown 0.3s ease-out; margin-left: 20px !important;">
                                 
                                 {{-- PANEL FINANZAS --}}
                                 <div id="panel-finanzas-{{ $col->id }}" class="collegiate-panel d-none">
