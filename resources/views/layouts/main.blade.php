@@ -331,7 +331,7 @@
                             @if(auth()->user()->role === 'ADMIN_COLEGIO')
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('ui.padron') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">{{ __('ui.finances') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">Contabilidad Global</a></li>
                                 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'cms') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">

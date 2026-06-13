@@ -102,7 +102,7 @@
                 <a class="nav-link {{ request()->routeIs('admin.activity_logs.*') ? 'active' : '' }}" href="{{ route('admin.activity_logs.index') }}"><i class="bi bi-activity me-2"></i> Auditoría</a>
             @else
                 <a class="nav-link" href="#"><i class="bi bi-people me-2"></i> Usuarios</a>
-                <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2 me-2"></i> Finanzas de Colegio</a>
+                <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2 me-2"></i> Contabilidad Global</a>
                 <a class="nav-link {{ request()->routeIs('billing.index') ? 'active' : '' }}" href="{{ route('billing.index') }}"><i class="bi bi-credit-card me-2"></i> Mi Plan SaaS</a>
                 <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots me-2"></i> Mis Tickets</a>
             @endif

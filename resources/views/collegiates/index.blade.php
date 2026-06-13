@@ -90,49 +90,202 @@
             <table class="table table-hover align-middle m-0" id="collegiateTable">
                 <thead class="bg-light bg-opacity-50">
                     <tr class="small fw-bold text-muted uppercase ls-1 text-nowrap">
-                        <th class="py-1 px-4 text-center" style="width: 50px;">Estado</th>
-                        <th class="py-1" style="width: 250px;">Nombre y Apellido</th>
-                        <th class="py-1" style="width: 120px;">Matrícula</th>
+                        <th class="py-1 px-4" style="width: 250px;">Nombre y Apellido</th>
+                        <th class="py-1" style="width: 100px;">Matrícula</th>
                         <th class="py-1">Documento / Contacto</th>
-                        <th class="py-1">Ubicación</th>
+                        <th class="py-1 text-center" style="width: 100px;">Finanzas</th>
+                        <th class="py-1 text-center" style="width: 120px;">Documentos</th>
+                        <th class="py-1 text-center" style="width: 100px;">Ética</th>
                         <th class="py-1 text-end px-4">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     @forelse($collegiates as $col)
-                    <tr class="border-bottom border-light">
-                        <td class="py-1 px-4 text-center">
-                            @if($col->is_fees_compliant && $col->is_fully_documented && $col->is_ethics_compliant)
-                                <div class="bg-success rounded-circle shadow-sm mx-auto" style="width: 10px; height: 10px" title="Habilitado"></div>
-                            @elseif(!$col->is_fees_compliant)
-                                <div class="bg-danger rounded-circle shadow-sm mx-auto" style="width: 10px; height: 10px" title="Deuda Cuotas"></div>
-                            @else
-                                <div class="bg-warning rounded-circle shadow-sm mx-auto" style="width: 10px; height: 10px" title="Deuda Documental"></div>
-                            @endif
+                        @php
+                            // Lógica de Finanzas
+                            $pendingDues = $col->dues->whereIn('status', ['pending', 'overdue']);
+                            $overdueCount = $pendingDues->where('due_date', '<', now())->count();
+                            $soonCount = $pendingDues->where('due_date', '>=', now())->where('due_date', '<=', now()->addDays(7))->count();
+                            
+                            $financeColor = 'success';
+                            $financeText = 'Al día';
+                            if ($overdueCount > 0) {
+                                $financeColor = 'danger';
+                                $financeText = 'Deuda';
+                            } elseif ($soonCount > 0) {
+                                $financeColor = 'warning';
+                                $financeText = 'Vence pronto';
+                            }
+
+                            // Lógica de Documentación
+                            $requiredDocsCount = $requirements->count();
+                            $approvedDocsCount = $col->documents->where('status', 'approved')->count();
+                            $docsProgress = $requiredDocsCount > 0 ? ($approvedDocsCount / $requiredDocsCount) * 100 : 100;
+                            
+                            $docsColor = 'success';
+                            if ($docsProgress < 50) $docsColor = 'danger';
+                            elseif ($docsProgress < 100) $docsColor = 'warning';
+
+                            // Lógica de Ética
+                            $activeSanctions = $col->sanctions;
+                            $ethicsColor = 'success';
+                            $ethicsText = 'Limpio';
+                            if ($activeSanctions->count() > 0) {
+                                if ($activeSanctions->where('severity', 'grave')->count() > 0) {
+                                    $ethicsColor = 'danger';
+                                    $ethicsText = 'Sanción Grave';
+                                } else {
+                                    $ethicsColor = 'warning';
+                                    $ethicsText = 'Sanción Leve';
+                                }
+                            }
+                        @endphp
+                    <tr class="border-bottom border-light table-row-main" id="row-{{ $col->id }}">
+                        <td class="py-2 px-4 searchable" data-field="name">
+                            <div class="d-flex flex-column">
+                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">{{ $col->last_name }}, {{ $col->first_name }}</span>
+                                <span class="x-small text-muted fw-medium">{{ $col->professional_situation ?? 'Activo' }}</span>
+                            </div>
                         </td>
-                        <td class="py-1 searchable" data-field="name">
-                            <span class="fw-bold d-inline-block" style="font-size: 0.95rem;">{{ $col->last_name }}, {{ $col->first_name }}</span>
+                        <td class="py-2">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">{{ $col->registration_number }}</span>
                         </td>
-                        <td class="py-1">
-                            <span class="badge bg-primary bg-opacity-10 text-primary x-small border border-primary border-opacity-25 px-2" style="font-size: 0.65rem; min-width: 80px;">{{ $col->registration_number }}</span>
+                        <td class="py-2 searchable" data-field="contact">
+                            <div class="d-flex flex-column">
+                                <span class="x-small text-dark fw-bold mb-1">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
+                                <div class="d-flex gap-2">
+                                    <span class="x-small text-muted"><i class="bi bi-envelope me-1"></i>{{ $col->email }}</span>
+                                    @if($col->phone)
+                                        <span class="x-small text-muted"><i class="bi bi-whatsapp me-1"></i>{{ $col->phone }}</span>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
-                        <td class="py-1 searchable" data-field="contact">
-                            <span class="x-small text-muted fw-bold me-3">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
-                            <span class="x-small text-muted me-3 d-none d-lg-inline">{{ $col->email }}</span>
-                            @if($col->phone)
-                                <span class="x-small text-secondary"><i class="bi bi-phone me-1"></i>{{ $col->phone }}</span>
-                            @endif
+                        <td class="py-2 text-center">
+                            <button class="btn btn-sm btn-{{ $financeColor }} rounded-pill px-3 py-1 shadow-sm fw-bold x-small w-100 btn-indicator" onclick="togglePanel({{ $col->id }}, 'finanzas')">
+                                <i class="bi bi-currency-dollar me-1"></i> {{ $financeText }}
+                            </button>
                         </td>
-                        <td class="py-1 x-small fw-bold text-muted text-uppercase" style="font-size: 0.65rem;">
-                            {{ $col->professional_situation ?? 'Activo' }}
+                        <td class="py-2 text-center">
+                            <button class="btn btn-sm btn-{{ $docsColor }} rounded-pill px-3 py-1 shadow-sm fw-bold x-small w-100 btn-indicator" onclick="togglePanel({{ $col->id }}, 'docs')">
+                                <i class="bi bi-folder-check me-1"></i> {{ $approvedDocsCount }} de {{ $requiredDocsCount }}
+                            </button>
                         </td>
-                        <td class="py-1 text-end px-4">
-                            <a href="{{ route('collegiates.show', $col) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-bold x-small py-0 px-3">Ver Perfil</a>
+                        <td class="py-2 text-center">
+                            <button class="btn btn-sm btn-{{ $ethicsColor }} rounded-pill px-3 py-1 shadow-sm fw-bold x-small w-100 btn-indicator" onclick="togglePanel({{ $col->id }}, 'etica')">
+                                <i class="bi bi-shield-check me-1"></i> {{ $ethicsText }}
+                            </button>
+                        </td>
+                        <td class="py-2 text-end px-4">
+                            <a href="{{ route('collegiates.show', $col) }}" class="btn btn-light btn-sm rounded-circle shadow-sm" title="Ver Perfil Completo">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    
+                    {{-- ACORDEÓN EXPANDIBLE --}}
+                    <tr id="panel-row-{{ $col->id }}" class="collapse panel-row" style="background-color: rgba(0,0,0,0.02);">
+                        <td colspan="7" class="p-0 border-0">
+                            <div class="p-4 border-bottom border-light shadow-inner">
+                                
+                                {{-- PANEL FINANZAS --}}
+                                <div id="panel-finanzas-{{ $col->id }}" class="collegiate-panel d-none">
+                                    <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-wallet2 me-2"></i> Estado Financiero</h6>
+                                    @if($pendingDues->isEmpty())
+                                        <div class="alert alert-success border-0 py-2 x-small fw-bold mb-0"><i class="bi bi-check-circle-fill me-2"></i> El colegiado está al día con sus cuotas.</div>
+                                    @else
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-borderless mb-0">
+                                                <thead class="text-muted x-small uppercase">
+                                                    <tr>
+                                                        <th>Concepto</th>
+                                                        <th>Vencimiento</th>
+                                                        <th>Monto</th>
+                                                        <th class="text-end">Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($pendingDues as $due)
+                                                    <tr class="border-bottom border-light align-middle">
+                                                        <td class="fw-medium x-small text-dark">Cuota {{ \Carbon\Carbon::parse($due->due_date)->translatedFormat('F Y') }}</td>
+                                                        <td class="x-small {{ $due->due_date < now() ? 'text-danger fw-bold' : 'text-warning fw-bold' }}">
+                                                            {{ \Carbon\Carbon::parse($due->due_date)->format('d/m/Y') }}
+                                                            @if($due->due_date < now()) (Vencida) @endif
+                                                        </td>
+                                                        <td class="fw-bold text-dark x-small">$ {{ number_format($due->amount, 2, ',', '.') }}</td>
+                                                        <td class="text-end">
+                                                            <button class="btn btn-primary btn-sm x-small py-0 px-2 rounded-pill fw-bold" onclick="alert('Función de cobro en desarrollo')">Pagar</button>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="mt-3 text-end">
+                                            <button class="btn btn-outline-danger btn-sm x-small py-1 px-3 rounded-pill fw-bold" onclick="alert('Notificación enviada')"><i class="bi bi-bell-fill me-1"></i> Avisar Deuda</button>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                {{-- PANEL DOCUMENTACIÓN --}}
+                                <div id="panel-docs-{{ $col->id }}" class="collegiate-panel d-none">
+                                    <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-folder-check me-2"></i> Requisitos Documentales</h6>
+                                    <div class="row g-2">
+                                        @foreach($requirements as $req)
+                                            @php
+                                                $doc = $col->documents->where('compliance_requirement_id', $req->id)->first();
+                                                $statusClass = 'bg-danger text-white';
+                                                $statusIcon = 'bi-x-circle-fill';
+                                                $statusText = 'Faltante';
+                                                if($doc && $doc->status === 'approved') {
+                                                    $statusClass = 'bg-success text-white';
+                                                    $statusIcon = 'bi-check-circle-fill';
+                                                    $statusText = 'Aprobado';
+                                                } elseif($doc && $doc->status === 'pending') {
+                                                    $statusClass = 'bg-warning text-dark';
+                                                    $statusIcon = 'bi-clock-fill';
+                                                    $statusText = 'En Revisión';
+                                                }
+                                            @endphp
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center p-2 border rounded bg-white">
+                                                    <div class="rounded-circle {{ $statusClass }} d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
+                                                        <i class="bi {{ $statusIcon }} x-small"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1 x-small text-truncate" title="{{ $req->name }}">
+                                                        <span class="fw-bold d-block text-dark">{{ $req->name }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <div class="mt-3 text-end">
+                                        <a href="{{ route('collegiates.show', $col) }}#documentos" class="btn btn-outline-primary btn-sm x-small py-1 px-3 rounded-pill fw-bold">Gestionar Documentos</a>
+                                    </div>
+                                </div>
+
+                                {{-- PANEL ÉTICA --}}
+                                <div id="panel-etica-{{ $col->id }}" class="collegiate-panel d-none">
+                                    <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-shield-check me-2"></i> Historial de Ética y Disciplina</h6>
+                                    @if($activeSanctions->isEmpty())
+                                        <div class="alert alert-success border-0 py-2 x-small fw-bold mb-0"><i class="bi bi-check-circle-fill me-2"></i> El colegiado no registra sanciones activas.</div>
+                                    @else
+                                        <ul class="list-group list-group-flush mb-0">
+                                            @foreach($activeSanctions as $sanction)
+                                            <li class="list-group-item bg-transparent px-0 border-light text-dark x-small">
+                                                <span class="badge {{ $sanction->severity === 'grave' ? 'bg-danger' : 'bg-warning text-dark' }} me-2 uppercase">{{ $sanction->severity }}</span>
+                                                <span class="fw-bold">{{ \Carbon\Carbon::parse($sanction->start_date)->format('d/m/Y') }}</span> - 
+                                                {{ $sanction->reason }}
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </div>
+
+                            </div>
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="6" class="py-5 text-center">
                             <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-state-2130362-1800505.png" alt="Vacío" width="150" class="mb-3 opacity-25">
                             <p class="text-muted fw-bold">No se encontraron resultados del padrón.</p>
                         </td>
@@ -187,12 +340,16 @@
         color: white !important;
     }
 
-    #collegiateTable tr { transition: background 0.2s ease; border-bottom: 1px solid rgba(0,0,0,0.03); }
-    #collegiateTable tr:hover { background-color: rgba(248, 250, 252, 0.8) !important; }
+    #collegiateTable tr.table-row-main { transition: background 0.2s ease; border-bottom: 1px solid rgba(0,0,0,0.03); }
+    #collegiateTable tr.table-row-main:hover { background-color: rgba(248, 250, 252, 0.8) !important; }
     
-    body.dark-mode #collegiateTable tr {
+    body.dark-mode #collegiateTable tr.table-row-main {
         border-bottom-color: rgba(255, 255, 255, 0.05) !important;
     }
+
+    .shadow-inner { box-shadow: inset 0px 10px 15px -10px rgba(0,0,0,0.05); }
+    .btn-indicator { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .btn-indicator:hover { transform: scale(1.05); }
 
     .paddinc-lc { padding-left: 1rem !important; }
 </style>
@@ -252,6 +409,46 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // Funcionalidad global del Acordeón para evitar problemas con la paginación dinámica
+    window.togglePanel = function(colId, panelName) {
+        const row = document.getElementById('panel-row-' + colId);
+        if (!row) return;
+
+        // Instancia de Bootstrap Collapse o creamos una si no existe
+        let bsCollapse = bootstrap.Collapse.getInstance(row);
+        if (!bsCollapse) {
+            bsCollapse = new bootstrap.Collapse(row, { toggle: false });
+        }
+
+        const isCurrentlyOpen = row.classList.contains('show');
+        const targetPanel = document.getElementById('panel-' + panelName + '-' + colId);
+        const allPanels = row.querySelectorAll('.collegiate-panel');
+
+        if (isCurrentlyOpen) {
+            // Si el acordeón está abierto, vemos si el panel clickeado ya está visible
+            if (!targetPanel.classList.contains('d-none')) {
+                // Era el mismo, cerramos todo
+                bsCollapse.hide();
+            } else {
+                // Era distinto, ocultamos los demás y mostramos este sin cerrar el acordeón
+                allPanels.forEach(p => p.classList.add('d-none'));
+                targetPanel.classList.remove('d-none');
+            }
+        } else {
+            // Estaba cerrado. Mostramos el correcto y abrimos el acordeón.
+            // Para mantener el "acordeón estricto", cerramos todos los demás acordeones
+            document.querySelectorAll('.panel-row.show').forEach(openRow => {
+                if (openRow.id !== 'panel-row-' + colId) {
+                    bootstrap.Collapse.getInstance(openRow)?.hide();
+                }
+            });
+
+            allPanels.forEach(p => p.classList.add('d-none'));
+            targetPanel.classList.remove('d-none');
+            bsCollapse.show();
+        }
+    };
 });
 </script>
 @endsection

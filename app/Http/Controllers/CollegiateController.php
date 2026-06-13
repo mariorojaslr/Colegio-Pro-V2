@@ -14,7 +14,23 @@ class CollegiateController extends Controller
         $user = Auth::user();
         if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
 
+        $schoolId = $user->isOwner() ? request('school_id', School::first()->id) : $user->school_id;
+
         $baseQuery = $user->isOwner() ? Collegiate::query() : $user->school->collegiates();
+
+        // Eager load para evitar N+1 en la tabla interactiva
+        $baseQuery->with([
+            'dues' => function($q) {
+                $q->orderBy('due_date', 'asc');
+            }, 
+            'documents', 
+            'sanctions' => function($q) {
+                $q->where('status', 'active');
+            }
+        ]);
+
+        // Requisitos documentales obligatorios para calcular el progreso
+        $requirements = \App\Models\ComplianceRequirement::where('school_id', $schoolId)->get();
 
         // 📊 Calculamos Métricas para las Tarjetas Superiores
         $stats = [
@@ -59,7 +75,7 @@ class CollegiateController extends Controller
 
         $collegiates = $query->orderBy('last_name')->paginate($perPage);
         
-        return view('collegiates.index', compact('collegiates', 'stats', 'perPage'));
+        return view('collegiates.index', compact('collegiates', 'stats', 'perPage', 'requirements'));
     }
 
     public function show(Collegiate $collegiate)
