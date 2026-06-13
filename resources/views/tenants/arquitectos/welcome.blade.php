@@ -13,7 +13,7 @@
     
     <style>
         :root {
-            --primary: #f59e0b; /* Amber */
+            --primary: #000000; /* Black */
             --dark: #1f2937; /* Gray 800 */
             --light: #f3f4f6; /* Gray 100 */
         }
@@ -150,8 +150,9 @@
     <!-- FOOTER -->
     <footer class="bg-dark text-white py-5">
         <div class="container text-center">
-            <h5 class="text-uppercase letter-spacing-2 mb-4">{{ $school->name ?? 'Colegio de Arquitectos' }}</h5>
-            <p class="text-white-50 mb-0">&copy; {{ date('Y') }} Todos los derechos reservados. Diseño Exclusivo Arquitectura.</p>
+            <h5 class="text-uppercase letter-spacing-2 mb-2">{{ $school->name ?? 'CAPLaR - Colegio Arquitectos de La Rioja' }}</h5>
+            <p class="text-white-50 mb-4 small">San Nicolas de Bari (O) N° 1.138, La Rioja, Argentina 5300</p>
+            <p class="text-white-50 mb-0">&copy; {{ date('Y') }} Todos los derechos reservados.</p>
         </div>
     </footer>
 

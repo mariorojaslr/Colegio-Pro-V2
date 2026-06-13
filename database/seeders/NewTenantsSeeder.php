@@ -16,9 +16,9 @@ class NewTenantsSeeder extends Seeder
         School::updateOrCreate(
             ['slug' => 'arquitectos'],
             [
-                'name' => "Colegio de Arquitectos",
-                'primary_color' => "#374151", // Gray 700
-                'secondary_color' => "#f59e0b", // Amber 500
+                'name' => "CAPLaR - Colegio de Arquitectos de La Rioja",
+                'primary_color' => "#000000", // Black from their logo
+                'secondary_color' => "#ffffff", // White
                 'is_active' => true,
                 'plan_category' => 'basic'
             ]
