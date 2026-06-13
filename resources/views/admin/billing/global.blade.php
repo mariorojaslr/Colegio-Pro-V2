@@ -178,15 +178,15 @@
         <div class="saas-client-item accordion-item border-0 bg-transparent">
             <div class="saas-client-header accordion-header" id="heading{{ $index }}">
                 <div class="d-flex justify-content-between align-items-center w-100" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
-                    <div>
+                    <div class="flex-grow-1">
                         <div class="client-name">{{ $client->school->name }}</div>
                         <div class="client-meta">Plan: {{ $client->school->activeSubscription->plan->name ?? 'Básico' }} | Subdominio: {{ $client->school->slug }}</div>
                     </div>
-                    <div class="text-end d-flex flex-column align-items-end">
-                        <span class="status-pill bg-{{ $client->status_badge }} mb-1">{{ $client->status_label }}</span>
-                        <div class="client-total-paid">Total Pagado: ${{ number_format($client->total_paid, 0, ',', '.') }}</div>
+                    <div class="d-flex flex-column align-items-center justify-content-center" style="min-width: 180px;">
+                        <span class="status-pill w-100 text-center bg-{{ $client->status_badge }} mb-1" style="display: inline-block;">{{ $client->status_label }}</span>
+                        <div class="client-total-paid w-100 text-center">Total Pagado: ${{ number_format($client->total_paid, 0, ',', '.') }}</div>
                     </div>
-                    <div class="ms-3 text-muted">
+                    <div class="ms-4 text-muted text-center" style="width: 24px;">
                         <i class="bi bi-chevron-down"></i>
                     </div>
                 </div>
