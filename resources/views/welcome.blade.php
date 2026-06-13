@@ -231,7 +231,6 @@
             </div>
 
             @if(isset($boardMembers) && $boardMembers->count() > 0)
-            @if(isset($boardMembers) && $boardMembers->count() > 0)
                 @foreach($boardMembers as $department => $members)
                     <div class="mb-5">
                         <h4 class="text-center text-theme-primary fw-bold mb-4">{{ $department }}</h4>
