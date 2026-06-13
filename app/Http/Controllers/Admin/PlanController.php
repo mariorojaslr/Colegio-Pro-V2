@@ -39,7 +39,6 @@ class PlanController extends Controller
             'max_traffic' => 'required|integer|min:1',
             'max_files' => 'required|integer|min:1',
             'max_images' => 'required|integer|min:1',
-            'max_streaming' => 'required|integer|min:0',
             'features_list' => 'required|string',
         ]);
 
@@ -55,7 +54,6 @@ class PlanController extends Controller
             'max_traffic' => $request->max_traffic,
             'max_files' => $request->max_files,
             'max_images' => $request->max_images,
-            'max_streaming' => $request->max_streaming,
             'is_one_time' => $request->has('is_one_time'),
             'features' => array_values($features),
         ]);

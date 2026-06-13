@@ -26,11 +26,10 @@
                 </div>
 
                 <ul class="list-unstyled d-grid gap-2 mb-4">
-                    <li class="small fw-bold"><i class="bi bi-mortarboard me-2"></i> {{ number_format($plan->max_users, 0, ',', '.') }} Alumnos</li>
+                    <li class="small fw-bold"><i class="bi bi-mortarboard me-2"></i> {{ number_format($plan->max_users, 0, ',', '.') }} Colegiados</li>
                     <li class="small fw-bold"><i class="bi bi-hdd me-2"></i> {{ $plan->max_storage }} GB Disco</li>
                     <li class="small fw-bold"><i class="bi bi-broadcast me-2 text-info"></i> {{ number_format($plan->max_traffic, 0, ',', '.') }} GB Tráfico</li>
                     <li class="small fw-bold"><i class="bi bi-file-earmark-plus me-2 text-success"></i> {{ number_format($plan->max_files, 0, ',', '.') }} Archivos</li>
-                    <li class="small fw-bold"><i class="bi bi-play-circle me-2 text-primary"></i> {{ number_format($plan->max_streaming, 0, ',', '.') }} Min Streaming</li>
                 </ul>
 
                 <div class="mt-auto">

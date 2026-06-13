@@ -103,7 +103,7 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::get('/auditoria', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.activity_logs.index');
 
     // Finanzas Globales (Owner side)
-    Route::get('/admin/global-billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.global');
+    Route::get('/admin/global-billing', [\App\Http\Controllers\Admin\GlobalBillingController::class, 'index'])->name('admin.billing.global');
 
     // Gestión Global de Academia (Cursos/Lecciones)
     Route::resource('/admin/academy', \App\Http\Controllers\Admin\LessonController::class)->names('admin.academy');

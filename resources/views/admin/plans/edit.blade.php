@@ -53,13 +53,9 @@
                     </div>
 
                     <div class="row g-4 mb-4">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Límite de Imágenes</label>
                             <input type="number" name="max_images" value="{{ $plan->max_images }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" required min="1">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Minutos Streaming</label>
-                            <input type="number" name="max_streaming" value="{{ $plan->max_streaming }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" required min="0">
                         </div>
                     </div>
 
