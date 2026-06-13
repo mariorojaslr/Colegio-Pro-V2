@@ -181,7 +181,6 @@
         </div>
 
         <!-- NOTICIAS Y NOVEDADES -->
-        @if(isset($latestNews) && $latestNews->count() > 0)
         <div class="mb-5 pb-5 border-bottom border-theme">
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <div>
@@ -190,6 +189,8 @@
                 </div>
                 <a href="{{ route('news.index') }}" class="btn btn-outline-primary rounded-pill px-4">Ver todas <span class="material-icons align-middle ms-1" style="font-size: 1.1rem;">arrow_forward</span></a>
             </div>
+            
+            @if(isset($latestNews) && $latestNews->count() > 0)
             <div class="row g-4">
                 @foreach($latestNews as $news)
                 <div class="col-md-4">
@@ -214,8 +215,13 @@
                 </div>
                 @endforeach
             </div>
+            @else
+            <div class="text-center p-5 bg-theme-card rounded-4 border border-theme shadow-sm">
+                <span class="material-icons text-muted fs-1 mb-3">newspaper</span>
+                <p class="text-muted mb-0">Aún no se han publicado noticias recientes.</p>
+            </div>
+            @endif
         </div>
-        @endif
 
         <!-- COMISION DIRECTIVA (ORG CHART) -->
         <div class="mb-5 pb-4">

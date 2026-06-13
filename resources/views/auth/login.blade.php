@@ -28,9 +28,9 @@
 
         /* Micro-Animations (Piripipí) */
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% { transform: translateX(-50%) translateY(0px); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+            100% { transform: translateX(-50%) translateY(0px); }
         }
         @keyframes fadeInScale {
             0% { opacity: 0; transform: scale(0.95); }
