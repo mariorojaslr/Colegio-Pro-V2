@@ -210,18 +210,18 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-azul-marino py-5 mt-auto">
-        <div class="container text-center text-white">
+    <footer class="bg-azul-card py-5 mt-auto border-top border-azul-borde">
+        <div class="container text-center text-azul-marino">
             <div class="mb-4">
                 <h4 class="fw-bold">{{ $school->name }}</h4>
-                <p class="text-white-50 small mb-0">Órgano oficial de regulación profesional</p>
+                <p class="text-azul-sec small mb-0">Órgano oficial de regulación profesional</p>
             </div>
             <div class="d-flex justify-content-center gap-4 mb-4">
-                <a href="#" class="text-white-50 text-decoration-none hover-white"><span class="material-icons">facebook</span></a>
-                <a href="#" class="text-white-50 text-decoration-none hover-white"><span class="material-icons">email</span></a>
-                <a href="#" class="text-white-50 text-decoration-none hover-white"><span class="material-icons">location_on</span></a>
+                <a href="#" class="text-azul-primario text-decoration-none shadow-hover-up"><span class="material-icons">facebook</span></a>
+                <a href="#" class="text-azul-primario text-decoration-none shadow-hover-up"><span class="material-icons">email</span></a>
+                <a href="#" class="text-azul-primario text-decoration-none shadow-hover-up"><span class="material-icons">location_on</span></a>
             </div>
-            <p class="text-white-50 small mb-0">&copy; {{ date('Y') }} Todos los derechos reservados. Desarrollado por <span class="text-white">Gente Piola</span>.</p>
+            <p class="text-azul-marino small mb-0">&copy; {{ date('Y') }} Todos los derechos reservados. Desarrollado por <span class="fw-bold">Gente Piola</span>.</p>
         </div>
     </footer>
 
