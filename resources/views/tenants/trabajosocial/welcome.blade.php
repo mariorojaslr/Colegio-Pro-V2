@@ -3,138 +3,349 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Consejo Profesional de Trabajo Social La Rioja - Argentina</title>
+    <title>{{ $school->name ?? 'Colegio de Trabajo Social' }}</title>
     
+    <link rel="icon" type="image/png" href="{{ isset($school) && $school->logo ? asset($school->logo) : asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Fuentes cálidas y legibles -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --ts-blue: #1E3A8A;
-            --ts-red: #DC2626;
-            --ts-light: #F3F4F6;
+            --ts-primary: #8e44ad; /* Púrpura cálido */
+            --ts-secondary: #e67e22; /* Naranja terroso */
+            --ts-light: #fdfaf6; /* Crema suave */
+            --ts-dark: #2c3e50;
         }
         
         body {
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .top-bar {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ts-dark);
             background-color: var(--ts-light);
-            padding: 10px 0;
-            border-bottom: 3px solid var(--ts-red);
         }
 
-        .header-custom {
-            padding: 20px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        h1, h2, h3, h4, h5, h6, .playfair {
+            font-family: 'Playfair Display', serif;
         }
 
-        .nav-link-custom {
-            color: var(--ts-blue);
+        /* NAVBAR */
+        .navbar-ts {
+            background-color: rgba(253, 250, 246, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(142, 68, 173, 0.2);
+        }
+        .navbar-ts .navbar-brand {
+            color: var(--ts-primary) !important;
             font-weight: 700;
-            text-transform: uppercase;
-            margin: 0 10px;
+        }
+        .btn-ts-nav {
+            background-color: var(--ts-secondary);
+            color: #fff;
+            border-radius: 50px;
+            padding: 8px 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-ts-nav:hover {
+            background-color: #d35400;
+            color: #fff;
+            transform: translateY(-2px);
         }
 
+        /* HERO */
+        @php
+            $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : 'https://images.unsplash.com/photo-1529156069898-49953eb1f5bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
+        @endphp
         .hero-ts {
-            background: linear-gradient(135deg, var(--ts-blue) 0%, rgba(30, 58, 138, 0.8) 100%), url('https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, rgba(253, 250, 246, 0.9) 0%, rgba(253, 250, 246, 0.95) 100%), url('{{ $bgImage }}');
             background-size: cover;
             background-position: center;
-            color: white;
-            padding: 100px 0;
+            position: relative;
+        }
+        .hero-ts h1 {
+            font-size: 4rem;
+            color: var(--ts-primary);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        .hero-ts p {
+            font-size: 1.25rem;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+        
+        /* SECTIONS */
+        .section-title {
+            color: var(--ts-primary);
+            margin-bottom: 3rem;
             text-align: center;
-            border-bottom: 5px solid var(--ts-red);
+            font-size: 2.5rem;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--ts-secondary);
+            margin: 15px auto 0;
+            border-radius: 2px;
         }
 
+        /* CARDS */
         .card-ts {
+            background: #fff;
+            border-radius: 20px;
             border: none;
-            border-top: 4px solid var(--ts-blue);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+            padding: 2rem;
+            height: 100%;
+            transition: 0.3s ease;
+        }
+        .card-ts:hover {
+            box-shadow: 0 20px 45px rgba(142, 68, 173, 0.1);
+        }
+        .card-ts img {
+            border-radius: 15px;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
         }
 
+        /* ORG CHART */
+        .org-ts-node {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 250px;
+            border-top: 5px solid var(--ts-primary);
+        }
+        .org-ts-node img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.2);
+        }
+        
         .footer-ts {
-            background-color: var(--ts-blue);
-            color: white;
-            padding: 40px 0;
-            border-top: 5px solid var(--ts-red);
+            background-color: var(--ts-primary);
+            color: #fff;
+            padding: 4rem 0;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP BAR (DATOS DE CONTACTO EXACTOS DEL CLIENTE) -->
-    <div class="top-bar text-center text-md-start">
-        <div class="container d-flex flex-wrap justify-content-center justify-content-md-between align-items-center">
-            <div class="small fw-bold" style="color: var(--ts-blue);">
-                <span class="material-icons" style="font-size: 14px; vertical-align: middle;">location_on</span>
-                San Martín N° 117 - Edificio Federación piso 8° "D"
-            </div>
-            <div class="small fw-bold" style="color: var(--ts-blue);">
-                <span class="material-icons" style="font-size: 14px; vertical-align: middle;">phone</span> 0380-4242904
-                <span class="material-icons ms-3" style="font-size: 14px; vertical-align: middle;">email</span> cptslar@yahoo.com.ar | cptslar@gmail.com
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-ts fixed-top py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand d-flex align-items-center gap-2 playfair" href="/">
+                @if(isset($school) && $school->logo)
+                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 55px;">
+                @else
+                    <span class="material-icons">diversity_1</span>
+                @endif
+                <span class="ms-2 fs-4">{{ $school->name ?? 'Colegio' }}</span>
+            </a>
+            <div>
+                <a href="{{ route('login') }}" class="btn-ts-nav">Portal Colegiados</a>
             </div>
         </div>
-    </div>
-
-    <!-- HEADER -->
-    <header class="header-custom bg-white sticky-top">
-        <div class="container d-flex flex-wrap align-items-center justify-content-between">
-            <div class="d-flex align-items-center gap-3">
-                <!-- Espacio para el logo que proporcionaron -->
-                <div class="rounded-circle border border-2 border-danger d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: #fff; overflow:hidden;">
-                    <span class="material-icons text-primary fs-1">groups</span>
-                </div>
-                <div>
-                    <h2 class="m-0 fw-bold" style="color: var(--ts-blue); font-size: 1.5rem;">Consejo Profesional de Trabajo Social</h2>
-                    <h3 class="m-0 fw-bold" style="color: var(--ts-red); font-size: 1.2rem;">La Rioja - Argentina</h3>
-                </div>
-            </div>
-            <a href="{{ route('login') }}" class="btn btn-danger fw-bold px-4 rounded-pill">Ingresar al Sistema</a>
-        </div>
-    </header>
+    </nav>
 
     <!-- HERO -->
     <section class="hero-ts">
-        <div class="container">
-            <h1 class="display-4 fw-bold mb-4">Compromiso con la Profesión y la Sociedad</h1>
-            <p class="lead mb-0">Órgano rector del ejercicio profesional del Trabajo Social en la provincia de La Rioja.</p>
-        </div>
-    </section>
-
-    <!-- SECCIONES -->
-    <section class="py-5">
-        <div class="container py-4">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card card-ts p-4 h-100">
-                        <h4 class="fw-bold" style="color: var(--ts-blue);">Sobre Nosotros</h4>
-                        <p class="text-muted">El Consejo Profesional de Trabajo Social de La Rioja tiene como misión velar por el cumplimiento de las normas éticas de la profesión, defender los derechos de los matriculados y promover la capacitación continua.</p>
-                    </div>
+        <div class="container position-relative">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <span class="badge rounded-pill mb-3" style="background-color: rgba(230,126,34,0.15); color: var(--ts-secondary); font-size: 0.9rem; padding: 8px 15px;">Bienvenidos</span>
+                    <h1 class="playfair">Empatía, <br>Derechos & <br>Comunidad.</h1>
+                    <p>Órgano oficial que agrupa, regula y defiende a los profesionales del Trabajo Social, velando por la ética y el compromiso social.</p>
                 </div>
-                <div class="col-md-6">
-                    <div class="card card-ts p-4 h-100">
-                        <h4 class="fw-bold" style="color: var(--ts-blue);">Trámites Frecuentes</h4>
-                        <ul class="text-muted">
-                            <li>Solicitud de Matriculación</li>
-                            <li>Pago de Cuotas y Certificados</li>
-                            <li>Denuncias al Tribunal de Ética</li>
-                            <li>Inscripción a Capacitaciones</li>
-                        </ul>
-                    </div>
+                <div class="col-lg-6 text-center">
+                    @if(isset($school) && $school->logo)
+                        <img src="{{ asset($school->logo) }}" alt="Logo Gigante" class="img-fluid opacity-75" style="max-height: 350px; filter: drop-shadow(0 20px 30px rgba(142,68,173,0.2));">
+                    @endif
                 </div>
             </div>
         </div>
     </section>
 
+    <main class="container py-5">
+        
+        <!-- INSTITUCIONAL -->
+        <div class="row align-items-center mb-5 pb-5">
+            <div class="col-lg-6 mb-4">
+                @php
+                    $aboutImage = isset($slider) && $slider->items->count() > 1 ? $slider->items[1]->image_url : 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
+                @endphp
+                <div style="position: relative; border-radius: 30px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+                    <img src="{{ $aboutImage }}" alt="Nosotros" class="img-fluid" style="width: 100%; height: 450px; object-fit: cover;">
+                </div>
+            </div>
+            <div class="col-lg-6 ps-lg-5">
+                <h2 class="playfair" style="color: var(--ts-primary); font-size: 2.5rem; margin-bottom: 1.5rem;">Nuestra Misión</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #666;">
+                    El <strong>{{ $school->name }}</strong> tiene como propósito principal garantizar la jerarquización de la profesión,
+                    el resguardo de las incumbencias y el acompañamiento constante a cada matriculado en su labor diaria.
+                </p>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #666;">
+                    Fomentamos la solidaridad, el respeto por los derechos humanos y la construcción de una sociedad más justa y equitativa.
+                </p>
+            </div>
+        </div>
+
+        <!-- NOTICIAS -->
+        <div class="mb-5 pb-5">
+            <h2 class="section-title">Últimas Novedades</h2>
+            
+            @if(isset($latestNews) && $latestNews->count() > 0)
+            <div class="row g-4 mt-4">
+                @foreach($latestNews as $news)
+                <div class="col-md-4">
+                    <div class="card-ts d-flex flex-column">
+                        @if($news->image_path)
+                            <img src="{{ asset($news->image_path) }}" alt="{{ $news->title }}">
+                        @else
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="border-radius: 15px; height: 200px; margin-bottom: 1.5rem;">
+                                <span class="material-icons" style="font-size: 3rem; color: var(--ts-primary);">volunteer_activism</span>
+                            </div>
+                        @endif
+                        <span class="text-muted small mb-2"><span class="material-icons align-middle fs-6 me-1">calendar_today</span> {{ $news->published_at->format('d de M, Y') }}</span>
+                        <h4 class="playfair mb-3" style="font-size: 1.3rem;">{{ $news->title }}</h4>
+                        <div class="mt-auto pt-3">
+                            <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none fw-bold" style="color: var(--ts-secondary);">Seguir Leyendo →</a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="text-center mt-5">
+                <a href="{{ route('news.index') }}" class="btn btn-outline-primary" style="border-radius: 50px; border-color: var(--ts-primary); color: var(--ts-primary); padding: 10px 30px; text-decoration:none;">Ver todas las noticias</a>
+            </div>
+            @else
+            <div class="text-center p-5 rounded-4" style="background-color: #fff; border: 1px dashed var(--ts-secondary);">
+                <p class="text-muted mb-0">La cartelera informativa se actualizará pronto.</p>
+            </div>
+            @endif
+        </div>
+
+        <!-- AUTORIDADES -->
+        <div class="mb-5 pb-5">
+            <h2 class="section-title">Nuestras Autoridades</h2>
+            
+            @if(isset($boardMembers) && $boardMembers->count() > 0)
+                @foreach($boardMembers as $department => $members)
+                    <div class="mb-5 bg-white p-5 rounded-4 shadow-sm">
+                        <h4 class="text-center playfair mb-5" style="color: var(--ts-secondary);">{{ $department }}</h4>
+                        @php
+                            $president = null;
+                            $others = [];
+                            foreach($members as $m) {
+                                if(!$president && (stripos($m->role, 'president') !== false || stripos($m->role, 'titular') !== false || stripos($m->role, 'director') !== false)) {
+                                    $president = $m;
+                                } else {
+                                    $others[] = $m;
+                                }
+                            }
+                            if(!$president && count($others) > 0) {
+                                $president = array_shift($others);
+                            }
+                        @endphp
+
+                        <div class="d-flex flex-column align-items-center">
+                            @if($president)
+                            <div class="org-ts-node mb-4" style="border-top-color: var(--ts-secondary);">
+                                <img src="{{ $president->image_path }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($president->name) }}&background=8e44ad&color=fff'">
+                                <h5 class="fw-bold mb-1">{{ $president->name }}</h5>
+                                <span class="badge rounded-pill" style="background-color: rgba(230,126,34,0.1); color: var(--ts-secondary);">{{ $president->role }}</span>
+                            </div>
+                            @endif
+
+                            @if(count($others) > 0)
+                            <div class="d-flex flex-wrap justify-content-center gap-4">
+                                @foreach($others as $m)
+                                <div class="org-ts-node">
+                                    <img src="{{ $m->image_path }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background=2c3e50&color=fff'">
+                                    <h6 class="fw-bold mb-1">{{ $m->name }}</h6>
+                                    <small class="text-muted fw-bold d-block">{{ $m->role }}</small>
+                                    @if($m->is_substitute) <small class="text-danger">Suplente</small> @endif
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="text-center p-4">
+                    <p class="text-muted">Las autoridades se publicarán pronto.</p>
+                </div>
+            @endif
+        </div>
+
+        <!-- CONTACTO -->
+        <div class="row g-4 mb-4 bg-white p-4 p-md-5 rounded-4 shadow-sm">
+            <div class="col-lg-5">
+                <h2 class="playfair mb-4" style="color: var(--ts-primary);">Estemos en Contacto</h2>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-light p-3 rounded-circle me-3 text-center" style="width: 60px; height: 60px;">
+                        <span class="material-icons" style="color: var(--ts-secondary); font-size: 28px;">location_on</span>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Dónde encontrarnos</small>
+                        <strong class="fs-6">{{ $school->address ?? 'Dirección no disponible' }}</strong>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-light p-3 rounded-circle me-3 text-center" style="width: 60px; height: 60px;">
+                        <span class="material-icons" style="color: var(--ts-secondary); font-size: 28px;">phone</span>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Llamanos</small>
+                        <strong class="fs-6">{{ $school->phone ?? 'Teléfono no disponible' }}</strong>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-light p-3 rounded-circle me-3 text-center" style="width: 60px; height: 60px;">
+                        <span class="material-icons" style="color: var(--ts-secondary); font-size: 28px;">email</span>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Escribinos</small>
+                        <strong class="fs-6">{{ $school->email ?? 'correo@ejemplo.com' }}</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                @if($school->map_embed_code)
+                    <div class="rounded-4 overflow-hidden shadow-sm" style="height: 100%; min-height: 350px;">
+                        {!! $school->map_embed_code !!}
+                    </div>
+                @else
+                    <div class="bg-light rounded-4 d-flex align-items-center justify-content-center" style="height: 350px;">
+                        <span class="material-icons text-muted" style="font-size: 3rem;">map</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+    </main>
+
     <!-- FOOTER -->
     <footer class="footer-ts">
-        <div class="container text-center">
-            <h5 class="fw-bold mb-3">Consejo Profesional de Trabajo Social La Rioja - Argentina</h5>
-            <p class="small mb-1">San Martín N° 117 - Edificio Federación piso 8° "D"</p>
-            <p class="small mb-0">Tel: 0380-4242904 | Emails: cptslar@yahoo.com.ar / cptslar@gmail.com</p>
+        <div class="container">
+            <h3 class="playfair mb-3">{{ $school->name }}</h3>
+            <p class="mb-0" style="opacity: 0.8;">&copy; {{ date('Y') }} Todos los derechos reservados.</p>
         </div>
     </footer>
 

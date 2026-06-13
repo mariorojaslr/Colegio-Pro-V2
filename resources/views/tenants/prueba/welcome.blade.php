@@ -3,204 +3,216 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $school->name ?? 'Colegio de Prueba' }}</title>
+    <title>{{ $school->name ?? 'SaaS Demo' }}</title>
     
     <link rel="icon" type="image/png" href="{{ isset($school) && $school->logo ? asset($school->logo) : asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Fuente Tech/Clean -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #10B981; /* Emerald Green */
-            --dark-bg: #0f172a; /* Slate 900 */
-            --dark-card: #1e293b; /* Slate 800 */
-            --text-light: #f8fafc; /* Slate 50 */
-            --text-muted: #94a3b8; /* Slate 400 */
+            --brand-main: #10b981; /* Esmeralda */
+            --brand-dark: #0f172a; /* Slate 900 */
+            --brand-light: #f8fafc; /* Slate 50 */
         }
         
         body {
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            font-family: 'Outfit', sans-serif;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            color: #334155;
+            background-color: var(--brand-light);
         }
 
-        /* Navbar Custom */
-        .navbar-custom {
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        h1, h2, h3, .grotesk {
+            font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* Hero Custom */
-        .hero-section {
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.15), transparent 50%),
-                        radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.1), transparent 50%);
+        /* NAVBAR */
+        .navbar-tech {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .btn-emerald {
-            background-color: var(--primary);
+        /* HERO */
+        @php
+            $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
+        @endphp
+        .hero-tech {
+            padding: 150px 0 100px;
+            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.1), transparent), 
+                        url('{{ $bgImage }}');
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .btn-tech {
+            background-color: var(--brand-main);
             color: #fff;
-            border: none;
             padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
         }
-
-        .btn-emerald:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        .btn-tech:hover {
+            background-color: #059669;
             color: #fff;
+            transform: translateY(-2px);
         }
 
-        .glass-card {
-            background: var(--dark-card);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s ease;
+        /* CARDS */
+        .tech-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 30px;
+            transition: 0.3s;
+            height: 100%;
+        }
+        .tech-card:hover {
+            border-color: var(--brand-main);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .node-tech {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            width: 220px;
         }
-
-        .huge-title {
-            font-size: 4rem;
-            font-weight: 900;
-            background: linear-gradient(to right, #10B981, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.1;
-        }
-
-        .avatar-img {
-            width: 100px;
-            height: 100px;
+        .node-tech img {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            border: 3px solid var(--primary);
-            padding: 3px;
+            margin-bottom: 15px;
             object-fit: cover;
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top py-3">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-3" href="/">
+    <nav class="navbar navbar-expand-lg navbar-tech fixed-top">
+        <div class="container d-flex align-items-center justify-content-between py-2">
+            <a class="navbar-brand grotesk fw-bold d-flex align-items-center gap-2" href="/" style="color: var(--brand-dark);">
                 @if(isset($school) && $school->logo)
-                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 50px;">
+                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 35px;">
                 @else
-                    <span class="material-icons text-success" style="font-size: 2.5rem;">memory</span>
+                    <span class="material-icons" style="color: var(--brand-main);">cloud_done</span>
                 @endif
-                <span class="fw-bold fs-4">{{ $school->name ?? 'Empresa de Prueba' }}</span>
+                {{ $school->name ?? 'Demo SaaS' }}
             </a>
-            
-            <div class="ms-auto">
-                <a href="{{ route('login') }}" class="btn-emerald text-decoration-none d-flex align-items-center gap-2">
-                    <span class="material-icons">terminal</span> Portal de Acceso
+            <div>
+                <a href="{{ route('login') }}" class="btn-tech">
+                    Acceder <span class="material-icons" style="font-size: 1.2rem;">arrow_forward</span>
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- HERO -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <span class="badge bg-success bg-opacity-25 text-success px-3 py-2 rounded-pill mb-3 border border-success border-opacity-25">
-                        Versión 2.0.0
-                    </span>
-                    <h1 class="huge-title mb-4">La nueva era de la regulación digital.</h1>
-                    <p class="lead text-muted mb-5">
-                        Somos el órgano oficial que nuclea a los profesionales en sistemas. Diseñado exclusivamente para demostrar el poder del diseño único por empresa (Tenant-Specific Overrides).
-                    </p>
-                    <div class="d-flex gap-3">
-                        <button class="btn-emerald">Conoce más</button>
-                        <button class="btn btn-outline-light rounded-pill px-4">Ver Autoridades</button>
-                    </div>
-                </div>
-                <div class="col-lg-6 mt-5 mt-lg-0 text-center">
-                    <!-- Imagen decorativa tecnológica -->
-                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Tech" class="img-fluid rounded-4 shadow-lg" style="border: 2px solid rgba(255,255,255,0.1);">
-                </div>
-            </div>
+    <section class="hero-tech">
+        <div class="container text-center">
+            <span class="badge bg-light text-success border border-success mb-3 px-3 py-2 rounded-pill">Plataforma V2 Activa</span>
+            <h1 class="display-4 fw-bold mb-4" style="color: var(--brand-dark);">Tu organización,<br>en la nube.</h1>
+            <p class="fs-5 mb-5 mx-auto" style="max-width: 600px; color: #64748b;">
+                Gestión inteligente para colegios profesionales. Matrículas, cobros, noticias y portal de colegiados en un solo lugar.
+            </p>
         </div>
     </section>
 
-    <!-- SERVICIOS -->
-    <section class="py-5">
-        <div class="container py-5">
-            <div class="text-center mb-5">
-                <h2 class="fs-1 fw-bold">Nuestros Servicios Exclusivos</h2>
-                <p class="text-muted">Diseño estructurado según las necesidades de esta empresa.</p>
+    <main class="container py-5">
+        
+        <!-- CARACTERÍSTICAS -->
+        <div class="row g-4 mb-5 pb-5 border-bottom">
+            <div class="col-md-4">
+                <div class="tech-card text-center">
+                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">speed</span>
+                    <h4 class="grotesk fw-bold">Gestión Ágil</h4>
+                    <p class="text-muted small">Automatizá la revisión de legajos y el pago de cuotas mensuales de forma simple.</p>
+                </div>
             </div>
+            <div class="col-md-4">
+                <div class="tech-card text-center">
+                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">verified_user</span>
+                    <h4 class="grotesk fw-bold">Seguridad Total</h4>
+                    <p class="text-muted small">Validación de certificados por código QR y perfiles con auditoría completa.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="tech-card text-center">
+                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">devices</span>
+                    <h4 class="grotesk fw-bold">Multi-dispositivo</h4>
+                    <p class="text-muted small">Tus matriculados pueden acceder desde cualquier lugar con un diseño responsivo y PWA.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTICIAS -->
+        <div class="mb-5 pb-5 border-bottom">
+            <h2 class="grotesk fw-bold mb-4" style="color: var(--brand-dark);">Últimos Updates</h2>
+            @if(isset($latestNews) && $latestNews->count() > 0)
             <div class="row g-4">
+                @foreach($latestNews as $news)
                 <div class="col-md-4">
-                    <div class="glass-card text-center h-100">
-                        <span class="material-icons text-success mb-3" style="font-size: 3rem;">dns</span>
-                        <h4 class="fw-bold">Infraestructura</h4>
-                        <p class="text-muted mb-0">Esta tarjeta es un ejemplo de contenido que solo existe en esta empresa.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="glass-card text-center h-100">
-                        <span class="material-icons text-success mb-3" style="font-size: 3rem;">code</span>
-                        <h4 class="fw-bold">API Pública</h4>
-                        <p class="text-muted mb-0">Contenido exclusivo programado a mano para el subdominio de prueba.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="glass-card text-center h-100">
-                        <span class="material-icons text-success mb-3" style="font-size: 3rem;">security</span>
-                        <h4 class="fw-bold">Ciberseguridad</h4>
-                        <p class="text-muted mb-0">Total aislamiento de datos y código fuente entre empresas.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- AUTORIDADES -->
-    <section class="py-5" style="background-color: var(--dark-card);">
-        <div class="container py-5">
-            <h2 class="fs-1 fw-bold text-center mb-5">Nuestros Pioneros</h2>
-            <div class="row justify-content-center g-4">
-                @if(isset($boardMembers) && count($boardMembers) > 0)
-                    @foreach($boardMembers as $dept => $members)
-                        @foreach($members as $m)
-                        <div class="col-md-3 text-center">
-                            <div class="mb-3">
-                                <img src="{{ $m->image_path }}" class="avatar-img shadow-lg" alt="{{ $m->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background=10B981&color=fff'">
+                    <div class="tech-card p-0 overflow-hidden">
+                        @if($news->image_path)
+                            <img src="{{ asset($news->image_path) }}" class="w-100" style="height: 180px; object-fit: cover;">
+                        @else
+                            <div class="w-100 bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                                <span class="material-icons text-muted" style="font-size: 3rem;">article</span>
                             </div>
-                            <h5 class="fw-bold mb-1">{{ $m->name }}</h5>
-                            <p class="text-success small mb-0 fw-bold">{{ $m->role }}</p>
+                        @endif
+                        <div class="p-4">
+                            <h5 class="fw-bold">{{ $news->title }}</h5>
+                            <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none fw-bold mt-3 d-inline-block" style="color: var(--brand-main);">Ver detalles &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <div class="alert alert-light border text-center p-4">
+                <p class="mb-0 text-muted">No hay actualizaciones en el sistema de noticias.</p>
+            </div>
+            @endif
+        </div>
+
+        <!-- AUTORIDADES -->
+        <div class="mb-5">
+            <h2 class="grotesk fw-bold mb-4 text-center" style="color: var(--brand-dark);">Equipo Demo</h2>
+            @if(isset($boardMembers) && $boardMembers->count() > 0)
+                @foreach($boardMembers as $department => $members)
+                    <h5 class="text-center text-muted mb-4 mt-5">{{ $department }}</h5>
+                    <div class="d-flex flex-wrap justify-content-center gap-4">
+                        @foreach($members as $m)
+                        <div class="node-tech">
+                            <img src="{{ $m->image_path }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background=10b981&color=fff'">
+                            <h6 class="fw-bold mb-1">{{ $m->name }}</h6>
+                            <small class="text-muted">{{ $m->role }}</small>
                         </div>
                         @endforeach
-                    @endforeach
-                @else
-                    <p class="text-center text-muted">Aún no hay autoridades cargadas.</p>
-                @endif
-            </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="alert alert-light border text-center p-4">
+                    <p class="mb-0 text-muted">Aún no hay autoridades configuradas para esta instancia.</p>
+                </div>
+            @endif
         </div>
-    </section>
+    </main>
 
-    <!-- FOOTER -->
-    <footer class="py-4 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+    <footer class="py-5 border-top" style="background-color: #fff;">
         <div class="container text-center">
-            <p class="text-muted small mb-0">&copy; {{ date('Y') }} {{ $school->name ?? 'Empresa' }}. Implementación de Vistas por Inquilino demostrada con éxito.</p>
+            <p class="text-muted mb-0">Demostración Multi-tenant SaaS &copy; {{ date('Y') }}</p>
         </div>
     </footer>
 
