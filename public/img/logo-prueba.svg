@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+    <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#047857;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="grad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#34d399;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+        </linearGradient>
+        <filter id="shadow">
+            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity="0.3"/>
+        </filter>
+    </defs>
+    <!-- Background Circle -->
+    <circle cx="200" cy="200" r="180" fill="url(#grad1)" filter="url(#shadow)" />
+    
+    <!-- Outer Ring -->
+    <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="4" stroke-dasharray="10 10" />
+
+    <!-- Polygon Shape -->
+    <polygon points="200,80 290,140 290,260 200,320 110,260 110,140" fill="url(#grad2)" filter="url(#shadow)" />
+    
+    <!-- Inner P -->
+    <path d="M 170 140 L 230 140 C 260 140 260 190 230 190 L 195 190 L 195 260 L 170 260 Z" fill="#ffffff" />
+    <path d="M 195 160 L 225 160 C 235 160 235 175 225 175 L 195 175 Z" fill="url(#grad2)" />
+</svg>

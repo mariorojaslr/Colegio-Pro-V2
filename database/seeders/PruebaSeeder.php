@@ -17,7 +17,7 @@ class PruebaSeeder extends Seeder
             ['slug' => 'prueba'],
             [
                 'name' => "C.P. de Sistemas y Tecnología",
-                'logo' => "https://img.logoipsum.com/296.svg",
+                'logo' => "img/logo-prueba.svg",
                 'primary_color' => "#10B981",
                 'secondary_color' => "#0f172a",
                 'is_active' => true,

@@ -95,12 +95,11 @@
     <!-- NAVBAR MINIMALISTA -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3 shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold text-uppercase" href="/" style="letter-spacing: 2px;">
+            <a class="navbar-brand fw-bold text-uppercase d-flex align-items-center gap-2" href="/" style="letter-spacing: 1px; font-size: 1rem;">
                 @if(isset($school) && $school->logo)
-                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 40px;">
-                @else
-                    CA | {{ $school->name ?? 'Colegio' }}
+                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 50px;">
                 @endif
+                <span class="d-none d-sm-inline">{{ $school->name ?? 'CAPLaR' }}</span>
             </a>
             <div class="ms-auto">
                 <a href="{{ route('login') }}" class="btn btn-dark rounded-0 px-4 text-uppercase" style="letter-spacing: 1px;">Ingreso Matriculados</a>

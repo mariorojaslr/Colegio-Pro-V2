@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registro - {{ $currentTenant->name ?? 'Colegio-Pro' }}</title>
+    <link rel="icon" href="{{ isset($currentTenant) && $currentTenant->logo ? asset($currentTenant->logo) : asset('favicon.ico') }}">
     <link rel="manifest" href="/manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -44,33 +45,35 @@
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(15px);
             border-radius: 16px;
-            padding: 3rem 2.5rem 2.5rem;
+            padding: 5rem 2.5rem 2.5rem; /* Increased top padding to avoid overlap */
             width: 100%;
             max-width: 450px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255,255,255,0.1);
             position: relative;
             animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            margin-top: 40px;
+            margin-top: 80px; /* Space for the floating logo */
         }
 
         .login-logo-container {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 20px; /* Modern squircle shape */
+            padding: 15px 25px; /* Flexible padding */
             text-align: center;
-            border: 2px solid {{ $currentTenant->primary_color ?? '#3b82f6' }};
+            border: 3px solid {{ $currentTenant->primary_color ?? '#3b82f6' }};
             position: absolute;
-            top: -50px;
+            top: -60px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 100px;
+            min-width: 120px;
+            max-width: 280px;
+            height: 110px;
             display: flex;
             align-items: center;
             justify-content: center;
             animation: float 4s ease-in-out infinite, pulseGlow 3s infinite;
             z-index: 10;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .login-logo-container img {
