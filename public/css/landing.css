@@ -1,0 +1,95 @@
+:root {
+    --azul-claro: #D6EAF8;
+    --azul-card: #EAF2F8;
+    --azul-marino: #154360;
+    --azul-sec: #2E86C1;
+    --azul-primario: #2980B9;
+    --celeste: #5DADE2;
+    --azul-borde: #A9CCE3;
+}
+
+body {
+    background-color: var(--azul-claro);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--azul-marino);
+}
+
+.bg-azul-card { background-color: var(--azul-card); }
+.bg-azul-primario { background-color: var(--azul-primario); color: white; }
+.text-azul-marino { color: var(--azul-marino); }
+.text-azul-primario { color: var(--azul-primario); }
+.text-azul-sec { color: var(--azul-sec); }
+.border-azul-borde { border-color: var(--azul-borde) !important; }
+
+.shadow-hover-up {
+    transition: all 0.3s ease;
+}
+.shadow-hover-up:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(41, 128, 185, 0.2) !important;
+}
+
+.hero-bg {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--azul-borde);
+}
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(41, 128, 185, 0.85), rgba(93, 173, 226, 0.85));
+    z-index: 0;
+}
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.rounded-4 { border-radius: 1rem !important; }
+.rounded-5 { border-radius: 1.5rem !important; }
+
+.material-icons {
+    vertical-align: middle;
+}
+
+.org-chart-node {
+    background-color: white;
+    border: 1px solid var(--azul-borde);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    z-index: 2;
+}
+.org-chart-node img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--azul-claro);
+    margin-bottom: 1rem;
+}
+.org-chart-connector {
+    width: 2px;
+    background-color: var(--azul-primario);
+    margin: 0 auto;
+    height: 40px;
+    position: relative;
+    z-index: 1;
+}
+.org-line-horizontal {
+    height: 2px;
+    background-color: var(--azul-primario);
+    width: 100%;
+    margin-bottom: -1px;
+    position: relative;
+    z-index: 1;
+}

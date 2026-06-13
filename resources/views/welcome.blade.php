@@ -1,273 +1,230 @@
-@extends('layouts.main')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $school->name ?? 'Colegio-Pro' }}</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/landing.css') }}" rel="stylesheet">
+    <style>
+        :root {
+            --azul-primario: {{ $school->primary_color ?? '#2980B9' }};
+            --azul-sec: {{ $school->secondary_color ?? '#2E86C1' }};
+        }
+    </style>
+</head>
+<body>
 
-@section('title', 'Colegio de Terapistas Ocupacionales')
-
-@section('content')
-<!-- Barra de Navegación Institucional Superior -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);">
-    <div class="container-fluid px-4">
-        @php
-            $tenant = $currentTenant ?? (\App\Models\School::where('slug', 'cotolar')->first() ?? \App\Models\School::first());
-        @endphp
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-            @if($tenant && $tenant->logo)
-                <img src="{{ asset($tenant->logo) }}" alt="{{ $tenant->name }}" style="height: 110px; width: 110px; object-fit: cover;" class="me-2 rounded-circle border border-2 border-primary shadow-sm bg-white">
-            @else
-                <div style="width: 110px; height: 110px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; display:flex; justify-content:center; align-items:center;" class="me-2 shadow-sm">
-                    <i class="bi bi-shield-plus text-white fs-1"></i>
+    <!-- HEADER -->
+    <nav class="navbar navbar-expand-lg bg-azul-card border-bottom border-azul-borde sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <div class="bg-white rounded-4 shadow-sm d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; padding: 5px;">
+                    @if(isset($school) && $school->logo)
+                        <img src="{{ asset($school->logo) }}" alt="Logo" class="img-fluid">
+                    @else
+                        <span class="material-icons text-azul-primario">school</span>
+                    @endif
                 </div>
-            @endif
-            <span style="font-family: 'Outfit', sans-serif; letter-spacing: -0.5px; font-size: 1.5rem;" class="d-none d-sm-inline text-truncate">{{ strtoupper($tenant->name ?? 'COLEGIO') }}</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-medium" style="font-size: 0.9rem;">
-                @if(isset($mainMenu) && $mainMenu)
-                    @foreach($mainMenu->items as $item)
-                        @if($item->children->count() > 0)
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                    {{ $item->title }}
-                                </a>
-                                <ul class="dropdown-menu shadow-lg border-0 bg-dark">
-                                    @foreach($item->children as $child)
-                                        @if($child->is_active)
-                                            <li><a class="dropdown-item text-white hover-gold" href="{{ $child->page_id ? route('public.page', $child->page->slug) : $child->url }}" target="{{ $child->target }}">{{ $child->title }}</a></li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                            </li>
-                        @else
-                            <li class="nav-item"><a class="nav-link" href="{{ $item->page_id ? route('public.page', $item->page->slug) : $item->url }}" target="{{ $item->target }}">{{ $item->title }}</a></li>
-                        @endif
-                    @endforeach
-                @else
-                    <li class="nav-item"><a class="nav-link active" href="#institucional">Institucional</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#ejercicio">Ejercicio Profesional</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#capacitaciones">Capacitaciones</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-                @endif
-            </ul>
-            <div class="d-flex gap-2">
-                <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-4 shadow-sm" style="font-size: 0.9rem;">Portal de Autogestión</a>
-                <a href="{{ route('login') }}" class="btn btn-primary rounded-pill px-4 shadow-sm" style="font-size: 0.9rem; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none;">Pagar Cuota</a>
+                <div>
+                    <h1 class="h5 mb-0 fw-bold text-azul-marino">{{ $school->name ?? 'Institución' }}</h1>
+                    <small class="text-azul-sec d-block" style="font-size: 0.75rem;">Colegio Profesional</small>
+                </div>
+            </a>
+            
+            <div class="ms-auto">
+                <a href="{{ route('login') }}" class="btn bg-azul-primario rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                    <span class="material-icons" style="font-size: 1rem;">login</span> Ingresar
+                </a>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Hero Section Espectacular / Slider Dinámico -->
-@if(isset($slider) && $slider->items->count() > 0)
-    <div id="heroSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" style="min-height: 100vh;">
-        <div class="carousel-inner h-100">
-            @foreach($slider->items as $index => $slide)
-                <div class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100 position-relative" style="min-height: 100vh; background: url('{{ $slide->image_url }}') center/cover fixed;">
-                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%);"></div>
-                    <section class="h-100 d-flex align-items-center position-relative pt-5">
-                        <div class="container mt-5">
-                            <div class="row">
-                                <div class="col-lg-7 text-white">
-                                    <h1 class="display-3 fw-black mb-4 animate__animated animate__fadeInUp" style="font-family: 'Outfit', sans-serif; line-height: 1.1;">
-                                        {{ $slide->title }}
-                                    </h1>
-                                    <p class="lead mb-5 opacity-75 fw-light animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.25rem; max-width: 600px;">
-                                        {{ $slide->description }}
-                                    </p>
-                                    @if($slide->link)
-                                        <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s">
-                                            <a href="{{ $slide->link }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">Ingresar al Portal</a>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            @endforeach
+    <!-- HERO SECTION -->
+    @php
+        $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : asset('image.png');
+    @endphp
+    <section class="hero-bg" style="background-image: url('{{ $bgImage }}');">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content text-center py-5">
+            <p class="text-white fw-bold mb-3 text-uppercase tracking-wider small opacity-75">Órgano oficial de regulación profesional</p>
+            <h1 class="display-4 fw-bold text-white mb-4 shadow-sm">{{ $school->name ?? 'Bienvenido' }}</h1>
+            <p class="lead text-white mx-auto" style="max-width: 800px; opacity: 0.9;">
+                Organismo encargado de habilitar, regular y fiscalizar el ejercicio ético y legal de la profesión en toda la jurisdicción.
+            </p>
         </div>
-        @if($slider->items->count() > 1)
-            <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Siguiente</span>
-            </button>
-        @endif
-    </div>
-@else
-    <div class="position-relative overflow-hidden" style="min-height: 100vh; background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover fixed;">
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.7) 100%);"></div>
-        <section class="h-100 d-flex align-items-center position-relative pt-5">
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-lg-7 text-white">
-                        <span class="badge rounded-pill bg-primary bg-opacity-25 text-info mb-3 px-3 py-2 border border-info border-opacity-25">ASOCIACIÓN PROFESIONAL</span>
-                        <h1 class="display-3 fw-black mb-4" style="font-family: 'Outfit', sans-serif; line-height: 1.1;">
-                            Excelencia y Ética en la <br><span style="background: linear-gradient(120deg, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Terapia Ocupacional</span>
-                        </h1>
-                        <p class="lead mb-5 opacity-75 fw-light" style="font-size: 1.25rem; max-width: 600px;">
-                            Promovemos el desarrollo científico, ético y profesional de nuestros colegiados, garantizando la calidad de la atención en salud para toda la comunidad.
-                        </p>
-                        <div class="d-flex gap-3">
-                            <a href="{{ route('login') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow-lg">Ingresar al Portal</a>
-                            <a href="#quienes-somos" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-medium backdrop-blur">Conocer más</a>
-                        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="bg-azul-card py-5 border-bottom border-azul-borde">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold text-azul-primario mb-0">+350</h2>
+                    <p class="text-azul-sec small mt-2 fw-semibold">Profesionales Matriculados</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold text-azul-primario mb-0">20+</h2>
+                    <p class="text-azul-sec small mt-2 fw-semibold">Años de Trayectoria</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold text-azul-primario mb-0">18</h2>
+                    <p class="text-azul-sec small mt-2 fw-semibold">Localidades de Cobertura</p>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h2 class="display-5 fw-bold text-azul-primario mb-0">12</h2>
+                    <p class="text-azul-sec small mt-2 fw-semibold">Convenios Vigentes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="container py-5">
+        
+        <!-- INSTITUCIONAL -->
+        <div class="row align-items-center mb-5 pb-5 border-bottom border-azul-borde">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <span class="material-icons text-azul-primario fs-1">info</span>
+                    <h2 class="h2 fw-bold text-azul-marino mb-0">¿Quiénes somos?</h2>
+                </div>
+                <div class="bg-white rounded-4 p-4 shadow-sm border border-azul-borde">
+                    <p class="text-azul-marino mb-0" style="line-height: 1.8;">
+                        El <strong>{{ $school->name }}</strong> es la institución que agrupa y regula a todos los profesionales que ejercen en nuestra jurisdicción. 
+                        Somos el organismo encargado de controlar la matrícula profesional, hacer cumplir el código de ética y defender los derechos de los colegiados, fomentando la excelencia y la actualización continua.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Institucional" class="img-fluid rounded-4 shadow-lg border border-azul-borde" style="max-height: 350px; object-fit: cover;">
+            </div>
+        </div>
+
+        <!-- SERVICIOS CARDS -->
+        <div class="row g-4 mb-5 pb-5 border-bottom border-azul-borde">
+            <div class="col-md-4">
+                <div class="card h-100 border-azul-borde rounded-4 p-4 text-center shadow-hover-up bg-azul-card">
+                    <div class="mb-3">
+                        <span class="material-icons text-azul-primario" style="font-size: 3rem;">badge</span>
                     </div>
+                    <h4 class="fw-bold text-azul-marino mb-2">Matrícula Habilitante</h4>
+                    <p class="text-azul-sec small mb-0">Verificá la habilitación legal de cualquier profesional en nuestra jurisdicción.</p>
                 </div>
             </div>
-        </section>
-    </div>
-@endif
-
-<!-- Quiénes Somos & Organigrama -->
-<section id="institucional" class="py-5" style="background-color: #f8fafc;">
-    <div class="container py-5">
-        <div class="text-center mb-5 pb-3">
-            <h6 class="text-primary fw-bold text-uppercase tracking-wider">Nuestro Equipo</h6>
-            <h2 class="display-5 fw-bold text-dark" style="font-family: 'Outfit', sans-serif;">Autoridades Institucionales</h2>
-            <p class="text-muted fs-5 mx-auto" style="max-width: 700px;">Conozca a los profesionales que lideran nuestra institución y velan por la excelencia en nuestra práctica.</p>
+            <div class="col-md-4">
+                <div class="card h-100 border-azul-borde rounded-4 p-4 text-center shadow-hover-up bg-azul-card">
+                    <div class="mb-3">
+                        <span class="material-icons text-azul-primario" style="font-size: 3rem;">assignment</span>
+                    </div>
+                    <h4 class="fw-bold text-azul-marino mb-2">Trámites y Requisitos</h4>
+                    <p class="text-azul-sec small mb-0">Toda la información necesaria para iniciar o renovar tu matriculación.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-azul-borde rounded-4 p-4 text-center shadow-hover-up bg-azul-card">
+                    <div class="mb-3">
+                        <span class="material-icons text-azul-primario" style="font-size: 3rem;">support_agent</span>
+                    </div>
+                    <h4 class="fw-bold text-azul-marino mb-2">Atención al Colegiado</h4>
+                    <p class="text-azul-sec small mb-0">Consultas, trámites presenciales, certificaciones y asistencia administrativa.</p>
+                </div>
+            </div>
         </div>
 
-        @if(isset($boardMembers) && $boardMembers->count() > 0)
-            @foreach($boardMembers as $department => $members)
-                <div class="mb-5">
-                    <h3 class="fw-bold mb-4 text-center text-secondary" style="font-family: 'Outfit', sans-serif;">{{ $department }}</h3>
-                    <div class="row justify-content-center g-4">
-                        @foreach($members as $member)
-                            <div class="col-lg-3 col-md-4 col-sm-6">
-                                <div class="card border-0 h-100 organigram-card position-relative overflow-hidden" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.8) !important;">
-                                    <div style="height: 80px; background: linear-gradient(135deg, {{ $member->is_substitute ? '#94a3b8, #cbd5e1' : '#3b82f6, #8b5cf6' }});"></div>
-                                    <div class="position-absolute w-100 text-center" style="top: 30px;">
-                                        @php
-                                            $photo = $member->image_path ? asset($member->image_path) : 'https://ui-avatars.com/api/?name='.urlencode($member->name).'&color=fff&background='.($member->is_substitute ? '94a3b8' : '3b82f6');
-                                        @endphp
-                                        <img src="{{ $photo }}" alt="{{ $member->name }}" class="rounded-circle shadow-sm border border-3 border-white bg-white" style="width: 100px; height: 100px; object-fit: cover;">
-                                    </div>
-                                    <div class="card-body text-center pt-5 mt-3 pb-3 px-3">
-                                        <h5 class="fw-bold mb-1 mt-2" style="color: #1e293b; font-size: 1.1rem;">{{ $member->name }}</h5>
-                                        <p class="fw-bold small text-uppercase mb-2 {{ $member->is_substitute ? 'text-secondary' : 'text-primary' }}" style="letter-spacing: 0.5px; font-size: 0.8rem;">
-                                            {{ $member->role }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+        <!-- COMISION DIRECTIVA (ORG CHART) -->
+        <div class="mb-5 pb-4">
+            <div class="text-center mb-5">
+                <h2 class="h2 fw-bold text-azul-marino mb-2">Comisión Directiva</h2>
+                <p class="text-azul-sec">Autoridades que guían nuestra institución</p>
+            </div>
+
+            @if(isset($boardMembers) && $boardMembers->count() > 0)
+                @php
+                    $president = null;
+                    $others = [];
+                    foreach($boardMembers as $dept => $members) {
+                        foreach($members as $m) {
+                            if(stripos($m->role, 'president') !== false) {
+                                $president = $m;
+                            } else {
+                                $others[] = $m;
+                            }
+                        }
+                    }
+                    // Si no hay alguien con rol de presidente, tomamos el primero
+                    if(!$president && count($others) > 0) {
+                        $president = array_shift($others);
+                    }
+                @endphp
+
+                <div class="org-chart-wrapper d-flex flex-column align-items-center">
+                    @if($president)
+                    <!-- Nivel 1: Presidente -->
+                    <div class="org-chart-node shadow-hover-up" style="width: 280px;">
+                        <img src="{{ $president->image_path }}" alt="{{ $president->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($president->name) }}&background=EAF2F8&color=2980B9'">
+                        <h5 class="fw-bold text-azul-marino mb-1">{{ $president->name }}</h5>
+                        <p class="text-azul-primario fw-bold small mb-0">{{ $president->role }}</p>
+                        <p class="text-muted small mb-0">{{ $president->department }}</p>
+                    </div>
+                    @endif
+
+                    @if(count($others) > 0)
+                    <!-- Conector Vertical -->
+                    <div class="org-chart-connector"></div>
+                    <!-- Línea Horizontal (solo si hay más de 1) -->
+                    @if(count($others) > 1)
+                    <div class="org-line-horizontal" style="max-width: {{ (count($others)-1) * 290 }}px;"></div>
+                    @endif
+
+                    <!-- Nivel 2: Resto de la comisión -->
+                    <div class="d-flex flex-wrap justify-content-center gap-4 mt-4">
+                        @foreach($others as $m)
+                        <div class="org-chart-node shadow-hover-up" style="width: 250px;">
+                            <img src="{{ $m->image_path }}" alt="{{ $m->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background=EAF2F8&color=2980B9'">
+                            <h5 class="fw-bold text-azul-marino mb-1">{{ $m->name }}</h5>
+                            <p class="text-azul-primario fw-bold small mb-0">{{ $m->role }}</p>
+                            <p class="text-muted small mb-0">{{ $m->department }}</p>
+                            @if($m->is_substitute)
+                                <span class="badge bg-secondary mt-2">Suplente</span>
+                            @endif
+                        </div>
                         @endforeach
                     </div>
+                    @endif
                 </div>
-            @endforeach
-        @else
-            <div class="alert alert-info text-center">
-                Aún no se han configurado las autoridades para este colegio.
-            </div>
-        @endif
-    </div>
-</section>
-
-<!-- Ubicación y Contáctenos -->
-<section id="contacto" class="py-5 bg-white position-relative">
-    <div class="container py-5">
-        <div class="row g-5">
-            <!-- Info Contacto -->
-            <div class="col-lg-5">
-                <h2 class="display-6 fw-bold mb-4 text-dark" style="font-family: 'Outfit', sans-serif;">Estamos para <span class="text-primary">Asistirlo</span></h2>
-                <p class="lead text-muted mb-5">Si tiene alguna duda sobre matriculación, tribunal de ética o beneficios, no dude en acercarse o escribirnos.</p>
-                
-                <div class="d-flex align-items-center gap-4 mb-4">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                        <i class="bi bi-geo-alt-fill fs-3"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-1">Nuestra Sede</h5>
-                        <p class="text-muted mb-0">Av. San Martín 1234, Centro<br>La Rioja, Argentina</p>
-                    </div>
+            @else
+                <div class="text-center p-5 bg-white rounded-4 border border-azul-borde shadow-sm">
+                    <span class="material-icons text-muted fs-1 mb-3">groups</span>
+                    <p class="text-muted mb-0">La comisión directiva aún no ha sido publicada.</p>
                 </div>
-
-                <div class="d-flex align-items-center gap-4 mb-4">
-                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                        <i class="bi bi-whatsapp fs-3"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-1">WhatsApp Institucional</h5>
-                        <p class="text-muted mb-0">+54 9 380 412-3456</p>
-                    </div>
-                </div>
-
-                <div class="d-flex align-items-center gap-4 mb-4">
-                    <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                        <i class="bi bi-envelope-paper-fill fs-3"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-1">Mesa de Entrada Digital</h5>
-                        <p class="text-muted mb-0">contacto@colegioterapistas.org.ar</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mapa Decorativo y Form -->
-            <div class="col-lg-7">
-                <div class="card border-0 shadow-lg" style="border-radius: 30px; overflow: hidden;">
-                    <div class="row g-0">
-                        <div class="col-md-12 p-5 bg-light">
-                            <h4 class="fw-bold mb-4">Envíenos su consulta</h4>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control form-control-lg rounded-pill px-4" placeholder="Nombre completo">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="email" class="form-control form-control-lg rounded-pill px-4" placeholder="Correo electrónico">
-                                    </div>
-                                    <div class="col-12">
-                                        <input type="text" class="form-control form-control-lg rounded-pill px-4" placeholder="Asunto (Ej. Matrícula, Certificado Ética)">
-                                    </div>
-                                    <div class="col-12">
-                                        <textarea class="form-control rounded-4 p-4" rows="4" placeholder="Su mensaje..."></textarea>
-                                    </div>
-                                    <div class="col-12 mt-4">
-                                        <button type="button" class="btn btn-primary btn-lg rounded-pill w-100 fw-bold shadow-sm" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); border:none;">Enviar Mensaje Rápidamente</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
-    </div>
-</section>
 
-<!-- Footer Simple -->
-<footer class="py-4 text-center text-white" style="background-color: #0f172a;">
-    <div class="container">
-        <p class="mb-0 opacity-75 small">© {{ date('Y') }} Colegio de Terapistas Ocupacionales. Todos los derechos reservados.</p>
-        <p class="mb-0 opacity-50 small mt-1">Desarrollado con ♥ por Terapista SaaS</p>
-    </div>
-</footer>
+    </main>
 
-@endsection
+    <!-- FOOTER -->
+    <footer class="bg-azul-marino py-5 mt-auto">
+        <div class="container text-center text-white">
+            <div class="mb-4">
+                <h4 class="fw-bold">{{ $school->name }}</h4>
+                <p class="text-white-50 small mb-0">Órgano oficial de regulación profesional</p>
+            </div>
+            <div class="d-flex justify-content-center gap-4 mb-4">
+                <a href="#" class="text-white-50 text-decoration-none hover-white"><span class="material-icons">facebook</span></a>
+                <a href="#" class="text-white-50 text-decoration-none hover-white"><span class="material-icons">email</span></a>
+                <a href="#" class="text-white-50 text-decoration-none hover-white"><span class="material-icons">location_on</span></a>
+            </div>
+            <p class="text-white-50 small mb-0">&copy; {{ date('Y') }} Todos los derechos reservados. Desarrollado por <span class="text-white">Gente Piola</span>.</p>
+        </div>
+    </footer>
 
-@section('styles')
-<style>
-    .fw-black { font-weight: 900; }
-    .tracking-wider { letter-spacing: 2px; }
-    
-    .organigram-card {
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .organigram-card:hover {
-        transform: translateY(-15px);
-    }
-    
-    .backdrop-blur {
-        backdrop-filter: blur(5px);
-        background: rgba(255,255,255,0.1) !important;
-    }
-    .backdrop-blur:hover {
-        background: rgba(255,255,255,0.2) !important;
-    }
-</style>
-@endsection
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

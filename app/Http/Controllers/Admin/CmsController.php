@@ -9,6 +9,7 @@ use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Slider;
 use App\Models\SliderItem;
+use App\Models\BoardMember;
 use Illuminate\Support\Str;
 
 class CmsController extends Controller
@@ -131,5 +132,41 @@ class CmsController extends Controller
             'order' => $request->order ?? 0
         ]);
         return redirect()->back()->with('success', 'Imagen añadida.');
+    }
+
+    // === BOARD MEMBERS (Autoridades) ===
+    public function boardMembersIndex()
+    {
+        $members = BoardMember::where('school_id', auth()->user()->school_id)->orderBy('order')->get();
+        return view('admin.cms.board_members.index', compact('members'));
+    }
+
+    public function boardMembersStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'role' => 'required|string',
+            'department' => 'required|string',
+        ]);
+
+        BoardMember::create([
+            'school_id' => auth()->user()->school_id,
+            'name' => $request->name,
+            'role' => $request->role,
+            'department' => $request->department,
+            'is_substitute' => $request->has('is_substitute'),
+            'image_path' => $request->image_path ?? 'https://via.placeholder.com/150',
+            'order' => $request->order ?? 0
+        ]);
+
+        return redirect()->back()->with('success', 'Autoridad agregada correctamente.');
+    }
+
+    public function boardMembersDestroy(BoardMember $boardMember)
+    {
+        if ($boardMember->school_id == auth()->user()->school_id) {
+            $boardMember->delete();
+        }
+        return redirect()->back()->with('success', 'Autoridad eliminada.');
     }
 }

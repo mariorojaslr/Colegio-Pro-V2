@@ -151,6 +151,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cms/sliders', [\App\Http\Controllers\Admin\CmsController::class, 'slidersStore'])->name('admin.cms.sliders.store');
     Route::post('/cms/sliders/{slider}/items', [\App\Http\Controllers\Admin\CmsController::class, 'sliderItemsStore'])->name('admin.cms.sliders.items.store');
 
+    Route::get('/cms/autoridades', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersIndex'])->name('admin.cms.board_members.index');
+    Route::post('/cms/autoridades', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersStore'])->name('admin.cms.board_members.store');
+    Route::delete('/cms/autoridades/{boardMember}', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersDestroy'])->name('admin.cms.board_members.destroy');
+
     // Asistente IA
     Route::get('/ai/asistente', [App\Http\Controllers\AIController::class, 'index'])->name('ai.index');
     Route::post('/ai/query', [App\Http\Controllers\AIController::class, 'query'])->name('ai.query');
