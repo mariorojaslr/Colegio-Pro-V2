@@ -152,7 +152,7 @@
                         </td>
                         <td class="py-2 searchable" data-field="contact">
                             <div class="d-flex flex-column">
-                                <span class="x-small text-dark fw-bold mb-1">DNI {{ number_format($col->dni, 0, ',', '.') }}</span>
+                                <span class="x-small text-dark fw-bold mb-1">DNI {{ is_numeric($col->dni) ? number_format((float)$col->dni, 0, ',', '.') : $col->dni }}</span>
                                 <div class="d-flex gap-2">
                                     <span class="x-small text-muted"><i class="bi bi-envelope me-1"></i>{{ $col->email }}</span>
                                     @if($col->phone)
