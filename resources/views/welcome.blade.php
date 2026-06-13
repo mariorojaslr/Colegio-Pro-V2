@@ -231,54 +231,56 @@
             </div>
 
             @if(isset($boardMembers) && $boardMembers->count() > 0)
-                @php
-                    $president = null;
-                    $others = [];
-                    foreach($boardMembers as $dept => $members) {
-                        foreach($members as $m) {
-                            if(stripos($m->role, 'president') !== false || stripos($m->role, 'director') !== false) {
-                                $president = $m;
-                            } else {
-                                $others[] = $m;
+            @if(isset($boardMembers) && $boardMembers->count() > 0)
+                @foreach($boardMembers as $department => $members)
+                    <div class="mb-5">
+                        <h4 class="text-center text-theme-primary fw-bold mb-4">{{ $department }}</h4>
+                        @php
+                            $president = null;
+                            $others = [];
+                            foreach($members as $m) {
+                                if(!$president && (stripos($m->role, 'president') !== false || stripos($m->role, 'titular') !== false || stripos($m->role, 'director') !== false)) {
+                                    $president = $m;
+                                } else {
+                                    $others[] = $m;
+                                }
                             }
-                        }
-                    }
-                    if(!$president && count($others) > 0) {
-                        $president = array_shift($others);
-                    }
-                @endphp
+                            if(!$president && count($others) > 0) {
+                                $president = array_shift($others);
+                            }
+                        @endphp
 
-                <div class="org-chart-wrapper d-flex flex-column align-items-center">
-                    @if($president)
-                    <div class="org-chart-node shadow-hover-up" style="width: 280px;">
-                        <img src="{{ $president->image_path }}" alt="{{ $president->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($president->name) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
-                        <h5 class="fw-bold text-theme-dark mb-1">{{ $president->name }}</h5>
-                        <p class="text-theme-primary fw-bold small mb-0">{{ $president->role }}</p>
-                        <p class="text-muted small mb-0">{{ $president->department }}</p>
-                    </div>
-                    @endif
+                        <div class="org-chart-wrapper d-flex flex-column align-items-center">
+                            @if($president)
+                            <div class="org-chart-node shadow-hover-up" style="width: 280px;">
+                                <img src="{{ $president->image_path }}" alt="{{ $president->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($president->name) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
+                                <h5 class="fw-bold text-theme-dark mb-1">{{ $president->name }}</h5>
+                                <p class="text-theme-primary fw-bold small mb-0">{{ $president->role }}</p>
+                            </div>
+                            @endif
 
-                    @if(count($others) > 0)
-                    <div class="org-chart-connector"></div>
-                    @if(count($others) > 1)
-                    <div class="org-line-horizontal" style="max-width: {{ (count($others)-1) * 290 }}px;"></div>
-                    @endif
+                            @if(count($others) > 0)
+                            <div class="org-chart-connector"></div>
+                            @if(count($others) > 1)
+                            <div class="org-line-horizontal" style="max-width: {{ min((count($others)-1) * 290, 800) }}px;"></div>
+                            @endif
 
-                    <div class="d-flex flex-wrap justify-content-center gap-4 mt-4">
-                        @foreach($others as $m)
-                        <div class="org-chart-node shadow-hover-up" style="width: 250px;">
-                            <img src="{{ $m->image_path }}" alt="{{ $m->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
-                            <h5 class="fw-bold text-theme-dark mb-1">{{ $m->name }}</h5>
-                            <p class="text-theme-primary fw-bold small mb-0">{{ $m->role }}</p>
-                            <p class="text-muted small mb-0">{{ $m->department }}</p>
-                            @if($m->is_substitute)
-                                <span class="badge bg-secondary mt-2">Suplente</span>
+                            <div class="d-flex flex-wrap justify-content-center gap-4 mt-4">
+                                @foreach($others as $m)
+                                <div class="org-chart-node shadow-hover-up" style="width: 250px;">
+                                    <img src="{{ $m->image_path }}" alt="{{ $m->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
+                                    <h5 class="fw-bold text-theme-dark mb-1">{{ $m->name }}</h5>
+                                    <p class="text-theme-primary fw-bold small mb-0">{{ $m->role }}</p>
+                                    @if($m->is_substitute)
+                                        <span class="badge bg-secondary mt-2">Suplente</span>
+                                    @endif
+                                </div>
+                                @endforeach
+                            </div>
                             @endif
                         </div>
-                        @endforeach
                     </div>
-                    @endif
-                </div>
+                @endforeach
             @else
                 <div class="text-center p-5 bg-theme-card rounded-4 border border-theme shadow-sm">
                     <span class="material-icons text-muted fs-1 mb-3">groups</span>
