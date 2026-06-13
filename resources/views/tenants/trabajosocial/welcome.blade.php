@@ -151,14 +151,27 @@
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand d-flex align-items-center gap-2 playfair" href="/">
                 @if(isset($school) && $school->logo)
-                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 55px;">
+                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 80px;">
                 @else
                     <span class="material-icons">diversity_1</span>
                 @endif
                 <span class="ms-2 fs-4">{{ $school->name ?? 'Colegio' }}</span>
             </a>
-            <div>
-                <a href="{{ route('login') }}" class="btn-ts-nav">Portal Colegiados</a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#tsNav">
+                <span class="material-icons" style="color: var(--ts-primary);">menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="tsNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#quienes-somos">Nuestra Misión</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#novedades">Novedades</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#autoridades">Autoridades</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#contacto">Contacto</a></li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('login') }}" class="btn-ts-nav">Portal Colegiados</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -184,7 +197,7 @@
     <main class="container py-5">
         
         <!-- INSTITUCIONAL -->
-        <div class="row align-items-center mb-5 pb-5">
+        <div id="quienes-somos" class="row align-items-center mb-5 pb-5 pt-5">
             <div class="col-lg-6 mb-4">
                 @php
                     $aboutImage = isset($slider) && $slider->items->count() > 1 ? $slider->items[1]->image_url : 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
@@ -206,7 +219,7 @@
         </div>
 
         <!-- NOTICIAS -->
-        <div class="mb-5 pb-5">
+        <div id="novedades" class="mb-5 pb-5 pt-5">
             <h2 class="section-title">Últimas Novedades</h2>
             
             @if(isset($latestNews) && $latestNews->count() > 0)
@@ -241,7 +254,7 @@
         </div>
 
         <!-- AUTORIDADES -->
-        <div class="mb-5 pb-5">
+        <div id="autoridades" class="mb-5 pb-5 pt-5">
             <h2 class="section-title">Nuestras Autoridades</h2>
             
             @if(isset($boardMembers) && $boardMembers->count() > 0)
@@ -295,7 +308,7 @@
         </div>
 
         <!-- CONTACTO -->
-        <div class="row g-4 mb-4 bg-white p-4 p-md-5 rounded-4 shadow-sm">
+        <div id="contacto" class="row g-4 mb-4 bg-white p-4 p-md-5 rounded-4 shadow-sm mt-4">
             <div class="col-lg-5">
                 <h2 class="playfair mb-4" style="color: var(--ts-primary);">Estemos en Contacto</h2>
                 <div class="d-flex align-items-center mb-4">

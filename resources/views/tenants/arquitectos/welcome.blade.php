@@ -171,14 +171,27 @@
         <div class="container d-flex align-items-center">
             <a class="navbar-brand d-flex align-items-center gap-3" href="/">
                 @if(isset($school) && $school->logo)
-                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 40px; filter: brightness(0) invert(1);">
+                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 100px;">
                 @else
                     <span class="material-icons text-white">architecture</span>
                 @endif
                 <span>{{ $school->name ?? 'CAPLaR' }}</span>
             </a>
-            <div class="ms-auto">
-                <a href="{{ route('login') }}" class="btn btn-arq-nav">Plataforma Colegiados</a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#arqNav">
+                <span class="material-icons text-white">menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="arqNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-white oswald" href="#quienes-somos" style="letter-spacing: 1px;">QUIÉNES SOMOS</a></li>
+                    <li class="nav-item"><a class="nav-link text-white oswald" href="#novedades" style="letter-spacing: 1px;">NOVEDADES</a></li>
+                    <li class="nav-item"><a class="nav-link text-white oswald" href="#autoridades" style="letter-spacing: 1px;">AUTORIDADES</a></li>
+                    <li class="nav-item"><a class="nav-link text-white oswald" href="#contacto" style="letter-spacing: 1px;">CONTACTO</a></li>
+                </ul>
+                <div class="ms-auto d-flex gap-2">
+                    <a href="{{ route('login') }}" class="btn btn-arq-nav">Plataforma Colegiados</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -198,7 +211,7 @@
     <main class="container py-5" style="margin-top: -50px; position: relative; z-index: 10;">
         
         <!-- INSTITUCIONAL -->
-        <div class="row mb-5 pb-5 border-bottom">
+        <div id="quienes-somos" class="row mb-5 pb-5 border-bottom pt-5">
             <div class="col-lg-5 mb-4">
                 <h2 class="section-title">Quiénes Somos</h2>
                 <p style="line-height: 1.8; color: var(--gray);">
@@ -215,7 +228,7 @@
         </div>
 
         <!-- NOTICIAS -->
-        <div class="mb-5 pb-5 border-bottom">
+        <div id="novedades" class="mb-5 pb-5 border-bottom pt-5">
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <h2 class="section-title mb-0">Novedades</h2>
                 <a href="{{ route('news.index') }}" class="btn btn-outline-dark rounded-0 px-4 py-2 oswald">Ver Archivo</a>
@@ -251,7 +264,7 @@
         </div>
 
         <!-- AUTORIDADES -->
-        <div class="mb-5 pb-5 border-bottom">
+        <div id="autoridades" class="mb-5 pb-5 border-bottom pt-5">
             <h2 class="section-title text-center d-block mb-5">Autoridades</h2>
             
             @if(isset($boardMembers) && $boardMembers->count() > 0)
@@ -304,7 +317,7 @@
         </div>
 
         <!-- CONTACTO -->
-        <div class="row g-5 mb-5 pb-4">
+        <div id="contacto" class="row g-5 mb-5 pb-4 pt-5">
             <div class="col-lg-5">
                 <h2 class="section-title mb-4">Contacto</h2>
                 <ul class="list-unstyled">

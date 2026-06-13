@@ -71,10 +71,22 @@
                 </div>
             </a>
             
-            <div class="ms-auto">
-                <a href="{{ route('login') }}" class="btn bg-theme-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2">
-                    <span class="material-icons" style="font-size: 1.2rem;">login</span> Ingresar
-                </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="material-icons text-theme-primary">menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-theme-dark fw-bold" href="#quienes-somos">Quiénes Somos</a></li>
+                    <li class="nav-item"><a class="nav-link text-theme-dark fw-bold" href="#novedades">Novedades</a></li>
+                    <li class="nav-item"><a class="nav-link text-theme-dark fw-bold" href="#autoridades">Autoridades</a></li>
+                    <li class="nav-item"><a class="nav-link text-theme-dark fw-bold" href="#contacto">Contacto</a></li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('login') }}" class="btn bg-theme-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 text-white text-decoration-none">
+                        <span class="material-icons" style="font-size: 1.2rem;">login</span> Ingresar
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -122,7 +134,7 @@
     <main class="container py-5">
         
         <!-- INSTITUCIONAL -->
-        <div class="row align-items-center mb-5 pb-5 border-bottom border-theme">
+        <div id="quienes-somos" class="row align-items-center mb-5 pb-5 border-bottom border-theme pt-5">
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <div class="d-flex align-items-center gap-2 mb-4">
                     <span class="material-icons text-theme-primary fs-1">info</span>
@@ -181,7 +193,7 @@
         </div>
 
         <!-- NOTICIAS Y NOVEDADES -->
-        <div class="mb-5 pb-5 border-bottom border-theme">
+        <div id="novedades" class="mb-5 pb-5 border-bottom border-theme pt-5">
             <div class="d-flex justify-content-between align-items-end mb-4">
                 <div>
                     <h2 class="h2 fw-bold text-theme-dark mb-2">Noticias y Novedades</h2>
@@ -224,7 +236,7 @@
         </div>
 
         <!-- COMISION DIRECTIVA (ORG CHART) -->
-        <div class="mb-5 pb-4">
+        <div id="autoridades" class="mb-5 pb-4 pt-5">
             <div class="text-center mb-5">
                 <h2 class="h2 fw-bold text-theme-dark mb-2">Comisión Directiva</h2>
                 <p class="text-theme-secondary">Autoridades que guían nuestra institución</p>
@@ -289,7 +301,7 @@
         </div>
 
         <!-- CONTACTO Y UBICACIÓN -->
-        <div class="row g-4 mb-5 pt-4">
+        <div id="contacto" class="row g-4 mb-5 pt-5">
             <div class="col-lg-5">
                 <h2 class="h2 fw-bold text-theme-dark mb-4">Dónde Estamos</h2>
                 <div class="bg-theme-card rounded-4 p-4 shadow-sm border border-theme h-100 d-flex flex-column justify-content-center">

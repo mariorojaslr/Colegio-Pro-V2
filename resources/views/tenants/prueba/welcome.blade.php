@@ -105,16 +105,28 @@
         <div class="container d-flex align-items-center justify-content-between py-2">
             <a class="navbar-brand grotesk fw-bold d-flex align-items-center gap-2" href="/" style="color: var(--brand-dark);">
                 @if(isset($school) && $school->logo)
-                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 35px;">
+                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 80px;">
                 @else
                     <span class="material-icons" style="color: var(--brand-main);">cloud_done</span>
                 @endif
                 {{ $school->name ?? 'Demo SaaS' }}
             </a>
-            <div>
-                <a href="{{ route('login') }}" class="btn-tech">
-                    Acceder <span class="material-icons" style="font-size: 1.2rem;">arrow_forward</span>
-                </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#demoNav">
+                <span class="material-icons" style="color: var(--brand-dark);">menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="demoNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#quienes-somos">Características</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#novedades">Novedades</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#autoridades">Autoridades</a></li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('login') }}" class="btn-tech">
+                        Acceder <span class="material-icons" style="font-size: 1.2rem;">arrow_forward</span>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -132,7 +144,7 @@
     <main class="container py-5">
         
         <!-- CARACTERÍSTICAS -->
-        <div class="row g-4 mb-5 pb-5 border-bottom">
+        <div id="quienes-somos" class="row g-4 mb-5 pb-5 border-bottom pt-5">
             <div class="col-md-4">
                 <div class="tech-card text-center">
                     <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">speed</span>
@@ -157,7 +169,7 @@
         </div>
 
         <!-- NOTICIAS -->
-        <div class="mb-5 pb-5 border-bottom">
+        <div id="novedades" class="mb-5 pb-5 border-bottom pt-5">
             <h2 class="grotesk fw-bold mb-4" style="color: var(--brand-dark);">Últimos Updates</h2>
             @if(isset($latestNews) && $latestNews->count() > 0)
             <div class="row g-4">
@@ -187,7 +199,7 @@
         </div>
 
         <!-- AUTORIDADES -->
-        <div class="mb-5">
+        <div id="autoridades" class="mb-5 pt-5">
             <h2 class="grotesk fw-bold mb-4 text-center" style="color: var(--brand-dark);">Equipo Demo</h2>
             @if(isset($boardMembers) && $boardMembers->count() > 0)
                 @foreach($boardMembers as $department => $members)
