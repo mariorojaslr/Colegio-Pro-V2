@@ -35,7 +35,7 @@ class PublicLandingController extends Controller
                                                ->groupBy('department');
 
         $latestNews = \App\Models\NewsArticle::where('school_id', $school->id ?? 1)
-                                             ->where('is_published', true)
+                                             ->where('status', 'published')
                                              ->latest('published_at')
                                              ->take(3)
                                              ->get();
