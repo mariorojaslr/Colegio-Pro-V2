@@ -38,27 +38,71 @@ class EthicsController extends Controller
         $commissionMembers = \App\Models\User::where('school_id', $schoolId)
             ->where('role', 'ADMIN_COLEGIO')
             ->get();
+            
+        // Reglas parametrizadas
+        $rules = \App\Models\EthicsRule::where('school_id', $schoolId)->get();
 
-        return view('admin.ethics.index', compact('activeSanctions', 'history', 'commissionMembers'));
+        return view('admin.ethics.index', compact('activeSanctions', 'history', 'commissionMembers', 'rules'));
     }
 
     /**
-     * Registrar una nueva sanción.
+     * Guardar una nueva regla de ética.
+     */
+    public function storeRule(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'penalty_type' => 'required|string',
+            'penalty_days' => 'nullable|integer|min:1',
+        ]);
+
+        \App\Models\EthicsRule::create([
+            'school_id' => auth()->user()->school_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'penalty_type' => $request->penalty_type,
+            'penalty_days' => $request->penalty_days,
+        ]);
+
+        return back()->with('success', 'Regla de ética creada correctamente.');
+    }
+
+    /**
+     * Eliminar una regla de ética.
+     */
+    public function destroyRule(\App\Models\EthicsRule $rule)
+    {
+        if ($rule->school_id !== auth()->user()->school_id) abort(403);
+        $rule->delete();
+        return back()->with('success', 'Regla eliminada.');
+    }
+
+    /**
+     * Registrar una nueva sanción basada en una regla.
      */
     public function createSanction(Request $request)
     {
         $request->validate([
             'collegiate_id' => 'required',
-            'type' => 'required', // temporary, permanent
-            'reason' => 'required',
+            'rule_id' => 'required|exists:ethics_rules,id',
             'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after:start_date',
         ]);
 
-        EthicsSanction::create(array_merge($request->all(), [
+        $rule = \App\Models\EthicsRule::findOrFail($request->rule_id);
+        
+        $endDate = null;
+        if ($rule->penalty_days) {
+            $endDate = \Carbon\Carbon::parse($request->start_date)->addDays($rule->penalty_days);
+        }
+
+        EthicsSanction::create([
+            'collegiate_id' => $request->collegiate_id,
+            'type' => $rule->penalty_type,
+            'reason' => $rule->name . ($request->notes ? ' - ' . $request->notes : ''),
+            'start_date' => $request->start_date,
+            'end_date' => $endDate,
             'status' => 'active',
-            // Si no hay end_date, es permanente por defecto en la lógica de negocio
-        ]));
+        ]);
 
         return back()->with('success', 'Sanción ética registrada correctamente.');
     }

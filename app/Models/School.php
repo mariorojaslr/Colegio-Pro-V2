@@ -15,7 +15,14 @@ class School extends Model
         'member_singular', 'member_plural',
         'primary_color', 'secondary_color', 'tertiary_color',
         'is_active', 'storage_used', 'traffic_used', 'user_count', 'plan_category',
-        'currency_code', 'currency_symbol', 'locale', 'has_academy'
+        'currency_code', 'currency_symbol', 'locale', 'has_academy',
+        'phone',
+        'email',
+        'address',
+        'map_embed_code',
+        'facebook_url',
+        'instagram_url',
+        'twitter_url'
     ];
 
     public function users()

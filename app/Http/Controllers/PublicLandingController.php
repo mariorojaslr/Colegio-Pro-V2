@@ -34,12 +34,18 @@ class PublicLandingController extends Controller
                                                ->get()
                                                ->groupBy('department');
 
+        $latestNews = \App\Models\NewsArticle::where('school_id', $school->id ?? 1)
+                                             ->where('is_published', true)
+                                             ->latest('published_at')
+                                             ->take(3)
+                                             ->get();
+
         $tenantSlug = $school->slug ?? 'default';
         if (view()->exists("tenants.{$tenantSlug}.welcome")) {
-            return view("tenants.{$tenantSlug}.welcome", compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers'));
+            return view("tenants.{$tenantSlug}.welcome", compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers', 'latestNews'));
         }
 
-        return view('welcome', compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers'));
+        return view('welcome', compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers', 'latestNews'));
     }
 
     public function showPage($slug)

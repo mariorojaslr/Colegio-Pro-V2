@@ -180,6 +180,43 @@
             </div>
         </div>
 
+        <!-- NOTICIAS Y NOVEDADES -->
+        @if(isset($latestNews) && $latestNews->count() > 0)
+        <div class="mb-5 pb-5 border-bottom border-theme">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="h2 fw-bold text-theme-dark mb-2">Noticias y Novedades</h2>
+                    <p class="text-theme-secondary mb-0">Últimas actualizaciones e información de interés para colegiados</p>
+                </div>
+                <a href="{{ route('news.index') }}" class="btn btn-outline-primary rounded-pill px-4">Ver todas <span class="material-icons align-middle ms-1" style="font-size: 1.1rem;">arrow_forward</span></a>
+            </div>
+            <div class="row g-4">
+                @foreach($latestNews as $news)
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 rounded-4 shadow-sm bg-theme-card overflow-hidden shadow-hover-up">
+                        @if($news->image_path)
+                            <img src="{{ asset($news->image_path) }}" class="card-img-top" alt="{{ $news->title }}" style="height: 200px; object-fit: cover;">
+                        @else
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="material-icons text-muted" style="font-size: 4rem;">article</span>
+                            </div>
+                        @endif
+                        <div class="card-body p-4">
+                            <span class="badge bg-theme-primary mb-2">{{ $news->category ?? 'Institucional' }}</span>
+                            <h5 class="fw-bold text-theme-dark mb-2 line-clamp-2">{{ $news->title }}</h5>
+                            <p class="text-secondary small mb-3 line-clamp-3">{{ Str::limit(strip_tags($news->content), 100) }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <small class="text-muted fw-medium">{{ $news->published_at->format('d/m/Y') }}</small>
+                                <a href="{{ route('news.show', $news->slug) }}" class="text-theme-primary fw-bold text-decoration-none small">Leer más &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <!-- COMISION DIRECTIVA (ORG CHART) -->
         <div class="mb-5 pb-4">
             <div class="text-center mb-5">
@@ -242,6 +279,59 @@
                     <p class="text-muted mb-0">La comisión directiva aún no ha sido publicada.</p>
                 </div>
             @endif
+        </div>
+
+        <!-- CONTACTO Y UBICACIÓN -->
+        <div class="row g-4 mb-5 pt-4">
+            <div class="col-lg-5">
+                <h2 class="h2 fw-bold text-theme-dark mb-4">Dónde Estamos</h2>
+                <div class="bg-theme-card rounded-4 p-4 shadow-sm border border-theme h-100 d-flex flex-column justify-content-center">
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <div class="bg-white p-2 rounded-circle shadow-sm text-theme-primary"><span class="material-icons">location_on</span></div>
+                        <div>
+                            <h6 class="fw-bold text-theme-dark mb-1">Dirección</h6>
+                            <p class="text-theme-secondary small mb-0">{{ $school->address ?? 'Calle Falsa 123, Ciudad' }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <div class="bg-white p-2 rounded-circle shadow-sm text-theme-primary"><span class="material-icons">phone</span></div>
+                        <div>
+                            <h6 class="fw-bold text-theme-dark mb-1">Teléfono</h6>
+                            <p class="text-theme-secondary small mb-0">{{ $school->phone ?? '(123) 456-7890' }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <div class="bg-white p-2 rounded-circle shadow-sm text-theme-primary"><span class="material-icons">email</span></div>
+                        <div>
+                            <h6 class="fw-bold text-theme-dark mb-1">Correo Electrónico</h6>
+                            <p class="text-theme-secondary small mb-0">{{ $school->email ?? 'contacto@colegio.com' }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2 pt-4 border-top border-theme">
+                        <h6 class="fw-bold text-theme-dark mb-3">Síguenos en Redes</h6>
+                        <div class="d-flex gap-2">
+                            @if($school->facebook_url)<a href="{{ $school->facebook_url }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-circle"><span class="material-icons" style="font-size: 1rem;">facebook</span></a>@endif
+                            @if($school->instagram_url)<a href="{{ $school->instagram_url }}" target="_blank" class="btn btn-outline-danger btn-sm rounded-circle"><span class="material-icons" style="font-size: 1rem;">photo_camera</span></a>@endif
+                            @if($school->twitter_url)<a href="{{ $school->twitter_url }}" target="_blank" class="btn btn-outline-info btn-sm rounded-circle"><span class="material-icons" style="font-size: 1rem;">chat</span></a>@endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                @if($school->map_embed_code)
+                    <div class="rounded-4 overflow-hidden shadow-sm h-100" style="min-height: 400px; border: 1px solid var(--theme-border);">
+                        {!! $school->map_embed_code !!}
+                    </div>
+                @else
+                    <div class="rounded-4 bg-theme-card d-flex align-items-center justify-content-center h-100 shadow-sm border border-theme" style="min-height: 400px;">
+                        <div class="text-center">
+                            <span class="material-icons text-theme-secondary mb-2" style="font-size: 3rem;">map</span>
+                            <p class="text-theme-secondary mb-0">Mapa no configurado</p>
+                        </div>
+                    </div>
+                @endif
+            </div>
         </div>
 
     </main>

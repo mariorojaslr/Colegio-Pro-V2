@@ -130,6 +130,13 @@ class SchoolController extends Controller
             'secondary_color' => $request->secondary_color,
             'accent_color' => $request->accent_color,
             'is_active' => $request->has('is_active'),
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'address' => $request->address,
+            'map_embed_code' => $request->map_embed_code,
+            'facebook_url' => $request->facebook_url,
+            'instagram_url' => $request->instagram_url,
+            'twitter_url' => $request->twitter_url,
         ]);
 
         return redirect()->route('admin.dashboard')->with('success', 'Configuración de colegio actualizada.');

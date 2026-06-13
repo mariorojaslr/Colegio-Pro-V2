@@ -129,7 +129,28 @@
                 
                 <div class="mt-4 pt-3 border-top">
                     <button class="btn btn-outline-dark btn-sm rounded-pill w-100 mb-2">Administrar Comisión</button>
-                    <button class="btn btn-outline-dark btn-sm rounded-pill w-100">Ver Libro de Actas Digital</button>
+                    <button class="btn btn-outline-dark btn-sm rounded-pill w-100 mb-3">Ver Libro de Actas Digital</button>
+                </div>
+
+                <div class="border-top pt-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-dark small fw-bold text-uppercase mb-0">Reglas de Sanción (Tipificación)</h6>
+                        <button class="btn btn-sm btn-link p-0 text-primary" data-bs-toggle="modal" data-bs-target="#newRuleModal">+ Nueva</button>
+                    </div>
+                    <ul class="list-group list-group-flush small">
+                        @foreach($rules as $rule)
+                        <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center border-0">
+                            <div>
+                                <span class="fw-bold d-block">{{ $rule->name }}</span>
+                                <span class="text-muted xx-small">{{ $rule->penalty_type }} ({{ $rule->penalty_days ? $rule->penalty_days . ' días' : 'Perm.' }})</span>
+                            </div>
+                            <form action="{{ route('admin.ethics.destroy_rule', $rule->id) }}" method="POST">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-sm text-danger p-0" onclick="return confirm('¿Eliminar regla?')"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
@@ -155,12 +176,14 @@
                                 <option value="{{ $c->id }}">{{ $c->first_name }} {{ $c->last_name }} ({{ $c->registration_number }})</option>
                              @endforeach
                         </select>
+                    </div>
                     <div class="row mb-3">
-                        <div class="col-4">
-                             <label class="form-label text-dark fw-bold small text-uppercase">Tipo</label>
-                             <select name="type" class="form-select border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
-                                 <option value="temporary">Temporal</option>
-                                 <option value="permanent">Permanente</option>
+                             <label class="form-label text-dark fw-bold small text-uppercase">Regla de Sanción</label>
+                             <select name="rule_id" class="form-select border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
+                                 <option value="">Seleccionar Regla...</option>
+                                 @foreach($rules as $rule)
+                                    <option value="{{ $rule->id }}">{{ $rule->name }}</option>
+                                 @endforeach
                              </select>
                         </div>
                         <div class="col-4">
@@ -174,8 +197,8 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-dark fw-bold small text-uppercase">Motivo Breve (Carátula)</label>
-                        <input type="text" name="reason" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" placeholder="Ej: Incumplimiento Grave Art. 12" required>
+                        <label class="form-label text-dark fw-bold small text-uppercase">Notas Adicionales / Nro Expediente</label>
+                        <input type="text" name="notes" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" placeholder="Ej: Exp. 1234/26">
                     </div>
                     <div class="mb-0">
                         <label class="form-label text-dark fw-bold small text-uppercase">Argumentación y Fallo Detallado</label>
@@ -217,4 +240,47 @@
     </div>
 </div>
 @endforeach
+
+<!-- Modal Nueva Regla -->
+<div class="modal fade" id="newRuleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-bottom py-3 px-4 bg-dark text-white">
+                <h5 class="modal-title fw-bold text-white"><i class="bi-file-earmark-ruled me-2"></i> Nueva Regla Disciplinaria</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('admin.ethics.store_rule') }}" method="POST">
+                @csrf
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label text-dark fw-bold small text-uppercase">Nombre de la Falta</label>
+                        <input type="text" name="name" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" placeholder="Ej: Falta de pago reiterada" required>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                             <label class="form-label text-dark fw-bold small text-uppercase">Gravedad (Tipo)</label>
+                             <select name="penalty_type" class="form-select border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
+                                 <option value="temporary">Temporal (Suspensión)</option>
+                                 <option value="permanent">Permanente (Expulsión)</option>
+                             </select>
+                        </div>
+                        <div class="col-6">
+                             <label class="form-label text-dark fw-bold small text-uppercase">Días de Sanción</label>
+                             <input type="number" name="penalty_days" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" placeholder="Ej: 30" min="1">
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label text-dark fw-bold small text-uppercase">Descripción (Opcional)</label>
+                        <textarea name="description" class="form-control border-0 bg-light rounded-3 px-3 py-2 shadow-none" rows="2" placeholder="Detalles de la regla..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-dark rounded-pill px-4 shadow-sm">Guardar Regla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection

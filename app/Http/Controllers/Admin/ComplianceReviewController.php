@@ -36,9 +36,15 @@ class ComplianceReviewController extends Controller
         // Seguridad: El admin debe pertenecer al mismo colegio que el colegiado
         if (Auth::user()->school_id !== $document->collegiate->school_id) abort(403);
 
+        $expiresAt = null;
+        if ($document->requirement->expiration_months) {
+            $expiresAt = now()->addMonths($document->requirement->expiration_months);
+        }
+
         $document->update([
             'status' => 'approved',
             'admin_notes' => 'Aprobado por auditoría el ' . now()->format('d/m/Y'),
+            'expires_at' => $expiresAt,
         ]);
 
         // Verificar si el colegiado ahora tiene TODOS sus documentos obligatorios aprobados
@@ -76,6 +82,9 @@ class ComplianceReviewController extends Controller
     {
         $mandatoryReqsCount = $collegiate->school->complianceRequirements()->where('is_mandatory', true)->count();
         $approvedDocsCount = $collegiate->documents()->where('status', 'approved')
+            ->where(function($q) {
+                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+            })
             ->whereHas('requirement', function($q) {
                 $q->where('is_mandatory', true);
             })->count();

@@ -41,13 +41,17 @@
                             <option value="special">Especial (Carga única)</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-bold text-muted">Frecuencia de Renovación</label>
+                    <div class="col-md-2">
+                        <label class="form-label small fw-bold text-muted">Vencimiento (Meses)</label>
+                        <input type="number" name="expiration_months" class="form-control rounded-pill border-light-subtle" placeholder="Ej: 12" min="1">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small fw-bold text-muted">Tipo de Frecuencia</label>
                         <select name="expiry_frequency" class="form-select rounded-pill border-light-subtle" required>
-                            <option value="none">Sin Vencimiento</option>
+                            <option value="none">Sin Frecuencia</option>
                             <option value="semester">Semestral</option>
                             <option value="year">Anual</option>
-                            <option value="fixed">Fecha Específica</option>
+                            <option value="fixed">Personalizado</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -101,14 +105,12 @@
                                 </td>
                                 <td class="py-3">
                                     @php
-                                        $freqMap = [
-                                            'none' => 'Nunca vence',
-                                            'semester' => 'Cada 6 meses',
-                                            'year' => 'Anual',
-                                            'fixed' => 'Fecha fija'
-                                        ];
+                                        $freqText = 'Nunca vence';
+                                        if ($requirement->expiration_months) {
+                                            $freqText = "Cada {$requirement->expiration_months} meses";
+                                        }
                                     @endphp
-                                    <span class="text-muted fw-medium">{{ $freqMap[$requirement->expiry_frequency] ?? 'N/A' }}</span>
+                                    <span class="text-muted fw-medium">{{ $freqText }}</span>
                                 </td>
                                 <td class="py-3 text-uppercase">
                                     @if($requirement->is_mandatory)

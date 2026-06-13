@@ -68,6 +68,46 @@
                             <input type="color" name="accent_color" class="form-control form-control-color w-100 rounded-4 border-light shadow-none" value="{{ $school->accent_color }}" style="height: 54px;">
                         </div>
                     </div>
+
+                    <h5 class="fw-bold mb-4 mt-5" style="color: var(--primary-color)">Datos de Contacto (Landing Page)</h5>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Teléfono</label>
+                            <input type="text" name="phone" value="{{ $school->phone }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="Ej: +54 9 380 4123456">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Email Público</label>
+                            <input type="email" name="email" value="{{ $school->email }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="contacto@colegio.com">
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Dirección Física</label>
+                            <input type="text" name="address" value="{{ $school->address }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="Ej: San Martín 123, La Rioja">
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Código de Inserción del Mapa (Google Maps Iframe)</label>
+                            <textarea name="map_embed_code" class="form-control rounded-4 px-4 py-3 border-light shadow-none" rows="3" placeholder="<iframe src='...'></iframe>">{{ $school->map_embed_code }}</textarea>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-4 mt-5" style="color: var(--primary-color)">Redes Sociales</h5>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Facebook URL</label>
+                            <input type="url" name="facebook_url" value="{{ $school->facebook_url }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="https://facebook.com/...">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Instagram URL</label>
+                            <input type="url" name="instagram_url" value="{{ $school->instagram_url }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="https://instagram.com/...">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Twitter URL</label>
+                            <input type="url" name="twitter_url" value="{{ $school->twitter_url }}" class="form-control rounded-pill px-4 py-3 border-light shadow-none" placeholder="https://twitter.com/...">
+                        </div>
+                    </div>
                 </div>
             </div>
 

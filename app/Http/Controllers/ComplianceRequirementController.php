@@ -31,6 +31,7 @@ class ComplianceRequirementController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'required|in:permanent,perentory,special',
             'expiry_frequency' => 'required|in:none,semester,year,fixed',
+            'expiration_months' => 'nullable|integer|min:1',
             'is_mandatory' => 'boolean',
         ]);
 
@@ -40,6 +41,7 @@ class ComplianceRequirementController extends Controller
             'description' => $request->description,
             'type' => $request->type,
             'expiry_frequency' => $request->expiry_frequency,
+            'expiration_months' => $request->expiration_months,
             'is_mandatory' => $request->is_mandatory ?? true,
         ]);
 
@@ -57,6 +59,7 @@ class ComplianceRequirementController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'required|in:permanent,perentory,special',
             'expiry_frequency' => 'required|in:none,semester,year,fixed',
+            'expiration_months' => 'nullable|integer|min:1',
         ]);
 
         $requirement->update([
@@ -64,6 +67,7 @@ class ComplianceRequirementController extends Controller
             'description' => $request->description,
             'type' => $request->type,
             'expiry_frequency' => $request->expiry_frequency,
+            'expiration_months' => $request->expiration_months,
             'is_mandatory' => $request->has('is_mandatory'),
         ]);
 

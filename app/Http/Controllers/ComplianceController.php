@@ -34,7 +34,21 @@ class ComplianceController extends Controller
         $requirements = ComplianceRequirement::where('school_id', $school->id)->get();
         $myDocuments = CollegiateDocument::where('collegiate_id', $collegiate->id)->get()->keyBy('requirement_id');
 
-        return view('compliance.index', compact('requirements', 'myDocuments', 'collegiate'));
+        $mandatoryReqsCount = $requirements->where('is_mandatory', true)->count();
+        
+        $validMandatoryDocsCount = 0;
+        foreach ($requirements as $req) {
+            if ($req->is_mandatory && isset($myDocuments[$req->id])) {
+                $doc = $myDocuments[$req->id];
+                if ($doc->status === 'approved') {
+                    if (!$doc->expires_at || $doc->expires_at > now()) {
+                        $validMandatoryDocsCount++;
+                    }
+                }
+            }
+        }
+
+        return view('compliance.index', compact('requirements', 'myDocuments', 'collegiate', 'mandatoryReqsCount', 'validMandatoryDocsCount'));
     }
 
     /**

@@ -15,12 +15,12 @@
                     <div class="col-md-4 text-md-end">
                         <div class="bg-white bg-opacity-10 p-4 rounded-4 backdrop-blur border border-white border-opacity-10">
                             @php
-                                $total = $requirements->count();
-                                $uploaded = $myDocuments->count();
-                                $percent = $total > 0 ? ($uploaded / $total) * 100 : 0;
+                                $total = $mandatoryReqsCount;
+                                $uploaded = $validMandatoryDocsCount;
+                                $percent = $total > 0 ? ($uploaded / $total) * 100 : 100;
                             @endphp
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-white-50 small fw-bold uppercase">Progreso Documental</span>
+                                <span class="text-white-50 small fw-bold uppercase">Progreso Documental ({{ $uploaded }}/{{ $total }})</span>
                                 <span class="text-warning fw-bold">{{ round($percent) }}%</span>
                             </div>
                             <div class="progress" style="height: 10px; border-radius: 10px; background: rgba(255,255,255,0.1)">
@@ -40,11 +40,19 @@
                 @php
                     $doc = $myDocuments->get($requirement->id);
                     $status = $doc ? $doc->status : 'missing';
+                    $isExpired = false;
+                    
+                    if ($status === 'approved' && $doc->expires_at && $doc->expires_at < now()) {
+                        $status = 'expired';
+                        $isExpired = true;
+                    }
+
                     $statusConfig = [
                         'missing' => ['label' => 'Sin Cargar', 'class' => 'bg-secondary-subtle text-muted', 'icon' => 'bi-file-earmark-plus'],
                         'pending' => ['label' => 'En Revisión', 'class' => 'bg-warning-subtle text-warning', 'icon' => 'bi-hourglass-split'],
-                        'approved' => ['label' => 'Aprobado', 'class' => 'bg-success-subtle text-success', 'icon' => 'bi-patch-check-fill'],
+                        'approved' => ['label' => 'Aprobado y Vigente', 'class' => 'bg-success-subtle text-success', 'icon' => 'bi-patch-check-fill'],
                         'rejected' => ['label' => 'Rechazado', 'class' => 'bg-danger-subtle text-danger', 'icon' => 'bi-exclamation-octagon-fill'],
+                        'expired' => ['label' => 'Vencido - Renovar', 'class' => 'bg-danger-subtle text-danger', 'icon' => 'bi-calendar-x-fill'],
                     ];
                 @endphp
                 <div class="card-prestige p-4 border-0 bg-white shadow-sm h-100" style="border-radius: 30px">
@@ -73,8 +81,17 @@
 
                     <div class="bg-light p-4 rounded-4 mb-4">
                         <p class="small text-muted mb-0">
-                            {{ $requirement->expiry_frequency == 'none' ? 'Documento de validez permanente.' : 'Requiere renovación ' . $requirement->expiry_frequency . '.' }}
+                            @if($requirement->expiration_months)
+                                Vencimiento: Cada {{ $requirement->expiration_months }} meses.
+                            @else
+                                Documento de validez permanente.
+                            @endif
                         </p>
+                        @if($doc && $doc->expires_at)
+                            <p class="small fw-bold text-dark mt-2 mb-0">
+                                Fecha de Vencimiento: <span class="{{ $isExpired ? 'text-danger' : 'text-success' }}">{{ \Carbon\Carbon::parse($doc->expires_at)->format('d/m/Y') }}</span>
+                            </p>
+                        @endif
                     </div>
 
                     @if($status != 'approved')

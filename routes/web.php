@@ -241,10 +241,15 @@ Route::middleware(['auth'])->group(function () {
 
     // Gestión de Ética y Sanciones (Admin de Colegio)
     Route::get('/gestion-etica', [\App\Http\Controllers\Admin\EthicsController::class, 'index'])->name('admin.ethics.index');
+    Route::post('/gestion-etica/reglas', [\App\Http\Controllers\Admin\EthicsController::class, 'storeRule'])->name('admin.ethics.store_rule');
+    Route::delete('/gestion-etica/reglas/{rule}', [\App\Http\Controllers\Admin\EthicsController::class, 'destroyRule'])->name('admin.ethics.destroy_rule');
     Route::post('/gestion-etica/sancion', [\App\Http\Controllers\Admin\EthicsController::class, 'createSanction'])->name('admin.ethics.create_sanction');
     Route::post('/gestion-etica/levantar/{sanction}', [\App\Http\Controllers\Admin\EthicsController::class, 'liftSanction'])->name('admin.ethics.lift_sanction');
 
 
+
+    // Gestión de Trámites y Certificados Valorizados (Admin de Colegio)
+    Route::resource('/gestion-tramites', \App\Http\Controllers\Admin\CertificateTypeController::class)->names('admin.certificate_types')->except(['create', 'show', 'edit']);
 
     // Tickets
     Route::get('/soporte', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
@@ -259,4 +264,8 @@ Route::middleware(['auth'])->group(function () {
     // Portal del Colegiado: Gestión de Legajo Digital
     Route::get('/mi-legajo', [\App\Http\Controllers\ComplianceController::class, 'index'])->name('compliance.index');
     Route::post('/mi-legajo/subir/{requirement}', [\App\Http\Controllers\ComplianceController::class, 'upload'])->name('compliance.upload');
+
+    // Portal del Colegiado: Trámites y Certificados (Comprar)
+    Route::get('/mis-tramites', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'index'])->name('collegiate.certificates.store');
+    Route::post('/mis-tramites/comprar/{type}', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'purchase'])->name('collegiate.certificates.purchase');
 });
