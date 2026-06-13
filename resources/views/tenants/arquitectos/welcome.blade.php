@@ -15,7 +15,7 @@
     <style>
         :root {
             --primary: #1a1a1a;
-            --accent: #f39c12; /* Naranja/Dorado constructivo */
+            --accent: #ff6b00; /* Naranja fuerte/constructivo */
             --light: #f8f9fa;
             --dark: #0f0f0f;
             --gray: #7f8c8d;
@@ -35,8 +35,8 @@
         /* NAVBAR */
         .navbar-arq {
             background-color: var(--dark);
-            border-bottom: 2px solid var(--accent);
-            padding: 1rem 0;
+            border-bottom: 3px solid var(--accent);
+            padding: 0.5rem 0;
         }
         .navbar-arq .navbar-brand {
             color: #fff !important;
@@ -63,7 +63,7 @@
         @endphp
         .hero-arq {
             height: 100vh;
-            background-image: linear-gradient(rgba(15, 15, 15, 0.8), rgba(15, 15, 15, 0.8)), url('{{ $bgImage }}');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ $bgImage }}');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -77,13 +77,15 @@
             letter-spacing: 4px;
             line-height: 1;
             margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
         .hero-arq p {
-            font-size: 1.2rem;
-            color: #ccc;
-            font-weight: 300;
+            font-size: 1.3rem;
+            color: #ffffff;
+            font-weight: 500;
             letter-spacing: 1px;
             max-width: 600px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
         }
 
         /* SECTIONS */
@@ -171,7 +173,7 @@
         <div class="container d-flex align-items-center">
             <a class="navbar-brand d-flex align-items-center gap-3" href="/">
                 @if(isset($school) && $school->logo)
-                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 100px;">
+                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 180px; max-height: 250px;">
                 @else
                     <span class="material-icons text-white">architecture</span>
                 @endif

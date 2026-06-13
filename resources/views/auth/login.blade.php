@@ -28,9 +28,9 @@
 
         /* Micro-Animations (Piripipí) */
         @keyframes float {
-            0% { transform: translateX(-50%) translateY(0px); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-            100% { transform: translateX(-50%) translateY(0px); }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
         @keyframes fadeInScale {
             0% { opacity: 0; transform: scale(0.95); }
@@ -46,14 +46,13 @@
             background: rgba(30, 41, 59, 0.7); /* Slate 800 with transparency for glass effect */
             backdrop-filter: blur(15px);
             border-radius: 16px;
-            padding: 5rem 2.5rem 2.5rem; /* Increased top padding to avoid overlap */
+            padding: 3.5rem 2.5rem 2.5rem; /* Flexible padding */
             width: 100%;
             max-width: 420px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid #ffffff;
             position: relative;
             animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            margin-top: 80px; /* Space for the floating logo */
         }
 
         .login-logo-container {
@@ -62,10 +61,7 @@
             padding: 15px 25px; /* Flexible padding */
             text-align: center;
             border: 3px solid {{ $currentTenant->primary_color ?? '#3b82f6' }};
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
+            margin: 0 auto 2.5rem; /* Centers horizontally and pushes content down */
             min-width: 120px;
             max-width: 280px;
             height: 110px;
@@ -73,7 +69,6 @@
             align-items: center;
             justify-content: center;
             animation: float 4s ease-in-out infinite, pulseGlow 3s infinite;
-            z-index: 10;
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
