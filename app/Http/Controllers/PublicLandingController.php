@@ -34,6 +34,11 @@ class PublicLandingController extends Controller
                                                ->get()
                                                ->groupBy('department');
 
+        $tenantSlug = $school->slug ?? 'default';
+        if (view()->exists("tenants.{$tenantSlug}.welcome")) {
+            return view("tenants.{$tenantSlug}.welcome", compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers'));
+        }
+
         return view('welcome', compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers'));
     }
 
