@@ -102,7 +102,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-tech fixed-top">
-        <div class="container d-flex align-items-center justify-content-between py-2">
+        <div class="container-fluid px-4 px-xl-5 d-flex align-items-center justify-content-between py-2">
             <a class="navbar-brand grotesk fw-bold d-flex align-items-center gap-2" href="/" style="color: var(--brand-dark);">
                 @if(isset($school) && $school->logo)
                     <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 80px;">
@@ -132,16 +132,16 @@
     </nav>
 
     <section class="hero-tech">
-        <div class="container text-center">
-            <span class="badge bg-light text-success border border-success mb-3 px-3 py-2 rounded-pill">Plataforma V2 Activa</span>
-            <h1 class="display-4 fw-bold mb-4" style="color: var(--brand-dark);">Tu organización,<br>en la nube.</h1>
-            <p class="fs-5 mb-5 mx-auto" style="max-width: 600px; color: #64748b;">
+        <div class="container-fluid px-4 px-xl-5 text-center">
+            <span class="badge bg-light text-success border border-success mb-3 px-3 py-2 rounded-pill shadow-sm">Plataforma V2 Activa</span>
+            <h1 class="display-4 fw-bold mb-4" style="color: #ffffff; text-shadow: 0 4px 15px rgba(0,0,0,0.9);">Tu organización,<br>en la nube.</h1>
+            <p class="fs-5 mb-5 mx-auto" style="max-width: 600px; color: #f8fafc; text-shadow: 0 2px 8px rgba(0,0,0,0.9);">
                 Gestión inteligente para colegios profesionales. Matrículas, cobros, noticias y portal de colegiados en un solo lugar.
             </p>
         </div>
     </section>
 
-    <main class="container py-5">
+    <main class="container-fluid px-4 px-xl-5 py-5">
         
         <!-- CARACTERÍSTICAS -->
         <div id="quienes-somos" class="row g-4 mb-5 pb-5 border-bottom pt-5">

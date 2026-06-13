@@ -56,7 +56,7 @@
 
     <!-- HEADER -->
     <nav class="navbar navbar-expand-lg bg-theme-card border-bottom border-theme sticky-top shadow-sm py-3">
-        <div class="container">
+        <div class="container-fluid px-4 px-xl-5">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <div class="bg-white rounded-4 shadow-sm d-flex align-items-center justify-content-center me-3" style="width: 100px; height: 100px; padding: 10px; overflow: hidden;">
                     @if(isset($school) && $school->logo)
@@ -108,7 +108,7 @@
 
     <!-- STATS -->
     <section class="bg-theme-card py-5 border-bottom border-theme">
-        <div class="container">
+        <div class="container-fluid px-4 px-xl-5">
             <div class="row g-4 text-center">
                 <div class="col-6 col-md-3">
                     <h2 class="display-5 fw-bold text-theme-primary mb-0">+350</h2>
@@ -131,7 +131,7 @@
     </section>
 
     <!-- MAIN CONTENT -->
-    <main class="container py-5">
+    <main class="container-fluid px-4 px-xl-5 py-5">
         
         <!-- INSTITUCIONAL -->
         <div id="quienes-somos" class="row align-items-center mb-5 pb-5 border-bottom border-theme pt-5">

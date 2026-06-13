@@ -9,25 +9,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
-    <!-- Fuentes cálidas y legibles -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <!-- Fuentes modernas y profesionales -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --ts-primary: #8e44ad; /* Púrpura cálido */
-            --ts-secondary: #e67e22; /* Naranja terroso */
-            --ts-light: #fdfaf6; /* Crema suave */
-            --ts-dark: #2c3e50;
+            --ts-primary: #1e3a8a; /* Azul Profundo / Institucional */
+            --ts-secondary: #059669; /* Esmeralda / Compromiso */
+            --ts-light: #f8fafc; /* Gris Slate muy suave */
+            --ts-dark: #0f172a;
         }
         
         body {
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Inter', sans-serif;
             color: var(--ts-dark);
             background-color: var(--ts-light);
         }
 
         h1, h2, h3, h4, h5, h6, .playfair {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         /* NAVBAR */
@@ -62,7 +62,7 @@
         @endphp
         .hero-ts {
             padding: 180px 0 100px;
-            background: linear-gradient(135deg, rgba(253, 250, 246, 0.9) 0%, rgba(253, 250, 246, 0.95) 100%), url('{{ $bgImage }}');
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.92) 0%, rgba(248, 250, 252, 0.98) 100%), url('{{ $bgImage }}');
             background-size: cover;
             background-position: center;
             position: relative;
@@ -148,7 +148,7 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-ts fixed-top py-3">
-        <div class="container d-flex justify-content-between align-items-center">
+        <div class="container-fluid px-4 px-xl-5 d-flex justify-content-between align-items-center">
             <a class="navbar-brand d-flex align-items-center gap-2 playfair" href="/">
                 @if(isset($school) && $school->logo)
                     <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 80px;">
@@ -178,10 +178,9 @@
 
     <!-- HERO -->
     <section class="hero-ts">
-        <div class="container position-relative">
+        <div class="container-fluid px-4 px-xl-5 position-relative">
             <div class="row align-items-center">
                 <div class="col-lg-6">
-                    <span class="badge rounded-pill mb-3" style="background-color: rgba(230,126,34,0.15); color: var(--ts-secondary); font-size: 0.9rem; padding: 8px 15px;">Bienvenidos</span>
                     <h1 class="playfair">Empatía, <br>Derechos & <br>Comunidad.</h1>
                     <p>Órgano oficial que agrupa, regula y defiende a los profesionales del Trabajo Social, velando por la ética y el compromiso social.</p>
                 </div>
@@ -194,7 +193,7 @@
         </div>
     </section>
 
-    <main class="container py-5">
+    <main class="container-fluid px-4 px-xl-5 py-5">
         
         <!-- INSTITUCIONAL -->
         <div id="quienes-somos" class="row align-items-center mb-5 pb-5 pt-5">
@@ -356,7 +355,7 @@
 
     <!-- FOOTER -->
     <footer class="footer-ts">
-        <div class="container">
+        <div class="container-fluid px-4 px-xl-5">
             <h3 class="playfair mb-3">{{ $school->name }}</h3>
             <p class="mb-0" style="opacity: 0.8;">&copy; {{ date('Y') }} Todos los derechos reservados.</p>
         </div>

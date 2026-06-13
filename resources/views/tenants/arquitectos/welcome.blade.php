@@ -170,7 +170,7 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-arq fixed-top">
-        <div class="container d-flex align-items-center">
+        <div class="container-fluid px-4 px-xl-5 d-flex align-items-center">
             <a class="navbar-brand d-flex align-items-center gap-3" href="/">
                 @if(isset($school) && $school->logo)
                     <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 180px; max-height: 250px;">
