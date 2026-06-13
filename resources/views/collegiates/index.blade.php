@@ -110,17 +110,17 @@
                         @php
                             // Lógica de Finanzas
                             $pendingDues = $col->dues->whereIn('status', ['pending', 'overdue']);
-                            $overdueCount = $pendingDues->where('due_date', '<', now())->count();
                             $soonCount = $pendingDues->where('due_date', '>=', now())->where('due_date', '<=', now()->addDays(7))->count();
                             
                             $financeColor = 'success';
                             $financeText = 'Al día';
-                            if ($overdueCount > 0) {
+                            
+                            if (!$col->is_fees_compliant) {
                                 $financeColor = 'danger';
-                                $financeText = 'Deuda';
+                                $financeText = 'Adeuda';
                             } elseif ($soonCount > 0) {
                                 $financeColor = 'warning';
-                                $financeText = 'Vence pronto';
+                                $financeText = 'Por Vencer';
                             }
 
                             // Lógica de Documentación
