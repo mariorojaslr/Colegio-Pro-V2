@@ -110,14 +110,15 @@
                         @php
                             // Lógica de Finanzas
                             $pendingDues = $col->dues->whereIn('status', ['pending', 'overdue']);
+                            $totalDebt = $pendingDues->sum('amount');
                             $soonCount = $pendingDues->where('due_date', '>=', now())->where('due_date', '<=', now()->addDays(7))->count();
                             
                             $financeColor = 'success';
                             $financeText = 'Al día';
                             
-                            if (!$col->is_fees_compliant) {
+                            if ($totalDebt > 0) {
                                 $financeColor = 'danger';
-                                $financeText = 'Adeuda';
+                                $financeText = '$ ' . number_format($totalDebt, 0, ',', '.');
                             } elseif ($soonCount > 0) {
                                 $financeColor = 'warning';
                                 $financeText = 'Por Vencer';
@@ -169,7 +170,7 @@
                         </td>
                         <td class="py-2 text-center align-middle">
                             <button class="btn btn-{{ $financeColor }} rounded-pill px-2 py-0 border-0 shadow-sm fw-bold w-100 btn-indicator" style="font-size: 0.75rem; height: 22px; line-height: 22px;" onclick="togglePanel({{ $col->id }}, 'finanzas')">
-                                <i class="bi bi-currency-dollar me-1"></i> {{ $financeText }}
+                                <i class="bi {{ $financeColor == 'success' ? 'bi-check-circle-fill' : 'bi-currency-dollar' }} me-1"></i> {{ $financeText }}
                             </button>
                         </td>
                         <td class="py-2 text-center align-middle" style="width: 120px;">
