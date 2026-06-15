@@ -61,7 +61,16 @@ class ComplianceController extends Controller
         ]);
 
         $user = Auth::user();
-        $collegiate = Collegiate::where('user_id', $user->id)->first();
+        
+        if ($request->has('collegiate_id') && ($user->role === 'ADMIN_COLEGIO' || $user->isOwner())) {
+            $collegiate = Collegiate::findOrFail($request->collegiate_id);
+        } else {
+            $collegiate = Collegiate::where('user_id', $user->id)->first();
+        }
+
+        if (!$collegiate) {
+            return back()->with('error', 'Colegiado no encontrado.');
+        }
 
         // Estructura de Bunny: colegio-pro/docs/{school_slug}/{registration_number}/{req_name}_{timestamp}.ext
         $file = $request->file('document');

@@ -31,7 +31,15 @@
                     <tr>
                         <td class="px-4 py-3">
                             <h6 class="mb-0 fw-bold">{{ $type->name }}</h6>
-                            <small class="text-muted">Validez: {{ $type->validity_days ? $type->validity_days . ' días' : 'Ilimitada' }}</small>
+                            <small class="text-muted">
+                                @if($type->is_single_use)
+                                    <span class="text-danger fw-bold"><i class="bi bi-1-circle"></i> Un solo uso</span>
+                                @elseif($type->validity_days)
+                                    Validez: {{ $type->validity_days }} días
+                                @else
+                                    Validez Ilimitada
+                                @endif
+                            </small>
                         </td>
                         <td class="px-4 py-3 fw-bold text-success">
                             {{ $type->price > 0 ? '$' . number_format($type->price, 2) : 'Gratuito' }}
@@ -78,13 +86,21 @@
                         <input type="text" name="name" class="form-control rounded-3" required placeholder="Ej: Certificado de Ética">
                     </div>
                     <div class="row mb-3">
-                        <div class="col-6">
+                        <div class="col-4">
                             <label class="form-label fw-bold small text-uppercase text-muted">Precio ($)</label>
                             <input type="number" step="0.01" name="price" class="form-control rounded-3" value="0" required>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <label class="form-label fw-bold small text-uppercase text-muted">Validez (Días)</label>
                             <input type="number" name="validity_days" class="form-control rounded-3" placeholder="Vacío = Ilimitado">
+                        </div>
+                        <div class="col-4 d-flex align-items-end">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="is_single_use" value="1" id="isSingleUse">
+                                <label class="form-check-label small fw-bold text-danger" for="isSingleUse">
+                                    Es de 1 solo uso
+                                </label>
+                            </div>
                         </div>
                     </div>
                     

@@ -344,7 +344,15 @@
                                     </ul>
                                 </li>
 
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.ethics.index') }}">{{ __('ui.ethics') }}</a></li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownEthics" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ __('ui.ethics') }}
+                                    </a>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownEthics">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics.index') }}">Gestión Ética y Sanciones</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics_infractions.index') }}">Tipos de Infracción</a></li>
+                                    </ul>
+                                </li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'news') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownNews" role="button" data-bs-toggle="dropdown" aria-expanded="false">

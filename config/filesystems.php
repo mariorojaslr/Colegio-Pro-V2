@@ -60,6 +60,19 @@ return [
             'report' => false,
         ],
 
+        'bunny' => [
+            'driver' => 's3',
+            'key' => env('BUNNY_API_KEY'),
+            'secret' => env('BUNNY_API_KEY'),
+            'region' => env('BUNNY_REGION', 'la-br'), // Defaulting to Latin America Brazil for better latency, or 'ny'
+            'bucket' => env('BUNNY_STORAGE_ZONE'),
+            'url' => env('BUNNY_PULL_ZONE_URL'),
+            'endpoint' => env('BUNNY_ENDPOINT', 'https://la-br.storage.bunnycdn.com'),
+            'use_path_style_endpoint' => true,
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*

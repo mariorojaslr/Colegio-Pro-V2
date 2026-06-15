@@ -246,6 +246,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/gestion-etica/sancion', [\App\Http\Controllers\Admin\EthicsController::class, 'createSanction'])->name('admin.ethics.create_sanction');
     Route::post('/gestion-etica/levantar/{sanction}', [\App\Http\Controllers\Admin\EthicsController::class, 'liftSanction'])->name('admin.ethics.lift_sanction');
 
+    // CRUD de Tipos de Infracciones Éticas
+    Route::resource('/gestion-etica/tipos-infraccion', \App\Http\Controllers\EthicsInfractionTypeController::class)->names('admin.ethics_infractions')->except(['create', 'show', 'edit']);
+
 
 
     // Gestión de Trámites y Certificados Valorizados (Admin de Colegio)

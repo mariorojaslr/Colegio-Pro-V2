@@ -208,7 +208,11 @@
                                 <div id="panel-finanzas-{{ $col->id }}" class="collegiate-panel d-none">
                                     <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-wallet2 me-2"></i> Estado Financiero</h6>
                                     @if($pendingDues->isEmpty())
-                                        <div class="alert alert-success border-0 py-2 x-small fw-bold mb-0"><i class="bi bi-check-circle-fill me-2"></i> El colegiado está al día con sus cuotas.</div>
+                                        @if(!$col->is_fees_compliant)
+                                            <div class="alert alert-warning border-0 py-2 x-small fw-bold mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i> El colegiado está marcado administrativamente con estado de deuda, pero no hay detalle de cuotas cargadas en el sistema.</div>
+                                        @else
+                                            <div class="alert alert-success border-0 py-2 x-small fw-bold mb-0"><i class="bi bi-check-circle-fill me-2"></i> El colegiado está al día con sus cuotas.</div>
+                                        @endif
                                     @else
                                         <div class="table-responsive">
                                             <table class="table table-sm table-borderless mb-0">

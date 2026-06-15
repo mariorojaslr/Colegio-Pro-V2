@@ -2,23 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CertificateType extends Model
+class EthicsInfractionType extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'school_id',
         'name',
         'description',
-        'price',
-        'validity_days',
-        'is_single_use',
-        'requires_clearance',
-        'requires_no_sanctions',
+        'severity',
+        'duration_months',
         'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'duration_months' => 'integer',
     ];
 
     public function school()
