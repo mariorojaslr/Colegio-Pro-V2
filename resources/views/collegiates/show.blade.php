@@ -145,15 +145,46 @@
                                 </button>
                             </h2>
                             <div id="collapseLegajo" class="accordion-collapse collapse" aria-labelledby="headingLegajo" data-bs-parent="#collegiateAccordion">
-                                <div class="accordion-body bg-white p-0">
+                                <div class="accordion-body bg-white p-4">
+                                    {{-- Búmetro de Progreso Documental --}}
+                                    @php
+                                        $percent = $reqCount > 0 ? ($appCount / $reqCount) * 100 : 100;
+                                        
+                                        // Calcular color basado en progreso (Rojo -> Amarillo -> Verde)
+                                        if ($percent < 50) {
+                                            $barColor = 'bg-danger';
+                                            $textColor = 'text-danger';
+                                        } elseif ($percent < 100) {
+                                            $barColor = 'bg-warning';
+                                            $textColor = 'text-warning';
+                                        } else {
+                                            $barColor = 'bg-success';
+                                            $textColor = 'text-success';
+                                        }
+                                    @endphp
+                                    <div class="mb-4 bg-light rounded-4 p-4 border border-secondary border-opacity-10 text-center">
+                                        <h6 class="fw-bold text-dark mb-3 uppercase ls-1">Estado de Completitud del Legajo</h6>
+                                        <div class="d-flex justify-content-between align-items-end mb-2">
+                                            <span class="fw-bold {{ $textColor }} fs-5">{{ $appCount }} de {{ $reqCount }}</span>
+                                            <span class="fw-bold {{ $textColor }} fs-5">{{ round($percent) }}%</span>
+                                        </div>
+                                        <div class="progress shadow-sm" style="height: 25px; border-radius: 20px; background: #e2e8f0;">
+                                            <div class="progress-bar {{ $barColor }} progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ $percent }}%; transition: width 1s ease-in-out;" aria-valuenow="{{ $percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-2 xx-small text-muted fw-bold uppercase">
+                                            <span>Incompleto</span>
+                                            <span>Completado</span>
+                                        </div>
+                                    </div>
+
                                     <div class="table-responsive">
                                         <table class="table table-hover align-middle mb-0">
                                             <thead class="bg-light border-0">
                                                 <tr class="xx-small fw-bold text-muted uppercase ls-1">
-                                                    <th class="py-3 px-4 border-0">Documento Requerido</th>
-                                                    <th class="py-3 border-0 text-center">Estado</th>
-                                                    <th class="py-3 border-0 text-center">Vencimiento</th>
-                                                    <th class="py-3 text-end px-4 border-0">Acciones</th>
+                                                    <th class="py-3 px-4 border-0" style="width: 50%;">Documento Requerido</th>
+                                                    <th class="py-3 border-0 text-center" style="width: 15%;">Estado</th>
+                                                    <th class="py-3 border-0 text-center" style="width: 15%;">Vencimiento</th>
+                                                    <th class="py-3 text-end px-4 border-0" style="width: 20%;">Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
