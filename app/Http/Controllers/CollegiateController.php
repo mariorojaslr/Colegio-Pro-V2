@@ -350,7 +350,7 @@ class CollegiateController extends Controller
     /**
      * Sube y actualiza la foto de perfil (avatar) del colegiado.
      */
-    public function uploadAvatar(Request $request, Collegiate $collegiate)
+    public function uploadAvatar(Request $request, Collegiate $collegiate, \App\Services\BunnyService $bunny)
     {
         $user = Auth::user();
         if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner() && $user->id !== $collegiate->user_id) abort(403);
@@ -362,25 +362,32 @@ class CollegiateController extends Controller
         $file = $request->file('avatar');
         $fileName = 'avatar_' . $collegiate->id . '_' . time() . '.jpg';
         
-        // Ensure avatars directory exists
-        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('avatars')) {
-            \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('avatars');
-        }
-
         // Utilizar Intervention Image para auto-centrar (cover), comprimir (75%) y redimensionar
         $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
         $image = $manager->read($file->getPathname());
-        
-        // Recorta de forma inteligente al centro (tipo busto cuadrado) a 400x400px
         $image->cover(400, 400, 'center');
         
-        // Guarda la imagen comprimida a JPEG para que sea liviana pero de buena calidad
-        $image->toJpeg(75)->save(storage_path('app/public/avatars/' . $fileName));
-        
+        // Guarda temporalmente la imagen procesada
+        $tempPath = storage_path('app/temp_' . $fileName);
+        $image->toJpeg(75)->save($tempPath);
+
+        // Subir a Bunny.net en una carpeta específica de avatares para la escuela
+        $remotePath = "avatars/escuela_{$collegiate->school_id}/{$fileName}";
+        $result = $bunny->uploadFile($tempPath, $remotePath);
+
+        // Eliminar el archivo temporal
+        if (file_exists($tempPath)) {
+            unlink($tempPath);
+        }
+
+        if (!$result['success']) {
+            return redirect()->back()->with('error', 'Error al subir foto a la nube. Detalle: ' . $result['error']);
+        }
+
         $collegiate->update([
-            'avatar_url' => asset('storage/avatars/' . $fileName)
+            'avatar_url' => $result['url']
         ]);
 
-        return redirect()->back()->with('success', 'Foto de perfil procesada, centrada y actualizada correctamente.');
+        return redirect()->back()->with('success', 'Foto de perfil procesada, centrada y subida a la nube correctamente.');
     }
 }
