@@ -270,22 +270,25 @@
                                         @foreach($requirements as $req)
                                             @php
                                                 $doc = $col->documents->where('compliance_requirement_id', $req->id)->first();
-                                                $statusClass = 'bg-danger text-white';
+                                                $statusClass = 'text-white';
+                                                $statusStyle = 'background-color: #dc3545 !important;';
                                                 $statusIcon = 'bi-x-circle-fill';
                                                 $statusText = 'Faltante';
                                                 if($doc && $doc->status === 'approved') {
-                                                    $statusClass = 'bg-success text-white';
+                                                    $statusClass = 'text-white';
+                                                    $statusStyle = 'background-color: #198754 !important;';
                                                     $statusIcon = 'bi-check-circle-fill';
                                                     $statusText = 'Aprobado';
                                                 } elseif($doc && $doc->status === 'pending') {
-                                                    $statusClass = 'bg-warning text-dark';
+                                                    $statusClass = 'text-dark';
+                                                    $statusStyle = 'background-color: #ffc107 !important;';
                                                     $statusIcon = 'bi-clock-fill';
                                                     $statusText = 'En Revisión';
                                                 }
                                             @endphp
                                             <div class="col-md-4">
                                                 <div class="d-flex align-items-center p-2 border rounded bg-white">
-                                                    <div class="rounded-circle {{ $statusClass }} d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
+                                                    <div class="rounded-circle {{ $statusClass }} d-flex align-items-center justify-content-center me-2" style="{{ $statusStyle }} width: 24px; height: 24px;">
                                                         <i class="bi {{ $statusIcon }} x-small"></i>
                                                     </div>
                                                     <div class="flex-grow-1 x-small text-truncate" title="{{ $req->name }}">

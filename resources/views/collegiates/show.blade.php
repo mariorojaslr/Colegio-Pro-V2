@@ -197,11 +197,11 @@
                                                         </td>
                                                         <td class="py-3 border-0 text-center">
                                                             @if($doc && $doc->status == 'approved')
-                                                                <span class="badge bg-success rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 10px"><i class="bi bi-check-circle-fill me-1"></i> Completado</span>
+                                                                <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: #198754 !important; color: white !important; font-size: 10px"><i class="bi bi-check-circle-fill me-1"></i> Aprobado</span>
                                                             @elseif($doc && $doc->status == 'pending')
-                                                                <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 10px"><i class="bi bi-clock-fill me-1"></i> En Revisión</span>
+                                                                <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: #ffc107 !important; color: #000 !important; font-size: 10px"><i class="bi bi-clock-fill me-1"></i> En Revisión</span>
                                                             @else
-                                                                <span class="badge bg-danger rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 10px"><i class="bi bi-x-circle-fill me-1"></i> Falta</span>
+                                                                <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: #dc3545 !important; color: white !important; font-size: 10px"><i class="bi bi-x-circle-fill me-1"></i> Falta</span>
                                                             @endif
                                                         </td>
                                                         <td class="py-3 border-0 text-center text-muted small fw-medium">
@@ -215,6 +215,20 @@
                                                         <td class="py-3 text-end px-4 border-0">
                                                             @if($doc)
                                                                 <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3">Ver Documento</a>
+                                                                
+                                                                @if(auth()->user()->isOwner() || auth()->user()->role === 'ADMIN_COLEGIO')
+                                                                    @if($doc->status === 'pending')
+                                                                        <form action="{{ route('admin.compliance.approve', $doc->id) }}" method="POST" class="d-inline">
+                                                                            @csrf
+                                                                            <button type="submit" class="btn btn-sm btn-success rounded-circle ms-1" title="Aprobar"><i class="bi bi-check-lg"></i></button>
+                                                                        </form>
+                                                                        <form action="{{ route('admin.compliance.reject', $doc->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de rechazar este documento?');">
+                                                                            @csrf
+                                                                            <button type="submit" class="btn btn-sm btn-danger rounded-circle ms-1" title="Rechazar"><i class="bi bi-x-lg"></i></button>
+                                                                        </form>
+                                                                    @endif
+                                                                @endif
+
                                                                 <button class="btn btn-sm btn-light border rounded-circle ms-1" title="Actualizar Archivo" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $req->id }}"><i class="bi bi-arrow-repeat"></i></button>
                                                             @else
                                                                 <button class="btn btn-sm btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $req->id }}">Subir <i class="bi bi-cloud-arrow-up ms-1"></i></button>
