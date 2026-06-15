@@ -196,9 +196,7 @@ class CollegiateController extends Controller
             }
             $collegiate->updateComplianceStatus();
             return back()->with('success', 'Las cuotas han sido marcadas como pagadas (Financiación Externa exitosa).');
-        } 
-        
-        else {
+        } else {
             // Plan Interno: Anular cuotas antiguas y crear nuevas.
             foreach ($dues as $due) {
                 $due->update([
@@ -207,25 +205,27 @@ class CollegiateController extends Controller
                 ]);
             }
 
-        // 2. Generar las N nuevas cuotas extraordinarias
-        $installments = (int) $request->installments;
-        $amount = (float) $request->installment_amount;
-        $date = \Carbon\Carbon::parse($request->first_due_date);
+            // 2. Generar las N nuevas cuotas extraordinarias
+            $installments = (int) $request->installments;
+            $amount = (float) $request->installment_amount;
+            $date = \Carbon\Carbon::parse($request->first_due_date);
 
-        for ($i = 1; $i <= $installments; $i++) {
-            \App\Models\CollegiateDue::create([
-                'collegiate_id' => $collegiate->id,
-                'due_date' => $date->copy()->addMonths($i - 1),
-                'amount' => $amount,
-                'status' => 'pending',
-                'due_type' => 'extraordinary',
-                'notes' => "Cuota Plan de Pagos Institucional ($i/$installments)"
-            ]);
+            for ($i = 1; $i <= $installments; $i++) {
+                \App\Models\CollegiateDue::create([
+                    'collegiate_id' => $collegiate->id,
+                    'due_date' => $date->copy()->addMonths($i - 1),
+                    'amount' => $amount,
+                    'status' => 'pending',
+                    'due_type' => 'extraordinary',
+                    'notes' => "Cuota Plan de Pagos Institucional ($i/$installments)"
+                ]);
+            }
+
+            $collegiate->updateComplianceStatus();
+            return back()->with('success', "Se generó el Plan de Pagos con $installments cuotas exitosamente.");
         }
-
-        $collegiate->updateComplianceStatus();
-        return back()->with('success', "Se generó el Plan de Pagos con $installments cuotas exitosamente.");
     }
+
 
     /**
      * Genera el Certificado de Habilitación Profesional.
