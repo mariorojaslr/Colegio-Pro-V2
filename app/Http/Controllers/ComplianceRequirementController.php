@@ -42,7 +42,8 @@ class ComplianceRequirementController extends Controller
             'type' => $request->type,
             'expiry_frequency' => $request->expiry_frequency,
             'expiration_months' => $request->expiration_months,
-            'is_mandatory' => $request->is_mandatory ?? true,
+            'is_mandatory' => $request->has('is_mandatory'),
+            'is_physical' => $request->has('is_physical'),
         ]);
 
         return redirect()->route('compliance_requirements.index')->with('success', "¡Requisito '{$request->name}' creado correctamente!");
@@ -69,6 +70,7 @@ class ComplianceRequirementController extends Controller
             'expiry_frequency' => $request->expiry_frequency,
             'expiration_months' => $request->expiration_months,
             'is_mandatory' => $request->has('is_mandatory'),
+            'is_physical' => $request->has('is_physical'),
         ]);
 
         return redirect()->route('compliance_requirements.index')->with('success', "Actualización de '{$requirement->name}' exitosa.");

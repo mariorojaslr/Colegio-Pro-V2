@@ -100,7 +100,7 @@
                         <th class="py-1" style="width: 100px;">Matrícula</th>
                         <th class="py-1">Documento / Contacto</th>
                         <th class="py-1 text-center" style="width: 100px;">Finanzas</th>
-                        <th class="py-1 text-center" style="width: 120px;">Documentos</th>
+                        <th class="py-1 text-center" style="width: 250px;">Documentos</th>
                         <th class="py-1 text-center" style="width: 100px;">Ética</th>
                         <th class="py-1 text-end px-4">Acciones</th>
                     </tr>
@@ -173,17 +173,14 @@
                                 <i class="bi {{ $financeColor == 'success' ? 'bi-check-circle-fill' : 'bi-currency-dollar' }} me-1"></i> {{ $financeText }}
                             </button>
                         </td>
-                        <td class="py-2 text-center align-middle" style="width: 120px;">
-                            <div class="cursor-pointer px-1" onclick="togglePanel({{ $col->id }}, 'docs')" title="Ver detalle de documentos">
-                                <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.65rem;">
-                                    <span class="text-muted fw-bold">PAPELERÍA</span>
-                                    <span class="fw-bold text-{{ $docsColor }}">{{ $approvedDocsCount }} de {{ $requiredDocsCount }}</span>
+                        <td class="py-2 text-center align-middle" style="width: 250px;">
+                            <div class="cursor-pointer px-3" onclick="togglePanel({{ $col->id }}, 'docs')" title="Ver detalle de documentos">
+                                <div class="d-flex flex-column align-items-center justify-content-center mb-1">
+                                    <span class="fw-bold text-{{ $docsColor }}" style="font-size: 0.85rem;">{{ $approvedDocsCount }} de {{ $requiredDocsCount }}</span>
+                                    <span class="text-muted fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">DOCUMENTOS</span>
                                 </div>
-                                <div class="progress bg-secondary bg-opacity-10 rounded-pill overflow-visible" style="height: 6px;">
-                                    <div class="progress-bar bg-{{ $docsColor }} rounded-pill position-relative" role="progressbar" style="width: {{ $docsProgress }}%;">
-                                        @if($docsProgress == 100)
-                                            <span class="position-absolute end-0 top-50 translate-middle-y me-n2 text-success"><i class="bi bi-check-circle-fill" style="font-size: 10px;"></i></span>
-                                        @endif
+                                <div class="progress bg-secondary bg-opacity-10 rounded-pill overflow-hidden mt-1 shadow-sm" style="height: 10px;">
+                                    <div class="progress-bar bg-{{ $docsColor }} rounded-pill" role="progressbar" style="width: {{ $docsProgress }}%; transition: width 0.5s ease;">
                                     </div>
                                 </div>
                             </div>

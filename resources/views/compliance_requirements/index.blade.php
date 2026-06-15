@@ -60,7 +60,13 @@
                             <label class="form-check-label fw-bold small" for="mandatorySwitch">Es Obligatorio</label>
                         </div>
                     </div>
-                    <div class="col-md-12 text-end">
+                    <div class="col-md-3">
+                        <div class="form-check form-switch mt-4 pt-2">
+                            <input class="form-check-input" type="checkbox" name="is_physical" value="1" id="physicalSwitch">
+                            <label class="form-check-label fw-bold small text-warning" for="physicalSwitch">Entrega Presencial</label>
+                        </div>
+                    </div>
+                    <div class="col-md-9 text-end">
                         <button type="submit" class="btn btn-dark rounded-pill px-5 py-2 fw-bold">Guardar Requisito <i class="bi bi-check2-circle ms-2"></i></button>
                     </div>
                 </div>
@@ -125,7 +131,7 @@
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu shadow border-0 rounded-4">
-                                            <li><a class="dropdown-item py-2" href="#"><i class="bi bi-pencil me-2"></i> Editar</a></li>
+                                            <li><a class="dropdown-item py-2" href="#" data-bs-toggle="modal" data-bs-target="#editModal{{ $requirement->id }}"><i class="bi bi-pencil me-2"></i> Editar</a></li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <form action="{{ route('compliance_requirements.destroy', $requirement) }}" method="POST">
@@ -138,6 +144,67 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    
+                                    {{-- Modal de Edición --}}
+                                    <div class="modal fade text-start" id="editModal{{ $requirement->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                                                <div class="modal-header bg-light border-0" style="border-radius: 20px 20px 0 0;">
+                                                    <h5 class="modal-title fw-bold">Editar Requisito</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body p-4">
+                                                    <form action="{{ route('compliance_requirements.update', $requirement) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="row g-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label small fw-bold text-muted">Nombre</label>
+                                                                <input type="text" name="name" class="form-control rounded-pill" value="{{ $requirement->name }}" required>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label small fw-bold text-muted">Tipo</label>
+                                                                <select name="type" class="form-select rounded-pill" required>
+                                                                    <option value="permanent" {{ $requirement->type == 'permanent' ? 'selected' : '' }}>Permanente</option>
+                                                                    <option value="perentory" {{ $requirement->type == 'perentory' ? 'selected' : '' }}>Perentorio</option>
+                                                                    <option value="special" {{ $requirement->type == 'special' ? 'selected' : '' }}>Especial</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label small fw-bold text-muted">Frecuencia</label>
+                                                                <select name="expiry_frequency" class="form-select rounded-pill" required>
+                                                                    <option value="none" {{ $requirement->expiry_frequency == 'none' ? 'selected' : '' }}>Sin Frecuencia</option>
+                                                                    <option value="semester" {{ $requirement->expiry_frequency == 'semester' ? 'selected' : '' }}>Semestral</option>
+                                                                    <option value="year" {{ $requirement->expiry_frequency == 'year' ? 'selected' : '' }}>Anual</option>
+                                                                    <option value="fixed" {{ $requirement->expiry_frequency == 'fixed' ? 'selected' : '' }}>Personalizado</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label small fw-bold text-muted">Vencimiento (Meses)</label>
+                                                                <input type="number" name="expiration_months" class="form-control rounded-pill" value="{{ $requirement->expiration_months }}" min="1">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-check form-switch mt-2">
+                                                                    <input class="form-check-input" type="checkbox" name="is_mandatory" value="1" {{ $requirement->is_mandatory ? 'checked' : '' }} id="editMandatory{{ $requirement->id }}">
+                                                                    <label class="form-check-label fw-bold small" for="editMandatory{{ $requirement->id }}">Es Obligatorio (Bloqueante)</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-check form-switch mt-2">
+                                                                    <input class="form-check-input" type="checkbox" name="is_physical" value="1" {{ $requirement->is_physical ? 'checked' : '' }} id="editPhysical{{ $requirement->id }}">
+                                                                    <label class="form-check-label fw-bold small text-warning" for="editPhysical{{ $requirement->id }}">Entrega Presencial Físicamente</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 text-end mt-4">
+                                                                <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Actualizar Cambios</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </td>
                             </tr>
                             @empty
