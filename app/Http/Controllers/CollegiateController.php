@@ -240,16 +240,27 @@ class CollegiateController extends Controller
         ]);
 
         $file = $request->file('avatar');
-        $extension = $file->getClientOriginalExtension();
-        $fileName = 'avatar_' . $collegiate->id . '_' . time() . '.' . $extension;
+        $fileName = 'avatar_' . $collegiate->id . '_' . time() . '.jpg';
         
-        // Guardar localmente
-        $path = $file->storeAs('public/avatars', $fileName);
+        // Ensure avatars directory exists
+        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('avatars')) {
+            \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('avatars');
+        }
+
+        // Utilizar Intervention Image para auto-centrar (cover), comprimir (75%) y redimensionar
+        $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+        $image = $manager->read($file->getPathname());
+        
+        // Recorta de forma inteligente al centro (tipo busto cuadrado) a 400x400px
+        $image->cover(400, 400, 'center');
+        
+        // Guarda la imagen comprimida a JPEG para que sea liviana pero de buena calidad
+        $image->toJpeg(75)->save(storage_path('app/public/avatars/' . $fileName));
         
         $collegiate->update([
             'avatar_url' => asset('storage/avatars/' . $fileName)
         ]);
 
-        return redirect()->back()->with('success', 'Foto de perfil actualizada correctamente.');
+        return redirect()->back()->with('success', 'Foto de perfil procesada, centrada y actualizada correctamente.');
     }
 }
