@@ -372,7 +372,7 @@ class CollegiateController extends Controller
         $image->toJpeg(75)->save($tempPath);
 
         // Subir a Bunny.net en una carpeta específica de avatares para la escuela
-        $remotePath = "avatars/escuela_{$collegiate->school_id}/{$fileName}";
+        $remotePath = "avatars/colegio_pro_{$collegiate->school_id}/{$fileName}";
         $result = $bunny->uploadFile($tempPath, $remotePath);
 
         // Eliminar el archivo temporal
