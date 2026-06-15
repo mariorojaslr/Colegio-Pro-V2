@@ -20,6 +20,9 @@ class School extends Model
         'email',
         'address',
         'map_embed_code',
+        'plus_code',
+        'latitude',
+        'longitude',
         'facebook_url',
         'instagram_url',
         'twitter_url'

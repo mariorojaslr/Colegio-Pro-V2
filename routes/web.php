@@ -254,6 +254,10 @@ Route::middleware(['auth'])->group(function () {
     // Gestión de Trámites y Certificados Valorizados (Admin de Colegio)
     Route::resource('/gestion-tramites', \App\Http\Controllers\Admin\CertificateTypeController::class)->names('admin.certificate_types')->except(['create', 'show', 'edit']);
 
+    // Configuración de la Empresa / Institución (Para el Admin del Colegio)
+    Route::get('/configuracion-institucion', [\App\Http\Controllers\Admin\SchoolSettingsController::class, 'edit'])->name('admin.school_settings.edit');
+    Route::put('/configuracion-institucion', [\App\Http\Controllers\Admin\SchoolSettingsController::class, 'update'])->name('admin.school_settings.update');
+
     // Tickets
     Route::get('/soporte', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
     Route::get('/soporte/nuevo', [App\Http\Controllers\TicketController::class, 'create'])->name('tickets.create');

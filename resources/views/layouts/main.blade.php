@@ -334,10 +334,12 @@
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">Contabilidad Global</a></li>
                                 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'cms') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
-                                        Gestor Web (CMS)
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'cms') || str_contains($currentRoute, 'school_settings') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
+                                        Gestor Institucional
                                     </a>
                                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.school_settings.edit') }}"><i class="bi bi-gear-fill me-2 text-primary"></i>Configuración (Logo y Mapa)</a></li>
+                                        <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.pages.index') }}"><i class="bi bi-file-earmark-richtext me-2 text-primary"></i>Páginas Dinámicas</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.menus.index') }}"><i class="bi bi-list-nested me-2 text-primary"></i>Menús y Navegación</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.sliders.index') }}"><i class="bi bi-images me-2 text-primary"></i>Sliders y Banners</a></li>
