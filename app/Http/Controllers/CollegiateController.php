@@ -112,11 +112,30 @@ class CollegiateController extends Controller
             'phone' => 'nullable|string|max:50',
             'dni' => 'required|string|max:20',
             'registration_number' => 'required|string|max:50',
-            'professional_situation' => 'required|string|max:100',
-            'financial_situation_note' => 'nullable|string'
+            'professional_situation' => 'nullable|string|max:100',
+            'financial_situation_note' => 'nullable|string',
+            'birth_date' => 'nullable|date',
+            'address' => 'nullable|string|max:255',
+            'workplaces_info' => 'nullable|string',
+            'plus_code' => 'nullable|string|max:255',
+            'degree' => 'nullable|string|max:255',
         ]);
 
-        $collegiate->update($request->all());
+        // Fix professional_situation mapping to status if necessary, or just rely on custom_attributes.
+        // Actually, we'll let it fill custom_attributes or status if we handle it elsewhere, 
+        // but since fillable just accepts it, wait, professional_situation and financial_situation_note are NOT in fillable.
+        // They were ignored before! Let's put them in custom_attributes.
+        $data = $request->all();
+        $customAttributes = $collegiate->custom_attributes ?? [];
+        if ($request->has('professional_situation')) {
+            $customAttributes['professional_situation'] = $request->professional_situation;
+        }
+        if ($request->has('financial_situation_note')) {
+            $customAttributes['financial_situation_note'] = $request->financial_situation_note;
+        }
+        $data['custom_attributes'] = $customAttributes;
+
+        $collegiate->update($data);
 
         return back()->with('success', 'Ficha del colegiado actualizada correctamente.');
     }

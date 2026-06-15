@@ -23,6 +23,14 @@ class Collegiate extends Model
         'is_fully_documented',
         'compliance_notes',
         'custom_attributes',
+        'birth_date',
+        'address',
+        'plus_code',
+        'latitude',
+        'longitude',
+        'degree',
+        'workplaces_info',
+        'practicing_since_year',
     ];
 
     protected $casts = [

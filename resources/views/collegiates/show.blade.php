@@ -398,6 +398,30 @@
                             <label class="form-label small fw-bold text-muted">Teléfono</label>
                             <input type="text" class="form-control" name="phone" value="{{ old('phone', $collegiate->phone) }}">
                         </div>
+
+                        <div class="col-12 mt-4 pt-3 border-top">
+                            <h6 class="fw-bold mb-3">Datos Personales y Profesionales</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" name="birth_date" value="{{ old('birth_date', $collegiate->birth_date ? \Carbon\Carbon::parse($collegiate->birth_date)->format('Y-m-d') : '') }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Título de Especialidad</label>
+                            <input type="text" class="form-control" name="degree" value="{{ old('degree', $collegiate->degree) }}" placeholder="Ej. Terapista Ocupacional">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Dirección de Residencia</label>
+                            <input type="text" class="form-control" name="address" value="{{ old('address', $collegiate->address) }}" placeholder="Calle, Número, Ciudad">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Dirección de Trabajo</label>
+                            <input type="text" class="form-control" name="workplaces_info" value="{{ old('workplaces_info', $collegiate->workplaces_info) }}" placeholder="Clínica, Hospital o Consultorio">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">Ubicación GPS / Plus Code</label>
+                            <input type="text" class="form-control" name="plus_code" value="{{ old('plus_code', $collegiate->plus_code) }}" placeholder="Enlace de Google Maps o Plus Code">
+                        </div>
                         
                         <div class="col-12 mt-4 pt-3 border-top">
                             <h6 class="fw-bold mb-3">Estado Institucional</h6>
