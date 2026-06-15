@@ -37,9 +37,10 @@ class SchoolSettingsController extends Controller
             $extension = $file->getClientOriginalExtension();
             $remoteName = "logos/{$school->slug}/logo_" . time() . ".{$extension}";
             
-            $url = $bunny->uploadFile($file->getPathname(), $remoteName);
-            if ($url) {
-                $data['logo'] = $url;
+            $result = $bunny->uploadFile($file->getPathname(), $remoteName);
+
+            if ($result['success']) {
+                $data['logo'] = $result['url'];
             }
         }
 

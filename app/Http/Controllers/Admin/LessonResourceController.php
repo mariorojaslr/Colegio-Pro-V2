@@ -38,11 +38,12 @@ class LessonResourceController extends Controller
             // Ruta: academy/resources/{lesson_id}/{slug}_{time}.ext
             $remoteName = "academy/resources/{$lesson->id}/" . Str::slug($request->title) . "_" . time() . ".{$ext}";
             
-            $url = $this->bunny->uploadFile($file->getPathname(), $remoteName);
+            $result = $this->bunny->uploadFile($file->getPathname(), $remoteName);
             
-            if (!$url) {
-                return back()->with('error', 'Error al subir el archivo a la nube.');
+            if (!$result['success']) {
+                return back()->with('error', 'Error al subir el archivo a la nube. Detalle: ' . $result['error']);
             }
+            $url = $result['url'];
         }
 
         $lesson->resources()->create([

@@ -36,7 +36,7 @@ class BunnyService
         if (empty($this->storageConfig['api_key']) || $this->storageConfig['api_key'] === 'tu_bunny_api_key_aqui') {
             $contents = file_get_contents($localFilePath);
             \Illuminate\Support\Facades\Storage::disk('public')->put($fullPath, $contents);
-            return asset('storage/' . $fullPath);
+            return ['success' => true, 'url' => asset('storage/' . $fullPath)];
         }
 
         $baseUri = "https://{$this->storageConfig['region']}.bunnycdn.com/{$this->storageConfig['zone']}/";
@@ -50,14 +50,14 @@ class BunnyService
               ->put($baseUri . $fullPath);
 
             if ($response->successful()) {
-                return $this->storageConfig['pull_zone_url'] . '/' . $fullPath;
+                return ['success' => true, 'url' => $this->storageConfig['pull_zone_url'] . '/' . $fullPath];
             }
 
             Log::error('Bunny Storage Upload Fail: ' . $response->body());
-            return false;
+            return ['success' => false, 'error' => "Bunny API Error: " . $response->status() . " " . $response->body()];
         } catch (\Exception $e) {
             Log::error('Bunny Storage Exception: ' . $e->getMessage());
-            return false;
+            return ['success' => false, 'error' => "Network Error: " . $e->getMessage()];
         }
     }
 

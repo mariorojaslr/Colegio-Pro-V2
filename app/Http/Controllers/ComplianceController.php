@@ -74,20 +74,53 @@ class ComplianceController extends Controller
 
         // Estructura de Bunny: colegio-pro/docs/{school_slug}/{registration_number}/{req_name}_{timestamp}.ext
         $file = $request->file('document');
-        $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($file->getClientOriginalExtension());
         $remoteName = "docs/{$user->school->slug}/{$collegiate->registration_number}/" . Str::slug($requirement->name) . "_" . time() . ".{$extension}";
 
-        $url = $this->bunny->uploadFile($file->getPathname(), $remoteName);
+        $uploadPath = $file->getPathname();
 
-        if (!$url) {
-            return back()->with('error', 'Error al subir el archivo a la nube. Intente nuevamente.');
+        // COMPRESIÓN DE IMÁGENES
+        // Si el archivo es una imagen, lo comprimimos antes de enviarlo a Bunny.net
+        if (in_array($extension, ['jpg', 'jpeg', 'png'])) {
+            try {
+                $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+                $image = $manager->read($uploadPath);
+                
+                // Redimensionar proporcionalmente para que no exceda 1200px de ancho/alto
+                $image->scaleDown(width: 1200, height: 1200);
+                
+                // Guardar en temp
+                $tempPath = sys_get_temp_dir() . '/' . uniqid() . '.' . $extension;
+                
+                if ($extension === 'png') {
+                    $image->toPng()->save($tempPath);
+                } else {
+                    $image->toJpeg(quality: 75)->save($tempPath);
+                }
+                
+                $uploadPath = $tempPath;
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Error comprimiendo imagen: " . $e->getMessage());
+                // Si falla la compresión, intentamos subir el original
+            }
+        }
+
+        $result = $this->bunny->uploadFile($uploadPath, $remoteName);
+
+        if (!$result['success']) {
+            return back()->with('error', 'Error al subir el archivo a la nube. Detalle: ' . $result['error']);
+        }
+
+        // Limpiar archivo temporal si fue creado
+        if ($uploadPath !== $file->getPathname() && file_exists($uploadPath)) {
+            @unlink($uploadPath);
         }
 
         // Registrar o actualizar el documento del colegiado
         CollegiateDocument::updateOrCreate(
             ['collegiate_id' => $collegiate->id, 'requirement_id' => $requirement->id],
             [
-                'file_url' => $url,
+                'file_url' => $result['url'],
                 'status' => 'pending', // Siempre vuelve a pendiente tras una resubida
                 'admin_notes' => null,   // Limpiar notas anteriores si es una corrección
                 'uploaded_at' => now(),
