@@ -118,7 +118,7 @@
                             
                             if ($totalDebt > 0) {
                                 $financeColor = 'danger';
-                                $financeText = '$ ' . number_format($totalDebt, 0, ',', '.');
+                                $financeText = number_format($totalDebt, 0, ',', '.');
                             } elseif ($soonCount > 0) {
                                 $financeColor = 'warning';
                                 $financeText = 'Por Vencer';
