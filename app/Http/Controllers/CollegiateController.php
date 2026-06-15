@@ -141,6 +141,93 @@ class CollegiateController extends Controller
     }
 
     /**
+     * Actualización rápida de un solo campo (Perfilado Progresivo)
+     */
+    public function quickUpdate(Request $request, Collegiate $collegiate)
+    {
+        $user = Auth::user();
+        if ($user->id !== $collegiate->user_id && $user->role !== 'ADMIN_COLEGIO') {
+            abort(403);
+        }
+
+        $request->validate([
+            'field' => 'required|string|in:birth_date,address,workplaces_info',
+            'value' => 'required|string'
+        ]);
+
+        $collegiate->update([
+            $request->field => $request->value
+        ]);
+
+        return back()->with('success', '¡Gracias! Dato guardado en tu perfil correctamente.');
+    }
+
+    /**
+     * Refinancia deudas o registra un pago consolidado por tarjeta externa.
+     */
+    public function refinance(Request $request, Collegiate $collegiate)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
+
+        $request->validate([
+            'due_ids' => 'required|array',
+            'financing_type' => 'required|in:external_card,internal_plan',
+            'installments' => 'required_if:financing_type,internal_plan|integer|min:1',
+            'installment_amount' => 'required_if:financing_type,internal_plan|numeric|min:0',
+            'first_due_date' => 'required_if:financing_type,internal_plan|date',
+        ]);
+
+        $dues = $collegiate->dues()->whereIn('id', $request->due_ids)->get();
+        if ($dues->isEmpty()) {
+            return back()->with('error', 'No se seleccionaron cuotas válidas para refinanciar.');
+        }
+
+        if ($request->financing_type === 'external_card') {
+            // Se asume que la deuda la compró la tarjeta. La institución ya cobró todo.
+            foreach ($dues as $due) {
+                $due->update([
+                    'status' => 'paid',
+                    'paid_at' => now(),
+                    'payment_method' => 'Tarjeta de Crédito',
+                    'notes' => 'Pagado vía Financiación Externa / Tarjeta'
+                ]);
+            }
+            $collegiate->updateComplianceStatus();
+            return back()->with('success', 'Las cuotas han sido marcadas como pagadas (Financiación Externa exitosa).');
+        } 
+        
+        // internal_plan
+        // 1. "Anular/Refinanciar" las viejas
+        foreach ($dues as $due) {
+            $due->update([
+                'status' => 'refinanced',
+                'notes' => 'Refinanciado en nuevo plan de pagos institucional.'
+            ]);
+        }
+
+        // 2. Generar las N nuevas cuotas extraordinarias
+        $installments = (int) $request->installments;
+        $amount = (float) $request->installment_amount;
+        $date = \Carbon\Carbon::parse($request->first_due_date);
+
+        for ($i = 1; $i <= $installments; $i++) {
+            \App\Models\CollegiateDue::create([
+                'collegiate_id' => $collegiate->id,
+                'due_date' => $date->copy()->addMonths($i - 1),
+                'amount' => $amount,
+                'status' => 'pending',
+                'due_type' => 'extraordinary',
+                'notes' => "Cuota Plan de Pagos Institucional ($i/$installments)"
+            ]);
+        }
+
+        $collegiate->updateComplianceStatus();
+        return back()->with('success', "Se generó el Plan de Pagos con $installments cuotas exitosamente.");
+    }
+
+    /**
      * Genera el Certificado de Habilitación Profesional.
      */
     public function certificate(Collegiate $collegiate)

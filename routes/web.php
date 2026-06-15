@@ -194,6 +194,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/colegiados/importar', [\App\Http\Controllers\CollegiateController::class, 'import'])->name('collegiates.import');
     Route::post('/colegiados/importar', [\App\Http\Controllers\CollegiateController::class, 'storeImport'])->name('collegiates.import.store');
     Route::get('/colegiados/{collegiate}', [\App\Http\Controllers\CollegiateController::class, 'show'])->name('collegiates.show');
+    Route::post('/collegiates/{collegiate}/refinance', [\App\Http\Controllers\CollegiateController::class, 'refinance'])->name('collegiates.refinance');
+    Route::put('/collegiates/{collegiate}/quick-update', [\App\Http\Controllers\CollegiateController::class, 'quickUpdate'])->name('collegiates.quick_update');
+    Route::get('/collegiates/{collegiate}/certificate', [\App\Http\Controllers\CollegiateController::class, 'certificate'])->name('collegiates.certificate');
     Route::put('/colegiados/{collegiate}', [\App\Http\Controllers\CollegiateController::class, 'update'])->name('collegiates.update');
     Route::get('/colegiados/{collegiate}/certificado', [\App\Http\Controllers\CollegiateController::class, 'certificate'])->name('collegiates.certificate');
     Route::post('/colegiados/{collegiate}/avatar', [\App\Http\Controllers\CollegiateController::class, 'uploadAvatar'])->name('collegiates.avatar');

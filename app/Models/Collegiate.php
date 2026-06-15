@@ -109,4 +109,76 @@ class Collegiate extends Model
                $this->is_fully_documented &&
                !$this->isSanctioned();
     }
+
+    /**
+     * Perfilado Progresivo: Devuelve la siguiente tarea faltante (una sola)
+     * para no agobiar al colegiado.
+     */
+    public function getNextOnboardingTask()
+    {
+        // 1. Prioridad: Foto de perfil
+        if (empty($this->avatar_url)) {
+            return [
+                'type' => 'avatar',
+                'title' => 'Sube tu Foto de Perfil',
+                'description' => 'Ayúdanos a reconocerte. Sube una foto tuya tipo carnet, de frente y clara.',
+                'icon' => 'bi-camera'
+            ];
+        }
+
+        // 2. Prioridad: Fecha de Nacimiento
+        if (empty($this->birth_date)) {
+            return [
+                'type' => 'birth_date',
+                'title' => 'Fecha de Nacimiento Faltante',
+                'description' => 'Necesitamos tu fecha de nacimiento para completar tus datos filiatorios.',
+                'icon' => 'bi-calendar-event'
+            ];
+        }
+
+        // 3. Prioridad: Dirección
+        if (empty($this->address)) {
+            return [
+                'type' => 'address',
+                'title' => 'Domicilio Particular Faltante',
+                'description' => 'Registra tu dirección de residencia actual para notificaciones formales.',
+                'icon' => 'bi-geo-alt'
+            ];
+        }
+
+        // 4. Prioridad: Lugar de trabajo
+        if (empty($this->workplaces_info)) {
+            return [
+                'type' => 'workplaces_info',
+                'title' => 'Lugar de Trabajo Faltante',
+                'description' => 'Indica en qué institución, consultorio o clínica ejerces la profesión actualmente.',
+                'icon' => 'bi-building'
+            ];
+        }
+
+        // 5. Prioridad: Documentos obligatorios
+        $school = $this->school;
+        if ($school) {
+            // Check mandatory requirements without approved documents
+            $pendingReq = ComplianceRequirement::where('school_id', $school->id)
+                ->where('is_mandatory', true)
+                ->whereDoesntHave('documents', function($q) {
+                    $q->where('collegiate_id', $this->id)
+                      ->where('status', 'approved');
+                })
+                ->first();
+
+            if ($pendingReq) {
+                return [
+                    'type' => 'document',
+                    'title' => 'Documento Pendiente: ' . $pendingReq->name,
+                    'description' => 'Te falta subir este requisito obligatorio para tener tu legajo digital completo.',
+                    'icon' => 'bi-file-earmark-text',
+                    'route' => route('compliance.index')
+                ];
+            }
+        }
+
+        return null;
+    }
 }

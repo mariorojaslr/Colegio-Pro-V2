@@ -245,6 +245,67 @@
                     </div>
                 </div>
             </div>
+
+            {{-- BANNERS DE ONBOARDING / PERFILADO PROGRESIVO --}}
+            @if(isset($onboardingTask) && $onboardingTask)
+            <div class="col-12 mt-1 mb-2 animate__animated animate__fadeInDown">
+                <div class="card-prestige p-4 border-2 border-primary bg-primary bg-opacity-10 shadow-sm" style="border-radius: 30px; border-style: dashed !important;">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 60px; height: 60px;">
+                                <i class="bi {{ $onboardingTask['icon'] }} fs-3"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1">{{ $onboardingTask['title'] }}</h5>
+                                <p class="mb-0 text-muted small fw-medium">{{ $onboardingTask['description'] }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            @if($onboardingTask['type'] === 'avatar')
+                                <a href="{{ route('profile.index') }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Completar Ahora <i class="bi bi-arrow-right ms-2"></i></a>
+                            @elseif($onboardingTask['type'] === 'document')
+                                <a href="{{ $onboardingTask['route'] }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Subir Documento <i class="bi bi-upload ms-2"></i></a>
+                            @else
+                                <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#onboardingModal">Completar Dato <i class="bi bi-pencil ms-2"></i></button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- MODAL PARA PERFILADO PROGRESIVO RÁPIDO --}}
+            @if(in_array($onboardingTask['type'], ['birth_date', 'address', 'workplaces_info']))
+            <div class="modal fade" id="onboardingModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg rounded-4">
+                        <div class="modal-header border-bottom py-3">
+                            <h5 class="modal-title fw-bold text-dark"><i class="bi {{ $onboardingTask['icon'] }} text-primary me-2"></i> {{ $onboardingTask['title'] }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('collegiates.quick_update', $collegiate) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="field" value="{{ $onboardingTask['type'] }}">
+                            <div class="modal-body p-4 bg-light-subtle">
+                                <label class="form-label small fw-bold text-muted">{{ $onboardingTask['title'] }}</label>
+                                @if($onboardingTask['type'] === 'birth_date')
+                                    <input type="date" name="value" class="form-control form-control-lg rounded-3" required>
+                                @else
+                                    <input type="text" name="value" class="form-control form-control-lg rounded-3" placeholder="Ingresa tu respuesta aquí..." required>
+                                @endif
+                                <p class="text-muted small mt-3 mb-0"><i class="bi bi-info-circle me-1"></i> Este dato se guardará en tu legajo digital automáticamente.</p>
+                            </div>
+                            <div class="modal-footer py-3 border-top">
+                                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Quizás luego</button>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Guardar y Continuar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @endif
+
             
             <div class="col-md-6">
                 <div class="card-prestige p-5 border-0 bg-white h-100 shadow-sm" style="border-radius: 40px">

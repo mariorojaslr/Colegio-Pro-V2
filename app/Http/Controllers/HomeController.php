@@ -127,6 +127,9 @@ class HomeController extends Controller
 
         // 5. Perfil del Colegiado (si aplica)
         $collegiate = \App\Models\Collegiate::where('user_id', $user->id)->first();
+        
+        // 6. Tarea de Onboarding (Perfilado Progresivo)
+        $onboardingTask = $collegiate ? $collegiate->getNextOnboardingTask() : null;
 
         return view('home', compact(
             'totalColegiados', 
@@ -136,7 +139,8 @@ class HomeController extends Controller
             'topDeudores',
             'amenitiesCount',
             'collegiate',
-            'news'
+            'news',
+            'onboardingTask'
         ));
     }
 }
