@@ -198,14 +198,14 @@ class CollegiateController extends Controller
             return back()->with('success', 'Las cuotas han sido marcadas como pagadas (Financiación Externa exitosa).');
         } 
         
-        // internal_plan
-        // 1. "Anular/Refinanciar" las viejas
-        foreach ($dues as $due) {
-            $due->update([
-                'status' => 'refinanced',
-                'notes' => 'Refinanciado en nuevo plan de pagos institucional.'
-            ]);
-        }
+        else {
+            // Plan Interno: Anular cuotas antiguas y crear nuevas.
+            foreach ($dues as $due) {
+                $due->update([
+                    'status' => 'paid',
+                    'notes' => 'Refinanciada bajo plan de pagos interno.'
+                ]);
+            }
 
         // 2. Generar las N nuevas cuotas extraordinarias
         $installments = (int) $request->installments;
