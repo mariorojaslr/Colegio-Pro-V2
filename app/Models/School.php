@@ -82,4 +82,9 @@ class School extends Model
     {
         return $this->hasMany(Amenity::class);
     }
+
+    public function complianceRequirements()
+    {
+        return $this->hasMany(ComplianceRequirement::class);
+    }
 }
