@@ -37,9 +37,9 @@ return [
 
     'bunny' => [
         'storage' => [
-            'api_key' => env('BUNNY_STORAGE_API_KEY', env('BUNNY_API_KEY')),
-            'zone' => env('BUNNY_STORAGE_ZONE'),
-            'region' => env('BUNNY_STORAGE_REGION', 'storage'),
+            'api_key' => env('BUNNY_STORAGE_API_KEY', env('BUNNY_API_KEY', env('BUNNY_PASSWORD'))),
+            'zone' => env('BUNNY_STORAGE_ZONE', env('BUNNY_USERNAME')),
+            'region' => env('BUNNY_STORAGE_REGION', env('BUNNY_HOSTNAME') ? str_replace('.bunnycdn.com', '', env('BUNNY_HOSTNAME')) : 'storage'),
             'pull_zone_url' => env('BUNNY_PULL_ZONE_URL'),
         ],
         'stream' => [
