@@ -152,10 +152,10 @@
                             <div class="d-flex align-items-center gap-3">
                                 <div>
                                     @if($col->avatar_url)
-                                        <img src="{{ $col->avatar_url }}" alt="Avatar" class="rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; border: 2px solid var(--bs-primary);">
+                                        <img src="{{ $col->avatar_url }}" alt="Avatar" class="rounded-circle object-fit-cover shadow-sm" style="width: 114px; height: 114px; border: 2px solid var(--bs-primary);">
                                     @else
-                                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center shadow-sm border border-secondary border-opacity-25" style="width: 38px; height: 38px;">
-                                            <span class="text-secondary fw-bold" style="font-size: 0.8rem;">{{ strtoupper(substr($col->first_name, 0, 1) . substr($col->last_name, 0, 1)) }}</span>
+                                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center shadow-sm border border-secondary border-opacity-25" style="width: 114px; height: 114px;">
+                                            <span class="text-secondary fw-bold" style="font-size: 2.4rem;">{{ strtoupper(substr($col->first_name, 0, 1) . substr($col->last_name, 0, 1)) }}</span>
                                         </div>
                                     @endif
                                 </div>
