@@ -104,10 +104,38 @@ class Collegiate extends Model
      */
     public function isEnabledForCertificates()
     {
-        return $this->is_ethics_compliant && 
-               $this->is_fees_compliant && 
-               $this->is_fully_documented &&
-               !$this->isSanctioned();
+        return $this->is_fees_compliant && $this->is_fully_documented && !$this->isSanctioned();
+    }
+
+    /**
+     * Actualiza el estado de cumplimiento del colegiado, incluyendo la regla
+     * de suspensión automática por 3 meses de mora.
+     */
+    public function updateComplianceStatus()
+    {
+        // 1. Ética: Está al día si no tiene sanciones GRAVES activas.
+        $hasGraveSanction = $this->sanctions()->where('status', 'active')->where('severity', 'grave')->exists();
+        $this->is_ethics_compliant = !$hasGraveSanction;
+
+        // 2. Financiero y Suspensión Automática:
+        // Contamos las cuotas pendientes o vencidas
+        $unpaidDuesCount = $this->dues()->whereIn('status', ['pending', 'overdue'])->count();
+        $this->is_fees_compliant = ($unpaidDuesCount === 0);
+
+        // Regla: Si debe 3 o más cuotas, se suspende automáticamente.
+        if ($unpaidDuesCount >= 3) {
+            $this->professional_situation = 'Suspendido por Mora';
+        } else if ($this->professional_situation === 'Suspendido por Mora' && $unpaidDuesCount < 3) {
+            // Si pagó y bajó de 3, lo restauramos a Activo.
+            $this->professional_situation = 'Activo';
+        }
+
+        // Si tiene una sanción grave, forzamos su situación a Suspendido por Ética
+        if ($hasGraveSanction) {
+            $this->professional_situation = 'Suspendido por Ética';
+        }
+
+        $this->save();
     }
 
     /**

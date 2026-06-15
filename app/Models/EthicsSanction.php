@@ -12,6 +12,7 @@ class EthicsSanction extends Model
     protected $fillable = [
         'collegiate_id',
         'type', // temporary, permanent
+        'severity', // grave, media, leve
         'reason',
         'arguments',
         'start_date',

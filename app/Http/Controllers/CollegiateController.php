@@ -315,6 +315,39 @@ class CollegiateController extends Controller
     }
 
     /**
+     * Registra una nueva sanción del Tribunal de Ética.
+     */
+    public function storeSanction(Request $request, Collegiate $collegiate)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
+
+        $request->validate([
+            'severity' => 'required|in:leve,media,grave',
+            'reason' => 'required|string|max:255',
+            'arguments' => 'nullable|string',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        \App\Models\EthicsSanction::create([
+            'collegiate_id' => $collegiate->id,
+            'type' => empty($request->end_date) ? 'permanent' : 'temporary',
+            'severity' => $request->severity,
+            'reason' => $request->reason,
+            'arguments' => $request->arguments,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'status' => 'active',
+        ]);
+
+        $collegiate->updateComplianceStatus();
+
+        return back()->with('success', 'La infracción ética ha sido registrada correctamente.');
+    }
+
+    /**
      * Sube y actualiza la foto de perfil (avatar) del colegiado.
      */
     public function uploadAvatar(Request $request, Collegiate $collegiate)

@@ -366,7 +366,7 @@
                                                     <tr class="border-bottom border-light">
                                                         <td class="py-3 px-4 border-0">
                                                             <div class="fw-bold text-dark small">{{ $sanc->reason }}</div>
-                                                            <div class="xx-small text-muted">{{ $sanc->type == 'grave' ? 'Falta Grave' : 'Falta Leve' }}</div>
+                                                            <div class="xx-small text-muted">Falta {{ ucfirst($sanc->severity ?? 'Media') }}</div>
                                                         </td>
                                                         <td class="py-3 border-0 text-center">
                                                             @if($sanc->status == 'active')
@@ -747,6 +747,61 @@
         }
     });
 </script>
+
+<!-- Modal Nueva Sanción Ética -->
+<div class="modal fade" id="newSanctionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom py-3 bg-danger bg-opacity-10">
+                <h5 class="modal-title fw-bold text-danger">
+                    <i class="bi bi-shield-exclamation me-2"></i> Registrar Infracción
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('collegiates.sanctions.store', $collegiate) }}" method="POST">
+                @csrf
+                <div class="modal-body p-4 bg-white">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Gravedad de la Falta</label>
+                        <select name="severity" class="form-select border-2" required>
+                            <option value="">Seleccione el nivel...</option>
+                            <option value="leve">Falta Leve (Ej: Llamado de atención)</option>
+                            <option value="media">Falta Media (Ej: Multa económica)</option>
+                            <option value="grave">Falta Grave (Ej: Mala praxis - SUSPENSIÓN AUTOMÁTICA)</option>
+                        </select>
+                        <div class="form-text mt-2"><i class="bi bi-info-circle me-1"></i> Una falta GRAVE suspenderá inmediatamente la matrícula del profesional.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Motivo Resumido</label>
+                        <input type="text" name="reason" class="form-control" placeholder="Ej: Cobro indebido a paciente" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Argumentación Detallada (Opcional)</label>
+                        <textarea name="arguments" class="form-control" rows="3" placeholder="Detalles de la denuncia, expediente, etc."></textarea>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Fecha de Inicio</label>
+                            <input type="date" name="start_date" class="form-control" value="{{ now()->format('Y-m-d') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Fecha de Fin (Opcional)</label>
+                            <input type="date" name="end_date" class="form-control">
+                            <div class="form-text" style="font-size: 10px;">Dejar vacío si es permanente</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">Registrar Sanción <i class="bi bi-gavel ms-1"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <style>
     .ls-1 { letter-spacing: 1px }
