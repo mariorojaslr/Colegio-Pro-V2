@@ -3,25 +3,12 @@
 @section('content')
 <div class="container-fluid py-3 min-vh-100 bg-light-subtle">
     {{-- Consola de Simulación Prestigio (Discreta) --}}
-    @if(auth()->user()->isOwner() || session('impersonator_id'))
+    @if(session('impersonator_id'))
     <div class="d-flex justify-content-end mb-3 gap-2 px-2 animate__animated animate__fadeInDown">
         <div class="btn-group shadow-sm">
-            <button type="button" class="btn btn-white btn-sm border-0 dropdown-toggle rounded-pill px-3 x-small fw-bold text-muted" data-bs-toggle="dropdown" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);">
-                IDIOMA: <span class="text-dark">{{ strtoupper(app()->getLocale()) }}</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
-                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><img src="https://flagcdn.com/w20/es.png" class="me-2" width="16"> Español</a></li>
-                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><img src="https://flagcdn.com/w20/us.png" class="me-2" width="16"> English</a></li>
-            </ul>
-        </div>
-        <div class="btn-group shadow-sm">
-            <button type="button" class="btn btn-dark btn-sm border-0 dropdown-toggle rounded-pill px-3 x-small fw-bold" data-bs-toggle="dropdown" style="background: #0f172a;">
-                SIMULAR: <span class="text-warning">{{ auth()->user()->role }}</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-x1 p-2 mt-2 animate__animated animate__fadeIn">
-                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-shield-check me-2"></i> Administrador</a></li>
-                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-person me-2"></i> {{ auth()->user()->school->member_singular ?? 'Estudiante' }}</a></li>
-            </ul>
+            <a href="{{ route('admin.leave_impersonation') }}" class="btn btn-danger btn-sm border-0 rounded-pill px-3 fw-bold shadow-sm">
+                <i class="bi bi-box-arrow-left me-1"></i> SALIR DE SIMULACIÓN
+            </a>
         </div>
     </div>
     @endif
@@ -290,8 +277,22 @@
                             <i class="bi bi-cash-stack fs-3 text-danger"></i>
                             <span class="fw-bold small">Mora detectada. Regularice para habilitarse.</span>
                         </div>
-                        <button class="btn btn-dark w-100 rounded-pill py-3 fw-bold mt-2" onclick="alert('Ir a pagar...')">Pagar Cuota Matricular</button>
+                        <a href="{{ route('payment.index') }}" class="btn btn-dark w-100 rounded-pill py-3 fw-bold mt-2">Pagar Cuota Matricular</a>
                     @endif
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card-prestige p-5 border-0 bg-white h-100 shadow-sm" style="border-radius: 40px">
+                    <h5 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2 text-primary"></i> Trámites y <span class="text-primary">Entregables</span></h5>
+                    <div class="row align-items-center">
+                        <div class="col-md-8 mb-3 mb-md-0">
+                            <p class="text-muted mb-0 small">Acceda al catálogo de certificados y trámites institucionales disponibles para solicitar online (Ej: Certificado de Ética, Libre Deuda, etc).</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <a href="{{ route('collegiate.certificates.store') }}" class="btn btn-outline-primary w-100 rounded-pill py-3 fw-bold">Solicitar Trámite <i class="bi bi-arrow-right ms-2"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
 

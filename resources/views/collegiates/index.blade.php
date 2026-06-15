@@ -194,9 +194,16 @@
                             </button>
                         </td>
                         <td class="py-2 text-end px-4 align-middle">
-                            <a href="{{ route('collegiates.show', $col) }}" class="btn btn-outline-primary rounded-pill px-3 py-0 fw-bold shadow-sm" style="font-size: 0.75rem; height: 24px; line-height: 22px;">
-                                Ver Perfil
-                            </a>
+                            <div class="d-flex justify-content-end gap-1">
+                                <a href="{{ route('collegiates.show', $col) }}" class="btn btn-outline-primary rounded-pill px-3 py-0 fw-bold shadow-sm" style="font-size: 0.75rem; height: 24px; line-height: 22px;">
+                                    Ver Perfil
+                                </a>
+                                @if($col->user_id)
+                                    <a href="{{ route('admin.collegiates.impersonate', $col) }}" class="btn btn-outline-dark rounded-pill px-2 py-0 shadow-sm" style="font-size: 0.75rem; height: 24px; line-height: 22px;" title="Entrar como este usuario">
+                                        <i class="bi bi-person-fill-lock"></i>
+                                    </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     

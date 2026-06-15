@@ -360,7 +360,7 @@
                     @elseif($mapQuery)
                         <div class="rounded-4 overflow-hidden shadow-sm h-100" style="min-height: 400px; border: 1px solid var(--theme-border);">
                             <iframe width="100%" height="100%" style="border:0; min-height: 400px;" loading="lazy" allowfullscreen 
-                                src="https://maps.google.com/maps?q={{ urlencode($mapQuery) }}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                                src="https://maps.google.com/maps?q={{ urlencode($mapQuery) }}&t=&z=17&ie=UTF8&iwloc=&output=embed">
                             </iframe>
                         </div>
                     @else

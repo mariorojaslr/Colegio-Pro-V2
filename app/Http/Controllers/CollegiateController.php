@@ -178,4 +178,33 @@ class CollegiateController extends Controller
         
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CollegiatesExport($user->school_id), $fileName);
     }
+
+    /**
+     * Permite al Administrador entrar como un Colegiado específico.
+     */
+    public function impersonate(Collegiate $collegiate)
+    {
+        $admin = Auth::user();
+        if ($admin->role !== 'ADMIN_COLEGIO' && !$admin->isOwner()) {
+            abort(403, 'No tienes permisos para simular usuarios.');
+        }
+
+        // Si es admin de colegio, verificar que el colegiado pertenezca a su colegio
+        if ($admin->role === 'ADMIN_COLEGIO' && $collegiate->school_id !== $admin->school_id) {
+            abort(403, 'El colegiado no pertenece a su institución.');
+        }
+
+        // Asegurar que el colegiado tenga un usuario vinculado
+        if (!$collegiate->user_id) {
+            return redirect()->back()->with('error', 'Este colegiado no tiene una cuenta de usuario creada en el sistema.');
+        }
+
+        // Guardar el ID del admin original en sesión
+        session(['impersonator_id' => $admin->id]);
+        
+        // Loguear al usuario del colegiado
+        Auth::loginUsingId($collegiate->user_id);
+
+        return redirect()->route('home')->with('success', 'Estás simulando la cuenta de ' . $collegiate->first_name . '. Para volver a tu cuenta de Administrador, haz clic en el botón de la cabecera.');
+    }
 }

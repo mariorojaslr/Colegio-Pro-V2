@@ -95,28 +95,35 @@
                     </div>
 
                     @if($status != 'approved')
-                        <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input type="file" name="document" id="file-{{ $requirement->id }}" class="d-none" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
-                            
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small" onclick="document.getElementById('file-{{ $requirement->id }}').click()">
-                                        <i class="bi bi-folder2-open me-2"></i> ARCHIVO
-                                    </button>
-                                </div>
-                                <div class="col-6">
-                                    <input type="file" name="document" id="camera-{{ $requirement->id }}" class="d-none" accept="image/*" capture="environment" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
-                                    <button type="button" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm" onclick="document.getElementById('camera-{{ $requirement->id }}').click()">
-                                        <i class="bi bi-camera me-2"></i> ESCANEAR
-                                    </button>
-                                </div>
+                        @if($requirement->type === 'physical')
+                            <div class="bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-4 p-3 text-center mb-3">
+                                <span class="text-warning fw-bold small"><i class="bi bi-person-badge me-2"></i> ENTREGA PRESENCIAL</span>
+                                <div class="xx-small text-muted mt-1 uppercase">Debe presentar este requisito físicamente en la institución. No requiere archivo digital.</div>
                             </div>
+                        @else
+                            <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="document" id="file-{{ $requirement->id }}" class="d-none" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
+                                
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small" onclick="document.getElementById('file-{{ $requirement->id }}').click()">
+                                            <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="file" name="document" id="camera-{{ $requirement->id }}" class="d-none" accept="image/*" capture="environment" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
+                                        <button type="button" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm" onclick="document.getElementById('camera-{{ $requirement->id }}').click()">
+                                            <i class="bi bi-camera me-2"></i> ESCANEAR
+                                        </button>
+                                    </div>
+                                </div>
 
-                            <div class="mt-3 text-center">
-                                <span class="xx-small text-muted fw-bold ls-1 uppercase">SOPORTA: PDF, EXCEL, WORD, IMÁGENES (MÁX. 10MB)</span>
-                            </div>
-                        </form>
+                                <div class="mt-3 text-center">
+                                    <span class="xx-small text-muted fw-bold ls-1 uppercase">SOPORTA: PDF, EXCEL, WORD, IMÁGENES (MÁX. 10MB)</span>
+                                </div>
+                            </form>
+                        @endif
                     @else
                         <div class="bg-success bg-opacity-5 border border-success border-opacity-10 rounded-4 p-3 text-center">
                              <span class="text-success fw-bold small"><i class="bi bi-check2-all me-2"></i> DOCUMENTO VERIFICADO</span>

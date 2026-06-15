@@ -88,6 +88,10 @@ class DashboardController extends Controller
             // Volvemos a loguear como OWNER real
             auth()->login($owner);
             
+            if ($owner->role === 'ADMIN_COLEGIO') {
+                return redirect()->route('collegiates.index')->with('status', 'Has regresado a tu sesión de Administrador.');
+            }
+            
             return redirect()->route('admin.dashboard')->with('status', 'Has regresado a tu sesión de OWNER.');
         }
 
