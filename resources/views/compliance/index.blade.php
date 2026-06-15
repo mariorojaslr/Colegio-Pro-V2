@@ -95,12 +95,14 @@
                     </div>
 
                     @if($status != 'approved')
-                        @if($requirement->type === 'physical')
+                        @if($requirement->delivery_method === 'physical' || $requirement->delivery_method === 'both')
                             <div class="bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-4 p-3 text-center mb-3">
                                 <span class="text-warning fw-bold small"><i class="bi bi-person-badge me-2"></i> ENTREGA PRESENCIAL</span>
-                                <div class="xx-small text-muted mt-1 uppercase">Debe presentar este requisito físicamente en la institución. No requiere archivo digital.</div>
+                                <div class="xx-small text-muted mt-1 uppercase">Debe presentar este requisito físicamente en la institución.</div>
                             </div>
-                        @else
+                        @endif
+
+                        @if($requirement->delivery_method === 'digital' || $requirement->delivery_method === 'both')
                             <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="file" name="document" id="file-{{ $requirement->id }}" class="d-none" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">

@@ -61,10 +61,12 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="form-check form-switch mt-4 pt-2">
-                            <input class="form-check-input" type="checkbox" name="is_physical" value="1" id="physicalSwitch">
-                            <label class="form-check-label fw-bold small text-warning" for="physicalSwitch">Entrega Presencial</label>
-                        </div>
+                        <label class="form-label small fw-bold text-muted">Modalidad de Entrega</label>
+                        <select name="delivery_method" class="form-select rounded-pill border-light-subtle" required>
+                            <option value="digital">Virtual</option>
+                            <option value="physical">Entrega física o presencial</option>
+                            <option value="both">Ambas</option>
+                        </select>
                     </div>
                     <div class="col-md-9 text-end">
                         <button type="submit" class="btn btn-dark rounded-pill px-5 py-2 fw-bold">Guardar Requisito <i class="bi bi-check2-circle ms-2"></i></button>
@@ -105,9 +107,14 @@
                                             'special' => ['label' => 'Especial', 'class' => 'bg-info-subtle text-info']
                                         ];
                                     @endphp
-                                    <span class="badge rounded-pill px-3 {{ $typeMap[$requirement->type]['class'] ?? 'bg-light' }}">
+                                    <span class="badge rounded-pill px-3 {{ $typeMap[$requirement->type]['class'] ?? 'bg-light' }} mb-1">
                                         {{ $typeMap[$requirement->type]['label'] ?? 'General' }}
                                     </span>
+                                    @if($requirement->delivery_method == 'physical')
+                                        <div class="mt-1"><span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-person-badge"></i> Físico</span></div>
+                                    @elseif($requirement->delivery_method == 'both')
+                                        <div class="mt-1"><span class="badge bg-info bg-opacity-10 text-info rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-diagram-2"></i> Físico y Virtual</span></div>
+                                    @endif
                                 </td>
                                 <td class="py-3">
                                     @php
@@ -190,10 +197,12 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <div class="form-check form-switch mt-2">
-                                                                    <input class="form-check-input" type="checkbox" name="is_physical" value="1" {{ $requirement->is_physical ? 'checked' : '' }} id="editPhysical{{ $requirement->id }}">
-                                                                    <label class="form-check-label fw-bold small text-warning" for="editPhysical{{ $requirement->id }}">Entrega Presencial Físicamente</label>
-                                                                </div>
+                                                                <label class="form-label small fw-bold text-muted">Modalidad de Entrega</label>
+                                                                <select name="delivery_method" class="form-select rounded-pill" required>
+                                                                    <option value="digital" {{ $requirement->delivery_method == 'digital' ? 'selected' : '' }}>Virtual</option>
+                                                                    <option value="physical" {{ $requirement->delivery_method == 'physical' ? 'selected' : '' }}>Entrega física o presencial</option>
+                                                                    <option value="both" {{ $requirement->delivery_method == 'both' ? 'selected' : '' }}>Ambas</option>
+                                                                </select>
                                                             </div>
                                                             <div class="col-md-12 text-end mt-4">
                                                                 <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Actualizar Cambios</button>
