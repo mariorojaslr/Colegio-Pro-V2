@@ -15,10 +15,15 @@
         <div class="col-lg-3">
             <div class="card-prestige p-4 border-0 bg-white text-center shadow-sm h-100" style="border-radius: 40px">
                 <div class="mb-4 position-relative d-inline-block">
-                    <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" 
-                         style="width: 120px; height: 120px; background: var(--primary-color); font-size: 3rem">
-                        {{ substr($collegiate->first_name, 0, 1) }}{{ substr($collegiate->last_name, 0, 1) }}
-                    </div>
+                    @if($collegiate->avatar_url)
+                        <img src="{{ $collegiate->avatar_url }}" alt="Avatar" class="rounded-circle mx-auto d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid var(--primary-color);">
+                    @else
+                        <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center text-white fw-bold shadow-sm cursor-pointer" 
+                             style="width: 120px; height: 120px; background: var(--primary-color); font-size: 3rem"
+                             data-bs-toggle="modal" data-bs-target="#uploadAvatarModal" title="Subir Foto">
+                            {{ substr($collegiate->first_name, 0, 1) }}{{ substr($collegiate->last_name, 0, 1) }}
+                        </div>
+                    @endif
                     @if($collegiate->isEnabledForCertificates())
                         <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-4 border-white shadow-sm" style="width: 30px; height: 30px" title="Habilitado"></div>
                     @else
@@ -45,6 +50,10 @@
                     
                     <button type="button" class="btn btn-outline-primary rounded-pill py-2 fw-bold small mt-3" data-bs-toggle="modal" data-bs-target="#editCollegiateModal">
                         Editar Ficha <i class="bi bi-pencil ms-1"></i>
+                    </button>
+                    
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 mt-2 mb-2" data-bs-toggle="modal" data-bs-target="#uploadAvatarModal">
+                        <i class="bi bi-camera"></i> Subir/Cambiar Foto
                     </button>
                 </div>
             </div>
@@ -502,6 +511,39 @@
                 <div class="modal-footer border-top py-3">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Confirmar Pago</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Subir Foto de Perfil -->
+<div class="modal fade" id="uploadAvatarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-bottom border-light py-3 px-4 bg-light rounded-top-4">
+                <h5 class="modal-title fw-bold text-dark"><i class="bi bi-camera me-2 text-primary"></i> Subir Foto de Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('collegiates.avatar', $collegiate) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body p-4 text-center">
+                    <p class="small text-muted mb-4">Sube una foto tipo carnet (busto) donde se vea claramente el rostro, de frente y con fondo liso. Esta foto aparecerá en la credencial digital y en los certificados.</p>
+                    
+                    <div class="bg-light rounded-4 p-3 mb-4 d-inline-block border border-secondary border-opacity-25">
+                        <span class="d-block fw-bold small text-dark mb-2">Ejemplo de foto correcta:</span>
+                        <img src="{{ asset('media/photo_guide.png') }}" alt="Guía de Foto" class="img-fluid rounded-3" style="max-height: 150px; border: 2px dashed #cbd5e1;">
+                    </div>
+
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold small text-muted">Seleccionar Archivo (JPG/PNG)</label>
+                        <input type="file" name="avatar" class="form-control rounded-3 bg-light text-dark py-2" required accept=".jpg,.jpeg,.png">
+                        <small class="text-muted d-block mt-1">Máximo 5MB.</small>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Subir Foto <i class="bi bi-cloud-arrow-up ms-1"></i></button>
                 </div>
             </form>
         </div>

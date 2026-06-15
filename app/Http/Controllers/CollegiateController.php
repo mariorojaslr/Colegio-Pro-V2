@@ -226,4 +226,30 @@ class CollegiateController extends Controller
 
         return redirect()->route('home')->with('success', 'Estás simulando la cuenta de ' . $collegiate->first_name . '. Para volver a tu cuenta de Administrador, haz clic en el botón de la cabecera.');
     }
+
+    /**
+     * Sube y actualiza la foto de perfil (avatar) del colegiado.
+     */
+    public function uploadAvatar(Request $request, Collegiate $collegiate)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner() && $user->id !== $collegiate->user_id) abort(403);
+
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+        ]);
+
+        $file = $request->file('avatar');
+        $extension = $file->getClientOriginalExtension();
+        $fileName = 'avatar_' . $collegiate->id . '_' . time() . '.' . $extension;
+        
+        // Guardar localmente
+        $path = $file->storeAs('public/avatars', $fileName);
+        
+        $collegiate->update([
+            'avatar_url' => asset('storage/avatars/' . $fileName)
+        ]);
+
+        return redirect()->back()->with('success', 'Foto de perfil actualizada correctamente.');
+    }
 }
