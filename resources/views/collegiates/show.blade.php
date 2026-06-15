@@ -185,23 +185,28 @@
                                                     {{-- Modal Subida --}}
                                                     <div class="modal fade" id="uploadModal{{ $req->id }}" tabindex="-1">
                                                         <div class="modal-dialog modal-dialog-centered">
-                                                            <form action="{{ route('compliance.upload', $req->id) }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 shadow rounded-4">
+                                                            <form action="{{ route('compliance.upload', $req->id) }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 shadow-lg rounded-4 bg-body">
                                                                 @csrf
                                                                 <input type="hidden" name="collegiate_id" value="{{ $collegiate->id }}">
                                                                 <div class="modal-header border-bottom-0 pb-0">
-                                                                    <h5 class="modal-title fw-bold text-dark">Subir: {{ $req->name }}</h5>
+                                                                    <h5 class="modal-title fw-bold text-body">Subir Documento</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <div class="alert alert-info border-0 x-small fw-bold"><i class="bi bi-info-circle-fill me-2"></i> El archivo se almacenará de forma segura en la nube (Bunny.net).</div>
+                                                                    <div class="mb-4 text-center">
+                                                                        <h6 class="fw-bold">{{ $req->name }}</h6>
+                                                                    </div>
+                                                                    <div class="alert alert-success bg-success bg-opacity-10 text-success border-0 small fw-bold text-center rounded-3 mb-4">
+                                                                        <i class="bi bi-shield-check me-2"></i> El archivo se almacenará de forma segura en nuestro sistema.
+                                                                    </div>
                                                                     <div class="mb-3">
-                                                                        <label class="form-label fw-bold x-small text-muted uppercase">Seleccionar Archivo (PDF/IMG)</label>
-                                                                        <input type="file" name="document_file" class="form-control rounded-3" required accept=".pdf,.jpg,.jpeg,.png">
+                                                                        <label class="form-label fw-bold small text-muted">Seleccionar Archivo (PDF/IMG)</label>
+                                                                        <input type="file" name="document_file" class="form-control rounded-3 bg-light text-dark" required accept=".pdf,.jpg,.jpeg,.png">
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer border-top-0 pt-0">
-                                                                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold small" data-bs-dismiss="modal">Cancelar</button>
-                                                                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold small shadow-sm">Subir a la nube</button>
+                                                                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                                                                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Subir Archivo</button>
                                                                 </div>
                                                             </form>
                                                         </div>
