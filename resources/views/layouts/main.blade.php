@@ -346,7 +346,7 @@
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownEthics" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {{ __('ui.ethics') }}
+                                        ÉTICA
                                     </a>
                                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownEthics">
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics.index') }}">Gestión Ética y Sanciones</a></li>
@@ -365,12 +365,17 @@
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') || str_contains($currentRoute, 'requisitos') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownDocs" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {{ __('ui.audit') }}
+                                        AUDITORÍA
                                     </a>
                                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownDocs">
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.compliance.index') }}">Auditoría de Legajos</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('compliance_requirements.index') }}">Config. Requisitos</a></li>
                                     </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'tramites') || str_contains($currentRoute, 'certificate_types') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.certificate_types.index') }}">
+                                        TRÁMITES
+                                    </a>
                                 </li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'tickets') ? 'text-primary' : 'text-muted' }}" href="{{ route('tickets.index') }}"><i class="bi bi-headset me-1 text-primary"></i> SOPORTE</a></li>
                             @elseif(auth()->user()->isOwner())
