@@ -460,6 +460,38 @@
     </nav>
 
     <main>
+        @if(session('success'))
+            <div class="container mt-4">
+                <div class="alert alert-success bg-success bg-opacity-10 border-0 text-success fw-bold rounded-4 shadow-sm alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="container mt-4">
+                <div class="alert alert-danger bg-danger bg-opacity-10 border-0 text-danger fw-bold rounded-4 shadow-sm alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="container mt-4">
+                <div class="alert alert-danger bg-danger bg-opacity-10 border-0 text-danger fw-bold rounded-4 shadow-sm alert-dismissible fade show" role="alert">
+                    <i class="bi bi-x-circle-fill me-2"></i> Por favor, corrige los siguientes errores:
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                            <li class="small fw-medium">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+
         @yield('content')
     </main>
 

@@ -210,7 +210,7 @@
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label fw-bold small text-muted">Seleccionar Archivo (PDF/IMG)</label>
-                                                        <input type="file" name="document_file" class="form-control rounded-3 bg-light text-dark" required accept=".pdf,.jpg,.jpeg,.png">
+                                                        <input type="file" name="document" class="form-control rounded-3 bg-light text-dark" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx">
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer border-top-0 pt-0">
