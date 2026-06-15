@@ -37,13 +37,13 @@ return [
 
     'bunny' => [
         'storage' => [
-            'api_key' => env('BUNNY_STORAGE_API_KEY'),
+            'api_key' => env('BUNNY_STORAGE_API_KEY', env('BUNNY_API_KEY')),
             'zone' => env('BUNNY_STORAGE_ZONE'),
             'region' => env('BUNNY_STORAGE_REGION', 'storage'),
             'pull_zone_url' => env('BUNNY_PULL_ZONE_URL'),
         ],
         'stream' => [
-            'api_key' => env('BUNNY_STREAM_API_KEY'),
+            'api_key' => env('BUNNY_STREAM_API_KEY', env('BUNNY_API_KEY')),
             'library_id' => env('BUNNY_STREAM_LIBRARY_ID'),
         ],
     ],

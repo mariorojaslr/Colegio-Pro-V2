@@ -31,6 +31,14 @@ class BunnyService
     {
         $baseFolder = 'colegio-pro';
         $fullPath = "{$baseFolder}/{$remoteFileName}";
+        
+        // Fallback for local development / testing without Bunny keys
+        if (empty($this->storageConfig['api_key']) || $this->storageConfig['api_key'] === 'tu_bunny_api_key_aqui') {
+            $contents = file_get_contents($localFilePath);
+            \Illuminate\Support\Facades\Storage::disk('public')->put($fullPath, $contents);
+            return asset('storage/' . $fullPath);
+        }
+
         $baseUri = "https://{$this->storageConfig['region']}.bunnycdn.com/{$this->storageConfig['zone']}/";
 
         try {
