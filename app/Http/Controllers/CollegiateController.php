@@ -174,9 +174,9 @@ class CollegiateController extends Controller
         $request->validate([
             'due_ids' => 'required|array',
             'financing_type' => 'required|in:external_card,internal_plan',
-            'installments' => 'required_if:financing_type,internal_plan|integer|min:1',
-            'installment_amount' => 'required_if:financing_type,internal_plan|numeric|min:0',
-            'first_due_date' => 'required_if:financing_type,internal_plan|date',
+            'installments' => 'nullable|required_if:financing_type,internal_plan|integer|min:1',
+            'installment_amount' => 'nullable|required_if:financing_type,internal_plan|numeric|min:0',
+            'first_due_date' => 'nullable|required_if:financing_type,internal_plan|date',
         ]);
 
         $dues = $collegiate->dues()->whereIn('id', $request->due_ids)->get();
