@@ -9,7 +9,7 @@ class CollegiateDocument extends Model
     protected $fillable = [
         'collegiate_id',
         'compliance_requirement_id',
-        'file_path',
+        'file_url',
         'status',
         'expiry_date',
         'admin_notes',

@@ -118,12 +118,11 @@ class ComplianceController extends Controller
 
         // Registrar o actualizar el documento del colegiado
         CollegiateDocument::updateOrCreate(
-            ['collegiate_id' => $collegiate->id, 'requirement_id' => $requirement->id],
+            ['collegiate_id' => $collegiate->id, 'compliance_requirement_id' => $requirement->id],
             [
                 'file_url' => $result['url'],
                 'status' => 'pending', // Siempre vuelve a pendiente tras una resubida
                 'admin_notes' => null,   // Limpiar notas anteriores si es una corrección
-                'uploaded_at' => now(),
             ]
         );
 
