@@ -34,8 +34,6 @@ class AIController extends Controller
             $historyText .= ($msg->role == 'user' ? "Usuario: " : "Lili: ") . $msg->content . "\n";
         }
 
-        $user = Auth::user();
-
         // Mapa de rutas dinámico según el rol del usuario
         $routeMap = "- Mis Pagos / Estado de Cuenta / Pagar / Deudas -> '/pagos'\n";
         $routeMap .= "        - Mi Legajo / Subir Papeles / Documentos Obligatorios -> '/cumplimiento'\n";
