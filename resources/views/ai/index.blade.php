@@ -56,9 +56,9 @@
                     <button type="button" id="micBtn" class="btn btn-light rounded-circle shadow-sm" style="width: 55px; height: 55px">
                         <i class="bi bi-mic fs-5"></i>
                     </button>
-                    <input type="text" id="userInput" class="form-control rounded-pill border-0 bg-light px-4 shadow-none py-3" 
+                    <input type="text" id="userInput" class="form-control rounded-pill border-0 bg-light px-4 shadow-none py-3 me-4" 
                            placeholder="Dime qué necesitas que haga por ti..." autocomplete="off">
-                    <button type="submit" class="btn text-white rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm" 
+                    <button type="submit" class="btn text-white rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm ms-2" 
                             style="width: 55px; height: 55px; background: #db2777;" id="sendBtn">
                         <i class="bi bi-send-fill fs-5"></i>
                     </button>
