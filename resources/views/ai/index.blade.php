@@ -250,10 +250,13 @@
         div.className = `message-bubble ${type}-bubble shadow-sm`;
         div.id = `msg-${Date.now()}`;
         
+        // Convertir saltos de línea a etiquetas <br>
+        const formattedContent = content.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+        
         if(type === 'ai') {
-            div.innerHTML = `<div class="d-flex gap-3"><img src="{{ asset('media/lili_avatar.png') }}" class="rounded-circle" style="width:30px;height:30px"><div>${content}</div></div>`;
+            div.innerHTML = `<div class="d-flex gap-3"><img src="{{ asset('media/lili_avatar.png') }}" class="rounded-circle" style="width:30px;height:30px"><div>${formattedContent}</div></div>`;
         } else {
-            div.innerHTML = content;
+            div.innerHTML = formattedContent;
         }
 
         messagesContainer.appendChild(div);
@@ -264,7 +267,9 @@
     function updateMessage(id, content) {
         const msg = document.getElementById(id);
         if(msg) {
-            msg.innerHTML = `<div class="d-flex gap-3"><img src="{{ asset('media/lili_avatar.png') }}" class="rounded-circle" style="width:30px;height:30px"><div>${content}</div></div>`;
+            // Convertir saltos de línea a etiquetas <br>
+            const formattedContent = content.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+            msg.innerHTML = `<div class="d-flex gap-3"><img src="{{ asset('media/lili_avatar.png') }}" class="rounded-circle" style="width:30px;height:30px"><div>${formattedContent}</div></div>`;
         }
         chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
     }
