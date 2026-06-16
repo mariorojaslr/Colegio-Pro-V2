@@ -308,38 +308,75 @@
 
             
             <div class="col-md-6">
-                <div class="card-prestige p-5 border-0 bg-white h-100 shadow-sm" style="border-radius: 40px">
-                    <h5 class="fw-bold mb-4">Papeles de <span class="text-primary">Legajo</span></h5>
-                    @if($collegiate && $collegiate->is_fully_documented)
-                        <div class="alert alert-success rounded-4 d-flex align-items-center gap-3 border-0">
-                            <i class="bi bi-check-circle-fill fs-3 text-success"></i>
-                            <span class="fw-bold small">Documentación completa y aprobada.</span>
+                <div class="card-prestige p-5 border-0 bg-white h-100 shadow-sm" style="border-radius: 40px; position: relative; overflow: hidden;">
+                    <div class="position-absolute top-0 end-0 p-4 opacity-10">
+                        <i class="bi bi-folder-check display-1 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold mb-4 position-relative" style="z-index: 2;">Papeles de <span class="text-primary">Legajo</span></h5>
+                    
+                    <div class="d-flex align-items-center gap-4 mb-4 position-relative" style="z-index: 2;">
+                        <!-- Vu Meter Circular -->
+                        <div class="position-relative" style="width: 100px; height: 100px;">
+                            @php $docPercent = $docsTotal > 0 ? round(($docsApproved / $docsTotal) * 100) : 100; @endphp
+                            <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="{{ $docPercent == 100 ? '#10b981' : '#f59e0b' }}" stroke-width="3" stroke-dasharray="{{ $docPercent }}, 100"/>
+                            </svg>
+                            <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                <h4 class="fw-bold mb-0 lh-1" style="color: {{ $docPercent == 100 ? '#10b981' : '#f59e0b' }}">{{ $docsApproved }}</h4>
+                                <span class="x-small text-muted fw-bold">/ {{ $docsTotal }}</span>
+                            </div>
                         </div>
-                    @else
-                        <div class="alert alert-warning rounded-4 d-flex align-items-center gap-3 border-0">
-                            <i class="bi bi-exclamation-circle-fill fs-3 text-warning"></i>
-                            <span class="fw-bold small">Faltan requisitos por cargar o aprobar.</span>
+                        
+                        <div>
+                            @if($docPercent == 100)
+                                <h6 class="fw-bold text-success mb-1">¡Todo en Regla!</h6>
+                                <p class="small text-muted mb-0">Tu documentación está completa y aprobada.</p>
+                            @else
+                                <h6 class="fw-bold text-warning mb-1">Acción Requerida</h6>
+                                <p class="small text-muted mb-0">Tienes {{ $docsPending }} documento(s) pendiente(s).</p>
+                                <a href="{{ route('compliance.index') }}" class="btn btn-sm btn-warning rounded-pill mt-2 px-3 fw-bold shadow-sm">Subir Ahora <i class="bi bi-arrow-right ms-1"></i></a>
+                            @endif
                         </div>
-                        <a href="{{ route('compliance.index') }}" class="btn btn-warning w-100 rounded-pill py-3 fw-bold mt-2">Subir Papeles <i class="bi bi-upload ms-1"></i></a>
-                    @endif
+                    </div>
                 </div>
             </div>
 
             <div class="col-md-6">
-                <div class="card-prestige p-5 border-0 bg-white h-100 shadow-sm" style="border-radius: 40px">
-                    <h5 class="fw-bold mb-4">Pagos de <span class="text-primary">Matrícula</span></h5>
-                    @if($collegiate && $collegiate->is_fees_compliant)
-                        <div class="alert alert-success rounded-4 d-flex align-items-center gap-3 border-0">
-                            <i class="bi bi-wallet2 fs-3 text-success"></i>
-                            <span class="fw-bold small">Usted se encuentra al día con sus pagos.</span>
+                <div class="card-prestige p-5 border-0 bg-white h-100 shadow-sm" style="border-radius: 40px; position: relative; overflow: hidden;">
+                    <div class="position-absolute top-0 end-0 p-4 opacity-10">
+                        <i class="bi bi-wallet2 display-1 {{ $duesPendingCount == 0 ? 'text-success' : 'text-danger' }}"></i>
+                    </div>
+                    <h5 class="fw-bold mb-4 position-relative" style="z-index: 2;">Estado de <span class="text-primary">Cuenta</span></h5>
+                    
+                    <div class="d-flex align-items-center gap-4 mb-4 position-relative" style="z-index: 2;">
+                        <!-- Vu Meter Cuotas -->
+                        <div class="position-relative" style="width: 100px; height: 100px;">
+                            @php 
+                                $paidCount = $duesTotalCount - $duesPendingCount;
+                                $duePercent = $duesTotalCount > 0 ? round(($paidCount / $duesTotalCount) * 100) : 100; 
+                            @endphp
+                            <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="{{ $duePercent == 100 ? '#10b981' : '#ef4444' }}" stroke-width="3" stroke-dasharray="{{ $duePercent }}, 100"/>
+                            </svg>
+                            <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                <h4 class="fw-bold mb-0 lh-1" style="color: {{ $duePercent == 100 ? '#10b981' : '#ef4444' }}">{{ $paidCount }}</h4>
+                                <span class="x-small text-muted fw-bold">/ {{ $duesTotalCount }}</span>
+                            </div>
                         </div>
-                    @else
-                        <div class="alert alert-danger rounded-4 d-flex align-items-center gap-3 border-0">
-                            <i class="bi bi-cash-stack fs-3 text-danger"></i>
-                            <span class="fw-bold small">Mora detectada. Regularice para habilitarse.</span>
+
+                        <div>
+                            @if($duesPendingCount == 0)
+                                <h6 class="fw-bold text-success mb-1">Pagos al Día</h6>
+                                <p class="small text-muted mb-0">No registras deudas activas en este momento.</p>
+                            @else
+                                <h6 class="fw-bold text-danger mb-1">Mora Registrada</h6>
+                                <p class="small fw-bold text-dark mb-0">Deuda: ${{ number_format($duesPendingAmount, 0, ',', '.') }}</p>
+                                <a href="{{ route('payment.index') }}" class="btn btn-sm btn-dark rounded-pill mt-2 px-3 fw-bold shadow-sm">Regularizar <i class="bi bi-arrow-right ms-1"></i></a>
+                            @endif
                         </div>
-                        <a href="{{ route('payment.index') }}" class="btn btn-dark w-100 rounded-pill py-3 fw-bold mt-2">Pagar Cuota Matricular</a>
-                    @endif
+                    </div>
                 </div>
             </div>
 

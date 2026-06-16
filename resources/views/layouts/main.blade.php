@@ -532,17 +532,12 @@
             <i class="bi bi-grid m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">Inicio</div>
         </a>
+        
+        @if(auth()->user()->role === 'ADMIN_COLEGIO')
         <a href="{{ route('collegiates.index') }}" class="text-center text-decoration-none {{ request()->routeIs('collegiates.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <i class="bi bi-people m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">{{ auth()->user()->school?->member_plural ?? 'Miembros' }}</div>
         </a>
-        <a href="{{ route('ai.index') }}" class="text-center text-decoration-none {{ request()->routeIs('ai.*') ? 'text-primary fw-bold' : 'text-muted' }}">
-            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white shadow-sm" style="width: 45px; height: 45px; margin-top: -25px; border: 4px solid white">
-                <i class="bi bi-robot" style="font-size: 1.2rem"></i>
-            </div>
-            <div style="font-size: 10px">Asistente</div>
-        </a>
-        @if(auth()->user()->role === 'ADMIN_COLEGIO')
         <a href="{{ route('admin.billing.index') }}" class="text-center text-decoration-none {{ request()->routeIs('admin.billing.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <i class="bi bi-currency-dollar m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">Cobranzas</div>
@@ -551,7 +546,23 @@
             <i class="bi bi-shield-check m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">Ética</div>
         </a>
+        <a href="{{ route('ai.index') }}" class="text-center text-decoration-none {{ request()->routeIs('ai.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+            <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white shadow-sm" style="width: 45px; height: 45px; margin-top: -25px; border: 4px solid white">
+                <i class="bi bi-robot" style="font-size: 1.2rem"></i>
+            </div>
+            <div style="font-size: 10px">Asistente</div>
+        </a>
         @else
+        <a href="{{ route('collegiates.index') }}" class="text-center text-decoration-none {{ request()->routeIs('collegiates.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+            <i class="bi bi-people m-0" style="font-size: 1.4rem"></i>
+            <div style="font-size: 10px">Comunidad</div>
+        </a>
+        <a href="{{ route('ai.index') }}" class="text-center text-decoration-none {{ request()->routeIs('ai.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm overflow-hidden" style="width: 55px; height: 55px; margin-top: -30px; border: 4px solid white; background: #fff;">
+                <img src="{{ asset('media/lili_avatar.png') }}" alt="Lili" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="font-size: 10px; font-weight: 800; color: #db2777;">Lili</div>
+        </a>
         <a href="{{ route('payment.index') }}" class="text-center text-decoration-none {{ request()->routeIs('payment.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <i class="bi bi-credit-card m-0" style="font-size: 1.4rem"></i>
             <div style="font-size: 10px">Mis Pagos</div>

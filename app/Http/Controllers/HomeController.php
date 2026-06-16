@@ -131,6 +131,30 @@ class HomeController extends Controller
         // 6. Tarea de Onboarding (Perfilado Progresivo)
         $onboardingTask = $collegiate ? $collegiate->getNextOnboardingTask() : null;
 
+        // Datos para Vu-Meters del Colegiado
+        $docsTotal = 0;
+        $docsApproved = 0;
+        $docsPending = 0;
+        
+        $duesTotalCount = 0;
+        $duesPendingCount = 0;
+        $duesPendingAmount = 0;
+
+        if ($collegiate) {
+            $school = $user->school;
+            $requirements = $school->complianceRequirements()->where('is_active', true)->get();
+            $docsTotal = $requirements->count();
+            
+            $docsApproved = $collegiate->documents()->whereIn('requirement_id', $requirements->pluck('id'))
+                                       ->where('status', 'approved')->count();
+            $docsPending = $docsTotal - $docsApproved;
+
+            $duesTotalCount = $collegiate->dues()->count();
+            $pendingDues = $collegiate->dues()->where('status', '!=', 'paid')->get();
+            $duesPendingCount = $pendingDues->count();
+            $duesPendingAmount = $pendingDues->sum('amount');
+        }
+
         return view('home', compact(
             'totalColegiados', 
             'habilitados', 
@@ -140,7 +164,13 @@ class HomeController extends Controller
             'amenitiesCount',
             'collegiate',
             'news',
-            'onboardingTask'
+            'onboardingTask',
+            'docsTotal',
+            'docsApproved',
+            'docsPending',
+            'duesTotalCount',
+            'duesPendingCount',
+            'duesPendingAmount'
         ));
     }
 }
