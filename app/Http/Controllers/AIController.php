@@ -92,7 +92,10 @@ Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$apiKey", [
-                'contents' => [['parts' => [['text' => $systemPrompt]]]]
+                'contents' => [['parts' => [['text' => $systemPrompt]]]],
+                'generationConfig' => [
+                    'responseMimeType' => 'application/json'
+                ]
             ]);
 
             $data = json_decode($response->body(), true);
@@ -191,7 +194,10 @@ Analiza la intención del usuario y responde en JSON estricto:
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$apiKey", [
-                'contents' => [['parts' => [['text' => $prompt]]]]
+                'contents' => [['parts' => [['text' => $prompt]]]],
+                'generationConfig' => [
+                    'responseMimeType' => 'application/json'
+                ]
             ]);
 
             $data = json_decode($response->body(), true);
