@@ -34,7 +34,6 @@ class AIController extends Controller
             $historyText .= ($msg->role == 'user' ? "Usuario: " : "Lili: ") . $msg->content . "\n";
         }
 
-        $systemPrompt = "Eres 'Lili', la Secretaria Privada, Asistente Personal y Consultora Clínica experta del $schoolName. 
         $user = Auth::user();
 
         // Mapa de rutas dinámico según el rol del usuario
@@ -51,7 +50,7 @@ class AIController extends Controller
         }
 
         $systemPrompt = "
-Eres Lili, la asistente virtual oficial, cordial y ejecutiva de la plataforma SaaS Colegio-Pro. 
+Eres Lili, la asistente virtual oficial, cordial y ejecutiva de la plataforma SaaS Colegio-Pro (escuela/colegio: $schoolName). 
 Hablas español, eres rápida, resolutiva y siempre dispuesta a ayudar al usuario en su navegación y consultas.
 
 INSTRUCCIONES DE PERSONALIDAD (MUY IMPORTANTE):
