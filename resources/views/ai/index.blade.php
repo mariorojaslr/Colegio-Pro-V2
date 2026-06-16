@@ -200,10 +200,20 @@
             
             if (availableVoices.length === 0) availableVoices = window.speechSynthesis.getVoices();
             
-            // Buscar la mejor voz femenina en español (Premium, Google, Microsoft, o genérica)
-            const bestVoice = availableVoices.find(v => v.lang.includes('es') && (
-                v.name.includes('Premium') || v.name.includes('Google') || v.name.includes('Microsoft Elena')
-            )) || availableVoices.find(v => v.lang.includes('es') && (v.name.includes('Female') || v.name.includes('Mujer'))) || availableVoices.find(v => v.lang.includes('es'));
+            // Buscar una voz femenina en español (Premium, Google, Microsoft, o genérica)
+            // Agregamos nombres femeninos conocidos para garantizar que sea de mujer
+            const femaleNames = ['elena', 'sabina', 'laura', 'monica', 'paulina', 'female', 'mujer'];
+            
+            let bestVoice = availableVoices.find(v => v.lang.includes('es') && femaleNames.some(n => v.name.toLowerCase().includes(n)));
+            
+            if(!bestVoice) {
+                // Si no encontramos un nombre explícitamente femenino, buscamos cualquier voz que no sea "Google español" (porque a veces es de hombre)
+                bestVoice = availableVoices.find(v => v.lang.includes('es') && !v.name.toLowerCase().includes('google español'));
+            }
+            if(!bestVoice) {
+                // Último recurso: cualquier voz en español
+                bestVoice = availableVoices.find(v => v.lang.includes('es'));
+            }
             
             if(bestVoice) utterance.voice = bestVoice;
             
