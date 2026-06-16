@@ -99,6 +99,15 @@ Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
             ]);
 
             $data = json_decode($response->body(), true);
+            
+            // Check if Google returned an error
+            if (isset($data['error'])) {
+                return response()->json([
+                    'status' => 'error', 
+                    'response' => 'Error de Google: ' . ($data['error']['message'] ?? 'Llave inválida o API no habilitada.')
+                ]);
+            }
+
             $aiText = $data['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
             $aiText = str_replace(['```json', '```'], '', $aiText);
             $jsonResponse = json_decode(trim($aiText), true);
@@ -201,6 +210,14 @@ Analiza la intención del usuario y responde en JSON estricto:
             ]);
 
             $data = json_decode($response->body(), true);
+            
+            if (isset($data['error'])) {
+                return response()->json([
+                    'status' => 'error', 
+                    'spoken_response' => 'Error de Google: ' . ($data['error']['message'] ?? 'Llave inválida.')
+                ]);
+            }
+
             $aiText = $data['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
             $aiText = str_replace(['```json', '```'], '', $aiText);
             $jsonResponse = json_decode(trim($aiText), true);
