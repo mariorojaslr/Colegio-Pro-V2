@@ -53,10 +53,7 @@
             <div class="glass-card p-3 border-0 shadow-lg" style="border-radius: 25px">
                 <form id="aiForm" class="d-flex gap-2">
                     @csrf
-                    <button type="button" id="micBtn" class="btn btn-light rounded-circle shadow-sm" style="width: 55px; height: 55px">
-                        <i class="bi bi-mic fs-5"></i>
-                    </button>
-                    <input type="text" id="userInput" class="form-control rounded-pill border-0 bg-light px-4 shadow-none py-3 me-4" 
+                    <input type="text" id="userInput" class="form-control rounded-pill border-0 bg-light px-4 shadow-none py-3" 
                            placeholder="Dime qué necesitas que haga por ti..." autocomplete="off">
                     <button type="submit" class="btn text-white rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm ms-2" 
                             style="width: 55px; height: 55px; background: #db2777;" id="sendBtn">
@@ -89,49 +86,6 @@
     const emptyState = document.getElementById('emptyState');
     const chatWindow = document.getElementById('chatWindow');
     const suggestionBtns = document.querySelectorAll('.suggestion-btn');
-    const micBtn = document.getElementById('micBtn');
-
-    // Inicializar Web Speech API
-    let recognition;
-    if ('webkitSpeechRecognition' in window) {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'es-ES';
-
-        recognition.onstart = function() {
-            micBtn.classList.replace('btn-light', 'btn-danger');
-            micBtn.innerHTML = '<i class="bi bi-mic-fill fs-5 spinner-grow spinner-grow-sm"></i>';
-            userInput.placeholder = "Escuchando...";
-        };
-
-        recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            userInput.value = transcript;
-            aiForm.dispatchEvent(new Event('submit')); // Auto-enviar
-        };
-
-        recognition.onerror = function(event) {
-            resetMicBtn();
-            alert("Error al escuchar: " + event.error);
-        };
-
-        recognition.onend = function() {
-            resetMicBtn();
-        };
-    } else {
-        micBtn.style.display = 'none'; // Navegador no soportado
-    }
-
-    function resetMicBtn() {
-        micBtn.classList.replace('btn-danger', 'btn-light');
-        micBtn.innerHTML = '<i class="bi bi-mic fs-5"></i>';
-        userInput.placeholder = "Dime qué necesitas que haga por ti...";
-    }
-
-    micBtn.addEventListener('click', () => {
-        if(recognition) recognition.start();
-    });
 
     suggestionBtns.forEach(btn => {
         btn.addEventListener('click', () => {
