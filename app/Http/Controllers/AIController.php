@@ -35,7 +35,24 @@ class AIController extends Controller
         }
 
         $systemPrompt = "Eres 'Lili', la Secretaria Privada, Asistente Personal y Consultora Clínica experta del $schoolName. 
-Estás interactuando en vivo con el usuario: {$user->name}.
+        $user = Auth::user();
+
+        // Mapa de rutas dinámico según el rol del usuario
+        $routeMap = "- Mis Pagos / Estado de Cuenta / Pagar / Deudas -> '/pagos'\n";
+        $routeMap .= "        - Mi Legajo / Subir Papeles / Documentos Obligatorios -> '/cumplimiento'\n";
+        
+        if ($user->role === 'ADMIN_COLEGIO' || $user->isOwner()) {
+            $routeMap .= "        - Padrón / Comunidad / Colegiados -> '/colegiados'\n";
+            $routeMap .= "        - Finanzas / Facturación Institucional -> '/finanzas'\n";
+            $routeMap .= "        - Gestión de Ética / Sanciones -> '/gestion-etica'\n";
+            $routeMap .= "        - Configuración de la Institución -> '/configuracion-institucion'\n";
+        } else {
+            $routeMap .= "        - (El padrón de colegiados y finanzas globales es privado y no tienes acceso a él. No intentes redirigir a /colegiados o /finanzas.)\n";
+        }
+
+        $systemPrompt = "
+Eres Lili, la asistente virtual oficial, cordial y ejecutiva de la plataforma SaaS Colegio-Pro. 
+Hablas español, eres rápida, resolutiva y siempre dispuesta a ayudar al usuario en su navegación y consultas.
 
 INSTRUCCIONES DE PERSONALIDAD (MUY IMPORTANTE):
 - Eres hiperactiva, sumamente inteligente, brillante y estás completamente despabilada.
@@ -46,12 +63,14 @@ INSTRUCCIONES DE PERSONALIDAD (MUY IMPORTANTE):
 - Habla como una asistente humana de muy alto nivel, con entusiasmo y claridad.
 
 IMPORTANTE: Conoces la plataforma a la perfección. Si el usuario pide ir a un lugar, tú debes redirigirlo enviando action_type = 'navigate' y el action_payload con la URL.
-Mapa de Rutas:
-- Mis Pagos / Estado de Cuenta / Pagar / Deudas -> '/pagos'
-- Mi Legajo / Subir Papeles / Documentos Obligatorios -> '/cumplimiento'
-- Padrón / Comunidad / Colegiados -> '/colegiados'
-- Inicio / Dashboard -> '/home'
-- Certificados / Trámites -> '/colegiados/certificados'
+Mapa de Rutas Permitidas para este usuario:
+        $routeMap
+Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
+{
+  \"response\": \"Tu respuesta en texto. Sé brillante, hiperactiva y profundamente útil. REGLA DE ORO: Escapa todos los saltos de línea con \\\\n y las comillas con \\\\\". NO uses saltos de línea literales, o el JSON fallará.\",
+  \"action_type\": \"'none' o 'navigate'\",
+  \"action_payload\": \"Si action_type es navigate, pon la ruta aquí (ej. '/pagos'). En caso contrario pon null.\"
+}
 
 Historial Reciente:
 $historyText
@@ -119,9 +138,16 @@ Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
             $jsonResponse = json_decode(trim($aiText), true);
             
             if (!$jsonResponse) {
-                // Fallback inteligente: si falla el JSON, asumimos que es una respuesta de texto plano
+                // Fallback inteligente: si falla el JSON porque Gemini mandó Markdown u otra cosa
+                // Intentamos extraer manualmente "response": "..." si existe
+                preg_match('/"response"\s*:\s*"(.*?)"\s*(?:,\s*"action_type"|\})/s', $aiText, $respMatches);
+                $extractedText = isset($respMatches[1]) ? str_replace(['\n', '\"'], ["\n", '"'], $respMatches[1]) : $aiText;
+
+                // Limpiar posibles bloques de markdown en el fallback crudo
+                $extractedText = str_replace(['```json', '```'], '', $extractedText);
+                
                 $jsonResponse = [
-                    'response' => $aiText,
+                    'response' => $extractedText,
                     'action_type' => 'none',
                     'action_payload' => null
                 ];

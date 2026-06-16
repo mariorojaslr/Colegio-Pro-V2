@@ -90,6 +90,12 @@
     const userInput = document.getElementById('userInput');
     const messagesContainer = document.getElementById('messagesContainer');
     const emptyState = document.getElementById('emptyState');
+    // Pre-cargar voces para evitar que falle en la primera llamada
+    let availableVoices = window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => {
+        availableVoices = window.speechSynthesis.getVoices();
+    };
+
     const chatWindow = document.getElementById('chatWindow');
     const suggestionBtns = document.querySelectorAll('.suggestion-btn');
     const micBtn = document.getElementById('micBtn');
@@ -187,12 +193,23 @@
 
     function speakText(text) {
         if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
+            // Limpiar asteriscos de markdown para que no los lea
+            const cleanText = text.replace(/\*/g, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
             utterance.lang = 'es-ES';
-            // Opcional: buscar una voz femenina específica
-            const voices = window.speechSynthesis.getVoices();
-            const femaleVoice = voices.find(v => v.lang.includes('es') && (v.name.includes('Female') || v.name.includes('Mujer')));
-            if(femaleVoice) utterance.voice = femaleVoice;
+            
+            if (availableVoices.length === 0) availableVoices = window.speechSynthesis.getVoices();
+            
+            // Buscar la mejor voz femenina en español (Premium, Google, Microsoft, o genérica)
+            const bestVoice = availableVoices.find(v => v.lang.includes('es') && (
+                v.name.includes('Premium') || v.name.includes('Google') || v.name.includes('Microsoft Elena')
+            )) || availableVoices.find(v => v.lang.includes('es') && (v.name.includes('Female') || v.name.includes('Mujer'))) || availableVoices.find(v => v.lang.includes('es'));
+            
+            if(bestVoice) utterance.voice = bestVoice;
+            
+            // Mejorar fluidez y naturalidad
+            utterance.rate = 1.05; // Ligeramente más rápido para evitar pausas largas
+            utterance.pitch = 1.15; // Ligeramente más agudo para mayor entusiasmo y naturalidad
             
             window.speechSynthesis.speak(utterance);
         }
