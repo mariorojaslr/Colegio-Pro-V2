@@ -142,10 +142,10 @@ class HomeController extends Controller
 
         if ($collegiate) {
             $school = $user->school;
-            $requirements = $school->complianceRequirements()->where('is_active', true)->get();
+            $requirements = $school->complianceRequirements()->get();
             $docsTotal = $requirements->count();
             
-            $docsApproved = $collegiate->documents()->whereIn('requirement_id', $requirements->pluck('id'))
+            $docsApproved = $collegiate->documents()->whereIn('compliance_requirement_id', $requirements->pluck('id'))
                                        ->where('status', 'approved')->count();
             $docsPending = $docsTotal - $docsApproved;
 
