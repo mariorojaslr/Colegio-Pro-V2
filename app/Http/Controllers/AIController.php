@@ -109,8 +109,23 @@ Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
             }
 
             $aiText = $data['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
-            $aiText = str_replace(['```json', '```'], '', $aiText);
+            
+            // Extraer solo la parte JSON en caso de que Gemini devuelva texto extra
+            preg_match('/\{.*\}/s', $aiText, $matches);
+            if (isset($matches[0])) {
+                $aiText = $matches[0];
+            }
+            
             $jsonResponse = json_decode(trim($aiText), true);
+            
+            if (!$jsonResponse) {
+                // Fallback inteligente: si falla el JSON, asumimos que es una respuesta de texto plano
+                $jsonResponse = [
+                    'response' => $aiText,
+                    'action_type' => 'none',
+                    'action_payload' => null
+                ];
+            }
 
             $aiResponseText = $jsonResponse['response'] ?? 'No pude procesar la respuesta adecuadamente.';
             $actionType = $jsonResponse['action_type'] ?? 'none';
@@ -219,11 +234,20 @@ Analiza la intención del usuario y responde en JSON estricto:
             }
 
             $aiText = $data['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
-            $aiText = str_replace(['```json', '```'], '', $aiText);
+            
+            preg_match('/\{.*\}/s', $aiText, $matches);
+            if (isset($matches[0])) {
+                $aiText = $matches[0];
+            }
+            
             $jsonResponse = json_decode(trim($aiText), true);
             
             if(!$jsonResponse) {
-                return response()->json(['status' => 'error', 'spoken_response' => 'No entendí bien tu consulta.']);
+                $jsonResponse = [
+                    'spoken_response' => $aiText,
+                    'action_url' => null,
+                    'action_type' => 'none'
+                ];
             }
 
             AIMemory::create([
