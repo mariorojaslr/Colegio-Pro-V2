@@ -380,15 +380,18 @@
                                     </a>
                                 </li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'tickets') ? 'text-primary' : 'text-muted' }}" href="{{ route('tickets.index') }}"><i class="bi bi-headset me-1 text-primary"></i> SOPORTE</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ request()->routeIs('ai.*') ? 'text-primary' : 'text-muted' }}" href="{{ route('ai.index') }}"><i class="bi bi-robot me-1" style="color: #db2777;"></i> Lili</a></li>
                             @elseif(auth()->user()->isOwner())
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="{{ route('admin.dashboard') }}">{{ __('ui.dashboard') }} (Owner)</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="{{ route('admin.tickets.index') }}"><i class="bi bi-headset me-1 text-primary"></i> SOPORTE GLOBAL</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ request()->routeIs('ai.*') ? 'text-primary' : 'text-muted' }}" href="{{ route('ai.index') }}"><i class="bi bi-robot me-1" style="color: #db2777;"></i> Lili</a></li>
                             @else
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'payment') ? 'text-primary' : 'text-muted' }}" href="{{ route('payment.index') }}">Mis Pagos</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="{{ route('compliance.index') }}">{{ __('ui.compliance') }}</a></li>
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ request()->routeIs('ai.*') ? 'text-primary' : 'text-muted' }}" href="{{ route('ai.index') }}"><i class="bi bi-robot me-1" style="color: #db2777;"></i> Lili</a></li>
                             @endif
                         @else
                         @if(isset($mainMenu) && $mainMenu)
@@ -660,52 +663,6 @@
             });
         });
     </script>
-    <!-- Asistente IA de Voz 'Carina' (Burbuja Flotante Premium) -->
-    @auth
-    <div class="position-fixed bottom-0 end-0 mb-4 me-4" style="z-index: 1061;">
-        <button id="carinaVoiceBtn" class="btn btn-primary rounded-circle shadow-lg p-0 border-4 border-white animate__animated animate__bounceIn" 
-                style="width: 65px; height: 65px; background: linear-gradient(135deg, #0F172A, #2563EB); transition: all 0.3s ease;">
-            <i id="carinaVoiceIcon" class="bi bi-mic-fill fs-2 text-white"></i>
-        </button>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const voiceBtn = document.getElementById('carinaVoiceBtn');
-            const voiceIcon = document.getElementById('carinaVoiceIcon');
-            
-            if (!voiceBtn) return;
-            
-            // Verificamos soporte
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            if (!SpeechRecognition) {
-                console.warn('Speech Recognition API no soportada en este navegador.');
-                voiceBtn.style.display = 'none';
-                return;
-            }
-
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'es-ES';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            let isRecording = false;
-
-            voiceBtn.addEventListener('click', () => {
-                if (isRecording) {
-                    recognition.stop();
-                    return;
-                }
-                
-                recognition.start();
-                isRecording = true;
-                
-                // Efecto visual de grabación
-                voiceBtn.classList.add('animate__pulse', 'animate__infinite');
-                voiceBtn.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
-                voiceIcon.classList.replace('bi-mic-fill', 'bi-mic-mute-fill');
-            });
 
             recognition.onresult = (event) => {
                 const speechResult = event.results[0][0].transcript;
