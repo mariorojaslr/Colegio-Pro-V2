@@ -60,7 +60,10 @@ class DashboardController extends Controller
 
         if ($user) {
             // Guardamos el ID original del OWNER en la sesión para poder permitir el retorno
-            session(['impersonator_id' => auth()->id()]);
+            // Solo si no estamos ya simulando a alguien más
+            if (!session()->has('impersonator_id')) {
+                session(['impersonator_id' => auth()->id()]);
+            }
             
             // Iniciamos sesión como el usuario del colegio (suplantación)
             auth()->login($user);

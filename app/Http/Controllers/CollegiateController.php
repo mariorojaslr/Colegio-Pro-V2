@@ -292,6 +292,9 @@ class CollegiateController extends Controller
     {
         $admin = Auth::user();
         if ($admin->role !== 'ADMIN_COLEGIO' && !$admin->isOwner()) {
+            if (session()->has('impersonator_id')) {
+                return redirect()->route('home')->with('warning', 'Ya estás simulando a un usuario. Si deseas cambiar, primero sal del Modo Visión Omnisciente usando el botón en la barra superior.');
+            }
             abort(403, 'No tienes permisos para simular usuarios.');
         }
 
@@ -305,8 +308,10 @@ class CollegiateController extends Controller
             return redirect()->back()->with('error', 'Este colegiado no tiene una cuenta de usuario creada en el sistema.');
         }
 
-        // Guardar el ID del admin original en sesión
-        session(['impersonator_id' => $admin->id]);
+        // Guardar el ID del admin original en sesión (solo si no venimos de otra simulación)
+        if (!session()->has('impersonator_id')) {
+            session(['impersonator_id' => $admin->id]);
+        }
         
         // Loguear al usuario del colegiado
         Auth::loginUsingId($collegiate->user_id);
