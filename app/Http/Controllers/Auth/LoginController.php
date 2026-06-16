@@ -47,4 +47,18 @@ class LoginController extends Controller
     {
         return redirect('/');
     }
+
+    /**
+     * El usuario ha iniciado sesión.
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->role === 'OWNER' || $user->role === 'ADMIN_COLEGIO' || $user->role === 'ADMIN_INTERNO') {
+            return redirect()->intended('/home');
+        }
+
+        // Para usuarios normales, NUNCA usar la URL intended si estaban intentando ver algo de admin.
+        // Los forzamos siempre al home.
+        return redirect('/home');
+    }
 }
