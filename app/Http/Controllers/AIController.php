@@ -35,8 +35,8 @@ class AIController extends Controller
         }
 
         // Mapa de rutas dinámico según el rol del usuario
-        $routeMap = "- Mis Pagos / Estado de Cuenta / Pagar / Deudas -> '/pagos'\n";
-        $routeMap .= "        - Mi Legajo / Subir Papeles / Documentos Obligatorios -> '/cumplimiento'\n";
+        $routeMap = "- Mis Pagos / Estado de Cuenta / Pagar / Deudas -> '/mis-pagos'\n";
+        $routeMap .= "        - Mi Legajo / Subir Papeles / Documentos Obligatorios -> '/mi-legajo'\n";
         
         if ($user->role === 'ADMIN_COLEGIO' || $user->isOwner()) {
             $routeMap .= "        - Padrón / Comunidad / Colegiados -> '/colegiados'\n";
