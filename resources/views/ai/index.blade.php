@@ -53,7 +53,7 @@
             <div class="glass-card p-3 border-0 shadow-lg" style="border-radius: 25px">
                 <form id="aiForm" class="d-flex gap-2">
                     @csrf
-                    <button type="button" class="btn btn-light rounded-circle shadow-sm" style="width: 55px; height: 55px" onclick="alert('Dictado por voz en desarrollo')">
+                    <button type="button" id="micBtn" class="btn btn-light rounded-circle shadow-sm" style="width: 55px; height: 55px">
                         <i class="bi bi-mic fs-5"></i>
                     </button>
                     <input type="text" id="userInput" class="form-control rounded-pill border-0 bg-light px-4 shadow-none py-3" 
@@ -89,6 +89,49 @@
     const emptyState = document.getElementById('emptyState');
     const chatWindow = document.getElementById('chatWindow');
     const suggestionBtns = document.querySelectorAll('.suggestion-btn');
+    const micBtn = document.getElementById('micBtn');
+
+    // Inicializar Web Speech API
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'es-ES';
+
+        recognition.onstart = function() {
+            micBtn.classList.replace('btn-light', 'btn-danger');
+            micBtn.innerHTML = '<i class="bi bi-mic-fill fs-5 spinner-grow spinner-grow-sm"></i>';
+            userInput.placeholder = "Escuchando...";
+        };
+
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            userInput.value = transcript;
+            aiForm.dispatchEvent(new Event('submit')); // Auto-enviar
+        };
+
+        recognition.onerror = function(event) {
+            resetMicBtn();
+            alert("Error al escuchar: " + event.error);
+        };
+
+        recognition.onend = function() {
+            resetMicBtn();
+        };
+    } else {
+        micBtn.style.display = 'none'; // Navegador no soportado
+    }
+
+    function resetMicBtn() {
+        micBtn.classList.replace('btn-danger', 'btn-light');
+        micBtn.innerHTML = '<i class="bi bi-mic fs-5"></i>';
+        userInput.placeholder = "Dime qué necesitas que haga por ti...";
+    }
+
+    micBtn.addEventListener('click', () => {
+        if(recognition) recognition.start();
+    });
 
     suggestionBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -102,7 +145,7 @@
         const text = userInput.value.trim();
         if(!text) return;
 
-        // Limpiar input y ocular estado vacío
+        // Limpiar input y ocultar estado vacío
         userInput.value = '';
         emptyState.classList.add('d-none');
         messagesContainer.classList.remove('d-none');
@@ -111,7 +154,6 @@
         // Añadir mensaje de usuario
         addMessage(text, 'user');
         
-        // Mock de carga de IA (mientras conectamos Gemini)
         const loadingId = addMessage('Analizando tu pedido...', 'ai', true);
         
         try {
@@ -127,15 +169,31 @@
             const data = await response.json();
             updateMessage(loadingId, data.response);
             
+            // Hablar respuesta
+            speakText(data.response);
+            
             // Handle Deep Actions
             if(data.action_type && data.action_type !== 'none') {
-                handleDeepAction(data.action_type, loadingId);
+                handleDeepAction(data.action_type, data.action_payload, loadingId);
             }
 
         } catch (error) {
             updateMessage(loadingId, 'Lo siento, ha ocurrido un error al conectar con mi cerebro.');
         }
     });
+
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES';
+            // Opcional: buscar una voz femenina específica
+            const voices = window.speechSynthesis.getVoices();
+            const femaleVoice = voices.find(v => v.lang.includes('es') && (v.name.includes('Female') || v.name.includes('Mujer')));
+            if(femaleVoice) utterance.voice = femaleVoice;
+            
+            window.speechSynthesis.speak(utterance);
+        }
+    }
 
     function addMessage(content, type, isLoading = false) {
         const div = document.createElement('div');
@@ -161,16 +219,26 @@
         chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
     }
 
-    function handleDeepAction(actionType, msgId) {
+    function handleDeepAction(actionType, payload, msgId) {
         const msgDiv = document.getElementById(msgId);
         let actionHtml = '';
 
-        if(actionType === 'upload_document') {
-            document.getElementById('cameraInput').click(); // Abre la cámara nativa
+        if (actionType === 'navigate' && payload) {
+            actionHtml = `
+            <div class="deep-action-card mt-3 border-primary">
+                <h6 class="fw-bold text-primary"><i class="bi bi-geo-alt me-2"></i> Navegando...</h6>
+                <p class="small text-muted mb-0">Redirigiendo a la sección solicitada en 3 segundos.</p>
+            </div>`;
+            setTimeout(() => {
+                window.location.href = payload;
+            }, 3000);
+        }
+        else if(actionType === 'upload_document') {
+            document.getElementById('cameraInput').click();
             actionHtml = `
             <div class="deep-action-card mt-3">
                 <h6 class="fw-bold text-dark"><i class="bi bi-camera me-2 text-primary"></i> Cámara Abierta</h6>
-                <p class="small text-muted mb-0">Enfoca tu documento y toma la foto. Yo me encargo del resto.</p>
+                <p class="small text-muted mb-0">Enfoca tu documento y toma la foto.</p>
             </div>`;
         } 
         else if (actionType === 'draft_document') {
@@ -179,23 +247,23 @@
                 <h6 class="fw-bold text-dark"><i class="bi bi-file-earmark-text me-2 text-primary"></i> Documento Redactado</h6>
                 <div class="d-flex gap-2 mt-2">
                     <button class="btn btn-sm btn-outline-primary" onclick="alert('Copiado al portapapeles!')"><i class="bi bi-clipboard me-1"></i> Copiar</button>
-                    <button class="btn btn-sm btn-primary"><i class="bi bi-download me-1"></i> Descargar PDF</button>
+                    <button class="btn btn-sm btn-primary"><i class="bi bi-download me-1"></i> Descargar</button>
                 </div>
             </div>`;
         }
         else if (actionType === 'batch_email_reports') {
             actionHtml = `
             <div class="deep-action-card mt-3">
-                <h6 class="fw-bold text-dark"><i class="bi bi-envelope-check me-2 text-success"></i> Tarea Batch Ejecutándose</h6>
+                <h6 class="fw-bold text-dark"><i class="bi bi-envelope-check me-2 text-success"></i> Tarea Batch Iniciada</h6>
                 <div class="progress mt-2" style="height: 10px;">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 100%"></div>
+                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 100%"></div>
                 </div>
-                <p class="small text-muted mt-2 mb-0">Generando informes cruzados y preparando el envío. Te avisaré cuando termine.</p>
             </div>`;
         }
 
         if(actionHtml) {
             msgDiv.querySelector('div > div').innerHTML += actionHtml;
+            chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
         }
     }
 </script>

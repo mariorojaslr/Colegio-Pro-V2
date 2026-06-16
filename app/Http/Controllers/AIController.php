@@ -34,14 +34,35 @@ class AIController extends Controller
             $historyText .= ($msg->role == 'user' ? "Usuario: " : "Lili: ") . $msg->content . "\n";
         }
 
-        $systemPrompt = "Eres 'Lili', la Asistente Personal y Secretaria Privada de la plataforma del $schoolName. Tienes memoria de todas nuestras conversaciones. Tu rol es interactuar por voz y texto para facilitar la vida del terapeuta (redactar informes, buscar info, subir documentos, ver deudas). Responde de forma clara y amable.\n\nHistorial Reciente:\n$historyText\n\nUsuario dice: $prompt\n\nDebes responder en formato JSON estricto con esta estructura:\n{\n  \"response\": \"Tu respuesta en texto o markdown.\",\n  \"action_type\": \"puede ser 'none', 'upload_document', 'download_certificate', 'draft_document', 'batch_email_reports'\"\n}";
+        $systemPrompt = "Eres 'Lili', la Asistente Personal y Secretaria Privada de la plataforma del $schoolName. Tienes memoria de todas nuestras conversaciones. Tu rol es interactuar por voz y texto para facilitar la vida del terapeuta.
+        
+IMPORTANTE: Conoces la plataforma a la perfección. Si el usuario pide ir a un lugar, tú debes redirigirlo enviando action_type = 'navigate' y el action_payload con la URL.
+Mapa de Rutas:
+- Mis Pagos / Estado de Cuenta / Pagar / Deudas -> '/pagos'
+- Mi Legajo / Subir Papeles / Documentos Obligatorios -> '/cumplimiento'
+- Padrón / Comunidad / Colegiados -> '/colegiados'
+- Inicio / Dashboard -> '/home'
+- Certificados / Trámites -> '/colegiados/certificados'
+
+Historial Reciente:
+$historyText
+
+Usuario dice: $prompt
+
+Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
+{
+  \"response\": \"Tu respuesta en texto. Corta, cálida, para ser leída por un sintetizador de voz.\",
+  \"action_type\": \"'none', 'navigate', 'upload_document', 'draft_document', 'batch_email_reports'\",
+  \"action_payload\": \"Si action_type es navigate, pon la ruta aquí (ej. '/pagos'). En caso contrario pon null.\"
+}";
 
         $apiKey = env('GEMINI_API_KEY');
         
         if (!$apiKey) {
             $mockResponse = json_encode([
-                'response' => "Simulando Respuesta de Lili: He guardado tu solicitud en mi memoria. Estaré encantada de ayudarte con: $prompt.",
-                'action_type' => 'none'
+                'response' => "Simulando Respuesta de Lili: ¡Entendido! Vamos para allá.",
+                'action_type' => 'navigate',
+                'action_payload' => '/pagos'
             ]);
             
             AIMemory::create([
@@ -53,7 +74,8 @@ class AIController extends Controller
             return response()->json([
                 'status' => 'success',
                 'response' => json_decode($mockResponse)->response,
-                'action_type' => 'none'
+                'action_type' => 'navigate',
+                'action_payload' => '/pagos'
             ]);
         }
 
@@ -71,19 +93,21 @@ class AIController extends Controller
 
             $aiResponseText = $jsonResponse['response'] ?? 'No pude procesar la respuesta adecuadamente.';
             $actionType = $jsonResponse['action_type'] ?? 'none';
+            $actionPayload = $jsonResponse['action_payload'] ?? null;
 
             // Guardar respuesta de Lili en memoria
             AIMemory::create([
                 'user_id' => $user->id,
                 'role' => 'ai',
                 'content' => $aiResponseText,
-                'metadata' => ['action_type' => $actionType]
+                'metadata' => ['action_type' => $actionType, 'action_payload' => $actionPayload]
             ]);
 
             return response()->json([
                 'status' => 'success', 
                 'response' => $aiResponseText,
-                'action_type' => $actionType
+                'action_type' => $actionType,
+                'action_payload' => $actionPayload
             ]);
             
         } catch (\Exception $e) {
