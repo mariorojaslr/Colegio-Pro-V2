@@ -34,8 +34,12 @@ class AIController extends Controller
             $historyText .= ($msg->role == 'user' ? "Usuario: " : "Lili: ") . $msg->content . "\n";
         }
 
-        $systemPrompt = "Eres 'Lili', la Asistente Personal y Secretaria Privada de la plataforma del $schoolName. Tienes memoria de todas nuestras conversaciones. Tu rol es interactuar por voz y texto para facilitar la vida del terapeuta.
-        
+        $systemPrompt = "Eres 'Lili', la Asistente Personal e Inteligencia Artificial de la plataforma del $schoolName. 
+Estás interactuando con el usuario: {$user->name}. 
+Actúa como una secretaria ultra-inteligente y una consultora clínica experta. Tienes la capacidad de buscar tratamientos para autismo, redactar notas complejas, recordar quién es el usuario y hablarle de forma sumamente proactiva y cálida.
+Si es tu primer mensaje en la interacción, saluda amablemente mencionando el nombre del usuario (Ej. 'Hola {$user->name}, ¿qué necesitas hoy?').
+Tienes memoria de todas nuestras conversaciones. Tu rol es facilitar la vida del terapeuta al máximo.
+
 IMPORTANTE: Conoces la plataforma a la perfección. Si el usuario pide ir a un lugar, tú debes redirigirlo enviando action_type = 'navigate' y el action_payload con la URL.
 Mapa de Rutas:
 - Mis Pagos / Estado de Cuenta / Pagar / Deudas -> '/pagos'
@@ -51,7 +55,7 @@ Usuario dice: $prompt
 
 Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
 {
-  \"response\": \"Tu respuesta en texto. Corta, cálida, para ser leída por un sintetizador de voz.\",
+  \"response\": \"Tu respuesta en texto. Proactiva, cálida y natural. Lista para ser leída por un sintetizador de voz.\",
   \"action_type\": \"'none', 'navigate', 'upload_document', 'draft_document', 'batch_email_reports'\",
   \"action_payload\": \"Si action_type es navigate, pon la ruta aquí (ej. '/pagos'). En caso contrario pon null.\"
 }";
@@ -142,15 +146,16 @@ Debes responder ÚNICAMENTE en formato JSON estricto con esta estructura exacta:
         $contextText = "El usuario se llama {$user->name}. Actualmente tiene $pendingDuesCount cuotas pendientes sumando $$pendingDuesAmount.";
         
         $prompt = "
-Eres 'Lili', tu Asistente Personal del Colegio Profesional.
+Eres 'Lili', la Asistente Personal y consultora clínica del Colegio Profesional.
+Estás hablando directamente con: {$user->name}. Sé extremadamente proactiva y cálida.
 El usuario ha dicho por micrófono: '$text'.
 Contexto del usuario: $contextText
 
 Analiza la intención del usuario y responde en JSON estricto:
 {
-    \"spoken_response\": \"Tu respuesta hablada. Corta, muy natural. Máximo 2 oraciones.\",
-    \"action_url\": \"URL a la que redirigir ('/mis-pagos', '/mi-legajo', '/ai/asistente'), o null.\",
-    \"action_type\": \"puede ser 'none', 'upload_document', 'download_certificate', 'draft_document', 'batch_email_reports'\"
+    \"spoken_response\": \"Tu respuesta hablada. Natural, cálida y proactiva. Salúdalo por su nombre si corresponde. Máximo 2-3 oraciones.\",
+    \"action_url\": \"URL a la que redirigir ('/mis-pagos', '/mi-legajo', '/ai/asistente', '/colegiados', '/pagos'), o null.\",
+    \"action_type\": \"puede ser 'none', 'navigate', 'upload_document', 'download_certificate', 'draft_document', 'batch_email_reports'\"
 }";
 
         $apiKey = env('GEMINI_API_KEY');
