@@ -213,8 +213,13 @@
 
     function speakText(text) {
         if ('speechSynthesis' in window) {
-            // Limpiar asteriscos de markdown para que no los lea
-            const cleanText = text.replace(/\*/g, '');
+            // Limpiar markdown (asteriscos, barras, almohadillas) para que no los lea
+            let cleanText = text.replace(/\\(\r?\n|$)/g, ' '); // Eliminar barras invertidas
+            cleanText = cleanText.replace(/\\n/g, ' '); // Reemplazar saltos textuales por espacios
+            cleanText = cleanText.replace(/\*/g, ''); // Eliminar asteriscos de bold o listas
+            cleanText = cleanText.replace(/#/g, ''); // Eliminar hashes de subtítulos
+            cleanText = cleanText.replace(/_/g, ''); // Eliminar guiones bajos
+            
             const utterance = new SpeechSynthesisUtterance(cleanText);
             utterance.lang = 'es-ES';
             
@@ -245,13 +250,36 @@
         }
     }
 
+    function formatMessageContent(text) {
+        if (!text) return '';
+        // 1. Limpiar barras invertidas extrañas que deja Gemini al final de las líneas
+        let html = text.replace(/\\(\r?\n|$)/g, '$1');
+        
+        // 2. Convertir saltos de línea literales (\n) en saltos reales
+        html = html.replace(/\\n/g, '\n');
+        
+        // 3. Negritas (**texto**)
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+        // 4. Listas o viñetas que empiezan con asterisco (* Item) -> (• Item)
+        html = html.replace(/(^|\n)\*\s+(.*)/g, '$1&bull; $2');
+        
+        // 5. Cursivas (*texto*)
+        html = html.replace(/(^|[^\\])\*(.*?)\*/g, '$1<em>$2</em>');
+        
+        // 6. Finalmente, convertir saltos de línea \n a etiquetas <br>
+        html = html.replace(/\n/g, '<br>');
+        
+        return html;
+    }
+
     function addMessage(content, type, isLoading = false) {
         const div = document.createElement('div');
         div.className = `message-bubble ${type}-bubble shadow-sm`;
         div.id = `msg-${Date.now()}`;
         
-        // Convertir saltos de línea a etiquetas <br>
-        const formattedContent = content.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+        // Formatear el contenido markdown a HTML
+        const formattedContent = formatMessageContent(content);
         
         if(type === 'ai') {
             div.innerHTML = `<div class="d-flex gap-3"><img src="{{ asset('media/lili_avatar.png') }}" class="rounded-circle" style="width:30px;height:30px"><div>${formattedContent}</div></div>`;
@@ -267,8 +295,8 @@
     function updateMessage(id, content) {
         const msg = document.getElementById(id);
         if(msg) {
-            // Convertir saltos de línea a etiquetas <br>
-            const formattedContent = content.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+            // Formatear el contenido markdown a HTML
+            const formattedContent = formatMessageContent(content);
             msg.innerHTML = `<div class="d-flex gap-3"><img src="{{ asset('media/lili_avatar.png') }}" class="rounded-circle" style="width:30px;height:30px"><div>${formattedContent}</div></div>`;
         }
         chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
