@@ -193,11 +193,20 @@
                         Recordarme
                     </label>
                 </div>
+                @if (Route::has('password.request'))
+                    <a class="text-muted-custom fw-bold small text-decoration-none" href="{{ route('password.request') }}" style="color: {{ $currentTenant->primary_color ?? '#3b82f6' }} !important;">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                @endif
             </div>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary mb-3">
                 Ingresar
             </button>
+            
+            <a href="{{ route('activate.step1') }}" class="btn btn-demo">
+                <i class="material-icons fs-5">person_add</i> ¿Eres colegiado y es tu primer ingreso? Activa tu cuenta
+            </a>
             
             <a href="{{ route('demo.fast') }}" class="btn-demo">
                 <span class="material-icons" style="font-size: 18px;">auto_awesome</span> ACCESO DEMO (PRUEBA)

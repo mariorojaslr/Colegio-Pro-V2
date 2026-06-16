@@ -90,6 +90,12 @@ Route::get('/escuela-virtual', [\App\Http\Controllers\Student\LessonController::
 Route::get('/noticias', [PublicNewsController::class, 'index'])->name('news.index');
 Route::get('/noticias/{slug}', [PublicNewsController::class, 'show'])->name('news.show');
 
+// RUTAS DE ACTIVACIÓN DE CUENTA (Para Colegiados importados sin usuario)
+Route::get('activar-cuenta', [App\Http\Controllers\Auth\AccountActivationController::class, 'showSearchForm'])->name('activate.step1');
+Route::post('activar-cuenta/buscar', [App\Http\Controllers\Auth\AccountActivationController::class, 'search'])->name('activate.search');
+Route::get('activar-cuenta/confirmar', [App\Http\Controllers\Auth\AccountActivationController::class, 'showRegisterForm'])->name('activate.step2');
+Route::post('activar-cuenta/registrar', [App\Http\Controllers\Auth\AccountActivationController::class, 'register'])->name('activate.register');
+
 Auth::routes();
 
 Route::post('/register/verify', [App\Http\Controllers\Auth\RegisterController::class, 'verify'])->name('register.verify');

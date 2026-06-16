@@ -82,7 +82,7 @@
     @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
     /* Ocultar el botón azul global de voz porque interfiere con el botón de enviar en esta pantalla */
-    #globalVoiceBtn { display: none !important; }
+    #carinaVoiceBtn { display: none !important; }
 </style>
 
 <script>
@@ -104,29 +104,40 @@
     let recognition;
     if ('webkitSpeechRecognition' in window) {
         recognition = new webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
+        recognition.continuous = true;
+        recognition.interimResults = true;
         recognition.lang = 'es-ES';
+
+        let finalTranscript = '';
 
         recognition.onstart = function() {
             micBtn.classList.replace('btn-light', 'btn-danger');
             micBtn.innerHTML = '<i class="bi bi-mic-fill fs-5 spinner-grow spinner-grow-sm"></i>';
-            userInput.placeholder = "Escuchando...";
+            userInput.placeholder = "Escuchando... Habla con tranquilidad.";
+            finalTranscript = userInput.value; // Conservar lo que ya estaba escrito
         };
 
         recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            userInput.value = transcript;
-            aiForm.dispatchEvent(new Event('submit')); // Auto-enviar
+            let interimTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript + ' ';
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+            userInput.value = finalTranscript + interimTranscript;
+            // Quitamos el auto-enviar para que el usuario pueda tomarse su tiempo.
         };
 
         recognition.onerror = function(event) {
             resetMicBtn();
-            alert("Error al escuchar: " + event.error);
+            console.error("Error al escuchar: " + event.error);
         };
 
         recognition.onend = function() {
             resetMicBtn();
+            isRecognizing = false;
         };
     } else {
         micBtn.style.display = 'none'; // Navegador no soportado
@@ -138,8 +149,17 @@
         userInput.placeholder = "Dime qué necesitas que haga por ti...";
     }
 
+    let isRecognizing = false;
     micBtn.addEventListener('click', () => {
-        if(recognition) recognition.start();
+        if(recognition) {
+            if (isRecognizing) {
+                recognition.stop();
+                isRecognizing = false;
+            } else {
+                recognition.start();
+                isRecognizing = true;
+            }
+        }
     });
 
     suggestionBtns.forEach(btn => {

@@ -1,12 +1,12 @@
-@if(isset($currentTenant) && view()->exists('tenants.' . $currentTenant->slug . '.auth.passwords.email'))
-    @include('tenants.' . $currentTenant->slug . '.auth.passwords.email')
+@if(isset($currentTenant) && view()->exists('tenants.' . $currentTenant->slug . '.auth.activate.step1'))
+    @include('tenants.' . $currentTenant->slug . '.auth.activate.step1')
 @else
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Recuperar Contraseña - {{ $currentTenant->name ?? 'Colegio-Pro' }}</title>
+    <title>Activar Cuenta - {{ $currentTenant->name ?? 'Colegio-Pro' }}</title>
     <link rel="icon" href="{{ isset($currentTenant) && $currentTenant->logo ? asset($currentTenant->logo) : asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -108,7 +108,8 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
         .text-muted-custom { color: #94a3b8; }
-        .alert-success { background-color: #064e3b; border-color: #065f46; color: #d1fae5; }
+        .alert-danger { background-color: #7f1d1d; border-color: #991b1b; color: #fecaca; }
+        .alert-info { background-color: #1e3a8a; border-color: #1e40af; color: #bfdbfe; }
     </style>
 </head>
 <body>
@@ -121,24 +122,30 @@
             @endif
         </div>
 
-        <h4 class="text-center fw-bold mb-2">Recuperar Contraseña</h4>
-        <p class="text-center text-muted-custom mb-4 small">Ingresa el correo electrónico asociado a tu cuenta para enviarte un enlace seguro.</p>
+        <h4 class="text-center fw-bold mb-2">Activar tu Cuenta</h4>
+        <p class="text-center text-muted-custom mb-4 small">¿Es tu primera vez aquí? Búscate en el padrón ingresando tu DNI, Matrícula, Email o Teléfono.</p>
 
-        @if(session('status'))
-            <div class="alert alert-success mb-4 p-3 rounded-3 text-center small">
-                {{ session('status') }}
+        @if(session('error'))
+            <div class="alert alert-danger mb-4 p-3 rounded-3 text-center small">
+                {{ session('error') }}
+            </div>
+        @endif
+        
+        @if(session('info'))
+            <div class="alert alert-info mb-4 p-3 rounded-3 text-center small">
+                {{ session('info') }}
             </div>
         @endif
 
-        <form method="POST" action="{{ route('password.email') }}">
+        <form method="POST" action="{{ route('activate.search') }}">
             @csrf
             <div class="mb-4">
-                <label for="email" class="form-label text-muted-custom small fw-bold">Correo Electrónico</label>
+                <label for="query" class="form-label text-muted-custom small fw-bold">Dato Identificatorio</label>
                 <div class="input-group">
-                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">email</i></span>
-                    <input id="email" type="email" class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Ej. juan@email.com">
+                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">search</i></span>
+                    <input id="query" type="text" class="form-control border-start-0 ps-0 @error('query') is-invalid @enderror" name="query" value="{{ old('query') }}" required autofocus placeholder="Ej. 34567890 o juan@email.com">
                 </div>
-                @error('email')
+                @error('query')
                     <span class="text-danger small mt-1 d-block">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -147,13 +154,13 @@
 
             <div class="d-grid gap-2 mt-4">
                 <button type="submit" class="btn btn-primary-custom d-flex align-items-center justify-content-center">
-                    Enviar Enlace <i class="material-icons ms-2 fs-5">send</i>
+                    Buscar mi perfil <i class="material-icons ms-2 fs-5">arrow_forward</i>
                 </button>
             </div>
         </form>
 
         <div class="text-center mt-4">
-            <p class="mb-0 text-muted-custom small"><a href="{{ route('login') }}" class="text-decoration-none fw-bold" style="color: {{ $currentTenant->primary_color ?? '#3b82f6' }}">Volver al login</a></p>
+            <p class="mb-0 text-muted-custom small">¿Ya tienes cuenta? <a href="{{ route('login') }}" class="text-decoration-none fw-bold" style="color: {{ $currentTenant->primary_color ?? '#3b82f6' }}">Inicia Sesión</a></p>
         </div>
     </div>
 </body>
