@@ -870,7 +870,7 @@
                 <div class="alert alert-info bg-info bg-opacity-10 text-info border-0 small mb-3">
                     <i class="bi bi-info-circle me-1"></i> Arrastra las esquinas para encuadrar correctamente el documento.
                 </div>
-                <div class="flex-grow-1 bg-dark rounded-3 d-flex align-items-center justify-content-center" style="overflow: hidden; width: 100%; min-height: 400px;">
+                <div class="flex-grow-1 bg-dark rounded-3 d-flex align-items-center justify-content-center" style="overflow: hidden; width: 100%; min-height: 250px; height: 100%;">
                     <img id="imageToCrop" style="max-width: 100%; max-height: 100%; display: block;">
                 </div>
                 <div class="mt-3">
