@@ -137,25 +137,35 @@ class CmsController extends Controller
     // === BOARD MEMBERS (Autoridades) ===
     public function boardMembersIndex()
     {
-        $members = BoardMember::where('school_id', auth()->user()->school_id)->orderBy('order')->get();
-        return view('admin.cms.board_members.index', compact('members'));
+        $schoolId = auth()->user()->school_id;
+        $members = BoardMember::with('collegiate')->where('school_id', $schoolId)->orderBy('order')->get();
+        $collegiates = \App\Models\Collegiate::where('school_id', $schoolId)->orderBy('last_name')->orderBy('first_name')->get();
+        
+        $departments = [
+            'Comisión Directiva' => ['Presidente', 'Vicepresidente', 'Secretaria', 'Tesorera', '1er Vocal', '2do Vocal', 'Suplente'],
+            'Tribunal de Ética' => ['Presidente', 'Vocal', 'Suplente'],
+            'Revisores de Cuentas' => ['Titular', 'Suplente']
+        ];
+
+        return view('admin.cms.board_members.index', compact('members', 'collegiates', 'departments'));
     }
 
     public function boardMembersStore(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'role' => 'required|string',
+            'collegiate_id' => 'required|exists:collegiates,id',
             'department' => 'required|string',
+            'role' => 'required|string',
         ]);
+
+        $collegiate = \App\Models\Collegiate::where('id', $request->collegiate_id)->where('school_id', auth()->user()->school_id)->firstOrFail();
 
         BoardMember::create([
             'school_id' => auth()->user()->school_id,
-            'name' => $request->name,
+            'collegiate_id' => $collegiate->id,
             'role' => $request->role,
             'department' => $request->department,
             'is_substitute' => $request->has('is_substitute'),
-            'image_path' => $request->image_path ?? 'https://via.placeholder.com/150',
             'order' => $request->order ?? 0
         ]);
 
@@ -168,5 +178,30 @@ class CmsController extends Controller
             $boardMember->delete();
         }
         return redirect()->back()->with('success', 'Autoridad eliminada.');
+    }
+
+    public function boardMembersUpdate(Request $request, BoardMember $boardMember)
+    {
+        if ($boardMember->school_id != auth()->user()->school_id) {
+            abort(403);
+        }
+
+        $request->validate([
+            'collegiate_id' => 'required|exists:collegiates,id',
+            'department' => 'required|string',
+            'role' => 'required|string',
+        ]);
+
+        $collegiate = \App\Models\Collegiate::where('id', $request->collegiate_id)->where('school_id', auth()->user()->school_id)->firstOrFail();
+
+        $boardMember->update([
+            'collegiate_id' => $collegiate->id,
+            'role' => $request->role,
+            'department' => $request->department,
+            'is_substitute' => $request->has('is_substitute'),
+            'order' => $request->order ?? 0
+        ]);
+
+        return redirect()->back()->with('success', 'Autoridad actualizada correctamente.');
     }
 }

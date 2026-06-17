@@ -190,6 +190,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/cms/autoridades', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersIndex'])->name('admin.cms.board_members.index');
     Route::post('/cms/autoridades', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersStore'])->name('admin.cms.board_members.store');
+    Route::put('/cms/autoridades/{boardMember}', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersUpdate'])->name('admin.cms.board_members.update');
     Route::delete('/cms/autoridades/{boardMember}', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersDestroy'])->name('admin.cms.board_members.destroy');
 
     // Asistente IA
