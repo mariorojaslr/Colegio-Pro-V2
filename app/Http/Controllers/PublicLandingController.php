@@ -29,7 +29,8 @@ class PublicLandingController extends Controller
 
         $plans = \App\Models\SubscriptionPlan::all();
 
-        $boardMembers = \App\Models\BoardMember::where('school_id', $school->id ?? 1)
+        $boardMembers = \App\Models\BoardMember::with('collegiate')
+                                               ->where('school_id', $school->id ?? 1)
                                                ->orderBy('order')
                                                ->get()
                                                ->groupBy('department');

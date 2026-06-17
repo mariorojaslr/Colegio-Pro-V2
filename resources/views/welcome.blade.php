@@ -264,8 +264,12 @@
                         <div class="org-chart-wrapper d-flex flex-column align-items-center">
                             @if($president)
                             <div class="org-chart-node shadow-hover-up" style="width: 280px;">
-                                <img src="{{ $president->image_path }}" alt="{{ $president->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($president->name) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
-                                <h5 class="fw-bold text-theme-dark mb-1">{{ $president->name }}</h5>
+                                @php
+                                    $presImageUrl = $president->collegiate && $president->collegiate->avatar_url ? $president->collegiate->avatar_url : $president->image_path;
+                                    $presName = $president->collegiate ? $president->collegiate->first_name . ' ' . $president->collegiate->last_name : $president->name;
+                                @endphp
+                                <img src="{{ $presImageUrl }}" alt="{{ $presName }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($presName) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
+                                <h5 class="fw-bold text-theme-dark mb-1">{{ $presName }}</h5>
                                 <p class="text-theme-primary fw-bold small mb-0">{{ $president->role }}</p>
                             </div>
                             @endif
@@ -279,8 +283,12 @@
                             <div class="d-flex flex-wrap justify-content-center gap-4 mt-4">
                                 @foreach($others as $m)
                                 <div class="org-chart-node shadow-hover-up" style="width: 250px;">
-                                    <img src="{{ $m->image_path }}" alt="{{ $m->name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
-                                    <h5 class="fw-bold text-theme-dark mb-1">{{ $m->name }}</h5>
+                                    @php
+                                        $mImageUrl = $m->collegiate && $m->collegiate->avatar_url ? $m->collegiate->avatar_url : $m->image_path;
+                                        $mName = $m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name;
+                                    @endphp
+                                    <img src="{{ $mImageUrl }}" alt="{{ $mName }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($mName) }}&background={{ str_replace('#','',$bgCard) }}&color={{ str_replace('#','',$primary) }}'">
+                                    <h5 class="fw-bold text-theme-dark mb-1">{{ $mName }}</h5>
                                     <p class="text-theme-primary fw-bold small mb-0">{{ $m->role }}</p>
                                     @if($m->is_substitute)
                                         <span class="badge bg-secondary mt-2">Suplente</span>
