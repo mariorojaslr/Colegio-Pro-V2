@@ -55,10 +55,15 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <div class="rounded-circle me-3 d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" 
-                                     style="width: 40px; height: 40px; background: {{ $school->primary_color }};">
-                                    {{ substr($school->name, 0, 1) }}
-                                </div>
+                                @if($school->logo_url)
+                                    <img src="{{ $school->logo_url }}" class="rounded-circle me-4 shadow-sm object-fit-cover bg-white" 
+                                         style="width: 80px; height: 80px; border: 2px solid {{ $school->primary_color }};">
+                                @else
+                                    <div class="rounded-circle me-4 d-flex align-items-center justify-content-center text-white fw-bold shadow-sm fs-3" 
+                                         style="width: 80px; height: 80px; background: {{ $school->primary_color }};">
+                                        {{ substr($school->name, 0, 1) }}
+                                    </div>
+                                @endif
                                 <div>
                                     <div class="fw-bold text-dark mb-1">{{ $school->name }}</div>
                                     <code class="text-muted bg-light px-2 py-1 rounded">{{ $school->slug }}.{{ \App\Models\GlobalSetting::getVal('base_domain', 'colegio-pro.cl') }}</code>
