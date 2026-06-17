@@ -55,8 +55,8 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
-                                @if($school->logo_url)
-                                    <img src="{{ $school->logo_url }}" class="rounded-circle me-4 shadow-sm object-fit-cover bg-white" 
+                                @if($school->logo)
+                                    <img src="{{ $school->logo }}" class="rounded-circle me-4 shadow-sm object-fit-cover bg-white" 
                                          style="width: 80px; height: 80px; border: 2px solid {{ $school->primary_color }};">
                                 @else
                                     <div class="rounded-circle me-4 d-flex align-items-center justify-content-center text-white fw-bold shadow-sm fs-3" 
