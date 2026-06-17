@@ -193,6 +193,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/cms/autoridades/{boardMember}', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersUpdate'])->name('admin.cms.board_members.update');
     Route::delete('/cms/autoridades/{boardMember}', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersDestroy'])->name('admin.cms.board_members.destroy');
 
+    // Bóveda de Resguardo
+    Route::get('/settings/boveda', [\App\Http\Controllers\Admin\BackupVaultController::class, 'index'])->name('admin.settings.vault.index');
+    Route::get('/settings/boveda/descargar-datos', [\App\Http\Controllers\Admin\BackupVaultController::class, 'downloadData'])->name('admin.settings.vault.data');
+    Route::get('/settings/boveda/descargar-fotos', [\App\Http\Controllers\Admin\BackupVaultController::class, 'downloadPhotos'])->name('admin.settings.vault.photos');
+    Route::get('/settings/boveda/descargar-certificados', [\App\Http\Controllers\Admin\BackupVaultController::class, 'downloadCertificates'])->name('admin.settings.vault.certificates');
+    Route::get('/settings/boveda/descarga-maestra', [\App\Http\Controllers\Admin\BackupVaultController::class, 'downloadMaster'])->name('admin.settings.vault.master');
+
     // Asistente IA
     Route::get('/ai/asistente', [App\Http\Controllers\AIController::class, 'index'])->name('ai.index');
     Route::post('/ai/query', [App\Http\Controllers\AIController::class, 'query'])->name('ai.query');
