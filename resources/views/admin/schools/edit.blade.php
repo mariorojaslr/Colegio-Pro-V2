@@ -20,7 +20,7 @@
             {{-- Datos de la Institución --}}
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm rounded-4 p-5 bg-white mb-4">
-                    <h5 class="fw-bold mb-4" style="color: var(--primary-color)">Información General</h5>
+                    <h5 class="fw-bold mb-4">Información General</h5>
                     
                     <div class="row g-4 mb-4">
                         <div class="col-md-4">
@@ -53,7 +53,7 @@
                         <label class="form-check-label fw-bold text-muted small uppercase ls-1 ms-2" for="is_active">Estado Activo (Permitir acceso)</label>
                     </div>
 
-                    <h5 class="fw-bold mb-4 mt-5" style="color: var(--primary-color)">Identidad Visual (Branding)</h5>
+                    <h5 class="fw-bold mb-4 mt-5">Identidad Visual (Branding)</h5>
                     <div class="row g-4">
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Color Principal</label>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
 
-                    <h5 class="fw-bold mb-4 mt-5" style="color: var(--primary-color)">Datos de Contacto (Landing Page)</h5>
+                    <h5 class="fw-bold mb-4 mt-5">Datos de Contacto (Landing Page)</h5>
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Teléfono</label>
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     
-                    <h5 class="fw-bold mb-4 mt-5" style="color: var(--primary-color)">Redes Sociales</h5>
+                    <h5 class="fw-bold mb-4 mt-5">Redes Sociales</h5>
                     <div class="row g-4">
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Facebook URL</label>
