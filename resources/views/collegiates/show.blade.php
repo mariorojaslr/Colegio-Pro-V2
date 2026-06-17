@@ -214,7 +214,38 @@
                                                         </td>
                                                         <td class="py-3 text-end px-4 border-0">
                                                             @if($doc)
-                                                                <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3">Ver Documento</a>
+                                                                @if($doc->file_url_back)
+                                                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3" data-bs-toggle="modal" data-bs-target="#viewDocModal{{ $doc->id }}">Ver Frente y Dorso</button>
+                                                                    
+                                                                    <div class="modal fade text-start" id="viewDocModal{{ $doc->id }}" tabindex="-1" aria-hidden="true">
+                                                                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                                            <div class="modal-content border-0 shadow-lg rounded-4">
+                                                                                <div class="modal-header border-bottom-0 pb-0">
+                                                                                    <h5 class="modal-title fw-bold text-dark">{{ $req->name }}</h5>
+                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                                                </div>
+                                                                                <div class="modal-body p-4 bg-light">
+                                                                                    <div class="row g-3">
+                                                                                        <div class="col-md-6">
+                                                                                            <div class="bg-dark rounded-4 p-2 text-center shadow-sm position-relative">
+                                                                                                <span class="badge bg-dark position-absolute top-0 start-0 m-3 z-index-2 fs-6">FRENTE</span>
+                                                                                                <img src="{{ $doc->file_url }}" class="img-fluid rounded-3" style="max-height: 70vh; width: auto;">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <div class="bg-dark rounded-4 p-2 text-center shadow-sm position-relative">
+                                                                                                <span class="badge bg-dark position-absolute top-0 start-0 m-3 z-index-2 fs-6">DORSO</span>
+                                                                                                <img src="{{ $doc->file_url_back }}" class="img-fluid rounded-3" style="max-height: 70vh; width: auto;">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3">Ver Documento</a>
+                                                                @endif
                                                                 
                                                                 @if(auth()->user()->isOwner() || auth()->user()->role === 'ADMIN_COLEGIO')
                                                                     @if($doc->status === 'pending')
