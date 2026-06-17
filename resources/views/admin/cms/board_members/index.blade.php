@@ -34,8 +34,8 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ $m->collegiate ? $m->collegiate->avatar_url : $m->image_path }}" class="rounded-circle me-3 border" style="width: 40px; height: 40px; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name) }}&background=random'">
-                                    <span class="fw-bold">{{ $m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name }}</span>
+                                    <img src="{{ $m->collegiate ? $m->collegiate->avatar_url : $m->image_path }}" class="rounded-circle me-3 border" style="width: 80px; height: 80px; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name) }}&background=random'">
+                                    <span class="fw-bold fs-6">{{ $m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name }}</span>
                                 </div>
                             </td>
                             <td>{{ $m->role }}</td>
