@@ -56,8 +56,11 @@ class ComplianceController extends Controller
      */
     public function upload(Request $request, ComplianceRequirement $requirement)
     {
+        // Validar normal y base64
         $request->validate([
-            'document' => 'required|file|mimes:jpg,jpeg,png,pdf,xls,xlsx,doc,docx|max:10240', // Máx 10MB
+            'document' => 'nullable|file|mimes:jpg,jpeg,png,pdf,xls,xlsx,doc,docx|max:10240',
+            'cropped_image' => 'nullable|string',
+            'cropped_image_back' => 'nullable|string',
         ]);
 
         $user = Auth::user();
@@ -72,60 +75,69 @@ class ComplianceController extends Controller
             return back()->with('error', 'Colegiado no encontrado.');
         }
 
-        // Estructura de Bunny: colegio-pro/docs/{school_slug}/{registration_number}/{req_name}_{timestamp}.ext
-        $file = $request->file('document');
-        $extension = strtolower($file->getClientOriginalExtension());
-        $remoteName = "docs/{$user->school->slug}/{$collegiate->registration_number}/" . Str::slug($requirement->name) . "_" . time() . ".{$extension}";
+        $url = null;
+        $url_back = null;
 
-        $uploadPath = $file->getPathname();
-
-        // COMPRESIÓN DE IMÁGENES
-        // Si el archivo es una imagen, lo comprimimos antes de enviarlo a Bunny.net
-        if (in_array($extension, ['jpg', 'jpeg', 'png'])) {
-            try {
-                $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
-                $image = $manager->read($uploadPath);
-                
-                // Redimensionar proporcionalmente para que no exceda 1200px de ancho/alto
-                $image->scaleDown(width: 1200, height: 1200);
-                
-                // Guardar en temp
-                $tempPath = sys_get_temp_dir() . '/' . uniqid() . '.' . $extension;
-                
-                if ($extension === 'png') {
-                    $image->toPng()->save($tempPath);
-                } else {
-                    $image->toJpeg(quality: 75)->save($tempPath);
-                }
-                
-                $uploadPath = $tempPath;
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error("Error comprimiendo imagen: " . $e->getMessage());
-                // Si falla la compresión, intentamos subir el original
+        // --- PROCESAR FRENTE ---
+        if ($request->filled('cropped_image')) {
+            // Es una imagen base64 desde Cropper.js
+            $base64 = $request->input('cropped_image');
+            $data = explode(',', $base64);
+            if (count($data) > 1) {
+                $imageData = base64_decode($data[1]);
+                $tempPath = sys_get_temp_dir() . '/' . uniqid() . '.jpg';
+                file_put_contents($tempPath, $imageData);
+                $remoteName = "docs/{$user->school->slug}/{$collegiate->registration_number}/" . Str::slug($requirement->name) . "_front_" . time() . ".jpg";
+                $result = $this->bunny->uploadFile($tempPath, $remoteName);
+                if ($result['success']) $url = $result['url'];
             }
+        } elseif ($request->hasFile('document')) {
+            // Archivo normal (PDF, o imagen sin cropper)
+            $file = $request->file('document');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $remoteName = "docs/{$user->school->slug}/{$collegiate->registration_number}/" . Str::slug($requirement->name) . "_" . time() . ".{$extension}";
+            $result = $this->bunny->uploadFile($file->getPathname(), $remoteName);
+            if ($result['success']) $url = $result['url'];
         }
 
-        $result = $this->bunny->uploadFile($uploadPath, $remoteName);
-
-        if (!$result['success']) {
-            return back()->with('error', 'Error al subir el archivo a la nube. Detalle: ' . $result['error']);
+        if (!$url) {
+            return back()->with('error', 'Error al procesar el archivo principal.');
         }
 
-        // Limpiar archivo temporal si fue creado
-        if ($uploadPath !== $file->getPathname() && file_exists($uploadPath)) {
-            @unlink($uploadPath);
+        // --- PROCESAR DORSO (Si existe) ---
+        if ($request->filled('cropped_image_back')) {
+            $base64_back = $request->input('cropped_image_back');
+            $data_back = explode(',', $base64_back);
+            if (count($data_back) > 1) {
+                $imageDataBack = base64_decode($data_back[1]);
+                $tempPathBack = sys_get_temp_dir() . '/' . uniqid() . '.jpg';
+                file_put_contents($tempPathBack, $imageDataBack);
+                $remoteNameBack = "docs/{$user->school->slug}/{$collegiate->registration_number}/" . Str::slug($requirement->name) . "_back_" . time() . ".jpg";
+                $result = $this->bunny->uploadFile($tempPathBack, $remoteNameBack);
+                if ($result['success']) $url_back = $result['url'];
+            }
+        } elseif ($request->hasFile('document_back')) {
+            $file_back = $request->file('document_back');
+            $extension_back = strtolower($file_back->getClientOriginalExtension());
+            $remoteNameBack = "docs/{$user->school->slug}/{$collegiate->registration_number}/" . Str::slug($requirement->name) . "_back_" . time() . ".{$extension_back}";
+            $result = $this->bunny->uploadFile($file_back->getPathname(), $remoteNameBack);
+            if ($result['success']) $url_back = $result['url'];
         }
 
-        // Registrar o actualizar el documento del colegiado
+        // Buscar o crear el registro
         CollegiateDocument::updateOrCreate(
-            ['collegiate_id' => $collegiate->id, 'compliance_requirement_id' => $requirement->id],
             [
-                'file_url' => $result['url'],
-                'status' => 'pending', // Siempre vuelve a pendiente tras una resubida
-                'admin_notes' => null,   // Limpiar notas anteriores si es una corrección
+                'collegiate_id' => $collegiate->id,
+                'compliance_requirement_id' => $requirement->id,
+            ],
+            [
+                'file_url' => $url,
+                'file_url_back' => $url_back,
+                'status' => 'pending',
+                'admin_notes' => null, // Limpiar notas previas si re-sube
             ]
         );
 
-        return back()->with('success', "¡El documento '{$requirement->name}' ha sido enviado para revisión!");
+        return back()->with('success', 'Documento enviado para revisión.');
     }
 }
