@@ -11,6 +11,7 @@ class BoardMember extends Model
 
     protected $fillable = [
         'school_id',
+        'collegiate_id',
         'department',
         'role',
         'name',
@@ -22,5 +23,10 @@ class BoardMember extends Model
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function collegiate()
+    {
+        return $this->belongsTo(Collegiate::class, 'collegiate_id');
     }
 }
