@@ -98,6 +98,9 @@ Route::post('activar-cuenta/registrar', [App\Http\Controllers\Auth\AccountActiva
 
 Auth::routes();
 
+// Permite cerrar sesión a través de una petición GET (evita errores 405 si el usuario escribe la URL o recarga la página)
+Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout.get');
+
 Route::post('/register/verify', [App\Http\Controllers\Auth\RegisterController::class, 'verify'])->name('register.verify');
 Route::get('/register/finalize', [App\Http\Controllers\Auth\RegisterController::class, 'showFinalizeForm'])->name('register.finalize');
 
