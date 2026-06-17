@@ -251,7 +251,7 @@
                             {{-- Modales de Subida de Documentos (Debe ir fuera de la tabla para que no se rompa el diseño) --}}
                             @foreach($requirements as $req)
                                 @php $doc = $collegiate->documents->where('compliance_requirement_id', $req->id)->first(); @endphp
-                                @if((!$doc || $doc->status != 'approved') && $req->delivery_format != 'physical_only')
+                                @if($req->delivery_format != 'physical_only')
                                     <div class="modal fade upload-req-modal" id="uploadModal{{ $req->id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <form action="{{ route('compliance.upload', $req->id) }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 shadow-lg rounded-4 bg-body req-form">
@@ -860,18 +860,18 @@
 </style>
 <!-- Modal para Cropper.js -->
 <div class="modal fade" id="cropperModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="z-index: 9999;">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header border-bottom-0 pb-0">
                 <h5 class="modal-title fw-bold text-dark">Ajustar / Recortar Imagen</h5>
                 <button type="button" class="btn-close cancel-crop"></button>
             </div>
-            <div class="modal-body text-center p-4">
+            <div class="modal-body text-center p-4 d-flex flex-column" style="min-height: 75vh;">
                 <div class="alert alert-info bg-info bg-opacity-10 text-info border-0 small mb-3">
                     <i class="bi bi-info-circle me-1"></i> Arrastra las esquinas para encuadrar correctamente el documento.
                 </div>
-                <div style="max-height: 60vh; overflow: hidden; background: #000;" class="rounded-3">
-                    <img id="imageToCrop" style="max-width: 100%; display: block;">
+                <div class="flex-grow-1 bg-dark rounded-3 d-flex align-items-center justify-content-center" style="overflow: hidden; width: 100%; min-height: 400px;">
+                    <img id="imageToCrop" style="max-width: 100%; max-height: 100%; display: block;">
                 </div>
                 <div class="mt-3">
                     <button type="button" class="btn btn-outline-secondary rounded-pill me-2 btn-rotate-left"><i class="bi bi-arrow-counterclockwise"></i> Rotar Izq</button>
