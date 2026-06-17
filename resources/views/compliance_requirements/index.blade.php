@@ -61,11 +61,11 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label small fw-bold text-muted">Modalidad de Entrega</label>
-                        <select name="delivery_method" class="form-select rounded-pill border-light-subtle" required>
-                            <option value="digital">Virtual</option>
-                            <option value="physical">Entrega física o presencial</option>
-                            <option value="both">Ambas</option>
+                        <label class="form-label small fw-bold text-muted">Formato de Entrega</label>
+                        <select name="delivery_format" class="form-select rounded-pill border-light-subtle" required>
+                            <option value="digital_single">Un archivo (PDF o Imagen)</option>
+                            <option value="digital_front_back">Frente y Dorso (Ej: DNI)</option>
+                            <option value="physical_only">Solo entrega física (Presencial)</option>
                         </select>
                     </div>
                     <div class="col-md-9 text-end">
@@ -110,10 +110,12 @@
                                     <span class="badge rounded-pill px-3 {{ $typeMap[$requirement->type]['class'] ?? 'bg-light' }} mb-1">
                                         {{ $typeMap[$requirement->type]['label'] ?? 'General' }}
                                     </span>
-                                    @if($requirement->delivery_method == 'physical')
-                                        <div class="mt-1"><span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-person-badge"></i> Físico</span></div>
-                                    @elseif($requirement->delivery_method == 'both')
-                                        <div class="mt-1"><span class="badge bg-info bg-opacity-10 text-info rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-diagram-2"></i> Físico y Virtual</span></div>
+                                    @if($requirement->delivery_format == 'physical_only')
+                                        <div class="mt-1"><span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-person-badge"></i> Físico Presencial</span></div>
+                                    @elseif($requirement->delivery_format == 'digital_front_back')
+                                        <div class="mt-1"><span class="badge bg-info bg-opacity-10 text-info rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-files"></i> Frente y Dorso</span></div>
+                                    @else
+                                        <div class="mt-1"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-file-earmark"></i> Archivo Único</span></div>
                                     @endif
                                 </td>
                                 <td class="py-3">
@@ -197,11 +199,11 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <label class="form-label small fw-bold text-muted">Modalidad de Entrega</label>
-                                                                <select name="delivery_method" class="form-select rounded-pill" required>
-                                                                    <option value="digital" {{ $requirement->delivery_method == 'digital' ? 'selected' : '' }}>Virtual</option>
-                                                                    <option value="physical" {{ $requirement->delivery_method == 'physical' ? 'selected' : '' }}>Entrega física o presencial</option>
-                                                                    <option value="both" {{ $requirement->delivery_method == 'both' ? 'selected' : '' }}>Ambas</option>
+                                                                <label class="form-label small fw-bold text-muted">Formato de Entrega</label>
+                                                                <select name="delivery_format" class="form-select rounded-pill" required>
+                                                                    <option value="digital_single" {{ $requirement->delivery_format == 'digital_single' ? 'selected' : '' }}>Un archivo (PDF o Imagen)</option>
+                                                                    <option value="digital_front_back" {{ $requirement->delivery_format == 'digital_front_back' ? 'selected' : '' }}>Frente y Dorso (Ej: DNI)</option>
+                                                                    <option value="physical_only" {{ $requirement->delivery_format == 'physical_only' ? 'selected' : '' }}>Solo entrega física (Presencial)</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-12 text-end mt-4">

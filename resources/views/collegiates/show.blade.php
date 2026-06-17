@@ -229,9 +229,15 @@
                                                                     @endif
                                                                 @endif
 
-                                                                <button class="btn btn-sm btn-light border rounded-circle ms-1" title="Actualizar Archivo" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $req->id }}"><i class="bi bi-arrow-repeat"></i></button>
+                                                                @if($req->delivery_format != 'physical_only')
+                                                                    <button class="btn btn-sm btn-light border rounded-circle ms-1" title="Actualizar Archivo" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $req->id }}"><i class="bi bi-arrow-repeat"></i></button>
+                                                                @endif
                                                             @else
-                                                                <button class="btn btn-sm btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $req->id }}">Subir <i class="bi bi-cloud-arrow-up ms-1"></i></button>
+                                                                @if($req->delivery_format == 'physical_only')
+                                                                    <button class="btn btn-sm btn-outline-warning rounded-pill px-3 fw-bold" disabled><i class="bi bi-person-badge me-1"></i> Presencial</button>
+                                                                @else
+                                                                    <button class="btn btn-sm btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $req->id }}">Subir <i class="bi bi-cloud-arrow-up ms-1"></i></button>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -245,12 +251,16 @@
                             {{-- Modales de Subida de Documentos (Debe ir fuera de la tabla para que no se rompa el diseño) --}}
                             @foreach($requirements as $req)
                                 @php $doc = $collegiate->documents->where('compliance_requirement_id', $req->id)->first(); @endphp
-                                @if(!$doc || $doc->status != 'approved')
-                                    <div class="modal fade" id="uploadModal{{ $req->id }}" tabindex="-1" aria-labelledby="uploadModalLabel{{ $req->id }}" aria-hidden="true">
+                                @if((!$doc || $doc->status != 'approved') && $req->delivery_format != 'physical_only')
+                                    <div class="modal fade upload-req-modal" id="uploadModal{{ $req->id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
-                                            <form action="{{ route('compliance.upload', $req->id) }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 shadow-lg rounded-4 bg-body">
+                                            <form action="{{ route('compliance.upload', $req->id) }}" method="POST" enctype="multipart/form-data" class="modal-content border-0 shadow-lg rounded-4 bg-body req-form">
                                                 @csrf
                                                 <input type="hidden" name="collegiate_id" value="{{ $collegiate->id }}">
+                                                <!-- Hidden fields to hold cropped base64 if needed -->
+                                                <input type="hidden" name="cropped_image" class="cropped-image-input">
+                                                <input type="hidden" name="cropped_image_back" class="cropped-image-back-input">
+                                                
                                                 <div class="modal-header border-bottom-0 pb-0">
                                                     <h5 class="modal-title fw-bold text-body">Subir Documento</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -259,17 +269,32 @@
                                                     <div class="mb-4 text-center">
                                                         <h6 class="fw-bold">{{ $req->name }}</h6>
                                                     </div>
-                                                    <div class="alert alert-success bg-success bg-opacity-10 text-success border-0 small fw-bold text-center rounded-3 mb-4">
-                                                        <i class="bi bi-shield-check me-2"></i> El archivo se almacenará de forma segura en nuestro sistema.
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-bold small text-muted">Seleccionar Archivo (PDF/IMG)</label>
-                                                        <input type="file" name="document" class="form-control rounded-3 bg-light text-dark" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx">
-                                                    </div>
+                                                    
+                                                    @if($req->delivery_format == 'digital_front_back')
+                                                        <div class="alert alert-info bg-info bg-opacity-10 text-info border-0 small fw-bold text-center rounded-3 mb-4">
+                                                            <i class="bi bi-files me-2"></i> Este documento requiere Frente y Dorso.
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold small text-muted">Seleccionar Frente (PDF/IMG)</label>
+                                                            <input type="file" name="document" class="form-control rounded-3 bg-light text-dark file-input-front" required accept=".pdf,.jpg,.jpeg,.png">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold small text-muted">Seleccionar Dorso (PDF/IMG)</label>
+                                                            <input type="file" name="document_back" class="form-control rounded-3 bg-light text-dark file-input-back" required accept=".pdf,.jpg,.jpeg,.png">
+                                                        </div>
+                                                    @else
+                                                        <div class="alert alert-success bg-success bg-opacity-10 text-success border-0 small fw-bold text-center rounded-3 mb-4">
+                                                            <i class="bi bi-shield-check me-2"></i> El archivo se almacenará de forma segura.
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-bold small text-muted">Seleccionar Archivo (PDF/IMG)</label>
+                                                            <input type="file" name="document" class="form-control rounded-3 bg-light text-dark file-input-front" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx">
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="modal-footer border-top-0 pt-0">
                                                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Subir Archivo</button>
+                                                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm btn-process-upload">Siguiente <i class="bi bi-arrow-right"></i></button>
                                                 </div>
                                             </form>
                                         </div>
@@ -833,4 +858,157 @@
     .card-prestige { transition: all 0.3s ease; }
     .table-hover tbody tr:hover { background: rgba(0,0,0,0.01); }
 </style>
+<!-- Modal para Cropper.js -->
+<div class="modal fade" id="cropperModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="z-index: 9999;">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark">Ajustar / Recortar Imagen</h5>
+                <button type="button" class="btn-close cancel-crop"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div class="alert alert-info bg-info bg-opacity-10 text-info border-0 small mb-3">
+                    <i class="bi bi-info-circle me-1"></i> Arrastra las esquinas para encuadrar correctamente el documento.
+                </div>
+                <div style="max-height: 60vh; overflow: hidden; background: #000;" class="rounded-3">
+                    <img id="imageToCrop" style="max-width: 100%; display: block;">
+                </div>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill me-2 btn-rotate-left"><i class="bi bi-arrow-counterclockwise"></i> Rotar Izq</button>
+                    <button type="button" class="btn btn-outline-secondary rounded-pill btn-rotate-right"><i class="bi bi-arrow-clockwise"></i> Rotar Der</button>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold cancel-crop">Volver</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold confirm-crop">Confirmar Recorte</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let cropper = null;
+    let currentInput = null;
+    let currentForm = null;
+    let isFront = true;
+    const cropperModalEl = document.getElementById('cropperModal');
+    let cropperModal = null;
+    if(cropperModalEl) {
+        cropperModal = new bootstrap.Modal(cropperModalEl);
+    }
+    const imageToCrop = document.getElementById('imageToCrop');
+
+    document.querySelectorAll('.btn-process-upload').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const frontInput = form.querySelector('.file-input-front');
+            const backInput = form.querySelector('.file-input-back');
+
+            // Form validation
+            if (!frontInput.value && !form.querySelector('.cropped-image-input').value) {
+                form.reportValidity();
+                return;
+            }
+            if (backInput && !backInput.value && !form.querySelector('.cropped-image-back-input').value) {
+                form.reportValidity();
+                return;
+            }
+
+            // Process front then back
+            processImage(frontInput, form, true, function() {
+                if (backInput && backInput.files.length) {
+                    processImage(backInput, form, false, function() {
+                        form.submit();
+                    });
+                } else {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    function processImage(input, form, front, onComplete) {
+        if (!input || !input.files || !input.files.length) {
+            onComplete();
+            return;
+        }
+
+        const file = input.files[0];
+        if (!file || !file.type.startsWith('image/')) {
+            onComplete();
+            return;
+        }
+
+        currentInput = input;
+        currentForm = form;
+        isFront = front;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imageToCrop.src = e.target.result;
+            // Hide parent modal
+            const parentModalEl = form.closest('.modal');
+            const parentModal = bootstrap.Modal.getInstance(parentModalEl) || new bootstrap.Modal(parentModalEl);
+            parentModal.hide();
+            
+            cropperModal.show();
+            
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(imageToCrop, {
+                viewMode: 1,
+                autoCropArea: 0.9,
+                background: false
+            });
+        };
+        reader.readAsDataURL(file);
+
+        document.querySelector('.confirm-crop').onclick = function() {
+            const canvas = cropper.getCroppedCanvas({
+                maxWidth: 1600,
+                maxHeight: 1600
+            });
+            const base64 = canvas.toDataURL('image/jpeg', 0.85);
+            
+            if (isFront) {
+                currentForm.querySelector('.cropped-image-input').value = base64;
+                currentInput.value = ''; // clear file to not upload big size
+            } else {
+                currentForm.querySelector('.cropped-image-back-input').value = base64;
+                currentInput.value = '';
+            }
+
+            cropperModal.hide();
+            
+            // Show original modal again
+            const parentModalEl = currentForm.closest('.modal');
+            const parentModal = bootstrap.Modal.getInstance(parentModalEl) || new bootstrap.Modal(parentModalEl);
+            parentModal.show();
+            
+            setTimeout(() => {
+                onComplete();
+            }, 300);
+        };
+    }
+
+    document.querySelectorAll('.cancel-crop').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if(cropperModal) cropperModal.hide();
+            if (currentForm) {
+                const parentModalEl = currentForm.closest('.modal');
+                const parentModal = bootstrap.Modal.getInstance(parentModalEl) || new bootstrap.Modal(parentModalEl);
+                parentModal.show();
+            }
+        });
+    });
+
+    const rotateLeft = document.querySelector('.btn-rotate-left');
+    if(rotateLeft) rotateLeft.addEventListener('click', () => { if(cropper) cropper.rotate(-90); });
+    const rotateRight = document.querySelector('.btn-rotate-right');
+    if(rotateRight) rotateRight.addEventListener('click', () => { if(cropper) cropper.rotate(90); });
+});
+</script>
 @endsection

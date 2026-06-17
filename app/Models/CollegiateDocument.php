@@ -10,6 +10,7 @@ class CollegiateDocument extends Model
         'collegiate_id',
         'compliance_requirement_id',
         'file_url',
+        'file_url_back',
         'status',
         'expiry_date',
         'admin_notes',

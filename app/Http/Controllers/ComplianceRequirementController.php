@@ -33,6 +33,7 @@ class ComplianceRequirementController extends Controller
             'expiry_frequency' => 'required|in:none,semester,year,fixed',
             'expiration_months' => 'nullable|integer|min:1',
             'is_mandatory' => 'boolean',
+            'delivery_format' => 'required|in:digital_single,digital_front_back,physical_only',
         ]);
 
         ComplianceRequirement::create([
@@ -43,7 +44,7 @@ class ComplianceRequirementController extends Controller
             'expiry_frequency' => $request->expiry_frequency,
             'expiration_months' => $request->expiration_months,
             'is_mandatory' => $request->has('is_mandatory'),
-            'delivery_method' => $request->delivery_method ?? 'digital',
+            'delivery_format' => $request->delivery_format,
         ]);
 
         return redirect()->route('compliance_requirements.index')->with('success', "¡Requisito '{$request->name}' creado correctamente!");
@@ -61,6 +62,7 @@ class ComplianceRequirementController extends Controller
             'type' => 'required|in:permanent,perentory,special',
             'expiry_frequency' => 'required|in:none,semester,year,fixed',
             'expiration_months' => 'nullable|integer|min:1',
+            'delivery_format' => 'required|in:digital_single,digital_front_back,physical_only',
         ]);
 
         $requirement->update([
@@ -70,7 +72,7 @@ class ComplianceRequirementController extends Controller
             'expiry_frequency' => $request->expiry_frequency,
             'expiration_months' => $request->expiration_months,
             'is_mandatory' => $request->has('is_mandatory'),
-            'delivery_method' => $request->delivery_method ?? 'digital',
+            'delivery_format' => $request->delivery_format,
         ]);
 
         return redirect()->route('compliance_requirements.index')->with('success', "Actualización de '{$requirement->name}' exitosa.");

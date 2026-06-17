@@ -12,6 +12,7 @@ class ComplianceRequirement extends Model
         'description',
         'type',
         'is_mandatory',
+        'delivery_format',
     ];
 
     /**

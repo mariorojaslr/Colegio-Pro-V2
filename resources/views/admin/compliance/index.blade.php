@@ -55,22 +55,50 @@
                         {{-- Visor de Documento --}}
                         <div class="col-md-5 p-5">
                             <h6 class="text-muted small fw-bold uppercase ls-1 mb-4">Captura del Colegiado</h6>
-                            <div class="bg-dark rounded-5 overflow-hidden shadow-2xl position-relative" style="height: 300px">
-                                @if(Str::endsWith($doc->file_url, '.pdf'))
-                                    <div class="h-100 d-flex flex-column align-items-center justify-content-center text-white p-5 text-center">
-                                        <i class="bi bi-file-earmark-pdf fs-1 text-danger mb-3"></i>
-                                        <p class="fw-bold mb-3">Documento PDF</p>
-                                        <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-light rounded-pill px-4 fw-bold small">Ver Pantalla Completa</a>
+                            
+                            @if($doc->file_url_back)
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="bg-dark rounded-4 overflow-hidden shadow-sm position-relative" style="height: 250px">
+                                            <span class="badge bg-dark position-absolute top-0 start-0 m-2 z-index-2">FRENTE</span>
+                                            <img src="{{ $doc->file_url }}" class="w-100 h-100 object-fit-cover opacity-75" style="transition: opacity 0.3s ease" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                                            <div class="position-absolute bottom-0 end-0 p-2">
+                                                <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-white btn-sm rounded-circle shadow">
+                                                    <i class="bi bi-fullscreen"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                @else
-                                    <img src="{{ $doc->file_url }}" class="w-100 h-100 object-fit-cover opacity-75" style="transition: opacity 0.3s ease" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
-                                    <div class="position-absolute bottom-0 end-0 p-3">
-                                        <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-white btn-sm rounded-circle shadow">
-                                            <i class="bi bi-fullscreen"></i>
-                                        </a>
+                                    <div class="col-6">
+                                        <div class="bg-dark rounded-4 overflow-hidden shadow-sm position-relative" style="height: 250px">
+                                            <span class="badge bg-dark position-absolute top-0 start-0 m-2 z-index-2">DORSO</span>
+                                            <img src="{{ $doc->file_url_back }}" class="w-100 h-100 object-fit-cover opacity-75" style="transition: opacity 0.3s ease" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                                            <div class="position-absolute bottom-0 end-0 p-2">
+                                                <a href="{{ $doc->file_url_back }}" target="_blank" class="btn btn-white btn-sm rounded-circle shadow">
+                                                    <i class="bi bi-fullscreen"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                @endif
-                            </div>
+                                </div>
+                            @else
+                                <div class="bg-dark rounded-5 overflow-hidden shadow-2xl position-relative" style="height: 300px">
+                                    @if(Str::endsWith($doc->file_url, '.pdf'))
+                                        <div class="h-100 d-flex flex-column align-items-center justify-content-center text-white p-5 text-center">
+                                            <i class="bi bi-file-earmark-pdf fs-1 text-danger mb-3"></i>
+                                            <p class="fw-bold mb-3">Documento PDF</p>
+                                            <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-light rounded-pill px-4 fw-bold small">Ver Pantalla Completa</a>
+                                        </div>
+                                    @else
+                                        <img src="{{ $doc->file_url }}" class="w-100 h-100 object-fit-cover opacity-75" style="transition: opacity 0.3s ease" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                                        <div class="position-absolute bottom-0 end-0 p-3">
+                                            <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-white btn-sm rounded-circle shadow">
+                                                <i class="bi bi-fullscreen"></i>
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
 
                         {{-- Acciones de Rechazo --}}
