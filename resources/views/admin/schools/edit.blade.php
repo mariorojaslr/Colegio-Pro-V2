@@ -138,7 +138,7 @@
                     <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold w-100 shadow-lg">
                         Guardar Cambios <i class="bi bi-save ms-2"></i>
                     </button>
-                    <a href="{{ route('admin.impersonate', $school->id) }}" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold w-100 mt-3 border-light opacity-75">
+                    <a href="{{ route('admin.impersonate', $school->id) }}" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold w-100 mt-3 border-light opacity-75">
                          Entrar como Admin <i class="bi bi-eye ms-2"></i>
                     </a>
                 </div>
