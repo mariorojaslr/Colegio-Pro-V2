@@ -116,9 +116,16 @@
                 <div class="card border-0 shadow-sm rounded-4 p-5 mb-4 bg-white">
                     <h5 class="fw-bold mb-4">Resumen de Uso</h5>
                     <ul class="list-unstyled d-grid gap-3 small">
-                        <li class="d-flex justify-content-between">
-                            <span class="text-muted">Plan Actual:</span>
-                            <span class="badge-plan plan-{{ $school->plan_category }}">{{ strtoupper($school->plan_category) }}</span>
+                        <li class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">Plan Asignado:</span>
+                            <select name="subscription_plan_id" class="form-select form-select-sm w-auto border-light shadow-none fw-bold" style="background-color: var(--bs-light);">
+                                <option value="">Seleccionar plan...</option>
+                                @foreach($plans as $plan)
+                                    <option value="{{ $plan->id }}" {{ ($school->activeSubscription && $school->activeSubscription->subscription_plan_id == $plan->id) ? 'selected' : '' }}>
+                                        {{ $plan->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </li>
                         <li class="d-flex justify-content-between">
                             <span class="text-muted">Usuarios:</span>

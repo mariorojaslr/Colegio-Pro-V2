@@ -139,6 +139,22 @@ class SchoolController extends Controller
             'twitter_url' => $request->twitter_url,
         ]);
 
+        if ($request->has('subscription_plan_id')) {
+            $plan = SubscriptionPlan::find($request->subscription_plan_id);
+            if ($plan) {
+                // Actualizar la categoría base
+                $school->update(['plan_category' => $plan->slug]);
+                
+                // Actualizar o crear la suscripción activa
+                $subscription = $school->activeSubscription ?? new Subscription(['school_id' => $school->id]);
+                $subscription->subscription_plan_id = $plan->id;
+                $subscription->status = 'active';
+                $subscription->starts_at = $subscription->starts_at ?? now();
+                $subscription->expires_at = $subscription->expires_at ?? now()->addYears(10);
+                $subscription->save();
+            }
+        }
+
         return redirect()->route('admin.dashboard')->with('success', 'Configuración de colegio actualizada.');
     }
 }
