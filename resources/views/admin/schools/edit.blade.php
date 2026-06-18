@@ -134,6 +134,37 @@
                     </ul>
                 </div>
 
+                {{-- Acuerdos Particulares (Facturación) --}}
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <h5 class="fw-bold mb-3 d-flex align-items-center">
+                        <i class="bi bi-cash-coin me-2 text-success"></i> Acuerdo de Facturación
+                    </h5>
+                    <p class="small text-muted mb-4">Aplica bonificaciones especiales o fija un precio que reemplace el costo del plan base.</p>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small uppercase mb-1 ls-1">Descuento (%)</label>
+                        <div class="input-group input-group-sm">
+                            <input type="number" name="discount_percent" class="form-control border-light shadow-none" placeholder="Ej: 100 para bonificado total" value="{{ $school->activeSubscription->discount_percent ?? '' }}" min="0" max="100">
+                            <span class="input-group-text bg-light text-muted border-light">%</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small uppercase mb-1 ls-1">Precio Fijo Especial</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-light text-muted border-light">$</span>
+                            <input type="number" step="0.01" name="custom_price" class="form-control border-light shadow-none" placeholder="Fija un monto exacto" value="{{ $school->activeSubscription->custom_price ?? '' }}">
+                        </div>
+                        <div class="form-text small" style="font-size: 0.75rem;">Deja vacío para usar el precio original del plan.</div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label fw-bold text-muted small uppercase mb-1 ls-1">Vencimiento del Beneficio</label>
+                        <input type="datetime-local" name="discount_expires_at" class="form-control form-control-sm border-light shadow-none" value="{{ $school->activeSubscription && $school->activeSubscription->discount_expires_at ? $school->activeSubscription->discount_expires_at->format('Y-m-d\TH:i') : '' }}">
+                        <div class="form-text small" style="font-size: 0.75rem;">Si no pones fecha, el acuerdo es por tiempo indefinido.</div>
+                    </div>
+                </div>
+
                 <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
                     <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold w-100 shadow-lg">
                         Guardar Cambios <i class="bi bi-save ms-2"></i>

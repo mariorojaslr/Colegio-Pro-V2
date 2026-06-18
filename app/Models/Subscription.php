@@ -12,11 +12,15 @@ class Subscription extends Model
         'status',
         'starts_at',
         'expires_at',
+        'custom_price',
+        'discount_percent',
+        'discount_expires_at',
     ];
 
     protected $casts = [
         'starts_at' => 'datetime',
         'expires_at' => 'datetime',
+        'discount_expires_at' => 'datetime',
     ];
 
     public function school()
@@ -27,5 +31,24 @@ class Subscription extends Model
     public function plan()
     {
         return $this->belongsTo(SubscriptionPlan::class, 'subscription_plan_id');
+    }
+
+    public function getFinalPriceAttribute()
+    {
+        // 1. Verificar si el acuerdo/bonificación expiró
+        if ($this->discount_expires_at && $this->discount_expires_at->isPast()) {
+            return $this->plan ? $this->plan->price : 0;
+        }
+
+        // 2. Determinar precio base (precio custom o precio del plan)
+        $basePrice = $this->custom_price !== null ? $this->custom_price : ($this->plan ? $this->plan->price : 0);
+
+        // 3. Aplicar descuento porcentual si lo hay
+        if ($this->discount_percent > 0) {
+            $discountAmount = $basePrice * ($this->discount_percent / 100);
+            $basePrice = max(0, $basePrice - $discountAmount);
+        }
+
+        return $basePrice;
     }
 }

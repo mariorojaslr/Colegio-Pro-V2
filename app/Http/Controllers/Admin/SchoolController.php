@@ -151,6 +151,12 @@ class SchoolController extends Controller
                 $subscription->status = 'active';
                 $subscription->starts_at = $subscription->starts_at ?? now();
                 $subscription->expires_at = $subscription->expires_at ?? now()->addYears(10);
+                
+                // Acuerdos particulares
+                $subscription->custom_price = $request->custom_price;
+                $subscription->discount_percent = $request->discount_percent;
+                $subscription->discount_expires_at = $request->discount_expires_at;
+                
                 $subscription->save();
             }
         }
