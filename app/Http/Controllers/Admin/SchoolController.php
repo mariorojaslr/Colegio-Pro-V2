@@ -117,7 +117,6 @@ class SchoolController extends Controller
             'name' => 'required|string|max:255',
             'slug' => "required|string|unique:schools,slug,{$school->id}|max:255",
             'custom_domain' => "nullable|string|unique:schools,custom_domain,{$school->id}|max:255",
-            'is_active' => 'boolean',
         ]);
 
         $school->update([
@@ -153,9 +152,9 @@ class SchoolController extends Controller
                 $subscription->expires_at = $subscription->expires_at ?? now()->addYears(10);
                 
                 // Acuerdos particulares
-                $subscription->custom_price = $request->custom_price;
-                $subscription->discount_percent = $request->discount_percent;
-                $subscription->discount_expires_at = $request->discount_expires_at;
+                $subscription->custom_price = $request->filled('custom_price') ? $request->custom_price : null;
+                $subscription->discount_percent = $request->filled('discount_percent') ? $request->discount_percent : null;
+                $subscription->discount_expires_at = $request->filled('discount_expires_at') ? $request->discount_expires_at : null;
                 
                 $subscription->save();
             }

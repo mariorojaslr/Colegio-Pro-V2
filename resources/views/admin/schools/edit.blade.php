@@ -16,6 +16,15 @@
 
     <form method="POST" action="{{ route('admin.schools.update', $school) }}">
         @csrf
+        @if ($errors->any())
+            <div class="alert alert-danger shadow-sm border-0 rounded-4 mb-4">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="row g-4">
             {{-- Datos de la Institución --}}
             <div class="col-lg-8">
