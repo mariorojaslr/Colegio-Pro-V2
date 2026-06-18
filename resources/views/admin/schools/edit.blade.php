@@ -118,7 +118,7 @@
                     <ul class="list-unstyled d-grid gap-3 small">
                         <li class="d-flex justify-content-between align-items-center mb-2">
                             <span class="text-muted">Plan Asignado:</span>
-                            <select name="subscription_plan_id" class="form-select form-select-sm w-auto border-light shadow-none fw-bold" style="background-color: var(--bs-light);">
+                            <select name="subscription_plan_id" class="form-select form-select-sm w-auto border-light shadow-none fw-bold text-dark bg-white">
                                 <option value="">Seleccionar plan...</option>
                                 @foreach($plans as $plan)
                                     <option value="{{ $plan->id }}" {{ ($school->activeSubscription && $school->activeSubscription->subscription_plan_id == $plan->id) ? 'selected' : '' }}>
