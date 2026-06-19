@@ -97,15 +97,14 @@ class CollegiatesImport implements ToCollection
                 $dni = $dniIdx !== null ? (trim((string)$rowArray[$dniIdx]) ?: null) : null;
 
                 // Find or create User
-                $user = User::where('email', $email)->orWhere('document_number', $dni)->first();
+                $user = $email ? User::where('email', $email)->first() : null;
                 if (!$user && $email) {
                     $user = User::create([
                         'name' => $firstName . ' ' . $lastName,
                         'email' => $email,
                         'password' => Hash::make($dni ?? '12345678'),
                         'role' => 'COLEGIADO',
-                        'school_id' => $this->school_id,
-                        'document_number' => $dni
+                        'school_id' => $this->school_id
                     ]);
                 }
 
