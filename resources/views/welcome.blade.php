@@ -51,6 +51,22 @@
         .hero-overlay {
             background: linear-gradient(135deg, {{ $primary }}dd, {{ $secondary }}dd);
         }
+        
+        @keyframes bounceBot {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+        
+        #chatbot-trigger {
+            animation: bounceBot 3s infinite ease-in-out;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        #chatbot-trigger:hover {
+            animation: none;
+            transform: scale(1.15) rotate(-5deg);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2) !important;
+        }
     </style>
 </head>
 <body>
