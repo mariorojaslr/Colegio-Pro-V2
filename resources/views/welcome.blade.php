@@ -407,7 +407,10 @@
     <div id="chatbot-widget" class="position-fixed" style="bottom: 20px; right: 20px; z-index: 1050; width: 350px; display: none;">
         <div class="card border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
-                <div class="fw-bold"><i class="bi bi-robot me-2"></i> Asistente Virtual</div>
+                <div class="fw-bold d-flex align-items-center">
+                    <img src="{{ asset('media/lili_avatar.png') }}" alt="Bot" class="me-2" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: white;">
+                    Asistente Virtual
+                </div>
                 <button type="button" class="btn-close btn-close-white" onclick="toggleChatbot()"></button>
             </div>
             <div class="card-body bg-light" id="chatbot-messages" style="height: 300px; overflow-y: auto;">
@@ -429,7 +432,7 @@
     </div>
     
     <button id="chatbot-trigger" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center" style="bottom: 20px; right: 20px; z-index: 1040; width: 60px; height: 60px;" onclick="toggleChatbot()">
-        <i class="bi bi-chat-dots-fill fs-3"></i>
+        <img src="{{ asset('media/lili_avatar.png') }}" alt="Bot" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
     </button>
 
     <script>
