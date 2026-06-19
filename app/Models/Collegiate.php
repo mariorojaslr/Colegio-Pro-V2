@@ -32,6 +32,9 @@ class Collegiate extends Model
         'workplaces_info',
         'practicing_since_year',
         'billing_profile',
+        'historical_debt',
+        'historical_debt_months',
+        'observations',
     ];
 
     protected $casts = [
