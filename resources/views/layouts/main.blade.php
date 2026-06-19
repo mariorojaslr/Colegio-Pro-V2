@@ -213,7 +213,7 @@
     @endif
 
     <nav class="navbar navbar-expand-lg py-2 sticky-top bg-white border-bottom border-light shadow-sm" style="transition: all 0.4s ease; z-index: 1050;">
-        <div class="container">
+        <div class="container-fluid px-4">
             <a class="navbar-brand d-flex align-items-center" href="{{ auth()->check() ? route('home') : url('/') }}">
                 @php
                     $isOwnerView = auth()->check() && auth()->user()->isOwner() && !session()->has('impersonator_id');
@@ -308,6 +308,8 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
                             <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('home') }}"><i class="bi bi-person me-2"></i> Perfil</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-key me-2 text-warning"></i> Cambiar Contraseña</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-headset me-2 text-info"></i> Soporte / Generar Ticket</a></li>
                             <li><hr class="dropdown-divider opacity-50"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
@@ -323,7 +325,7 @@
             </div>
 
             <div class="collapse navbar-collapse order-3" id="navContent">
-                <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0">
                     @auth
                         @php $currentRoute = request()->route()->getName(); @endphp
                         {{-- Solo mostramos el menú interno si NO estamos en la Landing Page pública --}}
@@ -345,6 +347,7 @@
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.pages.index') }}"><i class="bi bi-file-earmark-richtext me-2 text-primary"></i>Páginas Dinámicas</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.menus.index') }}"><i class="bi bi-list-nested me-2 text-primary"></i>Menús y Navegación</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.sliders.index') }}"><i class="bi bi-images me-2 text-primary"></i>Sliders y Banners</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.chatbot.index') }}"><i class="bi bi-robot me-2 text-primary"></i>Bot (IA)</a></li>
                                     </ul>
                                 </li>
 
@@ -372,7 +375,10 @@
                                         AUDITORÍA
                                     </a>
                                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownDocs">
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><h6 class="dropdown-header text-primary fw-bold">Auditoría</h6></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.compliance.index') }}">Auditoría de Legajos</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.certificates.index') }}">Solicitudes de Certificados</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('compliance_requirements.index') }}">Config. Requisitos</a></li>
                                     </ul>
                                 </li>

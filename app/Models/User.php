@@ -37,6 +37,11 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
+    public function collegiate()
+    {
+        return $this->hasOne(Collegiate::class);
+    }
+
     public function enrolledLessons()
     {
         return $this->belongsToMany(Lesson::class)->withPivot('status', 'paid_amount')->withTimestamps();

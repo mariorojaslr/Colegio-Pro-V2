@@ -310,12 +310,39 @@ class CollegiateController extends Controller
      */
     public function export()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
 
-        $fileName = 'padron_profesional_' . date('Y-m-d_H-i-s') . '.xlsx';
-        
+        $fileName = 'padron_export_' . date('Y_m_d_His') . '.xlsx';
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CollegiatesExport($user->school_id), $fileName);
+    }
+
+    /**
+     * Descarga plantilla en blanco
+     */
+    public function downloadTemplate()
+    {
+        $headers = [
+            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+            'Content-type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=plantilla_padron.csv',
+            'Expires'             => '0',
+            'Pragma'              => 'public'
+        ];
+
+        $list = [
+            ['matricula', 'nombre', 'apellido', 'dni', 'email', 'telefono', 'estado']
+        ];
+
+        $callback = function() use ($list) {
+            $FH = fopen('php://output', 'w');
+            foreach ($list as $row) {
+                fputcsv($FH, $row);
+            }
+            fclose($FH);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**

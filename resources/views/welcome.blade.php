@@ -402,5 +402,91 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {{-- Chatbot Widget --}}
+    <div id="chatbot-widget" class="position-fixed" style="bottom: 20px; right: 20px; z-index: 1050; width: 350px; display: none;">
+        <div class="card border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                <div class="fw-bold"><i class="bi bi-robot me-2"></i> Asistente Virtual</div>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleChatbot()"></button>
+            </div>
+            <div class="card-body bg-light" id="chatbot-messages" style="height: 300px; overflow-y: auto;">
+                <div class="d-flex mb-3">
+                    <div class="bg-white text-dark p-3 rounded-4 shadow-sm" style="max-width: 85%;">
+                        Hola 👋 Soy el asistente virtual del {{ $school->name ?? 'Colegio' }}. ¿En qué te puedo ayudar hoy?
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 py-3">
+                <form id="chatbot-form" class="d-flex gap-2" onsubmit="sendChatMessage(event)">
+                    <input type="text" id="chatbot-input" class="form-control rounded-pill bg-light border-0 px-3" placeholder="Escribe tu consulta..." required>
+                    <button type="submit" class="btn btn-primary rounded-circle" style="width: 40px; height: 40px;">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <button id="chatbot-trigger" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center" style="bottom: 20px; right: 20px; z-index: 1040; width: 60px; height: 60px;" onclick="toggleChatbot()">
+        <i class="bi bi-chat-dots-fill fs-3"></i>
+    </button>
+
+    <script>
+        function toggleChatbot() {
+            const widget = document.getElementById('chatbot-widget');
+            const trigger = document.getElementById('chatbot-trigger');
+            if (widget.style.display === 'none') {
+                widget.style.display = 'block';
+                trigger.style.display = 'none';
+            } else {
+                widget.style.display = 'none';
+                trigger.style.display = 'flex';
+            }
+        }
+
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('chatbot-messages');
+            
+            // Append user message
+            messagesDiv.innerHTML += `
+                <div class="d-flex mb-3 justify-content-end">
+                    <div class="bg-primary text-white p-3 rounded-4 shadow-sm" style="max-width: 85%;">${message}</div>
+                </div>
+            `;
+            
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Fetch response
+            try {
+                const response = await fetch('{{ route("chatbot.ask") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ question: message, school_id: '{{ $school->id ?? 1 }}' })
+                });
+
+                const data = await response.json();
+                
+                // Append bot message
+                messagesDiv.innerHTML += `
+                    <div class="d-flex mb-3">
+                        <div class="bg-white text-dark p-3 rounded-4 shadow-sm border" style="max-width: 85%;">${data.answer}</div>
+                    </div>
+                `;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
 </body>
 </html>

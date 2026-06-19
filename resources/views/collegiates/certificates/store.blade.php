@@ -53,7 +53,13 @@
                             <button type="submit" class="btn btn-primary rounded-pill w-100 shadow-sm fw-bold">Solicitar y Generar</button>
                         </form>
                     @else
-                        <button disabled class="btn btn-secondary rounded-pill w-100 opacity-50">Bloqueado ({{ $reason }})</button>
+                        <form action="{{ route('collegiate.certificates.purchase', $type) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="request_exception" value="1">
+                            <button type="submit" class="btn btn-outline-warning rounded-pill w-100 shadow-sm fw-bold" title="Pedir autorización especial">
+                                Solicitar Excepción
+                            </button>
+                        </form>
                     @endif
                 </div>
             </div>
@@ -81,20 +87,28 @@
                 <tbody>
                     @forelse($myCertificates as $cert)
                     <tr>
-                        <td class="px-4 py-3 fw-medium">{{ $cert->certificateType->name ?? 'Trámite Oficial' }}</td>
-                        <td class="px-4 py-3">{{ $cert->issue_date->format('d/m/Y') }}</td>
+                        <td class="px-4 py-3 fw-medium">{{ $cert->type->name ?? 'Trámite Oficial' }}
+                            @if($cert->status === 'pending')
+                                <span class="badge bg-warning text-dark ms-2">Pendiente de Aprobación</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3">{{ $cert->issued_at->format('d/m/Y') }}</td>
                         <td class="px-4 py-3">
-                            @if($cert->expiration_date)
-                                <span class="{{ $cert->expiration_date->isPast() ? 'text-danger fw-bold' : '' }}">
-                                    {{ $cert->expiration_date->format('d/m/Y') }}
+                            @if($cert->expires_at)
+                                <span class="{{ $cert->expires_at->isPast() ? 'text-danger fw-bold' : '' }}">
+                                    {{ $cert->expires_at->format('d/m/Y') }}
                                 </span>
                             @else
                                 Permanente
                             @endif
                         </td>
-                        <td class="px-4 py-3 text-muted font-monospace small">{{ $cert->validation_code }}</td>
+                        <td class="px-4 py-3 text-muted font-monospace small">{{ $cert->code }}</td>
                         <td class="px-4 py-3 text-center">
-                            <a href="#" class="btn btn-sm btn-outline-dark rounded-pill px-3">Descargar PDF</a>
+                            @if($cert->status === 'active' || $cert->status === 'valid')
+                                <a href="{{ route('collegiate.certificates.download', $cert) }}" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill px-3"><i class="bi bi-download me-1"></i> Descargar</a>
+                            @else
+                                <span class="text-muted small">No disponible</span>
+                            @endif
                         </td>
                     </tr>
                     @empty

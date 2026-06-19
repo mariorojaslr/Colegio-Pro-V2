@@ -48,11 +48,14 @@ Route::get('/force-admin-mario', function() {
 });
 
 // Rutas Públicas de Validación (Escaneo de QR)
+Route::get('/validador/{uuid}', [\App\Http\Controllers\ValidadorController::class, 'validateQR'])->name('validador.verify');
 Route::get('/v/{uuid}', [\App\Http\Controllers\ValidationController::class, 'show'])->name('validation.show');
 Route::post('/v/{uuid}/burn', [\App\Http\Controllers\ValidationController::class, 'burn'])->name('validation.burn');
 
+Route::post('/chatbot/ask', [\App\Http\Controllers\ChatbotController::class, 'ask'])->name('chatbot.ask');
+
 Route::get('/', [\App\Http\Controllers\PublicLandingController::class, 'index']);
-Route::get('/p/{slug}', [\App\Http\Controllers\PublicLandingController::class, 'showPage'])->name('public.page');
+Route::get('/noticias/{slug}', [\App\Http\Controllers\PublicNewsController::class, 'show'])->name('public.news.show');
 
 // Demo Registration
 Route::get('/demo/unirse', [App\Http\Controllers\DemoRegistrationController::class, 'show'])->name('demo.register');
@@ -151,6 +154,15 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::get('/admin/global-billing', [\App\Http\Controllers\Admin\GlobalBillingController::class, 'index'])->name('admin.billing.global');
 
     // Gestión Global de Academia (Cursos/Lecciones)
+    Route::resource('admin/cms/menus', \App\Http\Controllers\Admin\MenuController::class)->names('admin.cms.menus');
+    Route::resource('admin/cms/sliders', \App\Http\Controllers\Admin\SliderController::class)->names('admin.cms.sliders');
+
+    // Chatbot Knowledge
+    Route::get('admin/chatbot', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'index'])->name('admin.chatbot.index');
+    Route::post('admin/chatbot', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'store'])->name('admin.chatbot.store');
+    Route::put('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'update'])->name('admin.chatbot.update');
+    Route::delete('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'destroy'])->name('admin.chatbot.destroy');
+
     Route::resource('/admin/academy', \App\Http\Controllers\Admin\LessonController::class)->names('admin.academy');
     Route::resource('/admin/exams', \App\Http\Controllers\Admin\ExamController::class)->names('admin.exams');
     Route::post('/admin/exams/{exam}/questions', [\App\Http\Controllers\Admin\ExamController::class, 'storeQuestion'])->name('admin.exams.questions.store');
@@ -208,8 +220,9 @@ Route::middleware(['auth'])->group(function () {
     // Gestión de Colegiados (Admin de Colegio)
     Route::get('/colegiados', [\App\Http\Controllers\CollegiateController::class, 'index'])->name('collegiates.index');
     Route::get('/colegiados/exportar', [\App\Http\Controllers\CollegiateController::class, 'export'])->name('collegiates.export');
-    Route::get('/colegiados/importar', [\App\Http\Controllers\CollegiateController::class, 'import'])->name('collegiates.import');
-    Route::post('/colegiados/importar', [\App\Http\Controllers\CollegiateController::class, 'storeImport'])->name('collegiates.import.store');
+    Route::get('/padron/importar', [\App\Http\Controllers\CollegiateController::class, 'import'])->name('collegiates.import');
+    Route::get('/padron/importar/plantilla', [\App\Http\Controllers\CollegiateController::class, 'downloadTemplate'])->name('collegiates.import.template');
+    Route::post('/padron/importar', [\App\Http\Controllers\CollegiateController::class, 'storeImport'])->name('collegiates.import.store');
     Route::get('/colegiados/{collegiate}', [\App\Http\Controllers\CollegiateController::class, 'show'])->name('collegiates.show');
     Route::post('/collegiates/{collegiate}/refinance', [\App\Http\Controllers\CollegiateController::class, 'refinance'])->name('collegiates.refinance');
     Route::post('/collegiates/{collegiate}/sanctions', [\App\Http\Controllers\CollegiateController::class, 'storeSanction'])->name('collegiates.sanctions.store');
@@ -232,8 +245,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/requisitos/{requirement}', [\App\Http\Controllers\ComplianceRequirementController::class, 'update'])->name('compliance_requirements.update');
     Route::delete('/requisitos/{requirement}', [\App\Http\Controllers\ComplianceRequirementController::class, 'destroy'])->name('compliance_requirements.destroy');
 
-    // Auditoría de Legajos (Revisión de Documentación)
-    Route::get('/revision-documentos', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'index'])->name('admin.compliance.index');
+    // Auditoría y Legajos
+    Route::get('/admin/compliance', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'index'])->name('admin.compliance.index');
+    Route::get('/admin/certificates', [\App\Http\Controllers\Admin\CertificateController::class, 'index'])->name('admin.certificates.index');
+    Route::put('/admin/certificates/{certificate}/approve', [\App\Http\Controllers\Admin\CertificateController::class, 'approve'])->name('admin.certificates.approve');
+    Route::put('/admin/certificates/{certificate}/reject', [\App\Http\Controllers\Admin\CertificateController::class, 'reject'])->name('admin.certificates.reject');
     Route::post('/revision-documentos/{document}/aprobar', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'approve'])->name('admin.compliance.approve');
     Route::post('/revision-documentos/{document}/rechazar', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'reject'])->name('admin.compliance.reject');
 
@@ -297,6 +313,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/mi-legajo/subir/{requirement}', [\App\Http\Controllers\ComplianceController::class, 'upload'])->name('compliance.upload');
 
     // Portal del Colegiado: Trámites y Certificados (Comprar)
-    Route::get('/mis-tramites', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'index'])->name('collegiate.certificates.store');
-    Route::post('/mis-tramites/comprar/{type}', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'purchase'])->name('collegiate.certificates.purchase');
+    Route::get('/tramites', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'index'])->name('collegiates.certificates.store');
+    Route::post('/tramites/{type}/purchase', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'purchase'])->name('collegiates.certificates.purchase');
+    Route::get('/tramites/descargar/{certificate}', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'download'])->name('collegiates.certificates.download');
 });

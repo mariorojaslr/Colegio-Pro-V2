@@ -7,8 +7,11 @@
             <h1 class="display-5 fw-bold mb-1" style="font-family: 'Outfit', sans-serif">Importación <span class="text-primary">Masiva</span></h1>
             <p class="text-muted fs-5">Cargue su padrón de colegiados desde archivos externos de forma segura.</p>
         </div>
-        <div class="col-auto">
-            <a href="{{ route('collegiates.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+        <div class="col-auto d-flex gap-2">
+            <a href="{{ route('collegiates.import.template') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold shadow-sm">
+                <i class="bi bi-cloud-download me-2"></i> Descargar Plantilla CSV
+            </a>
+            <a href="{{ route('collegiates.index') }}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
                 <i class="bi bi-arrow-left me-2"></i> Volver al Padrón
             </a>
         </div>

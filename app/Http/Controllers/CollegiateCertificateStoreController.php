@@ -7,6 +7,8 @@ use App\Models\CertificateType;
 use App\Models\ProfessionalCertificate;
 use App\Models\EthicsSanction;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class CollegiateCertificateStoreController extends Controller
 {
@@ -45,6 +47,9 @@ class CollegiateCertificateStoreController extends Controller
 
         if ($type->school_id !== $user->school_id) abort(403);
 
+        $exceptionRequested = $request->input('request_exception') == '1';
+        $blockedReason = null;
+
         // Check rules
         if ($type->requires_no_sanctions) {
             $hasSanctions = EthicsSanction::where('collegiate_id', $collegiate->id)
@@ -54,15 +59,30 @@ class CollegiateCertificateStoreController extends Controller
                                             ->orWhere('end_date', '>', now());
                                       })->exists();
             if ($hasSanctions) {
-                return back()->with('error', 'No puede solicitar este trámite porque posee sanciones éticas activas.');
+                $blockedReason = 'Sanciones éticas activas';
             }
         }
 
-        if ($type->requires_clearance) {
-            // Check debt
-            $hasDebt = false; // TODO: Implement real debt check
-            if ($hasDebt) {
-                return back()->with('error', 'No puede solicitar este trámite porque posee deuda activa.');
+        if (!$blockedReason && $type->requires_clearance) {
+            // Check debt using our existing compliance system
+            $collegiate->updateComplianceStatus();
+            if (!$collegiate->is_fees_compliant) {
+                $blockedReason = 'Deuda activa';
+            }
+        }
+
+        if ($blockedReason) {
+            if ($exceptionRequested) {
+                ProfessionalCertificate::create([
+                    'collegiate_id' => $collegiate->id,
+                    'certificate_type_id' => $type->id,
+                    'issued_at' => now(),
+                    'expires_at' => $type->validity_days ? now()->addDays($type->validity_days) : null,
+                    'status' => 'pending',
+                ]);
+                return back()->with('success', "Se ha generado una solicitud de excepción debido a: {$blockedReason}. Un administrador evaluará su caso para autorizar el certificado.");
+            } else {
+                return back()->with('error', "No puede solicitar este trámite porque posee {$blockedReason}.");
             }
         }
 
@@ -78,12 +98,27 @@ class CollegiateCertificateStoreController extends Controller
         ProfessionalCertificate::create([
             'collegiate_id' => $collegiate->id,
             'certificate_type_id' => $type->id,
-            'issue_date' => now(),
-            'expiration_date' => $type->validity_days ? now()->addDays($type->validity_days) : null,
-            'validation_code' => strtoupper(Str::random(10)),
+            'issued_at' => now(),
+            'expires_at' => $type->validity_days ? now()->addDays($type->validity_days) : null,
             'status' => $status,
         ]);
 
         return back()->with('success', 'Trámite generado exitosamente. Puede descargarlo a continuación.');
+    }
+
+    public function download(ProfessionalCertificate $certificate)
+    {
+        $user = auth()->user();
+        if ($certificate->collegiate->user_id !== $user->id && $user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) {
+            abort(403);
+        }
+
+        $school = $certificate->collegiate->school;
+        $collegiate = $certificate->collegiate;
+
+        $pdf = Pdf::loadView('pdf.certificate', compact('certificate', 'school', 'collegiate'));
+        $pdf->setPaper('A4', 'landscape');
+
+        return $pdf->download('Certificado_' . $certificate->code . '.pdf');
     }
 }
