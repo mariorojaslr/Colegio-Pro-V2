@@ -302,7 +302,7 @@ class CollegiateController extends Controller
             
             $msg = "¡Proceso terminado! Se procesaron " . $import->importedCount . " colegiados correctamente.";
             if (count($import->errors) > 0) {
-                $msg .= " Hubo " . count($import->errors) . " errores menores (filas ignoradas).";
+                $msg .= " Hubo " . count($import->errors) . " errores menores. Ej: " . $import->errors[0];
             }
             return redirect()->route('collegiates.index')->with('success', $msg);
         } catch (\Exception $e) {
