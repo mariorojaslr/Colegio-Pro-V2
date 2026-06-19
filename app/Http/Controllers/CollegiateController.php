@@ -297,12 +297,17 @@ class CollegiateController extends Controller
         ]);
 
         try {
-            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\CollegiatesImport($user->school_id), $request->file('file'));
+            $import = new \App\Imports\CollegiatesImport($user->school_id);
+            \Maatwebsite\Excel\Facades\Excel::import($import, $request->file('file'));
+            
+            $msg = "¡Proceso terminado! Se procesaron " . $import->importedCount . " colegiados correctamente.";
+            if (count($import->errors) > 0) {
+                $msg .= " Hubo " . count($import->errors) . " errores menores (filas ignoradas).";
+            }
+            return redirect()->route('collegiates.index')->with('success', $msg);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', "Error en importación masiva: " . $e->getMessage());
         }
-
-        return redirect()->route('collegiates.index')->with('success', "¡Proceso terminado! Se ha importado/actualizado el padrón exitosamente.");
     }
 
     /**

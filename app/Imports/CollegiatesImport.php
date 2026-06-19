@@ -5,12 +5,11 @@ namespace App\Imports;
 use App\Models\Collegiate;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
-class CollegiatesImport implements ToCollection, WithChunkReading
+class CollegiatesImport implements ToCollection
 {
     protected $school_id;
 
@@ -18,6 +17,9 @@ class CollegiatesImport implements ToCollection, WithChunkReading
     {
         $this->school_id = $school_id;
     }
+
+    public $errors = [];
+    public $importedCount = 0;
 
     public function collection(Collection $rows)
     {
@@ -156,15 +158,14 @@ class CollegiatesImport implements ToCollection, WithChunkReading
                         'observations' => $finalObservations,
                     ]
                 );
+                $this->importedCount++;
+
             } catch (\Exception $e) {
-                Log::error('Error importando colegiado: ' . $e->getMessage() . ' Row: ' . json_encode($rowArray));
+                $errorMsg = 'Fila ' . ($index + 1) . ': ' . $e->getMessage();
+                Log::error('Error importando colegiado: ' . $errorMsg . ' Row: ' . json_encode($rowArray));
+                $this->errors[] = $errorMsg;
                 continue;
             }
         }
-    }
-
-    public function chunkSize(): int
-    {
-        return 50;
     }
 }
