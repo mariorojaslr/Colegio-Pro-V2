@@ -212,6 +212,52 @@
 
     <main class="container py-5" style="margin-top: -50px; position: relative; z-index: 10;">
         
+        <!-- STATS & SERVICES -->
+        <div class="row g-4 mb-5 pb-5 border-bottom pt-4 bg-white p-4 shadow-sm">
+            <div class="col-12 mb-4 text-center">
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 oswald" style="color: var(--accent);">+350</h2>
+                        <p class="text-muted small mt-2 fw-bold">Profesionales Matriculados</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 oswald" style="color: var(--accent);">20+</h2>
+                        <p class="text-muted small mt-2 fw-bold">Años de Trayectoria</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 oswald" style="color: var(--accent);">18</h2>
+                        <p class="text-muted small mt-2 fw-bold">Localidades</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 oswald" style="color: var(--accent);">12</h2>
+                        <p class="text-muted small mt-2 fw-bold">Convenios</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card-arq p-4 text-center border">
+                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--accent);">badge</span>
+                    <h4 class="oswald mb-2" style="font-size: 1.2rem;">Matrícula Habilitante</h4>
+                    <p class="text-muted small mb-0">Verificá la habilitación legal de cualquier profesional.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-arq p-4 text-center border">
+                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--accent);">assignment</span>
+                    <h4 class="oswald mb-2" style="font-size: 1.2rem;">Trámites</h4>
+                    <p class="text-muted small mb-0">Información para iniciar o renovar tu matriculación.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-arq p-4 text-center border">
+                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--accent);">support_agent</span>
+                    <h4 class="oswald mb-2" style="font-size: 1.2rem;">Atención</h4>
+                    <p class="text-muted small mb-0">Consultas presenciales y asistencia administrativa.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- INSTITUCIONAL -->
         <div id="quienes-somos" class="row mb-5 pb-5 border-bottom pt-5">
             <div class="col-lg-5 mb-4">
@@ -250,7 +296,8 @@
                         @endif
                         <div class="card-arq-body">
                             <small class="text-muted fw-bold">{{ $news->published_at->format('d M, Y') }}</small>
-                            <h4 class="mt-2 mb-3" style="font-size: 1.2rem;">{{ $news->title }}</h4>
+                            <h4 class="mt-2 mb-3" style="font-size: 1.2rem; line-height: 1.4;">{{ $news->title }}</h4>
+                            <p class="text-secondary small mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">{{ Str::limit(strip_tags($news->content), 100) }}</p>
                             <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none" style="color: var(--accent); font-weight: 600;">LEER MÁS &#8594;</a>
                         </div>
                     </div>
@@ -291,8 +338,12 @@
                         <div class="d-flex flex-column align-items-center">
                             @if($president)
                             <div class="node-arq president mb-4">
-                                <img src="{{ $president->image_path }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($president->name) }}&background=000&color=fff'">
-                                <h6 class="oswald mb-1">{{ $president->name }}</h6>
+                                @php
+                                    $presImageUrl = $president->collegiate && $president->collegiate->avatar_url ? $president->collegiate->avatar_url : $president->image_path;
+                                    $presName = $president->collegiate ? $president->collegiate->first_name . ' ' . $president->collegiate->last_name : $president->name;
+                                @endphp
+                                <img src="{{ $presImageUrl }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($presName) }}&background=000&color=fff'">
+                                <h6 class="oswald mb-1">{{ $presName }}</h6>
                                 <small style="color: var(--accent); font-weight: 600;">{{ $president->role }}</small>
                             </div>
                             @endif
@@ -301,7 +352,12 @@
                             <div class="d-flex flex-wrap justify-content-center gap-4">
                                 @foreach($others as $m)
                                 <div class="node-arq">
-                                    <h6 class="oswald mb-1">{{ $m->name }}</h6>
+                                    @php
+                                        $mName = $m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name;
+                                        $mImageUrl = $m->collegiate && $m->collegiate->avatar_url ? $m->collegiate->avatar_url : $m->image_path;
+                                    @endphp
+                                    <img src="{{ $mImageUrl }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($mName) }}&background=000&color=fff'" style="width: 40px; height: 40px; top: -20px; right: 10px;">
+                                    <h6 class="oswald mb-1">{{ $mName }}</h6>
                                     <small class="text-muted fw-bold">{{ $m->role }}</small>
                                     @if($m->is_substitute) <br><small class="text-danger">Suplente</small> @endif
                                 </div>
@@ -347,9 +403,26 @@
                 </ul>
             </div>
             <div class="col-lg-7">
+                @php
+                    $mapQuery = null;
+                    if(isset($school) && $school->latitude && $school->longitude) {
+                        $mapQuery = $school->latitude . ',' . $school->longitude;
+                    } elseif (isset($school) && $school->plus_code) {
+                        $mapQuery = $school->plus_code . ' ' . $school->address;
+                    } elseif (isset($school) && $school->address) {
+                        $mapQuery = $school->address;
+                    }
+                @endphp
+
                 @if($school->map_embed_code)
-                    <div style="filter: grayscale(100%) contrast(120%); border: 1px solid #ddd;">
+                    <div style="filter: grayscale(100%) contrast(120%); border: 1px solid #ddd; height: 100%; min-height: 300px;">
                         {!! $school->map_embed_code !!}
+                    </div>
+                @elseif($mapQuery)
+                    <div style="filter: grayscale(100%) contrast(120%); border: 1px solid #ddd; height: 100%; min-height: 300px;">
+                        <iframe width="100%" height="100%" style="border:0; min-height: 300px;" loading="lazy" allowfullscreen 
+                            src="https://maps.google.com/maps?q={{ urlencode($mapQuery) }}&t=&z=17&ie=UTF8&iwloc=&output=embed">
+                        </iframe>
                     </div>
                 @else
                     <div class="bg-dark text-white d-flex align-items-center justify-content-center" style="height: 300px;">

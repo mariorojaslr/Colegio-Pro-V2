@@ -121,6 +121,7 @@
                     <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#quienes-somos">Características</a></li>
                     <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#novedades">Novedades</a></li>
                     <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#autoridades">Autoridades</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#contacto">Contacto</a></li>
                 </ul>
                 <div class="d-flex gap-2">
                     <a href="{{ route('login') }}" class="btn-tech">
@@ -143,9 +144,28 @@
 
     <main class="container-fluid px-4 px-xl-5 py-5">
         
-        <!-- CARACTERÍSTICAS -->
+        <!-- STATS & SERVICES -->
         <div id="quienes-somos" class="row g-4 mb-5 pb-5 border-bottom pt-5">
-            <div class="col-md-4">
+            <div class="col-12 mb-5 text-center">
+                <div class="row g-3 bg-white p-4 rounded-4 shadow-sm border">
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">+350</h2>
+                        <p class="text-muted small mt-2 fw-bold">Profesionales Matriculados</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">20+</h2>
+                        <p class="text-muted small mt-2 fw-bold">Años de Trayectoria</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">18</h2>
+                        <p class="text-muted small mt-2 fw-bold">Localidades</p>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">12</h2>
+                        <p class="text-muted small mt-2 fw-bold">Convenios</p>
+                    </div>
+                </div>
+            </div>
                 <div class="tech-card text-center">
                     <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">speed</span>
                     <h4 class="grotesk fw-bold">Gestión Ágil</h4>
@@ -183,9 +203,11 @@
                                 <span class="material-icons text-muted" style="font-size: 3rem;">article</span>
                             </div>
                         @endif
-                        <div class="p-4">
-                            <h5 class="fw-bold">{{ $news->title }}</h5>
-                            <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none fw-bold mt-3 d-inline-block" style="color: var(--brand-main);">Ver detalles &rarr;</a>
+                        <div class="p-4 flex-grow-1 d-flex flex-column">
+                            <small class="text-muted fw-bold d-block mb-2">{{ $news->published_at->format('d M, Y') }}</small>
+                            <h5 class="fw-bold" style="line-height: 1.4;">{{ $news->title }}</h5>
+                            <p class="text-secondary small mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">{{ Str::limit(strip_tags($news->content), 100) }}</p>
+                            <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none fw-bold mt-auto d-inline-block" style="color: var(--brand-main);">Ver detalles &rarr;</a>
                         </div>
                     </div>
                 </div>
@@ -207,8 +229,12 @@
                     <div class="d-flex flex-wrap justify-content-center gap-4">
                         @foreach($members as $m)
                         <div class="node-tech">
-                            <img src="{{ $m->image_path }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($m->name) }}&background=10b981&color=fff'">
-                            <h6 class="fw-bold mb-1">{{ $m->name }}</h6>
+                            @php
+                                $mName = $m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name;
+                                $mImageUrl = $m->collegiate && $m->collegiate->avatar_url ? $m->collegiate->avatar_url : $m->image_path;
+                            @endphp
+                            <img src="{{ $mImageUrl }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($mName) }}&background=10b981&color=fff'">
+                            <h6 class="fw-bold mb-1">{{ $mName }}</h6>
                             <small class="text-muted">{{ $m->role }}</small>
                         </div>
                         @endforeach
@@ -219,6 +245,70 @@
                     <p class="mb-0 text-muted">Aún no hay autoridades configuradas para esta instancia.</p>
                 </div>
             @endif
+        </div>
+        </div>
+
+        <!-- CONTACTO -->
+        <div id="contacto" class="mb-5 pt-5 border-top">
+            <h2 class="grotesk fw-bold mb-4 text-center" style="color: var(--brand-dark);">Contacto</h2>
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <ul class="list-unstyled">
+                        <li class="d-flex mb-4 align-items-center">
+                            <span class="material-icons me-3 fs-3" style="color: var(--brand-main);">location_on</span>
+                            <div>
+                                <strong class="d-block grotesk">Dirección</strong>
+                                <span class="text-muted">{{ $school->address ?? 'San Martin 123' }}</span>
+                            </div>
+                        </li>
+                        <li class="d-flex mb-4 align-items-center">
+                            <span class="material-icons me-3 fs-3" style="color: var(--brand-main);">phone</span>
+                            <div>
+                                <strong class="d-block grotesk">Teléfono</strong>
+                                <span class="text-muted">{{ $school->phone ?? '(011) 456-7890' }}</span>
+                            </div>
+                        </li>
+                        <li class="d-flex mb-4 align-items-center">
+                            <span class="material-icons me-3 fs-3" style="color: var(--brand-main);">email</span>
+                            <div>
+                                <strong class="d-block grotesk">Mail</strong>
+                                <span class="text-muted">{{ $school->email ?? 'info@demo.com' }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-7">
+                    @php
+                        $mapQuery = null;
+                        if(isset($school) && $school->latitude && $school->longitude) {
+                            $mapQuery = $school->latitude . ',' . $school->longitude;
+                        } elseif (isset($school) && $school->plus_code) {
+                            $mapQuery = $school->plus_code . ' ' . $school->address;
+                        } elseif (isset($school) && $school->address) {
+                            $mapQuery = $school->address;
+                        }
+                    @endphp
+
+                    @if(isset($school) && $school->map_embed_code)
+                        <div class="rounded-4 overflow-hidden shadow-sm h-100" style="min-height: 300px; border: 1px solid #e2e8f0;">
+                            {!! $school->map_embed_code !!}
+                        </div>
+                    @elseif($mapQuery)
+                        <div class="rounded-4 overflow-hidden shadow-sm h-100" style="min-height: 300px; border: 1px solid #e2e8f0;">
+                            <iframe width="100%" height="100%" style="border:0; min-height: 300px;" loading="lazy" allowfullscreen 
+                                src="https://maps.google.com/maps?q={{ urlencode($mapQuery) }}&t=&z=17&ie=UTF8&iwloc=&output=embed">
+                            </iframe>
+                        </div>
+                    @else
+                        <div class="rounded-4 bg-light d-flex align-items-center justify-content-center h-100 shadow-sm border" style="min-height: 300px;">
+                            <div class="text-center">
+                                <span class="material-icons text-muted mb-2" style="font-size: 3rem;">map</span>
+                                <p class="text-muted mb-0">Mapa no configurado</p>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
     </main>
 
