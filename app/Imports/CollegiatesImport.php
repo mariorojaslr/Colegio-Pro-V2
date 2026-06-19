@@ -21,16 +21,42 @@ class CollegiatesImport implements ToModel, WithHeadingRow, WithChunkReading
 
     public function model(array $row)
     {
+        $matriculaKey = collect(array_keys($row))->first(function($key) {
+            return str_contains($key, 'matricula') || str_contains($key, 'mat');
+        });
+        $matricula = $matriculaKey ? $row[$matriculaKey] : null;
+
         // Ignorar filas vacías o sin matrícula
-        if (empty($row['matricula'])) {
+        if (empty($matricula)) {
             return null;
         }
 
         try {
-            $firstName = $row['nombre'] ?? $row['nombres'] ?? 'S/N';
-            $lastName = $row['apellido'] ?? $row['apellidos'] ?? 'S/A';
+            $nombreKey = collect(array_keys($row))->first(function($key) { return str_contains($key, 'nombre'); });
+            $apellidoKey = collect(array_keys($row))->first(function($key) { return str_contains($key, 'apellido') && !str_contains($key, 'nombre'); });
+            $apellidoYNombreKey = collect(array_keys($row))->first(function($key) { return str_contains($key, 'apellido') && str_contains($key, 'nombre'); });
+
+            $firstName = 'S/N';
+            $lastName = 'S/A';
+
+            if ($apellidoYNombreKey && !empty($row[$apellidoYNombreKey])) {
+                $parts = explode(',', $row[$apellidoYNombreKey]);
+                if (count($parts) >= 2) {
+                    $lastName = trim($parts[0]);
+                    $firstName = trim($parts[1]);
+                } else {
+                    $parts = explode(' ', $row[$apellidoYNombreKey], 2);
+                    $lastName = trim($parts[0] ?? 'S/A');
+                    $firstName = trim($parts[1] ?? 'S/N');
+                }
+            } else {
+                $firstName = $nombreKey ? ($row[$nombreKey] ?? 'S/N') : 'S/N';
+                $lastName = $apellidoKey ? ($row[$apellidoKey] ?? 'S/A') : 'S/A';
+            }
+
             $email = $row['email'] ?? null;
-            $dni = $row['dni'] ?? null;
+            $dniKey = collect(array_keys($row))->first(function($key) { return str_contains($key, 'dni') || str_contains($key, 'documento'); });
+            $dni = $dniKey ? ($row[$dniKey] ?? null) : null;
 
             // Find or create User
             $user = User::where('email', $email)->orWhere('document_number', $dni)->first();
@@ -80,7 +106,7 @@ class CollegiatesImport implements ToModel, WithHeadingRow, WithChunkReading
 
             return Collegiate::updateOrCreate(
                 [
-                    'registration_number' => $row['matricula'],
+                    'registration_number' => $matricula,
                     'school_id'           => $this->school_id
                 ],
                 [
