@@ -43,10 +43,10 @@
                     <div class="mb-5">
                         <label class="form-label fw-bold text-muted small uppercase mb-3 ls-1">Seleccionar Archivo (CSV)</label>
                         <div class="border-dashed-2 rounded-4 p-5 text-center bg-light position-relative" id="drop-zone">
-                            <input type="file" name="file" class="position-absolute w-100 h-100 top-0 start-0 opacity-0 cursor-pointer" required>
-                            <i class="bi bi-cloud-upload fs-1 text-primary opacity-50 mb-3 d-block"></i>
-                            <div class="fw-bold text-muted">Haga clic o arrastre el archivo CSV aquí</div>
-                            <div class="small text-muted mt-2">Tamaño máximo: 2MB</div>
+                            <input type="file" name="file" class="position-absolute w-100 h-100 top-0 start-0 opacity-0 cursor-pointer" id="file-input" required>
+                            <i class="bi bi-cloud-upload fs-1 text-primary opacity-50 mb-3 d-block" id="file-icon"></i>
+                            <div class="fw-bold text-muted" id="file-name-display">Haga clic o arrastre el archivo aquí</div>
+                            <div class="small text-muted mt-2" id="file-size-display">Tamaño máximo: 10MB</div>
                         </div>
                     </div>
 
@@ -103,4 +103,33 @@
     .border-dashed-2 { border: 2px dashed #cbd5e1; }
     .cursor-pointer { cursor: pointer; }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('file-input');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const fileSizeDisplay = document.getElementById('file-size-display');
+    const fileIcon = document.getElementById('file-icon');
+    const dropZone = document.getElementById('drop-zone');
+
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            fileNameDisplay.innerHTML = `<span class="text-primary fw-bold">${file.name}</span>`;
+            fileSizeDisplay.textContent = 'Archivo seleccionado y listo para subir.';
+            fileIcon.classList.remove('bi-cloud-upload');
+            fileIcon.classList.add('bi-file-earmark-check-fill');
+            fileIcon.classList.remove('opacity-50');
+            dropZone.classList.add('border-primary', 'bg-primary-subtle');
+        } else {
+            fileNameDisplay.textContent = 'Haga clic o arrastre el archivo aquí';
+            fileSizeDisplay.textContent = 'Tamaño máximo: 10MB';
+            fileIcon.classList.add('bi-cloud-upload');
+            fileIcon.classList.remove('bi-file-earmark-check-fill');
+            fileIcon.classList.add('opacity-50');
+            dropZone.classList.remove('border-primary', 'bg-primary-subtle');
+        }
+    });
+});
+</script>
 @endsection
