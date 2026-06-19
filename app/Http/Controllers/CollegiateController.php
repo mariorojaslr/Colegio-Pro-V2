@@ -119,6 +119,7 @@ class CollegiateController extends Controller
             'workplaces_info' => 'nullable|string',
             'plus_code' => 'nullable|string|max:255',
             'degree' => 'nullable|string|max:255',
+            'billing_profile' => 'required|in:mensual,anual,exento',
         ]);
 
         // Fix professional_situation mapping to status if necessary, or just rely on custom_attributes.

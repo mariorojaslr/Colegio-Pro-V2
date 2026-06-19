@@ -543,7 +543,7 @@
                         <div class="col-12 mt-4 pt-3 border-top">
                             <h6 class="fw-bold mb-3">Estado Institucional</h6>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label small fw-bold text-muted">Situación / Estado Actual</label>
                             <select name="professional_situation" class="form-select" required>
                                 <option value="Activo" {{ old('professional_situation', $collegiate->professional_situation ?? 'Activo') == 'Activo' ? 'selected' : '' }}>Activo</option>
@@ -552,9 +552,17 @@
                                 <option value="Fallecido" {{ old('professional_situation', $collegiate->professional_situation) == 'Fallecido' ? 'selected' : '' }}>Fallecido</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Perfil de Facturación</label>
+                            <select name="billing_profile" class="form-select" required>
+                                <option value="mensual" {{ old('billing_profile', $collegiate->billing_profile) == 'mensual' ? 'selected' : '' }}>Mensual (Automático)</option>
+                                <option value="anual" {{ old('billing_profile', $collegiate->billing_profile) == 'anual' ? 'selected' : '' }}>Anual Bonificado</option>
+                                <option value="exento" {{ old('billing_profile', $collegiate->billing_profile) == 'exento' ? 'selected' : '' }}>Exento</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
                             <label class="form-label small fw-bold text-muted">Nota Financiera (Opcional)</label>
-                            <input type="text" class="form-control" name="financial_situation_note" placeholder="Ej. Plan de pagos activo" value="{{ old('financial_situation_note', $collegiate->financial_situation_note) }}">
+                            <input type="text" class="form-control" name="financial_situation_note" placeholder="Ej. Plan de pagos" value="{{ old('financial_situation_note', $collegiate->financial_situation_note) }}">
                         </div>
                     </div>
                 </div>

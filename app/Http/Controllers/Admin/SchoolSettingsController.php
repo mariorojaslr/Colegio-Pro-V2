@@ -28,9 +28,16 @@ class SchoolSettingsController extends Controller
             'longitude' => 'nullable|string|max:255',
             'map_embed_code' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'billing_day' => 'nullable|integer|min:1|max:28',
+            'auto_billing_enabled' => 'boolean',
+            'mp_access_token' => 'nullable|string',
+            'mp_public_key' => 'nullable|string',
+            'mp_sandbox_mode' => 'boolean',
         ]);
 
         $data = $request->except(['logo']);
+        $data['auto_billing_enabled'] = $request->has('auto_billing_enabled');
+        $data['mp_sandbox_mode'] = $request->has('mp_sandbox_mode');
 
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');

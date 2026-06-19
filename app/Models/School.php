@@ -25,7 +25,12 @@ class School extends Model
         'longitude',
         'facebook_url',
         'instagram_url',
-        'twitter_url'
+        'twitter_url',
+        'billing_day',
+        'auto_billing_enabled',
+        'mp_access_token',
+        'mp_public_key',
+        'mp_sandbox_mode'
     ];
 
     public function users()
