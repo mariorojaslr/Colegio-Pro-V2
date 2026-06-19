@@ -108,10 +108,10 @@ class CollegiateController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
-            'dni' => 'required|string|max:20',
-            'registration_number' => 'required|string|max:50',
+            'dni' => 'nullable|string|max:20',
+            'registration_number' => 'required|string|max:50|unique:collegiates,registration_number,' . $collegiate->id,
             'professional_situation' => 'nullable|string|max:100',
             'financial_situation_note' => 'nullable|string',
             'birth_date' => 'nullable|date',
