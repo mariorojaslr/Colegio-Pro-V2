@@ -41,6 +41,8 @@ class CollegiateController extends Controller
                                           ->where('is_fully_documented', true)
                                           ->where('is_ethics_compliant', true)
                                           ->count(),
+            'activated' => (clone $baseQuery)->whereNotNull('user_id')->count(),
+            'pending' => (clone $baseQuery)->whereNull('user_id')->count(),
         ];
 
         $query = clone $baseQuery;

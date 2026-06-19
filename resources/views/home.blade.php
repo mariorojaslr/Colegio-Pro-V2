@@ -33,13 +33,31 @@
         </div>
 
         {{-- 2. Tarjetas de Acción (Lujo Silencioso) --}}
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-4">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
             <div class="col">
                 <a href="{{ route('collegiates.index') }}" class="text-decoration-none h-100 d-block">
                     <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-primary" style="border-radius: 12px; transition: transform 0.3s ease;">
                         <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">{{ Auth::user()->school->member_plural ?? 'Matriculados' }}</span>
                         <h2 class="fw-black mb-1 text-dark ls-n1">{{ $totalColegiados }}</h2>
                         <div class="x-small fw-bold text-primary opacity-75">Habilitados en padrón</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="{{ route('collegiates.index', ['filter' => 'activados']) }}" class="text-decoration-none h-100 d-block">
+                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-info" style="border-radius: 12px; transition: transform 0.3s ease;">
+                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Activados</span>
+                        <h2 class="fw-black mb-1 text-info ls-n1">{{ $activados }}</h2>
+                        <div class="x-small fw-bold text-info opacity-75">Ya registraron cuenta</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="{{ route('collegiates.index', ['filter' => 'pendientes']) }}" class="text-decoration-none h-100 d-block">
+                    <div class="bg-white p-3 border-0 h-100 shadow-sm border-start border-4 border-secondary" style="border-radius: 12px; transition: transform 0.3s ease;">
+                        <span class="text-muted x-small fw-bold text-uppercase ls-1 d-block mb-1">Pendientes</span>
+                        <h2 class="fw-black mb-1 text-secondary ls-n1">{{ $pendientes }}</h2>
+                        <div class="x-small fw-bold text-secondary opacity-75">Falta registrarse</div>
                     </div>
                 </a>
             </div>

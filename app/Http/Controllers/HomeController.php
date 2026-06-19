@@ -46,6 +46,10 @@ class HomeController extends Controller
         // Legajos con auditoría pendiente
         $morososDocs = $school->collegiates()->where('is_fully_documented', false)->count();
 
+        // Activaciones de cuentas (Onboarding)
+        $activados = $school->collegiates()->whereNotNull('user_id')->count();
+        $pendientes = $school->collegiates()->whereNull('user_id')->count();
+
         // 2. Ranking de Gestión (Top 5 con problemas)
         $topDeudores = $school->collegiates()->where('is_fees_compliant', false)
                                             ->latest()
@@ -162,6 +166,8 @@ class HomeController extends Controller
             'morososDocs', 
             'topDeudores',
             'amenitiesCount',
+            'activados',
+            'pendientes',
             'collegiate',
             'news',
             'onboardingTask',

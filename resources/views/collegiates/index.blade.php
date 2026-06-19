@@ -22,7 +22,7 @@
 
     {{-- Filtros Rápidos Compactos --}}
     <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('collegiates.index') }}" class="text-decoration-none">
                 <div class="card-prestige p-2 {{ !request('filter') ? 'bg-primary text-white border-primary shadow-lg' : 'bg-white text-dark border' }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['total'], 0, ',', '.') }}</div>
@@ -30,7 +30,23 @@
                 </div>
             </a>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="{{ route('collegiates.index', ['filter' => 'activados']) }}" class="text-decoration-none">
+                <div class="card-prestige p-2 {{ request('filter') === 'activados' ? 'bg-info text-white border-info shadow-lg' : 'bg-white text-info border border-info border-opacity-25' }} transition-all text-center" title="Ya crearon su contraseña y accedieron">
+                    <div class="fw-bold h5 mb-0">{{ number_format($stats['activated'], 0, ',', '.') }}</div>
+                    <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Activados</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <a href="{{ route('collegiates.index', ['filter' => 'pendientes']) }}" class="text-decoration-none">
+                <div class="card-prestige p-2 {{ request('filter') === 'pendientes' ? 'bg-secondary text-white border-secondary shadow-lg' : 'bg-white text-secondary border border-secondary border-opacity-25' }} transition-all text-center" title="Falta que se registren en el sistema">
+                    <div class="fw-bold h5 mb-0">{{ number_format($stats['pending'], 0, ',', '.') }}</div>
+                    <div class="x-small opacity-75 fw-bold text-uppercase" style="font-size: 0.6rem;">Pendientes</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('collegiates.index', ['filter' => 'morosos']) }}" class="text-decoration-none">
                 <div class="card-prestige p-2 {{ request('filter') === 'morosos' ? 'bg-danger text-white border-danger shadow-lg' : 'bg-white text-danger border border-danger border-opacity-25' }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['debt_fees'], 0, ',', '.') }}</div>
@@ -38,7 +54,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('collegiates.index', ['filter' => 'sin_papeles']) }}" class="text-decoration-none">
                 <div class="card-prestige p-2 {{ request('filter') === 'sin_papeles' ? 'bg-warning text-dark border-warning shadow-lg' : 'bg-white text-warning border border-warning border-opacity-25' }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['debt_docs'], 0, ',', '.') }}</div>
@@ -46,7 +62,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-4 col-lg-2">
             <a href="{{ route('collegiates.index', ['filter' => 'habilitados']) }}" class="text-decoration-none">
                 <div class="card-prestige p-2 {{ request('filter') === 'habilitados' ? 'bg-success text-white border-success shadow-lg' : 'bg-white text-success border border-success border-opacity-25' }} transition-all text-center">
                     <div class="fw-bold h5 mb-0">{{ number_format($stats['enabled'], 0, ',', '.') }}</div>
