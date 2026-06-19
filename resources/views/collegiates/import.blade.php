@@ -41,11 +41,11 @@
                     @endif
 
                     <div class="mb-5">
-                        <label class="form-label fw-bold text-muted small uppercase mb-3 ls-1">Seleccionar Archivo (CSV)</label>
+                        <label class="form-label fw-bold text-muted small uppercase mb-3 ls-1">Seleccionar Archivo (Excel o CSV)</label>
                         <div class="border-dashed-2 rounded-4 p-5 text-center bg-light position-relative" id="drop-zone">
                             <input type="file" name="file" class="position-absolute w-100 h-100 top-0 start-0 opacity-0 cursor-pointer" id="file-input" required>
                             <i class="bi bi-cloud-upload fs-1 text-primary opacity-50 mb-3 d-block" id="file-icon"></i>
-                            <div class="fw-bold text-muted" id="file-name-display">Haga clic o arrastre el archivo aquí</div>
+                            <div class="fw-bold text-muted" id="file-name-display">Haga clic o arrastre el archivo Excel/CSV aquí</div>
                             <div class="small text-muted mt-2" id="file-size-display">Tamaño máximo: 10MB</div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                 <div class="d-grid gap-4 opacity-75">
                     <div class="d-flex">
                         <div class="me-3"><i class="bi bi-1-circle fs-4 text-primary"></i></div>
-                        <div>Prepare su archivo Excel y expórtelo como formato <strong>CSV delimitado por comas</strong>.</div>
+                        <div>Prepare su archivo Excel (puede subirlo en formato original .xlsx o exportarlo como CSV). ¡Se recomiendan los .xlsx directamente!</div>
                     </div>
                     <div class="d-flex">
                         <div class="me-3"><i class="bi bi-2-circle fs-4 text-primary"></i></div>
