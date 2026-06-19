@@ -25,21 +25,20 @@ class AccountActivationController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|min:3'
+            'matricula' => 'required|string',
+            'apellido' => 'required|string|min:2'
         ]);
 
-        $query = $request->input('query');
+        $matricula = trim($request->input('matricula'));
+        $apellido = trim(strtolower($request->input('apellido')));
 
-        // Search by dni, email, phone, or registration_number
-        $collegiate = Collegiate::where(function($q) use ($query) {
-            $q->where('dni', $query)
-              ->orWhere('email', $query)
-              ->orWhere('phone', $query)
-              ->orWhere('registration_number', $query);
-        })->first();
+        // Search by registration_number AND a partial match on last_name
+        $collegiate = Collegiate::where('registration_number', $matricula)
+            ->whereRaw('LOWER(last_name) LIKE ?', ["%{$apellido}%"])
+            ->first();
 
         if (!$collegiate) {
-            return back()->with('error', 'No pudimos encontrar tus datos. Verifica que el valor ingresado coincida con el registrado en el padrón.');
+            return back()->with('error', 'No pudimos encontrar tus datos. Verifica que el N° de Matrícula sea correcto y que el apellido coincida con el registrado.');
         }
 
         if ($collegiate->user_id) {

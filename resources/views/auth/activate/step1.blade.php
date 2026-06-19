@@ -123,7 +123,7 @@
         </div>
 
         <h4 class="text-center fw-bold mb-2">Activar tu Cuenta</h4>
-        <p class="text-center text-muted-custom mb-4 small">¿Es tu primera vez aquí? Búscate en el padrón ingresando tu DNI, Matrícula, Email o Teléfono.</p>
+        <p class="text-center text-muted-custom mb-4 small">¿Es tu primera vez aquí? Para activar tu cuenta y acceder a la plataforma, por favor identifícate ingresando tu <strong>N° de Matrícula</strong> y tu <strong>Apellido</strong>.</p>
 
         @if(session('error'))
             <div class="alert alert-danger mb-4 p-3 rounded-3 text-center small">
@@ -139,13 +139,26 @@
 
         <form method="POST" action="{{ route('activate.search') }}">
             @csrf
-            <div class="mb-4">
-                <label for="query" class="form-label text-muted-custom small fw-bold">Dato Identificatorio</label>
+            <div class="mb-3">
+                <label for="matricula" class="form-label text-muted-custom small fw-bold">N° de Matrícula</label>
                 <div class="input-group">
-                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">search</i></span>
-                    <input id="query" type="text" class="form-control border-start-0 ps-0 @error('query') is-invalid @enderror" name="query" value="{{ old('query') }}" required autofocus placeholder="Ej. 34567890 o juan@email.com">
+                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">badge</i></span>
+                    <input id="matricula" type="text" class="form-control border-start-0 ps-0 @error('matricula') is-invalid @enderror" name="matricula" value="{{ old('matricula') }}" required autofocus placeholder="Ej. 1234">
                 </div>
-                @error('query')
+                @error('matricula')
+                    <span class="text-danger small mt-1 d-block">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="apellido" class="form-label text-muted-custom small fw-bold">Apellido (Para verificar tu identidad)</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">person_search</i></span>
+                    <input id="apellido" type="text" class="form-control border-start-0 ps-0 @error('apellido') is-invalid @enderror" name="apellido" value="{{ old('apellido') }}" required placeholder="Ej. Perez">
+                </div>
+                @error('apellido')
                     <span class="text-danger small mt-1 d-block">
                         <strong>{{ $message }}</strong>
                     </span>
