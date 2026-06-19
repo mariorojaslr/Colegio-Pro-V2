@@ -293,7 +293,7 @@ class CollegiateController extends Controller
         if ($user->role !== 'ADMIN_COLEGIO') abort(403);
 
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
+            'file' => 'required|file|max:10240', // Se relaja la validación estricta de mimes por problemas con Windows CSV/Excel
         ]);
 
         try {
