@@ -229,6 +229,38 @@ class CollegiateController extends Controller
 
 
     /**
+     * Genera cuotas personalizadas (ej: Pago Anual, Matrícula, Acuerdo Especial)
+     */
+    public function storeCustomDue(Request $request, Collegiate $collegiate)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
+
+        $request->validate([
+            'dues' => 'required|array|min:1',
+            'dues.*.concept' => 'required|string|max:255',
+            'dues.*.amount' => 'required|numeric|min:0',
+            'dues.*.due_date' => 'required|date',
+        ]);
+
+        foreach ($request->dues as $dueData) {
+            \App\Models\CollegiateDue::create([
+                'collegiate_id' => $collegiate->id,
+                'due_date' => \Carbon\Carbon::parse($dueData['due_date']),
+                'amount' => $dueData['amount'],
+                'concept' => $dueData['concept'],
+                'due_type' => 'extraordinary',
+                'status' => 'pending'
+            ]);
+        }
+
+        $collegiate->updateComplianceStatus();
+
+        return back()->with('success', 'Se han generado las cuotas personalizadas exitosamente.');
+    }
+
+    /**
      * Genera el Certificado de Habilitación Profesional.
      */
     public function certificate(Collegiate $collegiate)

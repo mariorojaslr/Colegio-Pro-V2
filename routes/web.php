@@ -213,6 +213,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/colegiados/{collegiate}', [\App\Http\Controllers\CollegiateController::class, 'show'])->name('collegiates.show');
     Route::post('/collegiates/{collegiate}/refinance', [\App\Http\Controllers\CollegiateController::class, 'refinance'])->name('collegiates.refinance');
     Route::post('/collegiates/{collegiate}/sanctions', [\App\Http\Controllers\CollegiateController::class, 'storeSanction'])->name('collegiates.sanctions.store');
+    Route::post('/collegiates/{collegiate}/custom-due', [\App\Http\Controllers\CollegiateController::class, 'storeCustomDue'])->name('collegiates.custom_due.store');
     Route::put('/collegiates/{collegiate}/quick-update', [\App\Http\Controllers\CollegiateController::class, 'quickUpdate'])->name('collegiates.quick_update');
     Route::get('/collegiates/{collegiate}/certificate', [\App\Http\Controllers\CollegiateController::class, 'certificate'])->name('collegiates.certificate');
     Route::put('/colegiados/{collegiate}', [\App\Http\Controllers\CollegiateController::class, 'update'])->name('collegiates.update');

@@ -13,6 +13,8 @@ class CollegiateDue extends Model
         'collegiate_id',
         'amount',
         'due_date',
+        'concept',
+        'due_type',
         'status', // pending, paid, overdue, defaulted
         'paid_at',
         'payment_reference',

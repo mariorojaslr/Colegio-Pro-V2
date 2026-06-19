@@ -352,6 +352,9 @@
                                                     <i class="bi bi-arrow-repeat me-1"></i> Refinanciar Deuda
                                                 </button>
                                             @endif
+                                            <button type="button" class="btn btn-dark btn-sm rounded-pill px-4 fw-bold shadow-sm me-2" data-bs-toggle="modal" data-bs-target="#customDueModal">
+                                                <i class="bi bi-file-earmark-plus me-1"></i> Generar Acuerdo / Cuota Libre
+                                            </button>
                                             <button type="button" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#payInPersonModal">
                                                 <i class="bi bi-cash-coin me-1"></i> Registrar Pago Presencial
                                             </button>
@@ -361,7 +364,7 @@
                                         <table class="table table-hover align-middle mb-0">
                                             <thead class="bg-light border-0">
                                                 <tr class="xx-small fw-bold text-muted uppercase ls-1">
-                                                    <th class="py-2 px-4 border-0">Periodo</th>
+                                                    <th class="py-2 px-4 border-0">Concepto / Periodo</th>
                                                     <th class="py-2 border-0 text-center">Vencimiento</th>
                                                     <th class="py-2 border-0 text-center">Estado</th>
                                                     <th class="py-2 border-0 text-end">Monto</th>
@@ -370,8 +373,12 @@
                                             <tbody>
                                                 @forelse($collegiate->dues as $due)
                                                     <tr class="border-bottom border-light">
-                                                        <td class="py-3 px-4 border-0 fw-bold small text-dark">
-                                                            {{ \Carbon\Carbon::parse($due->due_date)->translatedFormat('F Y') }}
+                                                        <td class="py-3 px-4 border-bottom fw-bold text-dark">
+                                                            @if($due->concept)
+                                                                {{ $due->concept }}
+                                                            @else
+                                                                {{ \Carbon\Carbon::parse($due->due_date)->translatedFormat('F Y') }}
+                                                            @endif
                                                         </td>
                                                         <td class="py-3 border-0 small text-muted text-center">
                                                             {{ \Carbon\Carbon::parse($due->due_date)->format('d/m/Y') }}
@@ -1050,4 +1057,114 @@ document.addEventListener('DOMContentLoaded', function() {
     if(rotateRight) rotateRight.addEventListener('click', () => { if(cropper) cropper.rotate(90); });
 });
 </script>
+<!-- Modal Cuota Personalizada / Acuerdo -->
+<div class="modal fade" id="customDueModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom py-3">
+                <h5 class="modal-title fw-bold text-dark">
+                    <i class="bi bi-file-earmark-plus me-2 text-primary"></i> Generar Acuerdo de Pago / Cuota Libre
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('collegiates.custom_due.store', $collegiate) }}" method="POST" id="customDueForm">
+                @csrf
+                <div class="modal-body p-4 bg-light-subtle">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold text-muted">Concepto Base</label>
+                            <input type="text" class="form-control" id="baseConcept" placeholder="Ej. Pago Anual 2026 o Refinanciación Histórica" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Monto Total</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="totalAmount" placeholder="0.00" required step="0.01">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Fecha del 1er Vencimiento</label>
+                            <input type="date" class="form-control" id="firstDueDate" value="{{ date('Y-m-d') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Cantidad de Cuotas</label>
+                            <select class="form-select" id="installmentsCount">
+                                @for($i = 1; $i <= 12; $i++)
+                                    <option value="{{ $i }}">{{ $i }} {{ $i == 1 ? 'pago' : 'cuotas' }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="col-12 mt-3 text-end">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill fw-bold" onclick="generateInstallmentRows()">
+                                <i class="bi bi-arrow-down-circle me-1"></i> Proyectar Cuotas
+                            </button>
+                        </div>
+                        
+                        <div class="col-12 mt-4 pt-3 border-top" id="installmentsContainer" style="display: none;">
+                            <h6 class="fw-bold mb-3 text-dark">Detalle de Cuotas (Modificable)</h6>
+                            <div id="installmentsList"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveCustomDues" disabled>Guardar y Generar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    function generateInstallmentRows() {
+        const concept = document.getElementById('baseConcept').value;
+        const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+        const count = parseInt(document.getElementById('installmentsCount').value);
+        let firstDate = document.getElementById('firstDueDate').value;
+        
+        if(!concept || !totalAmount || !firstDate) {
+            alert('Por favor complete Concepto, Monto Total y 1er Vencimiento antes de proyectar.');
+            return;
+        }
+
+        const amountPerInstallment = (totalAmount / count).toFixed(2);
+        let listHtml = '';
+
+        let currentDate = new Date(firstDate);
+
+        for(let i = 1; i <= count; i++) {
+            // Add month for subsequent installments
+            if (i > 1) {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            }
+            
+            let dateStr = currentDate.toISOString().split('T')[0];
+            let installmentConcept = count > 1 ? `${concept} (${i}/${count})` : concept;
+
+            listHtml += `
+                <div class="row g-2 mb-2 align-items-center bg-white p-2 border rounded">
+                    <div class="col-md-5">
+                        <input type="text" name="dues[${i}][concept]" class="form-control form-control-sm" value="${installmentConcept}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="date" name="dues[${i}][due_date]" class="form-control form-control-sm" value="${dateStr}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">$</span>
+                            <input type="number" name="dues[${i}][amount]" class="form-control" value="${amountPerInstallment}" step="0.01" required>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById('installmentsList').innerHTML = listHtml;
+        document.getElementById('installmentsContainer').style.display = 'block';
+        document.getElementById('btnSaveCustomDues').disabled = false;
+    }
+</script>
+@endpush
+
 @endsection
