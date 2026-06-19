@@ -309,7 +309,16 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
                             <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('home') }}"><i class="bi bi-person me-2"></i> Perfil</a></li>
                             <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-key me-2 text-warning"></i> Cambiar Contraseña</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-headset me-2 text-info"></i> Soporte / Generar Ticket</a></li>
+                            @if(in_array(auth()->user()->role, ['ADMIN_COLEGIO', 'OWNER']))
+                                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('admin.chatbot.index') }}">
+                                    <i class="bi bi-robot me-2 text-primary"></i> Asistente IA (Chatbot)
+                                    @if(isset($pendingChatbotCount) && $pendingChatbotCount > 0)
+                                        <span class="badge bg-danger rounded-pill ms-auto shadow-sm" style="font-size: 0.7rem;">{{ $pendingChatbotCount }}</span>
+                                    @endif
+                                </a></li>
+                            @else
+                                <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-headset me-2 text-info"></i> Soporte / Generar Ticket</a></li>
+                            @endif
                             <li><hr class="dropdown-divider opacity-50"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
