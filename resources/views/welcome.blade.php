@@ -52,18 +52,11 @@
             background: linear-gradient(135deg, {{ $primary }}dd, {{ $secondary }}dd);
         }
         
-        @keyframes bounceBot {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.05); }
-        }
-        
         #chatbot-trigger {
-            animation: bounceBot 3s infinite ease-in-out;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
         #chatbot-trigger:hover {
-            animation: none;
             transform: scale(1.15) rotate(-5deg);
             box-shadow: 0 15px 25px rgba(0,0,0,0.2) !important;
         }
@@ -448,7 +441,7 @@
         </div>
     </div>
     
-    <button id="chatbot-trigger" class="btn btn-light border border-2 border-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center p-0" style="bottom: 20px; right: 20px; z-index: 1040; width: 65px; height: 65px; background-color: white !important; overflow: hidden;" onclick="toggleChatbot()">
+    <button id="chatbot-trigger" class="btn btn-light border border-2 border-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center p-0" style="bottom: 25px; right: 25px; z-index: 1040; width: 95px; height: 95px; background-color: white !important; overflow: hidden;" onclick="toggleChatbot()">
         <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" style="width: 100%; height: 100%; object-fit: cover;">
     </button>
 
