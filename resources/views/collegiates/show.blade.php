@@ -1115,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 
-@push('scripts')
+@section('scripts')
 <script>
     function generateInstallmentRows() {
         const concept = document.getElementById('baseConcept').value;
@@ -1165,6 +1165,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('btnSaveCustomDues').disabled = false;
     }
 </script>
-@endpush
+@endsection
 
 @endsection
