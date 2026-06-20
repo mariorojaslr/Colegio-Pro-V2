@@ -157,11 +157,6 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::resource('admin/cms/menus', \App\Http\Controllers\Admin\MenuController::class)->names('admin.cms.menus');
     Route::resource('admin/cms/sliders', \App\Http\Controllers\Admin\SliderController::class)->names('admin.cms.sliders');
 
-    // Chatbot Knowledge
-    Route::get('admin/chatbot', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'index'])->name('admin.chatbot.index');
-    Route::post('admin/chatbot', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'store'])->name('admin.chatbot.store');
-    Route::put('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'update'])->name('admin.chatbot.update');
-    Route::delete('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'destroy'])->name('admin.chatbot.destroy');
 
     Route::resource('/admin/academy', \App\Http\Controllers\Admin\LessonController::class)->names('admin.academy');
     Route::resource('/admin/exams', \App\Http\Controllers\Admin\ExamController::class)->names('admin.exams');
@@ -211,6 +206,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/settings/boveda/descargar-fotos', [\App\Http\Controllers\Admin\BackupVaultController::class, 'downloadPhotos'])->name('admin.settings.vault.photos');
     Route::get('/settings/boveda/descargar-certificados', [\App\Http\Controllers\Admin\BackupVaultController::class, 'downloadCertificates'])->name('admin.settings.vault.certificates');
     Route::get('/settings/boveda/descarga-maestra', [\App\Http\Controllers\Admin\BackupVaultController::class, 'downloadMaster'])->name('admin.settings.vault.master');
+
+    // Chatbot Knowledge (Para administradores de colegio)
+    Route::get('admin/chatbot', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'index'])->name('admin.chatbot.index')->middleware('role:OWNER,ADMIN_COLEGIO');
+    Route::post('admin/chatbot', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'store'])->name('admin.chatbot.store')->middleware('role:OWNER,ADMIN_COLEGIO');
+    Route::put('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'update'])->name('admin.chatbot.update')->middleware('role:OWNER,ADMIN_COLEGIO');
+    Route::delete('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'destroy'])->name('admin.chatbot.destroy')->middleware('role:OWNER,ADMIN_COLEGIO');
 
     // Asistente IA
     Route::get('/ai/asistente', [App\Http\Controllers\AIController::class, 'index'])->name('ai.index');
