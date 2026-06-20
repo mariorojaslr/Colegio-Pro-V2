@@ -97,6 +97,16 @@
             margin-bottom: 15px;
             object-fit: cover;
         }
+    
+        #chatbot-trigger {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        #chatbot-trigger:hover {
+            transform: scale(1.15) rotate(-5deg);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2) !important;
+        }
+
     </style>
 </head>
 <body>
@@ -318,5 +328,136 @@
         </div>
     </footer>
 
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget" class="position-fixed" style="bottom: 120px; right: 25px; z-index: 1050; width: 400px; height: 550px; display: none; resize: both; overflow: hidden; min-width: 300px; min-height: 400px; max-width: 90vw; max-height: 90vh; background: transparent;">
+        <div class="card border-0 shadow-lg h-100" style="border-radius: 20px; overflow: hidden; display: flex; flex-direction: column;">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3" id="chatbot-header" style="cursor: move;">
+                <div class="fw-bold d-flex align-items-center">
+                    <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" class="me-2 shadow-sm" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; pointer-events: none;">
+                    Asistente Virtual
+                </div>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleChatbot()"></button>
+            </div>
+            <div class="card-body bg-light flex-grow-1" id="chatbot-messages" style="overflow-y: auto;">
+                <div class="d-flex mb-3">
+                    <div class="bg-white text-dark p-3 rounded-4 shadow-sm" style="max-width: 85%;">
+                        Hola 👋 Soy el asistente virtual del {{ $school->name ?? 'Colegio' }}. ¿En qué te puedo ayudar hoy?
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 py-3">
+                <form id="chatbot-form" class="d-flex gap-2" onsubmit="sendChatMessage(event)">
+                    <input type="text" id="chatbot-input" class="form-control rounded-pill bg-light border-0 px-3" placeholder="Escribe tu consulta..." required>
+                    <button type="submit" class="btn btn-primary rounded-circle" style="width: 40px; height: 40px;">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <button id="chatbot-trigger" class="btn btn-light border border-2 border-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center p-0" style="bottom: 25px; right: 25px; z-index: 1040; width: 95px; height: 95px; background-color: white !important; overflow: hidden;" onclick="toggleChatbot()">
+        <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" style="width: 100%; height: 100%; object-fit: cover;">
+    </button>
+
+    <script>
+        const chatbotWidget = document.getElementById('chatbot-widget');
+
+        function toggleChatbot() {
+            if (chatbotWidget.style.display === 'none' || chatbotWidget.style.display === '') {
+                chatbotWidget.style.display = 'block';
+            } else {
+                chatbotWidget.style.display = 'none';
+            }
+        }
+        
+        // Draggable logic
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        const header = document.getElementById("chatbot-header");
+
+        header.addEventListener("mousedown", dragStart);
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("mousemove", drag);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+            if (e.target === header || e.target.parentNode === header) {
+                isDragging = true;
+            }
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                setTranslate(currentX, currentY, chatbotWidget);
+            }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+        }
+
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('chatbot-messages');
+            
+            // Append user message
+            messagesDiv.innerHTML += `
+                <div class="d-flex mb-3 justify-content-end">
+                    <div class="bg-primary text-white p-3 rounded-4 shadow-sm" style="max-width: 85%;">${message}</div>
+                </div>
+            `;
+            
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Fetch response
+            try {
+                const response = await fetch('{{ route("chatbot.ask") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ question: message, school_id: '{{ $school->id ?? 1 }}' })
+                });
+
+                const data = await response.json();
+                
+                // Append bot message
+                messagesDiv.innerHTML += `
+                    <div class="d-flex mb-3">
+                        <div class="bg-white text-dark p-3 rounded-4 shadow-sm border" style="max-width: 85%;">${data.answer}</div>
+                    </div>
+                `;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
 </body>
 </html>
