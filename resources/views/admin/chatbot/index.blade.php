@@ -58,37 +58,7 @@
                         </td>
                     </tr>
 
-                    {{-- Edit Modal --}}
-                    <div class="modal fade" id="editKnowledgeModal{{ $knowledge->id }}" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <form class="modal-content border-0 shadow-lg rounded-4" action="{{ route('admin.chatbot.update', $knowledge) }}" method="POST">
-                                @csrf @method('PUT')
-                                <div class="modal-header border-bottom py-3">
-                                    <h5 class="modal-title fw-bold"><i class="bi bi-robot text-primary me-2"></i> Enseñar al Bot</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body p-4 bg-light-subtle">
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold">Pregunta del Usuario</label>
-                                        <input type="text" class="form-control" value="{{ $knowledge->question }}" readonly>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold">Palabras Clave (separadas por coma)</label>
-                                        <input type="text" name="keywords" class="form-control" value="{{ $knowledge->keywords }}" required placeholder="ej. matricula, costo, inscripcion">
-                                        <small class="text-muted">Si el usuario menciona alguna de estas palabras, el bot dará esta respuesta.</small>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small fw-bold">La Respuesta del Bot</label>
-                                        <textarea name="answer" class="form-control" rows="4" required placeholder="Escribe aquí lo que el bot debe contestar...">{{ $knowledge->answer }}</textarea>
-                                    </div>
-                                </div>
-                                <div class="modal-footer py-3">
-                                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Guardar Aprendizaje</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+
                     @empty
                     <tr>
                         <td colspan="5" class="text-center py-5 text-muted">
@@ -101,6 +71,40 @@
             </table>
         </div>
     </div>
+
+    {{-- Edit Modals (Outside table to prevent layout breaking) --}}
+    @foreach($knowledges as $knowledge)
+    <div class="modal fade" id="editKnowledgeModal{{ $knowledge->id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <form class="modal-content border-0 shadow-lg rounded-4" action="{{ route('admin.chatbot.update', $knowledge) }}" method="POST">
+                @csrf @method('PUT')
+                <div class="modal-header border-bottom py-3">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-robot text-primary me-2"></i> Enseñar al Bot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 bg-light-subtle">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Pregunta del Usuario</label>
+                        <input type="text" class="form-control" value="{{ $knowledge->question }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Palabras Clave (separadas por coma)</label>
+                        <input type="text" name="keywords" class="form-control" value="{{ $knowledge->keywords }}" required placeholder="ej. matricula, costo, inscripcion">
+                        <small class="text-muted">Si el usuario menciona alguna de estas palabras, el bot dará esta respuesta.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">La Respuesta del Bot</label>
+                        <textarea name="answer" class="form-control" rows="4" required placeholder="Escribe aquí lo que el bot debe contestar...">{{ $knowledge->answer }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer py-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Guardar Aprendizaje</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endforeach
 </div>
 
 {{-- Add Modal --}}
