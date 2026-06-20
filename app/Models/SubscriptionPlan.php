@@ -24,4 +24,23 @@ class SubscriptionPlan extends Model
     {
         return $this->price;
     }
+
+    /**
+     * Verifica si el plan incluye un feature específico (ej. streaming, api_access).
+     */
+    public function hasFeature(string $featureKey): bool
+    {
+        if (!is_array($this->features)) return false;
+        
+        return in_array($featureKey, $this->features) || 
+               (isset($this->features[$featureKey]) && $this->features[$featureKey] === true);
+    }
+
+    /**
+     * Verifica si el plan tiene acceso a Bunny Stream.
+     */
+    public function hasStreaming(): bool
+    {
+        return $this->hasFeature('bunny_stream');
+    }
 }

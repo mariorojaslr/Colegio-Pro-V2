@@ -88,5 +88,9 @@
             @yield('content')
         </main>
     </div>
+    <!-- Promo Banner Modal -->
+    <x-promo-banner />
+
+    @stack('scripts')
 </body>
 </html>

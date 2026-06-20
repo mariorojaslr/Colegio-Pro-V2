@@ -715,6 +715,9 @@
         @endif
     @endif
 
+    <!-- Promo Banner Modal -->
+    <x-promo-banner />
+
     @yield('scripts')
 </body>
 </html>

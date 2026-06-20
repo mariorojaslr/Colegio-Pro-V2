@@ -95,12 +95,13 @@
                 <a class="nav-link {{ request()->routeIs('admin.schools.*') ? 'active' : '' }}" href="{{ route('admin.schools.index') }}"><i class="bi bi-building me-2"></i> Empresas</a>
                 <a class="nav-link {{ request()->routeIs('admin.academy.*') ? 'active' : '' }}" href="{{ route('admin.academy.index') }}"><i class="bi bi-mortarboard me-2"></i> Academia Global</a>
                 <a class="nav-link {{ request()->routeIs('admin.exams.*') ? 'active' : '' }}" href="{{ route('admin.exams.index') }}"><i class="bi bi-card-checklist me-2"></i> Exámenes Globales</a>
-                <a class="nav-link" href="#"><i class="bi bi-people me-2"></i> Usuarios</a>
                 <a class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}"><i class="bi bi-credit-card me-2"></i> Suscripciones</a>
                 <a class="nav-link {{ request()->routeIs('admin.billing.global') ? 'active' : '' }}" href="{{ route('admin.billing.global') }}"><i class="bi bi-wallet2 me-2"></i> Finanzas Globales</a>
+            @else
+                <a class="nav-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}"><i class="bi bi-megaphone me-2"></i> Banners y Flyers</a>
                 <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots me-2"></i> Centro de Soporte</a>
                 <a class="nav-link {{ request()->routeIs('admin.activity_logs.*') ? 'active' : '' }}" href="{{ route('admin.activity_logs.index') }}"><i class="bi bi-activity me-2"></i> Auditoría</a>
-            @else
+
                 <a class="nav-link" href="#"><i class="bi bi-people me-2"></i> Usuarios</a>
                 <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2 me-2"></i> Contabilidad Global</a>
                 <a class="nav-link {{ request()->routeIs('billing.index') ? 'active' : '' }}" href="{{ route('billing.index') }}"><i class="bi bi-credit-card me-2"></i> Mi Plan</a>
@@ -214,6 +215,15 @@
         </nav>
 
         <div class="p-4 p-lg-5">
+            {{-- Alerta de Soft Limit de Almacenamiento --}}
+            @if(auth()->check() && !auth()->user()->isOwner() && auth()->user()->school && !auth()->user()->school->canUploadFile(0))
+                <div class="alert alert-warning alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+                    <strong>Límite de Almacenamiento Alcanzado:</strong> Tu empresa ha superado la capacidad incluida en tu plan actual. Puedes seguir operando, pero te recomendamos contactar al administrador para revisar o actualizar tu suscripción.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @if (session('status'))
                 <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
                     {{ session('status') }}

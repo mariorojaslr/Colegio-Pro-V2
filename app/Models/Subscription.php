@@ -51,4 +51,22 @@ class Subscription extends Model
 
         return $basePrice;
     }
+
+    /**
+     * Verifica si la suscripción está activa y no ha expirado.
+     * En caso de expirar, el sistema bloqueará el acceso al Tenant.
+     */
+    public function isActive(): bool
+    {
+        if ($this->status !== 'active') {
+            return false;
+        }
+
+        // Si tiene fecha de expiración y ya pasó, se considera inactiva (Suspendida)
+        if ($this->expires_at && $this->expires_at->isPast()) {
+            return false;
+        }
+
+        return true;
+    }
 }

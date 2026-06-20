@@ -176,6 +176,11 @@ Route::middleware(['auth'])->group(function () {
     // Noticias Administrativas
     Route::resource('admin/news', NewsArticleController::class)->names('admin.news');
 
+    // Banners Promocionales (Flyers)
+    Route::resource('admin/banners', \App\Http\Controllers\Admin\EventBannerController::class)->names('admin.banners');
+    Route::post('admin/banners/{banner}/toggle', [\App\Http\Controllers\Admin\EventBannerController::class, 'toggle'])->name('admin.banners.toggle');
+
+
     // Facturación y Suscripción (Admin de Colegio)
     Route::get('/mi-plan', [\App\Http\Controllers\BillingController::class, 'index'])->name('billing.index');
     Route::post('/mi-plan/upgrade', [\App\Http\Controllers\BillingController::class, 'upgrade'])->name('billing.upgrade');

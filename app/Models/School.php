@@ -92,4 +92,40 @@ class School extends Model
     {
         return $this->hasMany(ComplianceRequirement::class);
     }
+
+    /**
+     * Verifica si el Tenant tiene espacio disponible según su plan.
+     */
+    public function canUploadFile(int $sizeInBytes): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+        if (!$plan) return false;
+        
+        $limitInBytes = $plan->max_storage * 1024 * 1024; // MB a Bytes
+        return ($this->storage_used + $sizeInBytes) <= $limitInBytes;
+    }
+
+    /**
+     * Verifica si el Tenant puede añadir más usuarios según su plan.
+     */
+    public function canAddUser(): bool
+    {
+        $plan = $this->activeSubscription?->plan;
+        if (!$plan) return false;
+        
+        return $this->user_count < $plan->max_users;
+    }
+
+    /**
+     * Retorna los colores y el logo para personalizar el frontend.
+     */
+    public function getActiveTheme(): array
+    {
+        return [
+            'primary' => $this->primary_color ?? '#000000',
+            'secondary' => $this->secondary_color ?? '#ffffff',
+            'tertiary' => $this->tertiary_color ?? '#cccccc',
+            'logo' => $this->logo,
+        ];
+    }
 }
