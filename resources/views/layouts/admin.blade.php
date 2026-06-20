@@ -98,7 +98,7 @@
                 <a class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}"><i class="bi bi-credit-card me-2"></i> Suscripciones</a>
                 <a class="nav-link {{ request()->routeIs('admin.billing.global') ? 'active' : '' }}" href="{{ route('admin.billing.global') }}"><i class="bi bi-wallet2 me-2"></i> Finanzas Globales</a>
             @else
-                <a class="nav-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}"><i class="bi bi-megaphone me-2"></i> Banners y Flyers</a>
+                <a class="nav-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}"><i class="bi bi-megaphone me-2"></i> Flyers Temporales</a>
                 <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots me-2"></i> Centro de Soporte</a>
                 <a class="nav-link {{ request()->routeIs('admin.activity_logs.*') ? 'active' : '' }}" href="{{ route('admin.activity_logs.index') }}"><i class="bi bi-activity me-2"></i> Auditoría</a>
 

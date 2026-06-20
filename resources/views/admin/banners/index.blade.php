@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold m-0"><i class="bi bi-megaphone me-2"></i> Banners Promocionales (Flyers)</h3>
+    <h3 class="fw-bold m-0"><i class="bi bi-megaphone me-2"></i> Flyers Temporales</h3>
     <a href="{{ route('admin.banners.create') }}" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
         <i class="bi bi-plus-lg me-1"></i> Nuevo Flyer
     </a>
