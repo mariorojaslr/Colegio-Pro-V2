@@ -250,9 +250,12 @@
             
             @if(isset($latestNews) && $latestNews->count() > 0)
             <style>
+                .card-prestige {
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                }
                 .card-prestige:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+                    transform: translateY(-4px);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
                 }
                 .ls-1 { letter-spacing: 1px; }
             </style>
