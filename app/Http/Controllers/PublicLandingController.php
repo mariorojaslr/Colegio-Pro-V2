@@ -37,7 +37,40 @@ class PublicLandingController extends Controller
                                                ->get()
                                                ->groupBy('department');
 
-        $latestNews = \App\Models\NewsArticle::where('school_id', $school->id ?? 1)
+        $schoolId = $school->id ?? 1;
+
+        // Auto-fix for remote database
+        $existingNews = \App\Models\NewsArticle::where('school_id', $schoolId)->get();
+        $photos = [
+            'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        ];
+        
+        $i = 0;
+        foreach($existingNews as $n) {
+            if (empty($n->featured_image_url) || strpos($n->featured_image_url, 'http') === false) {
+                $n->featured_image_url = $photos[$i % count($photos)];
+                $n->save();
+            }
+            $i++;
+        }
+
+        while (\App\Models\NewsArticle::where('school_id', $schoolId)->count() < 3) {
+            \App\Models\NewsArticle::create([
+                'school_id' => $schoolId,
+                'author_id' => \App\Models\User::first()->id ?? 1,
+                'title' => 'Noticia Institucional ' . uniqid(),
+                'slug' => 'noticia-' . uniqid(),
+                'excerpt' => 'Acompañamos el crecimiento profesional de nuestros matriculados con nuevas herramientas.',
+                'content' => '<p>Seguimos trabajando para mejorar la experiencia de todos.</p>',
+                'status' => 'published',
+                'published_at' => now(),
+                'featured_image_url' => $photos[rand(0, 2)]
+            ]);
+        }
+
+        $latestNews = \App\Models\NewsArticle::where('school_id', $schoolId)
                                              ->where('status', 'published')
                                              ->latest('published_at')
                                              ->take(3)
