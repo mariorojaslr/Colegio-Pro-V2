@@ -22,12 +22,12 @@
     
     <style>
         body { background-color: #F8FAFC; font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
-        .sidebar { width: 110px; min-height: 100vh; background: var(--primary-color); color: white; transition: all 0.3s; z-index: 1040; flex-shrink: 0; }
+        .sidebar { width: 130px; min-height: 100vh; background: var(--primary-color); color: white; transition: all 0.3s; z-index: 1040; flex-shrink: 0; }
         .sidebar .nav-link { display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-weight: 600; font-size: 0.65rem; text-align: center; padding: 10px 5px; border-radius: 12px; margin: 4px 10px; border: 1px solid transparent; transition: all 0.2s; letter-spacing: 0.5px; }
         .sidebar .nav-link i { font-size: 1.4rem; margin-bottom: 4px; margin-right: 0 !important; }
         .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.05); }
         .sidebar-brand { padding: 25px 10px; text-align: center; }
-        .main-content { flex: 1; min-width: 0; background: #f8fafc; width: calc(100% - 110px); }
+        .main-content { flex: 1; min-width: 0; background: #f8fafc; width: calc(100% - 130px); }
         @media (max-width: 991.98px) { .main-content { width: 100%; } }
         .stat-card { border-radius: 20px; border: 0; transition: transform 0.2s, background-color 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .stat-card:hover { transform: translateY(-5px); }
@@ -110,11 +110,11 @@
             @endif
         </nav>
         
-        <div class="p-4 mt-auto">
-            <div class="glass-card p-3 rounded-4 bg-white bg-opacity-10 text-center">
-                <p class="small m-0 opacity-75">Soporte Técnico</p>
-                <a href="#" class="text-white fw-bold text-decoration-none small">Contactar Equipo</a>
-            </div>
+        <div class="mt-auto pb-3">
+            <a href="#" class="nav-link text-decoration-none text-center" style="display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-weight: 600; font-size: 0.65rem; padding: 10px 5px; border-radius: 12px; margin: 4px 10px; transition: all 0.2s;">
+                <i class="bi bi-headset" style="font-size: 1.4rem; margin-bottom: 4px; color: rgba(255,255,255,0.7);"></i>
+                <span>Soporte<br>Técnico</span>
+            </a>
         </div>
     </div>
 
