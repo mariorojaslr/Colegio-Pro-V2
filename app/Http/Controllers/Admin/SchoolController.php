@@ -24,7 +24,10 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $schools = School::withCount('users')->latest()->paginate(request('per_page', 10));
+        $schools = School::with(['activeSubscription.plan'])
+                         ->withCount(['users', 'collegiates'])
+                         ->latest()
+                         ->paginate(request('per_page', 10));
         return view('admin.schools.index', compact('schools'));
     }
 

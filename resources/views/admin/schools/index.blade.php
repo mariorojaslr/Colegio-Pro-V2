@@ -41,7 +41,7 @@
                         <th class="ps-4 py-3">ID</th>
                         <th class="py-3">Institución</th>
                         <th class="py-3">Plan</th>
-                        <th class="py-3">Colegiados</th>
+                        <th class="py-3" style="min-width: 200px;">Consumo (Uso / Límite)</th>
                         <th class="py-3">Suscripción</th>
                         <th class="py-3">Acceso</th>
                         <th class="text-end pe-4 py-3">Acciones</th>
@@ -74,7 +74,39 @@
                             <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 fw-semibold">{{ strtoupper($school->plan_category) }}</span>
                         </td>
                         <td>
-                            <div class="fw-bold text-dark">{{ $school->users_count }} <span class="fw-normal text-muted small">activos</span></div>
+                            @php 
+                                $plan = $school->activeSubscription?->plan;
+                                $maxStorage = $plan ? $plan->max_storage : 0; // en MB
+                                $usedStorage = round($school->storage_used / 1024 / 1024, 2);
+                                $storagePercent = $maxStorage > 0 ? round(($usedStorage / $maxStorage) * 100) : 0;
+                                $maxUsers = $plan ? $plan->max_users : 0;
+                                $usedUsers = $school->collegiates_count;
+                                $usersPercent = $maxUsers > 0 ? round(($usedUsers / $maxUsers) * 100) : 0;
+                            @endphp
+                            
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between mb-1" style="font-size: 0.75rem;">
+                                    <span class="text-muted fw-bold"><i class="bi bi-people-fill me-1"></i> Colegiados</span>
+                                    <span class="fw-bold {{ $usedUsers >= $maxUsers && $maxUsers > 0 ? 'text-danger' : 'text-dark' }}">
+                                        {{ $usedUsers }} <span class="text-muted fw-normal">/ {{ $maxUsers > 0 ? $maxUsers : '∞' }}</span>
+                                    </span>
+                                </div>
+                                <div class="progress bg-light" style="height: 5px;">
+                                    <div class="progress-bar {{ $usersPercent > 90 ? 'bg-danger' : ($usersPercent > 75 ? 'bg-warning' : 'bg-primary') }}" role="progressbar" style="width: {{ min($usersPercent, 100) }}%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="d-flex justify-content-between mb-1" style="font-size: 0.75rem;">
+                                    <span class="text-muted fw-bold"><i class="bi bi-hdd-fill me-1"></i> Espacio (MB)</span>
+                                    <span class="fw-bold {{ $usedStorage >= $maxStorage && $maxStorage > 0 ? 'text-danger' : 'text-dark' }}">
+                                        {{ $usedStorage }} <span class="text-muted fw-normal">/ {{ $maxStorage > 0 ? $maxStorage : '∞' }}</span>
+                                    </span>
+                                </div>
+                                <div class="progress bg-light" style="height: 5px;">
+                                    <div class="progress-bar {{ $storagePercent > 90 ? 'bg-danger' : ($storagePercent > 75 ? 'bg-warning' : 'bg-primary') }}" role="progressbar" style="width: {{ min($storagePercent, 100) }}%"></div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             @php $sub = $school->activeSubscription; @endphp
