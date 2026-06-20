@@ -413,17 +413,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    {{-- Chatbot Widget --}}
-    <div id="chatbot-widget" class="position-fixed" style="bottom: 20px; right: 20px; z-index: 1050; width: 350px; display: none;">
-        <div class="card border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget" class="position-fixed" style="bottom: 100px; right: 25px; z-index: 1050; width: 400px; display: none; resize: both; overflow: hidden; min-width: 300px; min-height: 400px; max-width: 90vw; max-height: 90vh; background: transparent;">
+        <div class="card border-0 shadow-lg h-100" style="border-radius: 20px; overflow: hidden; display: flex; flex-direction: column;">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3" id="chatbot-header" style="cursor: move;">
                 <div class="fw-bold d-flex align-items-center">
-                    <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" class="me-2 shadow-sm" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
+                    <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" class="me-2 shadow-sm" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; pointer-events: none;">
                     Asistente Virtual
                 </div>
                 <button type="button" class="btn-close btn-close-white" onclick="toggleChatbot()"></button>
             </div>
-            <div class="card-body bg-light" id="chatbot-messages" style="height: 300px; overflow-y: auto;">
+            <div class="card-body bg-light flex-grow-1" id="chatbot-messages" style="overflow-y: auto;">
                 <div class="d-flex mb-3">
                     <div class="bg-white text-dark p-3 rounded-4 shadow-sm" style="max-width: 85%;">
                         Hola 👋 Soy el asistente virtual del {{ $school->name ?? 'Colegio' }}. ¿En qué te puedo ayudar hoy?
@@ -446,16 +446,58 @@
     </button>
 
     <script>
+        const chatbotWidget = document.getElementById('chatbot-widget');
+
         function toggleChatbot() {
-            const widget = document.getElementById('chatbot-widget');
-            const trigger = document.getElementById('chatbot-trigger');
-            if (widget.style.display === 'none') {
-                widget.style.display = 'block';
-                trigger.style.display = 'none';
+            if (chatbotWidget.style.display === 'none' || chatbotWidget.style.display === '') {
+                chatbotWidget.style.display = 'block';
             } else {
-                widget.style.display = 'none';
-                trigger.style.display = 'flex';
+                chatbotWidget.style.display = 'none';
             }
+        }
+        
+        // Draggable logic
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        const header = document.getElementById("chatbot-header");
+
+        header.addEventListener("mousedown", dragStart);
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("mousemove", drag);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+            if (e.target === header || e.target.parentNode === header) {
+                isDragging = true;
+            }
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                setTranslate(currentX, currentY, chatbotWidget);
+            }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
         }
 
         async function sendChatMessage(e) {

@@ -681,6 +681,54 @@
         });
     </script>
 
+    @if(auth()->check() && in_array(auth()->user()->role, ['ADMIN_COLEGIO', 'OWNER']))
+        @php
+            $firstPendingQuestion = \App\Models\ChatbotKnowledge::where('school_id', auth()->user()->school_id)
+                                    ->where('status', 'pending')
+                                    ->first();
+        @endphp
+        @if($firstPendingQuestion)
+        <div class="modal fade" id="autoPendingQuestionModal" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <form class="modal-content border-0 shadow-lg rounded-4" action="{{ route('admin.chatbot.update', $firstPendingQuestion) }}" method="POST">
+                    @csrf @method('PUT')
+                    <div class="modal-header bg-danger text-white border-bottom-0 py-3">
+                        <h5 class="modal-title fw-bold"><i class="bi bi-robot me-2"></i> ¡El Bot necesita tu ayuda!</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4 bg-light">
+                        <p class="text-muted mb-4">Un usuario acaba de hacer una pregunta que el bot no supo responder. Por favor, enséñale qué contestar para la próxima vez.</p>
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Pregunta del Usuario</label>
+                            <input type="text" class="form-control bg-white" value="{{ $firstPendingQuestion->question }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Palabras Clave (separadas por coma)</label>
+                            <input type="text" name="keywords" class="form-control" required placeholder="ej. matricula, precio, inscripcion">
+                            <small class="text-muted">Si el usuario menciona alguna de estas palabras, el bot dará esta respuesta.</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">La Respuesta del Bot</label>
+                            <textarea name="answer" class="form-control" rows="4" required placeholder="Escribe aquí lo que el bot debe contestar..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 py-3">
+                        <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Más Tarde</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Enseñar y Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var pendingModal = new bootstrap.Modal(document.getElementById('autoPendingQuestionModal'));
+                pendingModal.show();
+            });
+        </script>
+        @endif
+    @endif
+
     @yield('scripts')
 </body>
 </html>
