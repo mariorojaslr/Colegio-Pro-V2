@@ -31,5 +31,19 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('pendingChatbotCount', $pendingChatbotCount);
             }
         });
+
+        // Traducir correo de restablecimiento de contraseña
+        \Illuminate\Auth\Notifications\ResetPassword::toMailUsing(function ($notifiable, $token) {
+            return (new \Illuminate\Notifications\Messages\MailMessage)
+                ->subject('Recuperación de Contraseña')
+                ->greeting('¡Hola!')
+                ->line('Estás recibiendo este correo porque solicitaste un restablecimiento de contraseña para tu cuenta.')
+                ->action('Restablecer Contraseña', url(route('password.reset', [
+                    'token' => $token,
+                    'email' => $notifiable->getEmailForPasswordReset(),
+                ], false)))
+                ->line('Este enlace de restablecimiento de contraseña expirará en 60 minutos.')
+                ->line('Si no solicitaste un restablecimiento de contraseña, no es necesario realizar ninguna otra acción.');
+        });
     }
 }

@@ -406,7 +406,7 @@
                             <p class="text-muted mb-0 small">Acceda al catálogo de certificados y trámites institucionales disponibles para solicitar online (Ej: Certificado de Ética, Libre Deuda, etc).</p>
                         </div>
                         <div class="col-md-4 text-md-end">
-                            <a href="{{ route('collegiate.certificates.store') }}" class="btn btn-outline-primary w-100 rounded-pill py-3 fw-bold">Solicitar Trámite <i class="bi bi-arrow-right ms-2"></i></a>
+                            <a href="{{ route('collegiates.certificates.store') }}" class="btn btn-outline-primary w-100 rounded-pill py-3 fw-bold">Solicitar Trámite <i class="bi bi-arrow-right ms-2"></i></a>
                         </div>
                     </div>
                 </div>
