@@ -40,10 +40,10 @@
                     <tr>
                         <th class="ps-4 py-3">ID</th>
                         <th class="py-3">Institución</th>
-                        <th class="py-3">Plan</th>
-                        <th class="py-3" style="min-width: 200px;">Consumo (Uso / Límite)</th>
-                        <th class="py-3">Suscripción</th>
-                        <th class="py-3">Acceso</th>
+                        <th class="py-3 text-center">Plan</th>
+                        <th class="py-3 px-4" style="min-width: 200px;">Consumo (Uso / Límite)</th>
+                        <th class="py-3 text-center">Suscripción</th>
+                        <th class="py-3 text-center">Acceso</th>
                         <th class="text-end pe-4 py-3">Acciones</th>
                     </tr>
                 </thead>
@@ -70,10 +70,10 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 fw-semibold">{{ strtoupper($school->plan_category) }}</span>
                         </td>
-                        <td>
+                        <td class="px-4">
                             @php 
                                 $plan = $school->activeSubscription?->plan;
                                 $maxStorage = $plan ? $plan->max_storage : 0; // en MB
@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
+                        <td class="text-center">
                             @php $sub = $school->activeSubscription; @endphp
                             @if($sub)
                                 <div class="badge bg-success text-white rounded-pill px-3 py-2 fw-semibold shadow-sm"><i class="bi bi-check-circle me-1"></i> AL DÍA</div>
@@ -116,9 +116,9 @@
                                 <div class="badge bg-danger text-white rounded-pill px-3 py-2 fw-semibold shadow-sm"><i class="bi bi-exclamation-circle me-1"></i> SIN PLAN</div>
                             @endif
                         </td>
-                        <td>
-                             <div class="form-check form-switch fs-5 mb-0">
-                                <input class="form-check-input" type="checkbox" disabled {{ $school->is_active ? 'checked' : '' }}>
+                        <td class="text-center">
+                             <div class="form-check form-switch fs-5 mb-0 d-inline-block">
+                                <input class="form-check-input m-0" type="checkbox" disabled {{ $school->is_active ? 'checked' : '' }}>
                             </div>
                         </td>
                         <td class="pe-4 text-end">
@@ -126,8 +126,8 @@
                                 <a href="{{ route('admin.schools.edit', $school->id) }}" class="btn btn-light btn-sm rounded-circle shadow-sm" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;" title="Editar">
                                     <i class="bi bi-pencil-square text-muted"></i>
                                 </a>
-                                <a href="{{ route('admin.impersonate', $school->id) }}" class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-sm">
-                                    Ver como Admin
+                                <a href="{{ route('admin.impersonate', $school->id) }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-sm" style="font-size: 0.8rem;">
+                                    Ver Admin
                                 </a>
                             </div>
                         </td>
