@@ -213,33 +213,43 @@
         $sliderItems = isset($slider) && $slider->items->count() > 0 ? $slider->items : collect([]);
     @endphp
 
-    @if($sliderItems->count() > 1)
-        <section class="hero-arq position-relative" style="overflow: hidden; padding:0; display:block;">
-            <div id="heroCarouselArq" class="carousel slide carousel-fade position-absolute w-100 h-100" data-bs-ride="carousel" style="z-index: 1; top: 0; left: 0;">
+    @if($sliderItems->count() > 0)
+        <!-- SLIDER ACTIVO: Muestra solo las imágenes (Tapa todo) -->
+        <section class="p-0 position-relative" style="height: 100vh; overflow: hidden; background-color: #000; clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);">
+            <div id="heroCarouselArq" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
                 <div class="carousel-inner h-100">
                     @foreach($sliderItems as $index => $item)
                         <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}" data-bs-interval="5000">
-                            <img src="{{ asset($item->image_url) }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="Slide {{ $index }}">
+                            @php
+                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset('storage/'.$item->image_url);
+                            @endphp
+                            @if($item->link)
+                                <a href="{{ $item->link }}" target="_blank" class="d-block w-100 h-100">
+                                    <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                                </a>
+                            @else
+                                <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                            @endif
                         </div>
                     @endforeach
                 </div>
-                <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)); z-index: 2;"></div>
-            </div>
-            <div class="container position-relative h-100 d-flex align-items-center" style="z-index: 3;">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <h1>DISEÑO,<br><span style="color: var(--accent);">VANGUARDIA</span><br>& ÉTICA.</h1>
-                        <p>Órgano oficial de regulación profesional. Defendiendo las incumbencias y promoviendo la excelencia arquitectónica en nuestra jurisdicción.</p>
-                    </div>
-                </div>
+                @if($sliderItems->count() > 1)
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarouselArq" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarouselArq" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+                @endif
             </div>
         </section>
     @else
-        @php
-            $bgImage = $sliderItems->count() == 1 ? asset($sliderItems->first()->image_url) : 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
-        @endphp
-        <section class="hero-arq" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ $bgImage }}');">
-            <div class="container">
+        <!-- SIN SLIDER: Muestra el diseño tradicional azul con texto -->
+        <section class="hero-arq" style="background-color: var(--dark);">
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)); z-index: 2;"></div>
+            <div class="container position-relative h-100 d-flex align-items-center" style="z-index: 3;">
                 <div class="row">
                     <div class="col-lg-8">
                         <h1>DISEÑO,<br><span style="color: var(--accent);">VANGUARDIA</span><br>& ÉTICA.</h1>

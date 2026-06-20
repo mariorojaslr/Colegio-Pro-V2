@@ -106,33 +106,43 @@
         $sliderItems = isset($slider) && $slider->items->count() > 0 ? $slider->items : collect([]);
     @endphp
     
-    @if($sliderItems->count() > 1)
-        <section class="hero-bg position-relative p-0" style="overflow: hidden; height: 600px;">
-            <div id="heroCarousel" class="carousel slide carousel-fade position-absolute w-100 h-100" data-bs-ride="carousel" style="z-index: 1; top: 0; left: 0;">
+    @if($sliderItems->count() > 0)
+        <!-- SLIDER ACTIVO: Muestra solo las imágenes en el carrusel (Tapa todo) -->
+        <section class="p-0 position-relative" style="height: 600px; overflow: hidden; background-color: #000;">
+            <div id="heroCarousel" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
                 <div class="carousel-inner h-100">
                     @foreach($sliderItems as $index => $item)
                         <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}" data-bs-interval="5000">
-                            <img src="{{ asset($item->image_url) }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="Slide {{ $index }}">
+                            @php
+                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset('storage/'.$item->image_url);
+                            @endphp
+                            @if($item->link)
+                                <a href="{{ $item->link }}" target="_blank" class="d-block w-100 h-100">
+                                    <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                                </a>
+                            @else
+                                <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                            @endif
                         </div>
                     @endforeach
                 </div>
-                <div class="hero-overlay" style="z-index: 2; position: absolute; top:0; left:0; width:100%; height:100%;"></div>
-            </div>
-            <div class="container hero-content text-center py-5 position-relative d-flex flex-column justify-content-center h-100" style="z-index: 3;">
-                <p class="text-white fw-bold mb-3 text-uppercase tracking-wider small opacity-75">Órgano oficial de regulación profesional</p>
-                <h1 class="display-4 fw-bold text-white mb-4 shadow-sm">{{ $school->name ?? 'Bienvenido' }}</h1>
-                <p class="lead text-white mx-auto" style="max-width: 800px; opacity: 0.9;">
-                    Organismo encargado de habilitar, regular y fiscalizar el ejercicio ético y legal de la profesión en toda la jurisdicción.
-                </p>
+                @if($sliderItems->count() > 1)
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.4); border-radius: 50%; padding: 20px;"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.4); border-radius: 50%; padding: 20px;"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+                @endif
             </div>
         </section>
     @else
-        @php
-            $bgImage = $sliderItems->count() == 1 ? asset($sliderItems->first()->image_url) : asset('image.png');
-        @endphp
-        <section class="hero-bg" style="background-image: url('{{ $bgImage }}');">
-            <div class="hero-overlay"></div>
-            <div class="container hero-content text-center py-5">
+        <!-- SIN SLIDER: Muestra el diseño tradicional azul con texto -->
+        <section class="hero-bg position-relative" style="background-color: var(--theme-primary); padding: 120px 0;">
+            <div class="hero-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%;"></div>
+            <div class="container hero-content text-center position-relative" style="z-index: 3;">
                 <p class="text-white fw-bold mb-3 text-uppercase tracking-wider small opacity-75">Órgano oficial de regulación profesional</p>
                 <h1 class="display-4 fw-bold text-white mb-4 shadow-sm">{{ $school->name ?? 'Bienvenido' }}</h1>
                 <p class="lead text-white mx-auto" style="max-width: 800px; opacity: 0.9;">

@@ -153,10 +153,7 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     // Finanzas Globales (Owner side)
     Route::get('/admin/global-billing', [\App\Http\Controllers\Admin\GlobalBillingController::class, 'index'])->name('admin.billing.global');
 
-    // Gestión Global de Academia (Cursos/Lecciones)
-    Route::resource('admin/cms/menus', \App\Http\Controllers\Admin\MenuController::class)->names('owner.cms.menus');
-    Route::resource('admin/cms/sliders', \App\Http\Controllers\Admin\SliderController::class)->names('owner.cms.sliders');
-
+    // (Rutas antiguas del CMS eliminadas para evitar colisión)
 
     Route::resource('/admin/academy', \App\Http\Controllers\Admin\LessonController::class)->names('admin.academy');
     Route::resource('/admin/exams', \App\Http\Controllers\Admin\ExamController::class)->names('admin.exams');

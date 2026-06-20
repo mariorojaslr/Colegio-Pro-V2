@@ -187,21 +187,60 @@
     </nav>
 
     <!-- HERO -->
-    <section class="hero-ts">
-        <div class="container-fluid px-4 px-xl-5 position-relative">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="playfair">Empatía, <br>Derechos & <br>Comunidad.</h1>
-                    <p>Órgano oficial que agrupa, regula y defiende a los profesionales del Trabajo Social, velando por la ética y el compromiso social.</p>
+    @php
+        $sliderItems = isset($slider) && $slider->items->count() > 0 ? $slider->items : collect([]);
+    @endphp
+
+    @if($sliderItems->count() > 0)
+        <!-- SLIDER ACTIVO: Muestra solo las imágenes (Tapa todo) -->
+        <section class="p-0 position-relative" style="height: 100vh; overflow: hidden; background-color: #000;">
+            <div id="heroCarouselTS" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
+                <div class="carousel-inner h-100">
+                    @foreach($sliderItems as $index => $item)
+                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}" data-bs-interval="5000">
+                            @php
+                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset('storage/'.$item->image_url);
+                            @endphp
+                            @if($item->link)
+                                <a href="{{ $item->link }}" target="_blank" class="d-block w-100 h-100">
+                                    <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                                </a>
+                            @else
+                                <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                            @endif
+                        </div>
+                    @endforeach
                 </div>
-                <div class="col-lg-6 text-center">
-                    @if(isset($school) && $school->logo)
-                        <img src="{{ asset($school->logo) }}" alt="Logo Gigante" class="img-fluid opacity-75" style="max-height: 350px; filter: drop-shadow(0 20px 30px rgba(142,68,173,0.2));">
-                    @endif
+                @if($sliderItems->count() > 1)
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarouselTS" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarouselTS" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+                @endif
+            </div>
+        </section>
+    @else
+        <!-- SIN SLIDER: Muestra el diseño tradicional azul con texto -->
+        <section class="hero-ts">
+            <div class="container-fluid px-4 px-xl-5 position-relative">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="playfair">Empatía, <br>Derechos & <br>Comunidad.</h1>
+                        <p>Órgano oficial que agrupa, regula y defiende a los profesionales del Trabajo Social, velando por la ética y el compromiso social.</p>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        @if(isset($school) && $school->logo)
+                            <img src="{{ asset($school->logo) }}" alt="Logo Gigante" class="img-fluid opacity-75" style="max-height: 350px; filter: drop-shadow(0 20px 30px rgba(142,68,173,0.2));">
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
 
     <main class="container-fluid px-4 px-xl-5 py-5">
         
