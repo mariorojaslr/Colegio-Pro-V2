@@ -8,8 +8,9 @@
             <form action="{{ route('admin.cms.pages.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label>Título de la Página</label>
+                    <label class="fw-bold">Título de la Página</label>
                     <input type="text" name="title" class="form-control" required placeholder="Ej: Quiénes Somos">
+                    <small class="text-muted mt-1 d-block"><i class="bi bi-link-45deg"></i> La extensión (URL Slug) se generará <b>automáticamente</b> a partir de este título. Por ejemplo, si escribes "Historia", el enlace será <code>/p/historia</code>.</small>
                 </div>
                 <div class="mb-3">
                     <label>Contenido (HTML permitido)</label>
