@@ -38,9 +38,9 @@ class NewsArticleController extends Controller
             $article->published_at = now();
         }
 
-        // Simulación de carga de imagen para la demo, pero listo para BunnyCDN o Storage
-        if ($request->has('featured_image_url')) {
-            $article->featured_image_url = $request->featured_image_url;
+        if ($request->hasFile('featured_image')) {
+            $path = $request->file('featured_image')->store('news', 'public');
+            $article->featured_image_url = 'storage/' . $path;
         }
 
         $article->save();
@@ -67,6 +67,11 @@ class NewsArticleController extends Controller
 
         if ($request->status == 'published' && !$news->published_at) {
             $news->published_at = now();
+        }
+
+        if ($request->hasFile('featured_image')) {
+            $path = $request->file('featured_image')->store('news', 'public');
+            $news->featured_image_url = 'storage/' . $path;
         }
 
         $news->save();

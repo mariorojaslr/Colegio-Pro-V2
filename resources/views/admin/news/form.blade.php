@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-prestige p-5 border-0 bg-white rounded-4 shadow-sm">
-                <form action="{{ isset($newsArticle) ? route('admin.news.update', $newsArticle->id) : route('admin.news.store') }}" method="POST">
+                <form action="{{ isset($newsArticle) ? route('admin.news.update', $newsArticle->id) : route('admin.news.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @if(isset($newsArticle)) @method('PUT') @endif
                     
@@ -51,8 +51,14 @@
                         </div>
 
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold text-muted">URL de Imagen Destacada (Opcional)</label>
-                            <input type="url" name="featured_image_url" class="form-control rounded-pill border-light-subtle" value="{{ old('featured_image_url', $newsArticle->featured_image_url ?? '') }}" placeholder="https://ejemplo.com/imagen.jpg">
+                            <label class="form-label small fw-bold text-muted">Subir Imagen Destacada (Opcional)</label>
+                            <input type="file" name="featured_image" accept="image/*" class="form-control rounded-pill border-light-subtle">
+                            @if(isset($newsArticle) && $newsArticle->featured_image_url)
+                                <div class="mt-3 bg-light p-3 rounded-4 border border-light-subtle d-inline-block">
+                                    <p class="small text-muted mb-2 fw-bold">Imagen actual:</p>
+                                    <img src="{{ asset($newsArticle->featured_image_url) }}" alt="Imagen actual" style="max-height: 120px; border-radius: 10px;" class="shadow-sm">
+                                </div>
+                            @endif
                         </div>
 
                         <div class="col-md-12 text-end mt-5 border-top pt-4">
