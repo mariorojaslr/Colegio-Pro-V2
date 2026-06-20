@@ -4,12 +4,33 @@
 <div class="container-fluid py-5 min-vh-100 bg-light-subtle">
     <div class="row g-4 mb-5">
         <div class="col-lg-12">
-            <div class="card-prestige p-5 border-0 overflow-hidden position-relative" 
+            <div class="card-prestige p-4 p-md-5 border-0 overflow-hidden position-relative" 
                  style="background: linear-gradient(135deg, #0f172a, #1e293b); border-radius: 40px">
                 <div class="row align-items-center position-relative" style="z-index: 2">
-                    <div class="col-md-8 text-white">
+                    <div class="col-md-7 text-white mb-4 mb-md-0">
                         <h1 class="display-4 fw-bold mb-2 shadow-text" style="font-family: 'Outfit', sans-serif;">Novedades y <span class="text-gradient-gold">Noticias</span></h1>
                         <p class="lead opacity-75 mb-0 fs-5 text-white-50">Manténgase informado con los últimos comunicados institucionales.</p>
+                    </div>
+                    <div class="col-md-5 text-md-end">
+                        <a href="{{ url('/') }}" class="btn btn-outline-light rounded-pill px-4 py-2 me-2 mb-2">
+                            <i class="bi bi-arrow-left me-1"></i> Volver al Inicio
+                        </a>
+                        <button onclick="window.close();" class="btn btn-primary rounded-pill px-4 py-2 mb-2" style="background: #f59e0b; border: none; color: #000; font-weight: bold;">
+                            <i class="bi bi-x-lg me-1"></i> Cerrar Pestaña
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Buscador -->
+                <div class="row mt-4 position-relative" style="z-index: 2">
+                    <div class="col-md-8 col-lg-6">
+                        <form action="{{ route('news.index') }}" method="GET" class="d-flex bg-white p-1 rounded-pill shadow-sm">
+                            <input type="text" name="search" class="form-control border-0 rounded-pill px-4 shadow-none" placeholder="Buscar por palabra clave..." value="{{ request('search') }}">
+                            <button type="submit" class="btn btn-dark rounded-pill px-4">Buscar</button>
+                            @if(request('search'))
+                                <a href="{{ route('news.index') }}" class="btn btn-light rounded-pill px-3 ms-1" title="Limpiar búsqueda"><i class="bi bi-eraser"></i></a>
+                            @endif
+                        </form>
                     </div>
                 </div>
             </div>

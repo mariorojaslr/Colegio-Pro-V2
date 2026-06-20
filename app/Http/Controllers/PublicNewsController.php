@@ -9,14 +9,19 @@ use App\Models\School;
 
 class PublicNewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // En una app multitenant real pública, quizás buscaríamos por dominio.
-        // Aquí mostraremos las noticias publicadas.
-        $articles = NewsArticle::with('author')
-            ->where('status', 'published')
-            ->orderBy('published_at', 'desc')
-            ->paginate(9);
+        $query = NewsArticle::with('author')->where('status', 'published');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $articles = $query->orderBy('published_at', 'desc')->paginate(9);
 
         return view('news.index', compact('articles'));
     }

@@ -324,8 +324,13 @@
                         @if($news->image_path)
                             <img src="{{ asset($news->image_path) }}" alt="{{ $news->title }}">
                         @else
-                            <div class="bg-light d-flex align-items-center justify-content-center" style="border-radius: 15px; height: 200px; margin-bottom: 1.5rem;">
-                                <span class="material-icons" style="font-size: 3rem; color: var(--ts-primary);">volunteer_activism</span>
+                            <div class="d-flex align-items-center justify-content-center" style="border-radius: 15px; height: 200px; margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--ts-primary, #8e44ad) 0%, rgba(142,68,173,0.8) 100%); position: relative; overflow: hidden;">
+                                <div style="position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); top: -25%; left: -25%;"></div>
+                                @if(isset($school) && $school->logo)
+                                    <img src="{{ asset($school->logo) }}" alt="Logo" style="max-height: 100px; opacity: 0.25; filter: grayscale(100%) brightness(200%); position: relative; z-index: 1;">
+                                @else
+                                    <span class="material-icons text-white" style="font-size: 5rem; opacity: 0.15; position: relative; z-index: 1;">volunteer_activism</span>
+                                @endif
                             </div>
                         @endif
                         <span class="text-muted small mb-2"><span class="material-icons align-middle fs-6 me-1">calendar_today</span> {{ $news->published_at->format('d de M, Y') }}</span>

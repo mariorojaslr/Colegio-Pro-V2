@@ -245,7 +245,7 @@
                     <h2 class="h2 fw-bold text-theme-dark mb-2">Noticias y Novedades</h2>
                     <p class="text-theme-secondary mb-0">Últimas actualizaciones e información de interés para colegiados</p>
                 </div>
-                <a href="{{ route('news.index') }}" class="btn btn-outline-primary rounded-pill px-4">Ver todas <span class="material-icons align-middle ms-1" style="font-size: 1.1rem;">arrow_forward</span></a>
+                <a href="{{ route('news.index') }}" target="_blank" class="btn btn-outline-primary rounded-pill px-4">Ver todas en nueva pestaña <span class="material-icons align-middle ms-1" style="font-size: 1.1rem;">open_in_new</span></a>
             </div>
             
             @if(isset($latestNews) && $latestNews->count() > 0)
@@ -256,8 +256,13 @@
                         @if($news->image_path)
                             <img src="{{ asset($news->image_path) }}" class="card-img-top" alt="{{ $news->title }}" style="height: 200px; object-fit: cover;">
                         @else
-                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <span class="material-icons text-muted" style="font-size: 4rem;">article</span>
+                            <div class="d-flex align-items-center justify-content-center" style="height: 200px; background: linear-gradient(135deg, var(--primary-color, #0f172a) 0%, rgba(15,23,42,0.8) 100%); position: relative; overflow: hidden;">
+                                <div style="position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); top: -25%; left: -25%;"></div>
+                                @if(isset($school) && $school->logo)
+                                    <img src="{{ asset($school->logo) }}" alt="Logo" style="max-height: 100px; opacity: 0.25; filter: grayscale(100%) brightness(200%); position: relative; z-index: 1;">
+                                @else
+                                    <span class="material-icons text-white" style="font-size: 5rem; opacity: 0.15; position: relative; z-index: 1;">newspaper</span>
+                                @endif
                             </div>
                         @endif
                         <div class="card-body p-4">

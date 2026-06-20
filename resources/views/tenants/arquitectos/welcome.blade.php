@@ -340,8 +340,13 @@
                         @if($news->image_path)
                             <img src="{{ asset($news->image_path) }}" class="card-img-top card-arq-img" alt="{{ $news->title }}">
                         @else
-                            <div class="bg-dark d-flex align-items-center justify-content-center card-arq-img">
-                                <span class="material-icons text-white" style="font-size: 3rem;">newspaper</span>
+                            <div class="card-arq-img d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #1a1a1a 0%, #333 100%); position: relative; overflow: hidden;">
+                                <div style="position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); top: -25%; left: -25%;"></div>
+                                @if(isset($school) && $school->logo)
+                                    <img src="{{ asset($school->logo) }}" alt="Logo" style="max-height: 100px; opacity: 0.2; filter: grayscale(100%) brightness(200%); position: relative; z-index: 1;">
+                                @else
+                                    <span class="material-icons text-white" style="font-size: 5rem; opacity: 0.1; position: relative; z-index: 1;">newspaper</span>
+                                @endif
                             </div>
                         @endif
                         <div class="card-arq-body">

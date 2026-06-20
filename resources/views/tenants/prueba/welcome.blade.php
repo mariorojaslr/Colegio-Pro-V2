@@ -248,8 +248,13 @@
                         @if($news->image_path)
                             <img src="{{ asset($news->image_path) }}" class="w-100" style="height: 180px; object-fit: cover;">
                         @else
-                            <div class="w-100 bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
-                                <span class="material-icons text-muted" style="font-size: 3rem;">article</span>
+                            <div class="w-100 d-flex align-items-center justify-content-center" style="height: 180px; background: linear-gradient(135deg, var(--brand-main, #10b981) 0%, rgba(16, 185, 129, 0.8) 100%); position: relative; overflow: hidden;">
+                                <div style="position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); top: -25%; left: -25%;"></div>
+                                @if(isset($school) && $school->logo)
+                                    <img src="{{ asset($school->logo) }}" alt="Logo" style="max-height: 90px; opacity: 0.25; filter: grayscale(100%) brightness(200%); position: relative; z-index: 1;">
+                                @else
+                                    <span class="material-icons text-white" style="font-size: 5rem; opacity: 0.15; position: relative; z-index: 1;">article</span>
+                                @endif
                             </div>
                         @endif
                         <div class="p-4 flex-grow-1 d-flex flex-column">
