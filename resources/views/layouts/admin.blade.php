@@ -215,13 +215,21 @@
         </nav>
 
         <div class="p-4 p-lg-5">
-            {{-- Alerta de Soft Limit de Almacenamiento --}}
-            @if(auth()->check() && !auth()->user()->isOwner() && auth()->user()->school && !auth()->user()->school->canUploadFile(0))
-                <div class="alert alert-warning alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
-                    <strong>Límite de Almacenamiento Alcanzado:</strong> Tu empresa ha superado la capacidad incluida en tu plan actual. Puedes seguir operando, pero te recomendamos contactar al administrador para revisar o actualizar tu suscripción.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+            {{-- Alertas de Suscripción y Almacenamiento --}}
+            @if(auth()->check() && !auth()->user()->isOwner() && auth()->user()->school)
+                @if(!auth()->user()->school->activeSubscription)
+                    <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+                        <i class="bi bi-x-octagon-fill me-2 text-danger"></i>
+                        <strong>Sin Suscripción Activa:</strong> Tu empresa no tiene un plan asignado. Por favor, contacta al administrador de la plataforma para habilitar tu cuenta.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @elseif(!auth()->user()->school->canUploadFile(0))
+                    <div class="alert alert-warning alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+                        <strong>Límite de Almacenamiento Alcanzado:</strong> Tu empresa ha superado la capacidad incluida en tu plan actual. Puedes seguir operando, pero te recomendamos contactar al administrador para revisar o actualizar tu suscripción.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
             @endif
 
             @if (session('status'))
