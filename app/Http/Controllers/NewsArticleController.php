@@ -48,13 +48,13 @@ class NewsArticleController extends Controller
         return redirect()->route('admin.news.index')->with('success', 'Noticia publicada exitosamente.');
     }
 
-    public function edit(NewsArticle $newsArticle)
+    public function edit(NewsArticle $news)
     {
-        // En un sistema real verificaríamos $newsArticle->school_id == auth()->user()->school_id
-        return view('admin.news.form', compact('newsArticle'));
+        // En un sistema real verificaríamos $news->school_id == auth()->user()->school_id
+        return view('admin.news.form', ['newsArticle' => $news]);
     }
 
-    public function update(Request $request, NewsArticle $newsArticle)
+    public function update(Request $request, NewsArticle $news)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -62,21 +62,21 @@ class NewsArticleController extends Controller
             'status' => 'required|in:draft,published,archived',
         ]);
 
-        $newsArticle->fill($request->all());
-        $newsArticle->slug = Str::slug($request->title) . '-' . time();
+        $news->fill($request->all());
+        $news->slug = Str::slug($request->title) . '-' . time();
 
-        if ($request->status == 'published' && !$newsArticle->published_at) {
-            $newsArticle->published_at = now();
+        if ($request->status == 'published' && !$news->published_at) {
+            $news->published_at = now();
         }
 
-        $newsArticle->save();
+        $news->save();
 
         return redirect()->route('admin.news.index')->with('success', 'Noticia actualizada.');
     }
 
-    public function destroy(NewsArticle $newsArticle)
+    public function destroy(NewsArticle $news)
     {
-        $newsArticle->delete();
+        $news->delete();
         return redirect()->route('admin.news.index')->with('success', 'Noticia eliminada.');
     }
 }

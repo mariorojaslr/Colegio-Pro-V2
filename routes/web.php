@@ -48,7 +48,7 @@ Route::get('/force-admin-mario', function() {
 });
 
 // Rutas Públicas de Validación (Escaneo de QR)
-Route::get('/validador/{uuid}', [\App\Http\Controllers\ValidadorController::class, 'validateQR'])->name('validador.verify');
+Route::get('/validador/{uuid}', [\App\Http\Controllers\ValidationController::class, 'validateQR'])->name('validador.verify');
 Route::get('/v/{uuid}', [\App\Http\Controllers\ValidationController::class, 'show'])->name('validation.show');
 Route::post('/v/{uuid}/burn', [\App\Http\Controllers\ValidationController::class, 'burn'])->name('validation.burn');
 
