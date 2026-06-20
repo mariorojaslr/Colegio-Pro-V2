@@ -121,17 +121,41 @@ class CmsController extends Controller
         return redirect()->back()->with('success', 'Carrusel creado.');
     }
 
-    public function sliderItemsStore(Request $request, Slider $slider)
+    public function sliderItemsStore(Request $request, Slider $slider, \App\Services\BunnyService $bunny)
     {
-        // Integration with Bunny.net would go here for file upload. For now we save the URL.
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date|after_or_equal:starts_at',
+        ]);
+
+        $file = $request->file('image');
+        $schoolId = auth()->user()->school_id;
+        $remoteName = "tenant_{$schoolId}/sliders/" . time() . '_' . $file->getClientOriginalName();
+        
+        $upload = $bunny->uploadFile($file->getPathname(), $remoteName);
+        $imageUrl = $upload['success'] ? $upload['url'] : $file->store('sliders', 'public');
+
         SliderItem::create([
             'slider_id' => $slider->id,
-            'image_url' => $request->image_url ?? 'https://via.placeholder.com/1200x400',
+            'image_url' => $imageUrl,
             'title' => $request->title,
             'description' => $request->description,
-            'order' => $request->order ?? 0
+            'link' => $request->link,
+            'order' => $request->order ?? 0,
+            'starts_at' => $request->starts_at,
+            'ends_at' => $request->ends_at
         ]);
         return redirect()->back()->with('success', 'Imagen añadida.');
+    }
+
+    public function sliderItemsDestroy(SliderItem $sliderItem)
+    {
+        // Verificar que el slider pertenece a la escuela actual
+        if ($sliderItem->slider->school_id == auth()->user()->school_id) {
+            $sliderItem->delete();
+        }
+        return redirect()->back()->with('success', 'Imagen eliminada del carrusel.');
     }
 
     // === BOARD MEMBERS (Autoridades) ===

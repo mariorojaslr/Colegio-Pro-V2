@@ -38,12 +38,21 @@
                     <div class="row mb-4">
                         @forelse($slider->items as $item)
                             <div class="col-md-4 mb-3">
-                                <div class="card h-100">
-                                    <img src="{{ $item->image_url }}" class="card-img-top" alt="{{ $item->title }}" style="height: 150px; object-fit: cover;">
+                                <div class="card h-100 position-relative">
+                                    <form action="{{ route('admin.cms.sliders.items.destroy', $item->id) }}" method="POST" class="position-absolute" style="top: -10px; right: -10px; z-index: 10;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-close shadow bg-white rounded-circle p-2 border border-2 border-danger" onclick="return confirm('¿Eliminar imagen?')" title="Eliminar" style="opacity: 1; width: 1.5em; height: 1.5em;"></button>
+                                    </form>
+                                    <img src="{{ Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset('storage/'.$item->image_url) }}" class="card-img-top" alt="{{ $item->title }}" style="height: 150px; object-fit: cover;">
                                     <div class="card-body p-2">
                                         <h6 class="card-title">{{ $item->title ?? 'Sin Título' }}</h6>
                                         <p class="card-text small text-truncate">{{ $item->description }}</p>
-                                        <p class="mb-0 small text-muted">Orden: {{ $item->order }}</p>
+                                        <p class="mb-0 small text-muted"><i class="bi bi-sort-numeric-down"></i> Orden: {{ $item->order }}</p>
+                                        <div class="small text-muted mt-1" style="font-size: 0.75rem;">
+                                            <div>Desde: {{ $item->starts_at ? $item->starts_at->format('d/m/Y H:i') : 'No def.' }}</div>
+                                            <div>Hasta: {{ $item->ends_at ? $item->ends_at->format('d/m/Y H:i') : 'No def.' }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -55,14 +64,24 @@
                     </div>
 
                     <h6>Añadir nueva imagen</h6>
-                    <form action="{{ route('admin.cms.sliders.items.store', $slider->id) }}" method="POST" class="border p-3 rounded bg-light">
+                    <form action="{{ route('admin.cms.sliders.items.store', $slider->id) }}" method="POST" enctype="multipart/form-data" class="border p-3 rounded bg-light">
                         @csrf
                         <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <label>URL de la Imagen (Bunny.net u otra)</label>
-                                <input type="url" name="image_url" class="form-control form-control-sm" required placeholder="https://midominio.b-cdn.net/imagen.jpg">
-                                <small class="text-muted">El sistema de subida directa a Bunny.net se implementará en la fase de optimización.</small>
+                            <div class="col-md-12 mb-3">
+                                <label class="fw-bold">Subir Foto para el Carrusel</label>
+                                <input type="file" name="image" class="form-control" accept="image/*" required>
+                                <small class="text-muted">La imagen se subirá automáticamente a Bunny.net</small>
                             </div>
+                            
+                            <div class="col-md-6 mb-2">
+                                <label>Fecha de Inicio</label>
+                                <input type="datetime-local" name="starts_at" class="form-control form-control-sm" value="{{ now()->format('Y-m-d\TH:i') }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Fecha de Fin (Caducidad)</label>
+                                <input type="datetime-local" name="ends_at" class="form-control form-control-sm" value="{{ now()->addDays(30)->format('Y-m-d\TH:i') }}" required>
+                            </div>
+
                             <div class="col-md-6 mb-2">
                                 <label>Título (Opcional)</label>
                                 <input type="text" name="title" class="form-control form-control-sm">
@@ -76,11 +95,12 @@
                                 <input type="text" name="description" class="form-control form-control-sm">
                             </div>
                             <div class="col-md-4 mb-2">
-                                <label>Orden</label>
+                                <label>Orden de aparición</label>
                                 <input type="number" name="order" class="form-control form-control-sm" value="0">
+                                <small class="text-muted" style="font-size: 0.7rem;">0=Primera, 1=Segunda, etc.</small>
                             </div>
-                            <div class="col-md-12 mt-2">
-                                <button type="submit" class="btn btn-sm btn-success">Añadir Imagen</button>
+                            <div class="col-md-12 mt-3">
+                                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-cloud-upload me-2"></i> Subir y Programar Imagen</button>
                             </div>
                         </div>
                     </form>

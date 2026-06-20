@@ -199,6 +199,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cms/sliders', [\App\Http\Controllers\Admin\CmsController::class, 'slidersIndex'])->name('admin.cms.sliders.index');
     Route::post('/cms/sliders', [\App\Http\Controllers\Admin\CmsController::class, 'slidersStore'])->name('admin.cms.sliders.store');
     Route::post('/cms/sliders/{slider}/items', [\App\Http\Controllers\Admin\CmsController::class, 'sliderItemsStore'])->name('admin.cms.sliders.items.store');
+    Route::delete('/cms/slider-items/{sliderItem}', [\App\Http\Controllers\Admin\CmsController::class, 'sliderItemsDestroy'])->name('admin.cms.sliders.items.destroy');
 
     Route::get('/cms/autoridades', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersIndex'])->name('admin.cms.board_members.index');
     Route::post('/cms/autoridades', [\App\Http\Controllers\Admin\CmsController::class, 'boardMembersStore'])->name('admin.cms.board_members.store');

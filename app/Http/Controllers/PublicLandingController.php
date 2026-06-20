@@ -24,7 +24,9 @@ class PublicLandingController extends Controller
 
         $slider = \App\Models\Slider::where('school_id', $school->id ?? 1)
                         ->where('is_active', true)
-                        ->with('items')
+                        ->with(['items' => function($q) {
+                            $q->active()->orderBy('order', 'asc');
+                        }])
                         ->first();
 
         $plans = \App\Models\SubscriptionPlan::all();
