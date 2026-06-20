@@ -69,6 +69,10 @@ class CollegiateController extends Controller
             $query->where('is_fees_compliant', true)
                   ->where('is_fully_documented', true)
                   ->where('is_ethics_compliant', true);
+        } elseif ($request->filter === 'activados') {
+            $query->whereNotNull('user_id');
+        } elseif ($request->filter === 'pendientes') {
+            $query->whereNull('user_id');
         }
 
         // 📏 Densidad de Datos (Paginación Personalizada)
