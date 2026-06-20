@@ -22,7 +22,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">COLEGIO-PRO SaaS</div>
+        <div class="logo">COLEGIO-PRO Plataforma</div>
         <div class="invoice-title">FACTURA</div>
     </div>
 
@@ -68,7 +68,7 @@
         <tbody>
             <tr>
                 <td>
-                    <div style="font-weight: bold;">Suscripción Mensual - Plan {{ $invoice->school->activeSubscription->plan->name ?? 'SaaS' }}</div>
+                    <div style="font-weight: bold;">Suscripción Mensual - Plan {{ $invoice->school->activeSubscription->plan->name ?? 'Plataforma' }}</div>
                     <div style="font-size: 11px; color: #64748b; margin-top: 5px;">
                         Incluye hasta {{ $invoice->school->activeSubscription->plan->max_users }} asociados activos y 
                         {{ $invoice->school->activeSubscription->plan->max_storage }}GB de almacenamiento Cloud.

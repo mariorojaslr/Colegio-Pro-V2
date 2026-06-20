@@ -5,7 +5,7 @@
     <div class="row mb-5 align-items-center">
         <div class="col">
             <h1 class="h3 fw-bold mb-0">Configuración Comercial de Planes</h1>
-            <p class="text-muted">Defina los precios, límites y características de los niveles de servicio SaaS.</p>
+            <p class="text-muted">Defina los precios, límites y características de los niveles de servicio Plataforma.</p>
         </div>
     </div>
 

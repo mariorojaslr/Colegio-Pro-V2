@@ -90,7 +90,7 @@
                     </li>
                     <li class="d-flex align-items-start">
                         <i class="bi bi-currency-dollar me-3 fs-5 text-primary text-opacity-75"></i>
-                        <div>El precio mínimo permitido es de $25.000 mensuales según las reglas de negocio SaaS.</div>
+                        <div>El precio mínimo permitido es de $25.000 mensuales según las reglas de negocio Plataforma.</div>
                     </li>
                 </ul>
             </div>

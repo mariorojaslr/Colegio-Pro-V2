@@ -35,20 +35,20 @@
     .metric-value.text-success { color: #10b981 !important; }
 
     /* Accordion Style Multipost */
-    .saas-client-list {
+    .platform-client-list {
         background-color: transparent;
     }
-    .saas-client-item {
+    .platform-client-item {
         background-color: #1a1e29;
         border: 1px solid rgba(255,255,255,0.05);
         margin-bottom: 2px;
     }
-    .saas-client-header {
+    .platform-client-header {
         padding: 1rem 1.5rem;
         cursor: pointer;
         transition: background-color 0.2s;
     }
-    .saas-client-header:hover {
+    .platform-client-header:hover {
         background-color: #1e2330;
     }
     .client-name {
@@ -79,7 +79,7 @@
         text-align: right;
     }
 
-    .saas-client-body {
+    .platform-client-body {
         background-color: #151821;
         padding: 1.5rem;
         border-top: 1px solid rgba(255,255,255,0.05);
@@ -170,13 +170,13 @@
 
 <div class="card bg-transparent border-0">
     <div class="card-header bg-transparent border-0 px-0 pb-3">
-        <h6 class="m-0 text-white fw-bold">Estado de Clientes SaaS</h6>
+        <h6 class="m-0 text-white fw-bold">Estado de Clientes Plataforma</h6>
     </div>
-    <div class="saas-client-list accordion" id="clientsAccordion">
+    <div class="platform-client-list accordion" id="clientsAccordion">
         
         @foreach($clientsStatus as $index => $client)
-        <div class="saas-client-item accordion-item border-0 bg-transparent">
-            <div class="saas-client-header accordion-header" id="heading{{ $index }}">
+        <div class="platform-client-item accordion-item border-0 bg-transparent">
+            <div class="platform-client-header accordion-header" id="heading{{ $index }}">
                 <div class="d-flex justify-content-between align-items-center w-100" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
                     <div class="flex-grow-1">
                         <div class="client-name">{{ $client->school->name }}</div>
@@ -192,7 +192,7 @@
                 </div>
             </div>
             <div id="collapse{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}" data-bs-parent="#clientsAccordion">
-                <div class="saas-client-body">
+                <div class="platform-client-body">
                     <div class="d-flex justify-content-between mb-4">
                         <div>
                             <div class="text-primary" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 1px;">Acciones de Gestión</div>

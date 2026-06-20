@@ -180,7 +180,7 @@
     </div>
     <div class="col-md-3">
         <div class="card card-multipost p-4 h-100">
-            <div class="metric-title mb-2">Conversión MRR (SaaS)</div>
+            <div class="metric-title mb-2">Conversión MRR (Plataforma)</div>
             <div class="d-flex align-items-baseline">
                 <div class="stat-value text-white">${{ number_format($stats['mrr'] ?? 0, 0, ',', '.') }}</div>
             </div>
@@ -196,7 +196,7 @@
             <div class="px-4 py-3 border-bottom" style="border-color: rgba(255,255,255,0.05) !important;">
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="m-0 fw-bold" style="font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: #94a3b8;">
-                        <i class="bi bi-clock-history me-2 text-neon-green"></i> MONITOR DE OPERACIONES GLOBAL (SAAS)
+                        <i class="bi bi-clock-history me-2 text-neon-green"></i> MONITOR DE OPERACIONES GLOBAL (PLATAFORMA)
                     </h6>
                     <span class="badge bg-success bg-opacity-25 text-success rounded-pill px-3" style="font-size: 0.7rem;">TIEMPO REAL</span>
                 </div>
@@ -261,7 +261,7 @@
                 <a href="{{ route('admin.plans.index') }}" class="control-btn">
                     <i class="bi bi-gear-fill text-info"></i>
                     <div>
-                        <span class="title">Planes SaaS</span>
+                        <span class="title">Planes Plataforma</span>
                         <span class="desc">Precios y servicios</span>
                     </div>
                 </a>
@@ -278,7 +278,7 @@
                     <i class="bi bi-bell-fill text-warning"></i>
                     <div>
                         <span class="title">Notificaciones</span>
-                        <span class="desc">Historial de avisos SaaS</span>
+                        <span class="desc">Historial de avisos Plataforma</span>
                     </div>
                 </a>
 
@@ -380,7 +380,7 @@
                     <div class="mb-3">
                         <label class="small fw-bold text-muted mb-1">Destinatarios</label>
                         <select class="form-select bg-dark text-white border-0 shadow-none" name="school_id">
-                            <option value="">Todos los Colegios (SaaS)</option>
+                            <option value="">Todos los Colegios (Plataforma)</option>
                             @foreach ($schools as $school)
                                 <option value="{{ $school->id }}">{{ $school->name }}</option>
                             @endforeach

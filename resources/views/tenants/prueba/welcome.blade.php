@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $school->name ?? 'SaaS Demo' }}</title>
+    <title>{{ $school->name ?? 'Plataforma Demo' }}</title>
     
     <link rel="icon" type="image/png" href="{{ isset($school) && $school->logo ? asset($school->logo) : asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -109,7 +109,7 @@
                 @else
                     <span class="material-icons" style="color: var(--brand-main);">cloud_done</span>
                 @endif
-                {{ $school->name ?? 'Demo SaaS' }}
+                {{ $school->name ?? 'Demo Plataforma' }}
             </a>
             
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#demoNav">
@@ -314,7 +314,7 @@
 
     <footer class="py-5 border-top" style="background-color: #fff;">
         <div class="container text-center">
-            <p class="text-muted mb-0">Demostración Multi-tenant SaaS &copy; {{ date('Y') }}</p>
+            <p class="text-muted mb-0">&copy; {{ date('Y') }} Graficar Software de Mario Rojas. Todos los derechos reservados.</p>
         </div>
     </footer>
 

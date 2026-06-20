@@ -200,11 +200,11 @@
     </style>
 </head>
 <body class="light-mode">
-    {{-- Barra de Alerta de Suplantación (Modo Visión Omnisciente) --}}
+    {{-- Barra de Alerta de Suplantación --}}
     @if(session('impersonator_id'))
     <div class="bg-warning text-dark py-2 px-4 d-flex justify-content-between align-items-center fw-bold shadow-sm sticky-top" style="z-index: 1060;">
         <div>
-            <i class="bi bi-eye-fill me-2"></i> MODO VISIÓN OMNISCIENTE: Estás viendo el sistema como <strong>{{ auth()->user()->name }}</strong>
+            <i class="bi bi-headset me-2"></i> SESIÓN DE SOPORTE: Estás viendo el sistema como <strong>{{ auth()->user()->name }}</strong>
         </div>
         <a href="{{ route('admin.leave_impersonation') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">
             <i class="bi bi-door-open me-1"></i> Salir y Volver a OWNER

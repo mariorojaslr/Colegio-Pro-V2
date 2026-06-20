@@ -103,7 +103,7 @@
             @else
                 <a class="nav-link" href="#"><i class="bi bi-people me-2"></i> Usuarios</a>
                 <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2 me-2"></i> Contabilidad Global</a>
-                <a class="nav-link {{ request()->routeIs('billing.index') ? 'active' : '' }}" href="{{ route('billing.index') }}"><i class="bi bi-credit-card me-2"></i> Mi Plan SaaS</a>
+                <a class="nav-link {{ request()->routeIs('billing.index') ? 'active' : '' }}" href="{{ route('billing.index') }}"><i class="bi bi-credit-card me-2"></i> Mi Plan</a>
                 <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots me-2"></i> Mis Tickets</a>
             @endif
         </nav>
@@ -118,11 +118,11 @@
 
     <!-- Contenedor de Contenido Principal -->
     <div class="main-content d-flex flex-column vh-100 overflow-auto">
-        {{-- Barra de Alerta de Suplantación (Modo Visión Omnisciente) --}}
+        {{-- Barra de Alerta de Suplantación (Modo Soporte Administrativo) --}}
         @if(session('impersonator_id'))
         <div class="bg-warning text-dark py-2 px-4 d-flex justify-content-between align-items-center fw-bold shadow-sm">
             <div>
-                <i class="bi bi-eye-fill me-2"></i> MODO VISIÓN OMNISCIENTE: Estás viendo el sistema como <strong>{{ auth()->user()->name }}</strong>
+                <i class="bi bi-headset me-2"></i> SESIÓN DE SOPORTE: Estás viendo el sistema como <strong>{{ auth()->user()->name }}</strong>
             </div>
             <a href="{{ route('admin.leave_impersonation') }}" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">
                 <i class="bi bi-door-open me-1"></i> Salir y Volver a OWNER
@@ -225,7 +225,7 @@
         </div>
 
         <footer class="mt-auto py-3 px-4 bg-white text-center border-top">
-            <p class="m-0 text-muted small">&copy; {{ date('y') }} Colegio-Pro-SaaS. Visión Omnisciente activada.</p>
+            <p class="m-0 text-muted small">&copy; {{ date('Y') }} Graficar Software de Mario Rojas. Todos los derechos reservados.</p>
         </footer>
     </div>
 

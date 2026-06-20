@@ -407,7 +407,7 @@
                 <a href="#" class="text-theme-primary text-decoration-none shadow-hover-up"><span class="material-icons">email</span></a>
                 <a href="#" class="text-theme-primary text-decoration-none shadow-hover-up"><span class="material-icons">location_on</span></a>
             </div>
-            <p class="text-theme-dark small mb-0">&copy; {{ date('Y') }} Todos los derechos reservados. Desarrollado por <span class="fw-bold">Gente Piola</span>.</p>
+            <p class="text-theme-dark small mb-0">&copy; {{ date('Y') }} Graficar Software de Mario Rojas. Todos los derechos reservados.</p>
         </div>
     </footer>
 

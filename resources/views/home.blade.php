@@ -175,7 +175,7 @@
                         <span class="small fw-bold">100% OK</span>
                     </div>
                     <hr class="opacity-10 my-3">
-                    <p class="small text-muted italic mb-0">Colegio-Pro Ver 1.2.0 - Dashboard Multi-SaaS</p>
+                    <p class="small text-muted italic mb-0">Colegio-Pro Ver 1.2.0 - Dashboard</p>
                 </div>
             </div>
         </div>

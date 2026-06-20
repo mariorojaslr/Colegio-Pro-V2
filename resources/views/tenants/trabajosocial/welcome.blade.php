@@ -429,7 +429,7 @@
     <footer class="footer-ts">
         <div class="container-fluid px-4 px-xl-5">
             <h3 class="playfair mb-3">{{ $school->name }}</h3>
-            <p class="mb-0" style="opacity: 0.8;">&copy; {{ date('Y') }} Todos los derechos reservados.</p>
+            <p class="mb-0" style="opacity: 0.8;">&copy; {{ date('Y') }} Graficar Software de Mario Rojas. Todos los derechos reservados.</p>
         </div>
     </footer>
 
