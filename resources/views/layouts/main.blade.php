@@ -341,63 +341,49 @@
                         @if(!request()->is('/'))
                             @if(auth()->user()->role === 'ADMIN_COLEGIO')
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') ? 'text-primary' : 'text-muted' }}" href="{{ route('collegiates.index') }}">{{ __('ui.padron') }}</a></li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">Contabilidad Global</a></li>
+                                
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'collegiates') || str_contains($currentRoute, 'lessons') || str_contains($currentRoute, 'news') || str_contains($currentRoute, 'certificate_types') || str_contains($currentRoute, 'ethics') || str_contains($currentRoute, 'compliance') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
+                                        Colegiados y Gestión
+                                    </a>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('collegiates.index') }}"><i class="bi bi-people-fill me-2 text-primary"></i> Padrón de Matriculados</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('student.lessons.index') }}"><i class="bi bi-mortarboard-fill me-2 text-primary"></i> Academia y Cursos</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.news.index') }}"><i class="bi bi-newspaper me-2 text-primary"></i> Prensa y Noticias</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.certificate_types.index') }}"><i class="bi bi-file-earmark-text me-2 text-primary"></i> Trámites Habilitados</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics.index') }}"><i class="bi bi-scales me-2 text-primary"></i> Ética y Sanciones</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.compliance.index') }}"><i class="bi bi-shield-check me-2 text-primary"></i> Auditoría de Legajos</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">Sector Económico</a></li>
                                 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'cms') || str_contains($currentRoute, 'school_settings') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
                                         Gestor Institucional
                                     </a>
                                     <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.school_settings.edit') }}"><i class="bi bi-gear-fill me-2 text-primary"></i>Configuración (Logo y Mapa)</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.settings.vault.index') }}"><i class="bi bi-shield-check me-2 text-primary"></i>Bóveda de Resguardo</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.school_settings.edit') }}"><i class="bi bi-gear-fill me-2 text-primary"></i> Configuración Visual</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.settings.vault.index') }}"><i class="bi bi-shield-lock-fill me-2 text-primary"></i> Bóveda de Resguardo</a></li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.board_members.index') }}"><i class="bi bi-people-fill me-2 text-primary"></i>Autoridades del Colegio</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.pages.index') }}"><i class="bi bi-file-earmark-richtext me-2 text-primary"></i>Páginas Dinámicas</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.menus.index') }}"><i class="bi bi-list-nested me-2 text-primary"></i>Menús y Navegación</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.sliders.index') }}"><i class="bi bi-images me-2 text-primary"></i>Sliders y Banners</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.chatbot.index') }}"><i class="bi bi-robot me-2 text-primary"></i>Bot (IA)</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.board_members.index') }}"><i class="bi bi-person-badge-fill me-2 text-primary"></i> Autoridades</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.pages.index') }}"><i class="bi bi-file-earmark-richtext me-2 text-primary"></i> Páginas Dinámicas</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.menus.index') }}"><i class="bi bi-list-nested me-2 text-primary"></i> Menús y Navegación</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.sliders.index') }}"><i class="bi bi-images me-2 text-primary"></i> Sliders y Banners</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.chatbot.index') }}"><i class="bi bi-robot me-2 text-primary"></i> Asistente Bot</a></li>
                                     </ul>
                                 </li>
 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'ethics') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownEthics" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        ÉTICA
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'tickets') || request()->routeIs('ai.*') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
+                                        Asistencia
                                     </a>
-                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownEthics">
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics.index') }}">Gestión Ética y Sanciones</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics_infractions.index') }}">Tipos de Infracción</a></li>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold d-flex align-items-center gap-2" href="{{ route('ai.index') }}"><img src="{{ asset('media/lili_avatar.png') }}" alt="Lili" class="rounded-circle shadow-sm border border-1" style="width: 20px; height: 20px; object-fit: cover;"> Lili (IA)</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('tickets.index') }}"><i class="bi bi-headset me-2 text-primary"></i> Soporte Técnico</a></li>
                                     </ul>
                                 </li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'lessons') ? 'text-primary' : 'text-muted' }}" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'news') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownNews" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Prensa
-                                    </a>
-                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownNews">
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.news.index') }}"><i class="bi bi-newspaper me-2 text-primary"></i>Gestor de Noticias</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#underConstructionModal"><i class="bi bi-envelope-paper me-2 text-primary"></i>Newsletters</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'compliance') || str_contains($currentRoute, 'requisitos') ? 'text-primary' : 'text-muted' }}" href="#" id="navbarDropdownDocs" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        AUDITORÍA
-                                    </a>
-                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2" aria-labelledby="navbarDropdownDocs">
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><h6 class="dropdown-header text-primary fw-bold">Auditoría</h6></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.compliance.index') }}">Auditoría de Legajos</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.certificates.index') }}">Solicitudes de Certificados</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('compliance_requirements.index') }}">Config. Requisitos</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'tramites') || str_contains($currentRoute, 'certificate_types') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.certificate_types.index') }}">
-                                        TRÁMITES
-                                    </a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'tickets') ? 'text-primary' : 'text-muted' }}" href="{{ route('tickets.index') }}"><i class="bi bi-headset me-1 text-primary"></i> SOPORTE</a></li>
-                                <li class="nav-item d-flex align-items-center"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase d-flex align-items-center gap-2 {{ request()->routeIs('ai.*') ? 'text-primary' : 'text-muted' }}" href="{{ route('ai.index') }}"><img src="{{ asset('media/lili_avatar.png') }}" alt="Lili" class="rounded-circle shadow-sm border border-1" style="width: 24px; height: 24px; object-fit: cover;"> LILI</a></li>
                             @elseif(auth()->user()->isOwner())
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-primary" href="{{ route('admin.dashboard') }}">{{ __('ui.dashboard') }} (Owner)</a></li>
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase text-muted" href="{{ route('student.lessons.index') }}">{{ __('ui.academy') }}</a></li>
