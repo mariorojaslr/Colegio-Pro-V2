@@ -154,8 +154,8 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::get('/admin/global-billing', [\App\Http\Controllers\Admin\GlobalBillingController::class, 'index'])->name('admin.billing.global');
 
     // Gestión Global de Academia (Cursos/Lecciones)
-    Route::resource('admin/cms/menus', \App\Http\Controllers\Admin\MenuController::class)->names('admin.cms.menus');
-    Route::resource('admin/cms/sliders', \App\Http\Controllers\Admin\SliderController::class)->names('admin.cms.sliders');
+    Route::resource('admin/cms/menus', \App\Http\Controllers\Admin\MenuController::class)->names('owner.cms.menus');
+    Route::resource('admin/cms/sliders', \App\Http\Controllers\Admin\SliderController::class)->names('owner.cms.sliders');
 
 
     Route::resource('/admin/academy', \App\Http\Controllers\Admin\LessonController::class)->names('admin.academy');

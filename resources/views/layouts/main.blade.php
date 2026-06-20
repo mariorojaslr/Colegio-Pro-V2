@@ -370,7 +370,8 @@
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.board_members.index') }}"><i class="bi bi-person-badge-fill me-2 text-primary"></i> Autoridades</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.pages.index') }}"><i class="bi bi-file-earmark-richtext me-2 text-primary"></i> Páginas Dinámicas</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.menus.index') }}"><i class="bi bi-list-nested me-2 text-primary"></i> Menús y Navegación</a></li>
-                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.sliders.index') }}"><i class="bi bi-images me-2 text-primary"></i> Sliders y Banners</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.cms.sliders.index') }}"><i class="bi bi-images me-2 text-primary"></i> Sliders del Carrusel</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.banners.index') }}"><i class="bi bi-megaphone me-2 text-primary"></i> Banners Temporales</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.chatbot.index') }}"><i class="bi bi-robot me-2 text-primary"></i> Asistente Bot</a></li>
                                     </ul>
                                 </li>
