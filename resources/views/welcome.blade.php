@@ -249,27 +249,35 @@
             </div>
             
             @if(isset($latestNews) && $latestNews->count() > 0)
+            <style>
+                .card-prestige:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+                }
+                .ls-1 { letter-spacing: 1px; }
+            </style>
             <div class="row g-4">
                 @foreach($latestNews as $news)
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 rounded-4 shadow-sm bg-theme-card overflow-hidden shadow-hover-up">
-                        @if($news->image_path)
-                            <img src="{{ asset($news->image_path) }}" class="card-img-top" alt="{{ $news->title }}" style="height: 200px; object-fit: cover;">
-                        @else
-                            <div class="d-flex align-items-center justify-content-center" style="height: 200px; background-color: var(--theme-bg-light); border-bottom: 1px solid var(--theme-border);">
-                                <span class="material-icons" style="font-size: 5rem; color: var(--theme-primary); opacity: 0.2;">newspaper</span>
-                            </div>
-                        @endif
-                        <div class="card-body p-4">
-                            <span class="badge bg-theme-primary mb-2">{{ $news->category ?? 'Institucional' }}</span>
-                            <h5 class="fw-bold text-theme-dark mb-2 line-clamp-2">{{ $news->title }}</h5>
-                            <p class="text-secondary small mb-3 line-clamp-3">{{ Str::limit(strip_tags($news->content), 100) }}</p>
-                            <div class="d-flex justify-content-between align-items-center mt-auto">
-                                <small class="text-muted fw-medium">{{ $news->published_at->format('d/m/Y') }}</small>
-                                <a href="{{ route('news.show', $news->slug) }}" class="text-theme-primary fw-bold text-decoration-none small">Leer más &rarr;</a>
+                    <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none text-start">
+                        <div class="card card-prestige h-100 border-0 shadow-sm rounded-4 overflow-hidden" style="transition: all 0.3s ease; text-align: left;">
+                            @if($news->image_path)
+                                <img src="{{ asset($news->image_path) }}" class="card-img-top" alt="{{ $news->title }}" style="height: 200px; object-fit: cover;">
+                            @else
+                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="bi bi-newspaper display-4 text-white opacity-50"></i>
+                                </div>
+                            @endif
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="mb-2 text-muted small fw-bold">
+                                    <i class="bi bi-calendar3 me-1"></i> {{ $news->published_at->format('d M, Y') }}
+                                </div>
+                                <h5 class="card-title fw-bold text-dark">{{ $news->title }}</h5>
+                                <p class="card-text text-muted flex-grow-1">{{ $news->excerpt ?? Str::limit(strip_tags($news->content), 100) }}</p>
+                                <div class="mt-3 text-primary fw-bold small text-uppercase ls-1">Leer más <i class="bi bi-arrow-right"></i></div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 @endforeach
             </div>
