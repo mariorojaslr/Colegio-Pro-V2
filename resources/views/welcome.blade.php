@@ -103,18 +103,44 @@
 
     <!-- HERO SECTION -->
     @php
-        $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : asset('image.png');
+        $sliderItems = isset($slider) && $slider->items->count() > 0 ? $slider->items : collect([]);
     @endphp
-    <section class="hero-bg" style="background-image: url('{{ $bgImage }}');">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content text-center py-5">
-            <p class="text-white fw-bold mb-3 text-uppercase tracking-wider small opacity-75">Órgano oficial de regulación profesional</p>
-            <h1 class="display-4 fw-bold text-white mb-4 shadow-sm">{{ $school->name ?? 'Bienvenido' }}</h1>
-            <p class="lead text-white mx-auto" style="max-width: 800px; opacity: 0.9;">
-                Organismo encargado de habilitar, regular y fiscalizar el ejercicio ético y legal de la profesión en toda la jurisdicción.
-            </p>
-        </div>
-    </section>
+    
+    @if($sliderItems->count() > 1)
+        <section class="hero-bg position-relative p-0" style="overflow: hidden; height: 600px;">
+            <div id="heroCarousel" class="carousel slide carousel-fade position-absolute w-100 h-100" data-bs-ride="carousel" style="z-index: 1; top: 0; left: 0;">
+                <div class="carousel-inner h-100">
+                    @foreach($sliderItems as $index => $item)
+                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}" data-bs-interval="5000">
+                            <img src="{{ asset($item->image_url) }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="Slide {{ $index }}">
+                        </div>
+                    @endforeach
+                </div>
+                <div class="hero-overlay" style="z-index: 2; position: absolute; top:0; left:0; width:100%; height:100%;"></div>
+            </div>
+            <div class="container hero-content text-center py-5 position-relative d-flex flex-column justify-content-center h-100" style="z-index: 3;">
+                <p class="text-white fw-bold mb-3 text-uppercase tracking-wider small opacity-75">Órgano oficial de regulación profesional</p>
+                <h1 class="display-4 fw-bold text-white mb-4 shadow-sm">{{ $school->name ?? 'Bienvenido' }}</h1>
+                <p class="lead text-white mx-auto" style="max-width: 800px; opacity: 0.9;">
+                    Organismo encargado de habilitar, regular y fiscalizar el ejercicio ético y legal de la profesión en toda la jurisdicción.
+                </p>
+            </div>
+        </section>
+    @else
+        @php
+            $bgImage = $sliderItems->count() == 1 ? asset($sliderItems->first()->image_url) : asset('image.png');
+        @endphp
+        <section class="hero-bg" style="background-image: url('{{ $bgImage }}');">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content text-center py-5">
+                <p class="text-white fw-bold mb-3 text-uppercase tracking-wider small opacity-75">Órgano oficial de regulación profesional</p>
+                <h1 class="display-4 fw-bold text-white mb-4 shadow-sm">{{ $school->name ?? 'Bienvenido' }}</h1>
+                <p class="lead text-white mx-auto" style="max-width: 800px; opacity: 0.9;">
+                    Organismo encargado de habilitar, regular y fiscalizar el ejercicio ético y legal de la profesión en toda la jurisdicción.
+                </p>
+            </div>
+        </section>
+    @endif
 
     <!-- STATS -->
     <section class="bg-theme-card py-5 border-bottom border-theme">

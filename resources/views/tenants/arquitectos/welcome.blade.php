@@ -63,7 +63,7 @@
         @endphp
         .hero-arq {
             height: 100vh;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ $bgImage }}');
+            /* Background handled inline or by carousel */
             background-size: cover;
             background-position: center;
             display: flex;
@@ -209,16 +209,46 @@
     </nav>
 
     <!-- HERO -->
-    <section class="hero-arq">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <h1>DISEÑO,<br><span style="color: var(--accent);">VANGUARDIA</span><br>& ÉTICA.</h1>
-                    <p>Órgano oficial de regulación profesional. Defendiendo las incumbencias y promoviendo la excelencia arquitectónica en nuestra jurisdicción.</p>
+    @php
+        $sliderItems = isset($slider) && $slider->items->count() > 0 ? $slider->items : collect([]);
+    @endphp
+
+    @if($sliderItems->count() > 1)
+        <section class="hero-arq position-relative" style="overflow: hidden; padding:0; display:block;">
+            <div id="heroCarouselArq" class="carousel slide carousel-fade position-absolute w-100 h-100" data-bs-ride="carousel" style="z-index: 1; top: 0; left: 0;">
+                <div class="carousel-inner h-100">
+                    @foreach($sliderItems as $index => $item)
+                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}" data-bs-interval="5000">
+                            <img src="{{ asset($item->image_url) }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="Slide {{ $index }}">
+                        </div>
+                    @endforeach
+                </div>
+                <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)); z-index: 2;"></div>
+            </div>
+            <div class="container position-relative h-100 d-flex align-items-center" style="z-index: 3;">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h1>DISEÑO,<br><span style="color: var(--accent);">VANGUARDIA</span><br>& ÉTICA.</h1>
+                        <p>Órgano oficial de regulación profesional. Defendiendo las incumbencias y promoviendo la excelencia arquitectónica en nuestra jurisdicción.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @else
+        @php
+            $bgImage = $sliderItems->count() == 1 ? asset($sliderItems->first()->image_url) : 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
+        @endphp
+        <section class="hero-arq" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ $bgImage }}');">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h1>DISEÑO,<br><span style="color: var(--accent);">VANGUARDIA</span><br>& ÉTICA.</h1>
+                        <p>Órgano oficial de regulación profesional. Defendiendo las incumbencias y promoviendo la excelencia arquitectónica en nuestra jurisdicción.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <main class="container py-5" style="margin-top: -50px; position: relative; z-index: 10;">
         
