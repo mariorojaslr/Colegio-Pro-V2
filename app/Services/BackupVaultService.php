@@ -28,11 +28,13 @@ class BackupVaultService
 
         $filePath = $storagePath . '/' . $filename;
 
-        // Use mysqldump (Requires mysqldump to be accessible in PATH)
-        $command = "mysqldump --user={$username} --password={$password} --host={$host} {$databaseName} > {$filePath}";
-        
-        // Execute the command
-        exec($command);
+        try {
+            $dump = new \Ifsnop\Mysqldump\Mysqldump("mysql:host={$host};dbname={$databaseName}", $username, $password);
+            $dump->start($filePath);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Backup failed: ' . $e->getMessage());
+            throw $e;
+        }
 
         return $filePath;
     }
