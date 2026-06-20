@@ -264,8 +264,8 @@
                 <div class="col-md-4">
                     <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none text-start">
                         <div class="card card-prestige h-100 border-0 shadow-sm rounded-4 overflow-hidden" style="transition: all 0.3s ease; text-align: left;">
-                            @if($news->image_path)
-                                <img src="{{ asset($news->image_path) }}" class="card-img-top" alt="{{ $news->title }}" style="height: 200px; object-fit: cover;">
+                            @if($news->featured_image_url)
+                                <img src="{{ str_starts_with($news->featured_image_url, 'http') ? $news->featured_image_url : asset($news->featured_image_url) }}" class="card-img-top" alt="{{ $news->title }}" style="height: 200px; object-fit: cover;">
                             @else
                                 <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
                                     <i class="bi bi-newspaper display-4 text-white opacity-50"></i>
