@@ -61,7 +61,7 @@
                         <li>Logo institucional</li>
                         <li>Comprobantes locales (si existen)</li>
                     </ul>
-                    <div class="alert alert-warning small py-2 mb-3 border-0" style="background-color: #fff3cd;">
+                    <div class="alert alert-warning small py-2 mb-3 border-0 fw-bold" style="background-color: #fff3cd; color: #000;">
                         Puede tardar según la cantidad de fotos
                     </div>
                     <a href="{{ route('admin.settings.vault.photos') }}" class="btn btn-primary rounded-3 fw-bold py-2 w-100 mt-auto" style="background-color: #3b82f6; border: none;">
