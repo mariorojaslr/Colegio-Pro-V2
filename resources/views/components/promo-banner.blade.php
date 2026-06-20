@@ -15,11 +15,11 @@
 @if($banner)
 <div class="modal fade" id="promo-flyer-modal-{{ $banner->id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-banner-id="{{ $banner->id }}">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4 shadow-lg bg-transparent">
-            <div class="modal-header border-0 position-absolute w-100 p-3" style="z-index: 10;">
-                <button type="button" class="btn-close btn-close-white shadow-sm bg-dark bg-opacity-50 rounded-circle p-2 ms-auto" data-bs-dismiss="modal" aria-label="Close" title="Cerrar por hoy"></button>
+        <div class="modal-content border-0 bg-transparent" style="box-shadow: none;">
+            <div class="position-absolute" style="top: -15px; right: -15px; z-index: 1050;">
+                <button type="button" class="btn-close shadow bg-white rounded-circle p-2 border border-2 border-dark" data-bs-dismiss="modal" aria-label="Close" title="Cerrar por hoy" style="opacity: 1; filter: invert(0) grayscale(0) brightness(1); width: 1.5em; height: 1.5em; background-color: #ffffff !important;"></button>
             </div>
-            <div class="modal-body p-0 position-relative overflow-hidden rounded-4 text-center bg-dark">
+            <div class="modal-body p-0 position-relative overflow-hidden rounded-4 text-center shadow-lg bg-dark">
                 @php
                     $imgSrc = Str::startsWith($banner->image_path, ['http://', 'https://']) 
                         ? $banner->image_path 
