@@ -170,8 +170,15 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/switch-context/{context}', [App\Http\Controllers\HomeController::class, 'switchContext'])->name('switch_context');
+    
     // Noticias Administrativas
     Route::resource('admin/news', NewsArticleController::class)->names('admin.news');
+
+    // Autoridades y Permisos
+    Route::get('admin/permissions', [\App\Http\Controllers\Admin\RolePermissionController::class, 'index'])->name('admin.permissions.index');
+    Route::post('admin/permissions', [\App\Http\Controllers\Admin\RolePermissionController::class, 'store'])->name('admin.permissions.store');
+    Route::delete('admin/permissions/{user}', [\App\Http\Controllers\Admin\RolePermissionController::class, 'destroy'])->name('admin.permissions.destroy');
 
     // Banners Promocionales (Flyers)
     Route::resource('admin/banners', \App\Http\Controllers\Admin\EventBannerController::class)->names('admin.banners');

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'permissions',
         'school_id',
         'is_active',
     ];
@@ -77,6 +78,31 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'permissions' => 'array',
         ];
+    }
+
+    /**
+     * Verifica si el usuario tiene un permiso específico o acceso total.
+     */
+    public function hasPermission($permission)
+    {
+        if ($this->isOwner() || $this->role === 'ADMIN_COLEGIO' || $this->role === 'ADMIN_INTERNO') {
+            return true;
+        }
+
+        return in_array($permission, $this->permissions ?? []);
+    }
+
+    /**
+     * Verifica si el usuario tiene AL MENOS UN permiso de administración o es admin full.
+     */
+    public function hasAnyAdminPermission()
+    {
+        if ($this->isOwner() || $this->role === 'ADMIN_COLEGIO' || $this->role === 'ADMIN_INTERNO') {
+            return true;
+        }
+
+        return !empty($this->permissions);
     }
 }

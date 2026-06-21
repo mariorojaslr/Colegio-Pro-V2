@@ -200,6 +200,9 @@
     </style>
 </head>
 <body class="light-mode">
+    @include('components.context-switcher')
+    
+    <div id="app">
     {{-- Barra de Alerta de Suplantación --}}
     @if(session('impersonator_id'))
     <div class="bg-warning text-dark py-2 px-4 d-flex justify-content-between align-items-center fw-bold shadow-sm sticky-top" style="z-index: 1060;">

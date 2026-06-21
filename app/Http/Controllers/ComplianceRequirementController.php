@@ -25,7 +25,7 @@ class ComplianceRequirementController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO') abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
 
         $request->validate([
             'name' => 'required|string|max:255',

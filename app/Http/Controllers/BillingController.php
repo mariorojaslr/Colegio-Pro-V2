@@ -14,7 +14,10 @@ class BillingController extends Controller
      */
     public function index()
     {
-        $schoolId = Auth::user()->school_id;
+        $user = Auth::user();
+        if (!$user->hasPermission('manage_finances') && !$user->isOwner()) abort(403);
+        
+        $schoolId = $user->school_id;
         
         $invoices = PaymentRecord::where('school_id', $schoolId)
             ->with(['school.activeSubscription.plan'])
@@ -29,8 +32,11 @@ class BillingController extends Controller
      */
     public function download(PaymentRecord $invoice)
     {
+        $user = Auth::user();
+        if (!$user->hasPermission('manage_finances') && !$user->isOwner()) abort(403);
+        
         // Seguridad: Solo puede descargar facturas de su propia institución
-        if ($invoice->school_id !== Auth::user()->school_id) {
+        if ($invoice->school_id !== $user->school_id) {
             abort(403, 'No tiene permiso para acceder a esta factura.');
         }
 

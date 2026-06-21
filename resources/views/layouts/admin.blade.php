@@ -60,7 +60,10 @@
     </style>
     @yield('styles')
 </head>
-<body class="d-flex">
+<body class="d-flex" style="flex-direction: column; min-height: 100vh;">
+    @include('components.context-switcher')
+    
+    <div class="d-flex flex-grow-1" style="width: 100%;">
 
     <!-- Sidebar -->
     <div class="sidebar d-none d-lg-block sticky-top h-100">
@@ -99,13 +102,38 @@
                 <a class="nav-link {{ request()->routeIs('admin.plans.*') ? 'active' : '' }}" href="{{ route('admin.plans.index') }}"><i class="bi bi-credit-card"></i> Suscripciones</a>
                 <a class="nav-link {{ request()->routeIs('admin.billing.global') ? 'active' : '' }}" href="{{ route('admin.billing.global') }}"><i class="bi bi-wallet2"></i> Finanzas</a>
             @else
-                <a class="nav-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}"><i class="bi bi-megaphone"></i> Flyers</a>
-                <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots"></i> Soporte</a>
-                <a class="nav-link {{ request()->routeIs('admin.activity_logs.*') ? 'active' : '' }}" href="{{ route('admin.activity_logs.index') }}"><i class="bi bi-activity"></i> Auditoría</a>
+                @php $ctx = session('active_role_context', 'admin_general'); @endphp
+                
+                @if($ctx === 'admin_general' || $ctx === 'manage_cms')
+                    <a class="nav-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}"><i class="bi bi-megaphone"></i> Flyers</a>
+                @endif
+                
+                @if($ctx === 'admin_general' || $ctx === 'manage_users' || $ctx === 'manage_finances' || $ctx === 'manage_ethics')
+                    <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots"></i> Soporte</a>
+                    <a class="nav-link {{ request()->routeIs('admin.activity_logs.*') ? 'active' : '' }}" href="{{ route('admin.activity_logs.index') }}"><i class="bi bi-activity"></i> Auditoría</a>
+                @endif
 
-                <a class="nav-link {{ request()->routeIs('collegiates.index') ? 'active' : '' }}" href="{{ route('collegiates.index') }}"><i class="bi bi-people"></i> Usuarios</a>
-                <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2"></i> Contabilidad</a>
-                <a class="nav-link {{ request()->routeIs('billing.index') ? 'active' : '' }}" href="{{ route('billing.index') }}"><i class="bi bi-credit-card"></i> Mi Plan</a>
+                @if($ctx === 'admin_general' || $ctx === 'manage_users')
+                    <a class="nav-link {{ request()->routeIs('collegiates.index') ? 'active' : '' }}" href="{{ route('collegiates.index') }}"><i class="bi bi-people"></i> Usuarios</a>
+                @endif
+                
+                @if($ctx === 'admin_general')
+                    <a class="nav-link {{ request()->routeIs('admin.permissions.index') ? 'active' : '' }}" href="{{ route('admin.permissions.index') }}"><i class="bi bi-shield-lock"></i> Autoridades</a>
+                @endif
+
+                @if($ctx === 'admin_general' || $ctx === 'manage_finances')
+                    <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2"></i> Contabilidad</a>
+                    <a class="nav-link {{ request()->routeIs('billing.index') ? 'active' : '' }}" href="{{ route('billing.index') }}"><i class="bi bi-credit-card"></i> Mi Plan</a>
+                @endif
+
+                @if($ctx === 'admin_general' || $ctx === 'manage_ethics')
+                    <a class="nav-link {{ request()->routeIs('admin.ethics.*') ? 'active' : '' }}" href="{{ route('admin.ethics.index') ?? '#' }}"><i class="bi bi-bank"></i> Ética</a>
+                @endif
+                
+                @if($ctx === 'admin_general' || $ctx === 'manage_academy')
+                    <a class="nav-link {{ request()->routeIs('admin.exams.*') ? 'active' : '' }}" href="{{ route('admin.exams.index') ?? '#' }}"><i class="bi bi-mortarboard"></i> Academia</a>
+                @endif
+
                 <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots"></i> Mis Tickets</a>
             @endif
         </nav>
@@ -280,5 +308,6 @@
             });
         });
     </script>
+    </div> <!-- Cerrar flex-grow-1 -->
 </body>
 </html>

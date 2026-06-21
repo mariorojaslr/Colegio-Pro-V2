@@ -15,7 +15,7 @@ class CollegiateNotificationController extends Controller
     public function sendWarning(Collegiate $collegiate)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO') abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
         if ($collegiate->school_id !== $user->school_id) abort(403);
 
         // Lógica de envío simulada (Email/Push/WhatsApp)
@@ -32,7 +32,7 @@ class CollegiateNotificationController extends Controller
     public function bulkNotify(Request $request)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO') abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
 
         $request->validate(['intensity' => 'required|integer|min:1|max:4']);
         $intensity = $request->intensity;

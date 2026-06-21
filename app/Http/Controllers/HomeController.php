@@ -16,6 +16,38 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    public function switchContext($context)
+    {
+        $user = auth()->user();
+
+        if ($context === 'user') {
+            session(['active_role_context' => 'user']);
+            return redirect()->route('home');
+        }
+
+        if ($user->hasPermission($context) || $user->hasAnyAdminPermission()) {
+            session(['active_role_context' => $context]);
+            
+            if ($context === 'admin_general') {
+                return redirect()->route('collegiates.index'); // O la ruta principal para admin colegio
+            } elseif ($context === 'manage_users') {
+                return redirect()->route('collegiates.index');
+            } elseif ($context === 'manage_finances') {
+                return redirect()->route('admin.billing.index');
+            } elseif ($context === 'manage_ethics') {
+                return redirect()->route('admin.ethics.index');
+            } elseif ($context === 'manage_cms') {
+                return redirect()->route('admin.news.index');
+            } elseif ($context === 'manage_academy') {
+                return redirect()->route('admin.exams.index');
+            }
+            
+            return redirect()->route('home');
+        }
+
+        return redirect()->back()->with('error', 'No tienes permiso para acceder a este modo.');
+    }
+
     /**
      * Show the application dashboard.
      *

@@ -25,7 +25,7 @@ class AmenityController extends Controller
      */
     public function toggle(Amenity $amenity)
     {
-        if (Auth::user()->role !== 'ADMIN_COLEGIO') abort(403);
+        if (!Auth::user()->hasPermission('manage_cms') && !Auth::user()->isOwner()) abort(403);
         
         $amenity->is_active = !$amenity->is_active;
         $amenity->save();

@@ -12,7 +12,7 @@ class CollegiateController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
 
         $schoolId = $user->isOwner() ? request('school_id', School::first()->id) : $user->school_id;
 
@@ -89,7 +89,7 @@ class CollegiateController extends Controller
         $user = Auth::user();
         
         // Seguridad: Solo admin del mismo colegio puede ver
-        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
         if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
 
         // Cargamos los documentos entregados y las cuotas de este colegio
@@ -108,7 +108,7 @@ class CollegiateController extends Controller
         $user = Auth::user();
         
         // Seguridad: Solo admin del mismo colegio puede editar
-        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
         if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
 
         $request->validate([
@@ -175,7 +175,7 @@ class CollegiateController extends Controller
     public function refinance(Request $request, Collegiate $collegiate)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
         if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
 
         $request->validate([
@@ -240,7 +240,7 @@ class CollegiateController extends Controller
     public function storeCustomDue(Request $request, Collegiate $collegiate)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
         if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
 
         $request->validate([
@@ -289,14 +289,14 @@ class CollegiateController extends Controller
     public function import()
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO') abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
         return view('collegiates.import');
     }
 
     public function storeImport(Request $request)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO') abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
 
         $request->validate([
             'file' => 'required|file|max:10240', // Se relaja la validación estricta de mimes por problemas con Windows CSV/Excel
@@ -322,7 +322,7 @@ class CollegiateController extends Controller
     public function export()
     {
         $user = auth()->user();
-        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
 
         $fileName = 'padron_export_' . date('Y_m_d_His') . '.xlsx';
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CollegiatesExport($user->school_id), $fileName);
@@ -396,7 +396,7 @@ class CollegiateController extends Controller
     public function storeSanction(Request $request, Collegiate $collegiate)
     {
         $user = Auth::user();
-        if ($user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) abort(403);
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
         if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) abort(403);
 
         $request->validate([

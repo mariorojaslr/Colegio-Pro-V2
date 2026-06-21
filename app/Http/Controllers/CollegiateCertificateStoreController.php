@@ -109,7 +109,7 @@ class CollegiateCertificateStoreController extends Controller
     public function download(ProfessionalCertificate $certificate)
     {
         $user = auth()->user();
-        if ($certificate->collegiate->user_id !== $user->id && $user->role !== 'ADMIN_COLEGIO' && !$user->isOwner()) {
+        if ($certificate->collegiate->user_id !== $user->id && !$user->hasPermission('manage_users') && !$user->isOwner()) {
             abort(403);
         }
 
