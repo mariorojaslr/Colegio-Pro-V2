@@ -308,6 +308,7 @@
             });
         });
     </script>
+    @stack('scripts')
     </div> <!-- Cerrar flex-grow-1 -->
 </body>
 </html>

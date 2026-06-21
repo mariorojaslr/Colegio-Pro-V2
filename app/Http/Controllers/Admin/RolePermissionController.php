@@ -43,9 +43,12 @@ class RolePermissionController extends Controller
             $colId = str_replace('col_', '', $userIdInput);
             $collegiate = Collegiate::findOrFail($colId);
             
+            // Generate fallback email if null
+            $fallbackEmail = $collegiate->email ?: 'col_' . $colId . '@' . ($collegiate->school->slug ?? 'sistema') . '.com';
+
             // Create user for collegiate silently so we can assign permissions
             $user = User::firstOrCreate(
-                ['email' => $collegiate->email],
+                ['email' => $fallbackEmail],
                 [
                     'name' => $collegiate->first_name . ' ' . $collegiate->last_name,
                     'password' => bcrypt(Str::random(12)),
@@ -54,6 +57,7 @@ class RolePermissionController extends Controller
                 ]
             );
             $collegiate->user_id = $user->id;
+            $collegiate->email = $fallbackEmail; // Ensure the collegiate gets the email too
             $collegiate->save();
         } else {
             $uId = str_replace('usr_', '', $userIdInput);

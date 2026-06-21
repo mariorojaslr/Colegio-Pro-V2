@@ -203,7 +203,24 @@
 @endsection
 
 @push('scripts')
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+<style>
+    .ts-control { border: 0 !important; border-radius: 0.5rem !important; box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; background-color: #f8f9fa !important; padding: 0.7rem 1rem !important; }
+    body[data-bs-theme='dark'] .ts-control { background-color: #212529 !important; color: white !important; }
+    body[data-bs-theme='dark'] .ts-dropdown { background-color: #2b3035 !important; color: white !important; border-color: #495057 !important; }
+    body[data-bs-theme='dark'] .ts-dropdown .option.active { background-color: #0d6efd !important; color: white !important; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new TomSelect("#userSelect", {
+            create: false,
+            sortField: { field: "text", direction: "asc" },
+            placeholder: "Escribe el apellido o nombre para buscar..."
+        });
+    });
+
     function selectRole(role) {
         document.getElementById('role_' + (role === 'admin_general' ? 'admin' : 'custom')).checked = true;
         
