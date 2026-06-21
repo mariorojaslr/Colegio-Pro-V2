@@ -129,9 +129,10 @@
                         <select name="user_id" class="form-select form-select-lg rounded-3 shadow-sm border-0 bg-light" id="userSelect" required>
                             <option value="">Buscar por nombre...</option>
                             @foreach($collegiates as $col)
-                                @if($col->user_id)
-                                    <option value="{{ $col->user_id }}">{{ $col->last_name }}, {{ $col->first_name }}</option>
-                                @endif
+                                <option value="{{ $col->user_id ? 'usr_'.$col->user_id : 'col_'.$col->id }}">
+                                    {{ $col->last_name }}, {{ $col->first_name }} 
+                                    @if(!$col->user_id) (Sin cuenta activada) @endif
+                                </option>
                             @endforeach
                         </select>
                     </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Collegiate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class RolePermissionController extends Controller
 {
@@ -30,12 +31,34 @@ class RolePermissionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|string',
             'role_type' => 'required|in:admin_general,custom',
             'permissions' => 'array|nullable'
         ]);
 
-        $user = User::where('id', $request->user_id)->where('school_id', auth()->user()->school_id)->firstOrFail();
+        $userIdInput = $request->user_id;
+        $user = null;
+
+        if (str_starts_with($userIdInput, 'col_')) {
+            $colId = str_replace('col_', '', $userIdInput);
+            $collegiate = Collegiate::findOrFail($colId);
+            
+            // Create user for collegiate silently so we can assign permissions
+            $user = User::firstOrCreate(
+                ['email' => $collegiate->email],
+                [
+                    'name' => $collegiate->first_name . ' ' . $collegiate->last_name,
+                    'password' => bcrypt(Str::random(12)),
+                    'school_id' => $collegiate->school_id,
+                    'role' => 'COLLEGIATE'
+                ]
+            );
+            $collegiate->user_id = $user->id;
+            $collegiate->save();
+        } else {
+            $uId = str_replace('usr_', '', $userIdInput);
+            $user = User::where('id', $uId)->where('school_id', auth()->user()->school_id)->firstOrFail();
+        }
 
         if ($request->role_type === 'admin_general') {
             $user->role = 'ADMIN_COLEGIO';
