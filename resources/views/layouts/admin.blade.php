@@ -90,7 +90,7 @@
         </div>
         
         <nav class="nav flex-column mb-auto">
-            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-grid"></i> Vista General</a>
+            <a class="nav-link {{ request()->routeIs('admin.dashboard') || request()->routeIs('home') ? 'active' : '' }}" href="{{ $isOwnerView ? route('admin.dashboard') : route('home') }}"><i class="bi bi-grid"></i> Vista General</a>
             
             @if($isOwnerView)
                 <a class="nav-link {{ request()->routeIs('admin.schools.*') ? 'active' : '' }}" href="{{ route('admin.schools.index') }}"><i class="bi bi-building"></i> Empresas</a>
@@ -103,7 +103,7 @@
                 <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots"></i> Soporte</a>
                 <a class="nav-link {{ request()->routeIs('admin.activity_logs.*') ? 'active' : '' }}" href="{{ route('admin.activity_logs.index') }}"><i class="bi bi-activity"></i> Auditoría</a>
 
-                <a class="nav-link" href="#"><i class="bi bi-people"></i> Usuarios</a>
+                <a class="nav-link {{ request()->routeIs('collegiates.index') ? 'active' : '' }}" href="{{ route('collegiates.index') }}"><i class="bi bi-people"></i> Usuarios</a>
                 <a class="nav-link {{ request()->routeIs('admin.billing.index') ? 'active' : '' }}" href="{{ route('admin.billing.index') }}"><i class="bi bi-wallet2"></i> Contabilidad</a>
                 <a class="nav-link {{ request()->routeIs('billing.index') ? 'active' : '' }}" href="{{ route('billing.index') }}"><i class="bi bi-credit-card"></i> Mi Plan</a>
                 <a class="nav-link {{ request()->routeIs('admin.tickets.*') ? 'active' : '' }}" href="{{ route('admin.tickets.index') }}"><i class="bi bi-chat-dots"></i> Mis Tickets</a>
