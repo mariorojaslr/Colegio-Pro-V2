@@ -28,6 +28,7 @@ class ProfileController extends Controller
         
         $request->validate([
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'dni' => 'nullable|string|max:50',
             'phone' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date',
@@ -40,6 +41,7 @@ class ProfileController extends Controller
         // Actualizar el colegiado asociado si existe
         $collegiate = \App\Models\Collegiate::where('user_id', $user->id)->first();
         if ($collegiate) {
+            if ($request->has('dni')) $collegiate->dni = $request->dni;
             if ($request->has('phone')) $collegiate->phone = $request->phone;
             if ($request->has('address')) $collegiate->address = $request->address;
             if ($request->has('birth_date')) $collegiate->birth_date = $request->birth_date;

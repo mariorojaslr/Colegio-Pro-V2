@@ -67,7 +67,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label small fw-bold text-muted">Documento (DNI/RUT)</label>
-                                        <input type="text" class="form-control bg-light" value="{{ $collegiate->dni ?? '' }}" disabled>
+                                        <input type="text" name="dni" class="form-control @error('dni') is-invalid @enderror" value="{{ old('dni', $collegiate->dni ?? '') }}">
+                                        @error('dni') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label small fw-bold text-muted">Correo Electrónico</label>
