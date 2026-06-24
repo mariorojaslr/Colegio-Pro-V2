@@ -103,6 +103,6 @@ class ProfileController extends Controller
         $user->password = \Illuminate\Support\Facades\Hash::make($request->new_password);
         $user->save();
 
-        return redirect()->route('profile.index', ['#security-section'])->with('success', 'Tu contraseña ha sido actualizada exitosamente.');
+        return back()->with('success', 'Tu contraseña ha sido actualizada exitosamente.');
     }
 }

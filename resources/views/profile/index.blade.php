@@ -99,41 +99,6 @@
                             </form>
                         </div>
                     </div>
-                    
-                    <!-- Tarjeta de Seguridad -->
-                    <div class="card border-0 shadow-sm rounded-4 mt-4" id="security-section">
-                        <div class="card-header bg-white border-bottom p-4">
-                            <h5 class="fw-bold mb-0"><i class="bi bi-shield-lock text-warning me-2"></i> Seguridad de la Cuenta</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <form action="{{ route('profile.password') }}" method="POST">
-                                @csrf
-                                
-                                <div class="row g-3">
-                                    <div class="col-md-12">
-                                        <label class="form-label small fw-bold text-muted">Contraseña Actual</label>
-                                        <input type="password" name="current_password" class="form-control @error('current_password') is-invalid @enderror" required>
-                                        @error('current_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-bold text-muted">Nueva Contraseña</label>
-                                        <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" required minlength="8">
-                                        @error('new_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small fw-bold text-muted">Confirmar Nueva Contraseña</label>
-                                        <input type="password" name="new_password_confirmation" class="form-control" required minlength="8">
-                                    </div>
-                                </div>
-
-                                <div class="mt-4 text-end">
-                                    <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold shadow-sm">
-                                        Actualizar Contraseña
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
