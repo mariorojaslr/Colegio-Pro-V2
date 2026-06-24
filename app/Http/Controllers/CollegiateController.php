@@ -494,12 +494,14 @@ class CollegiateController extends Controller
         ]);
 
         // Registrar en bitácora de auditoría
-        \App\Models\ActivityLog::log(
-            'FORCED_PASSWORD',
-            "El administrador {$user->name} forzó el cambio de contraseña del colegiado {$collegiate->first_name} {$collegiate->last_name}.",
-            $user->id,
-            $user->school_id
-        );
+        \App\Models\ActivityLog::create([
+            'action' => 'FORCED_PASSWORD',
+            'description' => "El administrador {$user->name} forzó el cambio de contraseña del colegiado {$collegiate->first_name} {$collegiate->last_name}.",
+            'user_id' => $user->id,
+            'school_id' => $user->school_id,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent()
+        ]);
 
         return redirect()->back()->with('success', "La contraseña fue forzada exitosamente. Infórmale al usuario su nueva clave.");
     }
