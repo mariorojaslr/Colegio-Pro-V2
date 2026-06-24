@@ -7,6 +7,9 @@ use App\Http\Controllers\NewsArticleController;
 
 Route::get('change-language/{lang}', [LanguageController::class, 'switch'])->name('lang.switch');
 
+// === Rutas Públicas (Landing Pages y Autenticación) ===
+Route::get('/admin/magic-impersonate/{userId}/{ownerId}', [App\Http\Controllers\Admin\DashboardController::class, 'magicImpersonate'])->name('admin.magic_impersonate')->middleware('signed');
+
 // Ruta de Acceso Rápido a la Demo (Cero Fricción)
 Route::get('/demo-fast', function(\Illuminate\Http\Request $request) {
     auth()->logout();
@@ -114,7 +117,7 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     // Dashboard principal con métricas globales
     Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     
-    // Rutas para la "Visión Omnisciente" y retorno al rol original
+    // Rutas para la "Visión Omnisciente" y retorno al rol original (Iniciador)
     Route::get('/admin/impersonate/{schoolId}', [App\Http\Controllers\Admin\DashboardController::class, 'impersonate'])->name('admin.impersonate');
     
     // Gestión de Colegios (Tenants)
@@ -171,6 +174,11 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/switch-context/{context}', [App\Http\Controllers\HomeController::class, 'switchContext'])->name('switch_context');
+    
+    // Perfil de Usuario Colegiado
+    Route::get('/mi-perfil', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/mi-perfil', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/mi-perfil/avatar', [App\Http\Controllers\ProfileController::class, 'uploadAvatar'])->name('profile.avatar');
     
     // Noticias Administrativas
     Route::resource('admin/news', NewsArticleController::class)->names('admin.news');

@@ -59,19 +59,52 @@ class DashboardController extends Controller
         }
 
         if ($user) {
-            // Guardamos el ID original del OWNER en la sesión para poder permitir el retorno
-            // Solo si no estamos ya simulando a alguien más
-            if (!session()->has('impersonator_id')) {
-                session(['impersonator_id' => auth()->id()]);
-            }
+            $baseDomain = preg_replace('/^admin\./', '', request()->getHost());
             
-            // Iniciamos sesión como el usuario del colegio (suplantación)
-            auth()->login($user);
+            // Construir el dominio destino de la empresa
+            $domain = $school->custom_domain ?: $school->slug . '.' . $baseDomain;
             
-            return redirect()->route('home')->with('status', "Sesión iniciada como {$user->name} ({$school->name})");
+            // Hack para que la ruta firmada se genere con el dominio de la empresa destino
+            $originalUrl = config('app.url');
+            $scheme = request()->secure() ? 'https' : 'http';
+            config(['app.url' => $scheme . '://' . $domain]);
+            
+            // Generar URL firmada temporal con 5 minutos de validez
+            $magicUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'admin.magic_impersonate', 
+                now()->addMinutes(5),
+                ['userId' => $user->id, 'ownerId' => auth()->id()]
+            );
+
+            // Restaurar la URL original
+            config(['app.url' => $originalUrl]);
+
+            return redirect()->away($magicUrl);
         }
 
         return redirect()->back()->with('error', 'No se encontró un usuario para suplantar en este colegio.');
+    }
+
+    /**
+     * Procesa el inicio de sesión cruzado (cross-domain) de forma segura.
+     * Esta ruta NO tiene el middleware 'auth', pero SÍ requiere firma válida.
+     */
+    public function magicImpersonate(Request $request, $userId, $ownerId)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(403, 'El enlace de acceso ha expirado o es inválido. Vuelva a intentarlo.');
+        }
+
+        $user = User::findOrFail($userId);
+        $school = School::findOrFail($user->school_id);
+
+        if (!session()->has('impersonator_id')) {
+            session(['impersonator_id' => $ownerId]);
+        }
+        
+        auth()->login($user);
+        
+        return redirect()->route('home')->with('status', "Sesión iniciada como {$user->name} ({$school->name})");
     }
 
     /**
