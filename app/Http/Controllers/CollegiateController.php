@@ -466,4 +466,41 @@ class CollegiateController extends Controller
 
         return redirect()->back()->with('success', 'Foto de perfil procesada, centrada y subida a la nube correctamente.');
     }
+
+    public function forcePassword(Request $request, Collegiate $collegiate)
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        
+        // Seguridad: Solo admin del mismo colegio o owner
+        if (!$user->hasPermission('manage_users') && !$user->isOwner()) {
+            abort(403, 'No tienes permiso para forzar contraseñas.');
+        }
+        if (!$user->isOwner() && $collegiate->school_id !== $user->school_id) {
+            abort(403, 'Este colegiado no pertenece a tu institución.');
+        }
+
+        $request->validate([
+            'new_password' => 'required|min:8'
+        ]);
+
+        $collegiateUser = \App\Models\User::where('email', $collegiate->email)->first();
+
+        if (!$collegiateUser) {
+            return redirect()->back()->with('error', 'El colegiado no tiene un usuario de acceso registrado. Debe activar su cuenta primero.');
+        }
+
+        $collegiateUser->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->new_password)
+        ]);
+
+        // Registrar en bitácora de auditoría
+        \App\Models\ActivityLog::log(
+            'FORCED_PASSWORD',
+            "El administrador {$user->name} forzó el cambio de contraseña del colegiado {$collegiate->first_name} {$collegiate->last_name}.",
+            $user->id,
+            $user->school_id
+        );
+
+        return redirect()->back()->with('success', "La contraseña fue forzada exitosamente. Infórmale al usuario su nueva clave.");
+    }
 }

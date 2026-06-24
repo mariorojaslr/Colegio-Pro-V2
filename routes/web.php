@@ -252,6 +252,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/colegiados/{collegiate}/certificado', [\App\Http\Controllers\CollegiateController::class, 'certificate'])->name('collegiates.certificate');
     Route::post('/colegiados/{collegiate}/avatar', [\App\Http\Controllers\CollegiateController::class, 'uploadAvatar'])->name('collegiates.avatar');
     Route::get('/colegiados/{collegiate}/impersonate', [\App\Http\Controllers\CollegiateController::class, 'impersonate'])->name('admin.collegiates.impersonate');
+    Route::post('/colegiados/{collegiate}/force-password', [\App\Http\Controllers\CollegiateController::class, 'forcePassword'])->name('collegiates.force_password');
 
     // Motor de Pagos y Liquidaciones
     Route::get('/mis-pagos', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');

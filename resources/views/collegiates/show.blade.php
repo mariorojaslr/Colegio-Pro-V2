@@ -55,6 +55,12 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-1 mt-2 mb-2" data-bs-toggle="modal" data-bs-target="#uploadAvatarModal">
                         <i class="bi bi-camera"></i> Subir/Cambiar Foto
                     </button>
+
+                    <hr class="my-2 opacity-10">
+
+                    <button type="button" class="btn btn-outline-danger rounded-pill py-2 fw-bold small mt-2" data-bs-toggle="modal" data-bs-target="#forcePasswordModal">
+                        <i class="bi bi-key ms-1"></i> Forzar Contraseña
+                    </button>
                 </div>
             </div>
         </div>
@@ -1109,6 +1115,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="modal-footer border-top py-3">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveCustomDues" disabled>Guardar y Generar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Forzar Contraseña --}}
+<div class="modal fade" id="forcePasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-bottom bg-danger text-white px-4 py-3" style="border-radius: 1rem 1rem 0 0;">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-key me-2"></i> Forzar Nueva Contraseña
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('collegiates.force_password', $collegiate) }}" method="POST">
+                @csrf
+                <div class="modal-body p-4 text-center">
+                    <p class="text-muted small mb-4">
+                        Ingresa una nueva contraseña para <strong>{{ $collegiate->first_name }} {{ $collegiate->last_name }}</strong>. El usuario anterior será reemplazado de inmediato y podrás darle esta nueva clave para que acceda.
+                    </p>
+                    
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold text-dark small">Nueva Contraseña</label>
+                        <div class="input-group">
+                            <input type="text" name="new_password" id="new_password_input" class="form-control rounded-start-pill py-2" placeholder="Ej: Temporal2026*" required minlength="8">
+                            <button type="button" class="btn btn-outline-secondary rounded-end-pill px-3" onclick="document.getElementById('new_password_input').value = Math.random().toString(36).slice(-8) + 'A*1';">
+                                <i class="bi bi-arrow-clockwise"></i> Generar
+                            </button>
+                        </div>
+                        <small class="text-muted mt-1 d-block">Mínimo 8 caracteres.</small>
+                    </div>
+                    
+                    <div class="alert alert-warning text-start small mb-0 mt-3 rounded-3">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Por seguridad, recuérdale al usuario que cambie su contraseña desde "Mi Perfil" luego de ingresar.
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-3 px-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Forzar Contraseña</button>
                 </div>
             </form>
         </div>
