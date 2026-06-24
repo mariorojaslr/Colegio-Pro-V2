@@ -179,6 +179,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mi-perfil', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
     Route::put('/mi-perfil', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/mi-perfil/avatar', [App\Http\Controllers\ProfileController::class, 'uploadAvatar'])->name('profile.avatar');
+    Route::post('/mi-perfil/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
     
     // Noticias Administrativas
     Route::resource('admin/news', NewsArticleController::class)->names('admin.news');

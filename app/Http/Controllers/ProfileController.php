@@ -83,4 +83,26 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.index')->with('success', 'Tu foto de perfil ha sido actualizada con éxito.');
     }
+
+    /**
+     * Permite al usuario cambiar su propia contraseña
+     */
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = auth()->user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'La contraseña actual no es correcta.']);
+        }
+
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('profile.index', ['#security-section'])->with('success', 'Tu contraseña ha sido actualizada exitosamente.');
+    }
 }

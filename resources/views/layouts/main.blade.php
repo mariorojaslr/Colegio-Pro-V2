@@ -311,7 +311,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
                             <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('home') }}"><i class="bi bi-person me-2"></i> Perfil</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#"><i class="bi bi-key me-2 text-warning"></i> Cambiar Contraseña</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="bi bi-key me-2 text-warning"></i> Cambiar Contraseña</a></li>
                             @if(in_array(auth()->user()->role, ['ADMIN_COLEGIO', 'OWNER']))
                                 <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('admin.chatbot.index') }}">
                                     <i class="bi bi-robot me-2 text-primary"></i> Asistente IA (Chatbot)
@@ -530,6 +530,42 @@
                 <div class="modal-footer border-0 p-4 pt-0 justify-content-center">
                     <button type="button" class="btn btn-warning rounded-pill px-5 fw-bold" data-bs-dismiss="modal">Entendido</button>
                 </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cambiar Contraseña (Usuario Final) -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header border-bottom py-3 px-4 bg-light text-dark" style="border-radius: 1rem 1rem 0 0;">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-shield-lock text-warning me-2"></i>Cambiar Mi Contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('profile.password') }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Contraseña Actual</label>
+                            <input type="password" name="current_password" class="form-control @error('current_password') is-invalid @enderror" required>
+                            @error('current_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Nueva Contraseña</label>
+                            <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" required minlength="8">
+                            @error('new_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">Confirmar Nueva Contraseña</label>
+                            <input type="password" name="new_password_confirmation" class="form-control" required minlength="8">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-3 px-4 bg-light">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">Actualizar Contraseña</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
