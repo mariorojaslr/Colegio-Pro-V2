@@ -266,14 +266,8 @@
     <nav class="navbar navbar-expand-lg navbar-law fixed-top">
         <div class="container-fluid px-4 px-xl-5">
             <a class="navbar-brand d-flex align-items-center gap-3" href="/">
-                @if(isset($school) && $school->logo)
-                    <!-- Intentaremos mostrar el logo original del sitio -->
-                    <img src="{{ asset($school->logo) }}" alt="Logo Consejo Abogados La Rioja" style="height: 55px; filter: brightness(0) invert(1);">
-                @else
-                    <div style="width:45px; height:45px; background:var(--accent); border-radius:10px; display:flex; align-items:center; justify-content:center;">
-                        <span class="material-icons" style="color: #fff; font-size: 1.5rem;">account_balance</span>
-                    </div>
-                @endif
+                <!-- Logo proporcionado por el usuario -->
+                <img src="{{ asset('images/tenants/logo-abogados.jpg') }}" alt="Logo Consejo Abogados La Rioja" style="height: 55px; border-radius: 8px;">
                 <div class="d-none d-sm-block lh-1">
                     <span class="d-block" style="font-size: 1.1rem;">Consejo de Abogados y Procuradores</span>
                     <span class="d-block text-white-50" style="font-size: 0.8rem; font-weight:400;">de la Provincia de La Rioja</span>
@@ -487,13 +481,7 @@
             <div class="row g-5">
                 <div class="col-lg-4">
                     <a class="d-flex align-items-center gap-3 mb-4 text-decoration-none" href="/">
-                        @if(isset($school) && $school->logo)
-                            <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 60px; filter: brightness(0) invert(1);">
-                        @else
-                            <div style="width:40px; height:40px; background:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center;">
-                                <span class="material-icons" style="color: var(--primary); font-size: 1.5rem;">account_balance</span>
-                            </div>
-                        @endif
+                        <img src="{{ asset('images/tenants/logo-abogados.jpg') }}" alt="Logo" style="height: 60px; border-radius: 8px;">
                         <span class="text-white h5 mb-0 outfit-font">{{ $school->name ?? 'Consejo de Abogados' }}</span>
                     </a>
                     <p class="small text-white-50">Garantizando el libre ejercicio de la profesión, la defensa del estado de derecho y la administración de justicia en la Provincia de La Rioja.</p>
