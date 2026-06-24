@@ -300,8 +300,8 @@
                     <h1 class="outfit-font">Defendiendo el<br>ejercicio <span>profesional.</span></h1>
                     <p>Órgano oficial que rige la matrícula, defiende los derechos de los profesionales del derecho y promueve la excelencia en el ejercicio de la abogacía en La Rioja.</p>
                     <div class="d-flex flex-wrap gap-3 mt-4">
-                        <a href="#servicios" class="btn btn-primary rounded-pill px-4 py-3 border-0" style="background-color: var(--accent); box-shadow: 0 4px 15px rgba(31,124,236,0.3);">Explorar Servicios</a>
-                        <a href="#contacto" class="btn btn-outline-light rounded-pill px-4 py-3">Contacto Institucional</a>
+                        <a href="#servicios" class="btn btn-light rounded-pill px-4 py-3 border-0 text-primary fw-bold" style="box-shadow: 0 4px 15px rgba(255,255,255,0.3);">Explorar Servicios</a>
+                        <a href="#contacto" class="btn btn-outline-light rounded-pill px-4 py-3 fw-bold">Contacto Institucional</a>
                     </div>
                 </div>
             </div>
