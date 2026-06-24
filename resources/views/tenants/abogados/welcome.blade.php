@@ -271,7 +271,7 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-law fixed-top">
-        <div class="container px-4 px-xl-5">
+        <div class="container-fluid px-4 px-xl-5">
             <a class="navbar-brand d-flex align-items-center gap-3" href="/">
                 @if(isset($school) && $school->logo)
                     <!-- Intentaremos mostrar el logo original del sitio -->
@@ -307,7 +307,7 @@
 
     <!-- HERO -->
     <section class="hero-law" style="background-image: url('{{ $bgImage }}');">
-        <div class="container">
+        <div class="container-fluid px-4 px-xl-5">
             <div class="row">
                 <div class="col-lg-8">
                     <h1 class="outfit-font">Defendiendo el<br>ejercicio <span>profesional.</span></h1>
@@ -339,7 +339,7 @@
         
         <!-- INSTITUCIONAL -->
         <section id="institucion" class="py-5 mt-5">
-            <div class="container pt-5">
+            <div class="container-fluid px-4 px-xl-5 pt-5">
                 <div class="row align-items-center g-5">
                     <div class="col-lg-5">
                         <div class="position-relative">
@@ -380,7 +380,7 @@
 
         <!-- SERVICIOS -->
         <section id="servicios" class="bg-light py-5 mt-5">
-            <div class="container py-5">
+            <div class="container-fluid px-4 px-xl-5 py-5">
                 <div class="text-center mb-5">
                     <h2 class="section-title">Servicios al <span>Matriculado</span></h2>
                     <p class="text-muted max-w-700 mx-auto">Ponemos a disposición herramientas digitales y presenciales para facilitar el ejercicio diario de la profesión.</p>
@@ -420,7 +420,7 @@
 
         <!-- NOTICIAS (Tomadas de la página real) -->
         <section id="novedades" class="py-5 my-5">
-            <div class="container">
+            <div class="container-fluid px-4 px-xl-5">
                 <div class="d-flex justify-content-between align-items-end mb-5">
                     <div>
                         <span class="text-accent fw-bold text-uppercase tracking-wider small" style="color: var(--accent);">Actualidad</span>
@@ -489,7 +489,7 @@
 
     <!-- FOOTER -->
     <footer id="contacto" class="footer-law">
-        <div class="container position-relative z-2">
+        <div class="container-fluid px-4 px-xl-5 position-relative z-2">
             <div class="row g-5">
                 <div class="col-lg-4">
                     <a class="d-flex align-items-center gap-3 mb-4 text-decoration-none" href="/">

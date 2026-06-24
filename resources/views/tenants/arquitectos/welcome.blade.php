@@ -249,7 +249,7 @@
         <!-- SIN SLIDER: Muestra el diseño tradicional azul con texto -->
         <section class="hero-arq" style="background-color: var(--dark);">
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)); z-index: 2;"></div>
-            <div class="container position-relative h-100 d-flex align-items-center" style="z-index: 3;">
+            <div class="container-fluid px-4 px-xl-5 position-relative h-100 d-flex align-items-center" style="z-index: 3;">
                 <div class="row">
                     <div class="col-lg-8">
                         <h1>DISEÑO,<br><span style="color: var(--accent);">VANGUARDIA</span><br>& ÉTICA.</h1>
@@ -260,7 +260,7 @@
         </section>
     @endif
 
-    <main class="container py-5" style="margin-top: -50px; position: relative; z-index: 10;">
+    <main class="container-fluid px-4 px-xl-5 py-5" style="margin-top: -50px; position: relative; z-index: 10;">
         
         <!-- STATS & SERVICES -->
         <div class="row g-4 mb-5 pb-5 border-bottom pt-4 bg-white p-4 shadow-sm">
@@ -491,7 +491,7 @@
 
     <!-- FOOTER -->
     <footer class="footer-arq">
-        <div class="container text-center">
+        <div class="container-fluid px-4 px-xl-5 text-center">
             <h4 class="oswald mb-3">{{ $school->name }}</h4>
             <p class="text-white-50 mb-4 small" style="letter-spacing: 1px;">DISEÑO • ÉTICA • PROFESIONALISMO</p>
             <p class="text-white-50 mb-0 small">&copy; {{ date('Y') }} Desarrollado por Gente Piola.</p>
