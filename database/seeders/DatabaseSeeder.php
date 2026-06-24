@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             'primary_color' => '#1e3a8a',
             'secondary_color' => '#d4af37',
             'plan_category' => 'enterprise',
+            'logo' => 'images/tenants/logo-abogados-redondo.png',
         ]);
 
         $school2 = \App\Models\School::create([

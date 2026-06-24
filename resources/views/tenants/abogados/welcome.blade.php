@@ -267,7 +267,7 @@
         <div class="container-fluid px-4 px-xl-5">
             <a class="navbar-brand d-flex align-items-center gap-3" href="/">
                 <!-- Logo proporcionado por el usuario -->
-                <img src="{{ asset('images/tenants/logo-abogados.jpg') }}" alt="Logo Consejo Abogados La Rioja" style="height: 55px; border-radius: 8px;">
+                <img src="{{ asset('images/tenants/logo-abogados-redondo.png') }}" alt="Logo Consejo Abogados La Rioja" style="height: 55px; border-radius: 50%;">
                 <div class="d-none d-sm-block lh-1">
                     <span class="d-block" style="font-size: 1.1rem;">Consejo de Abogados y Procuradores</span>
                     <span class="d-block text-white-50" style="font-size: 0.8rem; font-weight:400;">de la Provincia de La Rioja</span>
@@ -481,7 +481,7 @@
             <div class="row g-5">
                 <div class="col-lg-4">
                     <a class="d-flex align-items-center gap-3 mb-4 text-decoration-none" href="/">
-                        <img src="{{ asset('images/tenants/logo-abogados.jpg') }}" alt="Logo" style="height: 60px; border-radius: 8px;">
+                        <img src="{{ asset('images/tenants/logo-abogados-redondo.png') }}" alt="Logo" style="height: 60px; border-radius: 50%;">
                         <span class="text-white h5 mb-0 outfit-font">{{ $school->name ?? 'Consejo de Abogados' }}</span>
                     </a>
                     <p class="small text-white-50">Garantizando el libre ejercicio de la profesión, la defensa del estado de derecho y la administración de justicia en la Provincia de La Rioja.</p>
