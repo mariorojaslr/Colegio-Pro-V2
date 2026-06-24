@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('admin.schools.update', $school) }}">
+    <form method="POST" action="{{ route('admin.schools.update', $school) }}" enctype="multipart/form-data">
         @csrf
         @if ($errors->any())
             <div class="alert alert-danger shadow-sm border-0 rounded-4 mb-4">
@@ -75,6 +75,19 @@
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Color de Acento</label>
                             <input type="color" name="accent_color" class="form-control form-control-color w-100 rounded-4 border-light shadow-none" value="{{ $school->accent_color }}" style="height: 54px;">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mt-2 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Subir Logo Principal (Apaisado)</label>
+                            <input type="file" name="logo" class="form-control rounded-pill px-4 py-3 border-light shadow-none" accept="image/*">
+                            <div class="form-text small mt-2">Usado en la barra de navegación de la página principal. @if($school->logo) <a href="{{ asset($school->logo) }}" target="_blank">Ver actual</a> @endif</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-muted small uppercase mb-2 ls-1">Subir Logo Ícono (Cuadrado/Redondo)</label>
+                            <input type="file" name="logo_icon" class="form-control rounded-pill px-4 py-3 border-light shadow-none" accept="image/*">
+                            <div class="form-text small mt-2">Usado para el avatar en el panel de control. @if($school->logo_icon) <a href="{{ asset($school->logo_icon) }}" target="_blank">Ver actual</a> @endif</div>
                         </div>
                     </div>
 

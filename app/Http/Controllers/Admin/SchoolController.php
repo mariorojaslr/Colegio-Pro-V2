@@ -141,6 +141,20 @@ class SchoolController extends Controller
             'twitter_url' => $request->twitter_url,
         ]);
 
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $filename = time() . '_logo_' . $file->getClientOriginalName();
+            $file->move(public_path('images/tenants'), $filename);
+            $school->update(['logo' => 'images/tenants/' . $filename]);
+        }
+
+        if ($request->hasFile('logo_icon')) {
+            $file = $request->file('logo_icon');
+            $filename = time() . '_icon_' . $file->getClientOriginalName();
+            $file->move(public_path('images/tenants'), $filename);
+            $school->update(['logo_icon' => 'images/tenants/' . $filename]);
+        }
+
         if ($request->has('subscription_plan_id')) {
             $plan = SubscriptionPlan::find($request->subscription_plan_id);
             if ($plan) {
