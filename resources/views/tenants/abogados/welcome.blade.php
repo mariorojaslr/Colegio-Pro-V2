@@ -79,6 +79,7 @@
 
         /* HERO DINÁMICO */
         @php
+            // Se usa una imagen genérica de leyes/justicia, sin texto en inglés
             $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
         @endphp
         .hero-law {
@@ -93,7 +94,8 @@
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(10, 40, 75, 0.95) 0%, rgba(10, 40, 75, 0.6) 100%);
+            /* Oscurecer más el fondo para dar máximo contraste al texto blanco */
+            background: linear-gradient(135deg, rgba(10, 40, 75, 0.98) 0%, rgba(10, 40, 75, 0.85) 100%);
             z-index: 1;
         }
         .hero-law .container {
@@ -109,21 +111,12 @@
             letter-spacing: -1px;
         }
         .hero-law h1 span {
-            color: var(--accent);
+            color: #ffffff;
             position: relative;
             display: inline-block;
+            border-bottom: 4px solid var(--accent);
         }
-        .hero-law h1 span::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background-color: var(--accent);
-            opacity: 0.3;
-            border-radius: 4px;
-        }
+        /* Eliminar el pseudo-elemento after porque ahora usamos border-bottom */
         .hero-law p {
             font-size: 1.25rem;
             color: rgba(255, 255, 255, 0.9);
@@ -343,7 +336,8 @@
                 <div class="row align-items-center g-5">
                     <div class="col-lg-5">
                         <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Justicia" class="img-fluid rounded-4 shadow-lg" style="object-fit: cover; height: 500px;">
+                            <!-- Imagen de la balanza de la justicia sin texto en inglés -->
+                            <img src="https://images.unsplash.com/photo-1505664159623-2a1eb110bf52?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Justicia" class="img-fluid rounded-4 shadow-lg" style="object-fit: cover; height: 500px;">
                             <div class="position-absolute bg-white p-4 shadow-lg rounded-4" style="bottom: 30px; right: -40px; max-width: 280px; border-top: 4px solid var(--accent);">
                                 <h5 class="outfit-font text-primary mb-2">Comisión Directiva</h5>
                                 <p class="text-muted small mb-0">Renovación de Autoridades del Instituto de Derecho Registral para el período 2026–2028.</p>
@@ -408,10 +402,10 @@
                     <div class="col-md-4">
                         <div class="card-law">
                             <div class="icon-wrapper">
-                                <i class="material-icons fs-1">library_books</i>
+                                <i class="material-icons fs-1">contact_page</i>
                             </div>
-                            <h4 class="outfit-font">Biblioteca Virtual</h4>
-                            <p class="text-muted small">Acceso a jurisprudencia actualizada, biblioteca jurídica y resoluciones del Consejo y el TSJ.</p>
+                            <h4 class="outfit-font">Padrón de Colegiados</h4>
+                            <p class="text-muted small">Buscador oficial y actualizado de profesionales habilitados para ejercer la abogacía en La Rioja.</p>
                         </div>
                     </div>
                 </div>
