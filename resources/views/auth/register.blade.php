@@ -102,6 +102,10 @@
             color: #f8fafc;
             box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
         }
+        .form-control::placeholder {
+            color: #cbd5e1;
+            opacity: 1;
+        }
         .btn-primary {
             background-color: #3b82f6;
             border: none;

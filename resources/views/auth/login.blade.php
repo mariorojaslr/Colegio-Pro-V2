@@ -98,6 +98,10 @@
             color: #f8fafc;
             box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
         }
+        .form-control::placeholder {
+            color: #cbd5e1;
+            opacity: 1;
+        }
         .form-label {
             font-size: 0.85rem;
             color: #94a3b8;
