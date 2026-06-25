@@ -161,12 +161,12 @@
                     <p class="text-theme-secondary small mt-2 fw-semibold">{{ $school->member_plural ?? 'Profesionales Matriculados' }}</p>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h2 class="display-5 fw-bold text-theme-primary mb-0">20+</h2>
+                    <h2 class="display-5 fw-bold text-theme-primary mb-0">{{ \Carbon\Carbon::parse('1990-12-20')->age }}</h2>
                     <p class="text-theme-secondary small mt-2 fw-semibold">Años de Trayectoria</p>
                 </div>
                 <div class="col-6 col-md-3">
                     <h2 class="display-5 fw-bold text-theme-primary mb-0">18</h2>
-                    <p class="text-theme-secondary small mt-2 fw-semibold">Localidades de Cobertura</p>
+                    <p class="text-theme-secondary small mt-2 fw-semibold">Departamentos de La Rioja</p>
                 </div>
                 <div class="col-6 col-md-3">
                     <h2 class="display-5 fw-bold text-theme-primary mb-0">12</h2>

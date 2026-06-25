@@ -253,12 +253,12 @@
                         <p class="text-muted small mt-2 fw-bold">Profesionales Matriculados</p>
                     </div>
                     <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">20+</h2>
+                        <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">{{ \Carbon\Carbon::parse('1990-12-20')->age }}</h2>
                         <p class="text-muted small mt-2 fw-bold">Años de Trayectoria</p>
                     </div>
                     <div class="col-6 col-md-3">
                         <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">18</h2>
-                        <p class="text-muted small mt-2 fw-bold">Localidades</p>
+                        <p class="text-muted small mt-2 fw-bold">Departamentos de La Rioja</p>
                     </div>
                     <div class="col-6 col-md-3">
                         <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">12</h2>
