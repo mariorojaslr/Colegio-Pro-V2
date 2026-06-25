@@ -9,7 +9,6 @@ use App\Models\CollegiateDue;
 use App\Models\Ticket;
 use App\Models\TicketMessage;
 use Illuminate\Support\Facades\Hash;
-use Faker\Factory as Faker;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -17,18 +16,23 @@ class DemoArquitectosDataSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = Faker::create('es_AR');
         $schoolId = 2; // Arquitectos
 
-        $this->command->info("Creating 50 demo users for Arquitectos...");
+        $this->command->info("Creating 50 demo users for Arquitectos (Without Faker)...");
+
+        // Hardcoded arrays to replace Faker
+        $firstNames = ['Carlos', 'Maria', 'Juan', 'Ana', 'Luis', 'Laura', 'Diego', 'Sofia', 'Pedro', 'Lucia', 'Jorge', 'Elena', 'Miguel', 'Marta', 'Jose', 'Paula', 'Fernando', 'Carmen', 'Raul', 'Isabel'];
+        $lastNames = ['Gomez', 'Rodriguez', 'Fernandez', 'Lopez', 'Martinez', 'Gonzalez', 'Perez', 'Sanchez', 'Romero', 'Suarez', 'Diaz', 'Torres', 'Ruiz', 'Alonso', 'Blanco', 'Iglesias', 'Vidal', 'Molina', 'Garrido', 'Castro'];
+        $addresses = ['Av. Siempreviva 742', 'Calle Falsa 123', 'Av. del Libertador 1000', 'Calle Principal 45', 'Bulevar Central 88'];
+        $companies = ['Estudio Alfa', 'Constructora Beta', 'Diseños Gamma', 'Arquitectura Moderna', 'Espacios Creativos', 'Independiente'];
 
         // Start transaction for speed
         DB::beginTransaction();
 
         try {
             for ($i = 0; $i < 50; $i++) {
-                $firstName = $faker->firstName;
-                $lastName = $faker->lastName;
+                $firstName = $firstNames[array_rand($firstNames)];
+                $lastName = $lastNames[array_rand($lastNames)];
                 $email = "arquitecto{$i}@demo.com";
                 
                 // 1. Create User
@@ -45,7 +49,7 @@ class DemoArquitectosDataSeeder extends Seeder
 
                 // 2. Create Collegiate
                 $statusOptions = ['Activo', 'Activo', 'Activo', 'Suspendido por Mora', 'Baja Voluntaria'];
-                $status = $faker->randomElement($statusOptions);
+                $status = $statusOptions[array_rand($statusOptions)];
                 
                 // Random avatar
                 $avatarUrl = "https://i.pravatar.cc/150?u=" . urlencode($email);
@@ -54,20 +58,20 @@ class DemoArquitectosDataSeeder extends Seeder
                     ['user_id' => $user->id],
                     [
                         'school_id' => $schoolId,
-                        'registration_number' => 'ARQ-' . $faker->unique()->numerify('####'),
+                        'registration_number' => 'ARQ-' . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT),
                         'first_name' => $firstName,
                         'last_name' => $lastName,
                         'email' => $email,
-                        'dni' => $faker->unique()->numerify('########'),
-                        'phone' => $faker->phoneNumber,
+                        'dni' => str_pad(rand(10000000, 99999999), 8, '0', STR_PAD_LEFT),
+                        'phone' => '11 ' . rand(1000, 9999) . '-' . rand(1000, 9999),
                         'avatar_url' => $avatarUrl,
-                        'birth_date' => $faker->date('Y-m-d', '2000-01-01'),
-                        'address' => $faker->address,
+                        'birth_date' => Carbon::createFromDate(rand(1960, 1995), rand(1, 12), rand(1, 28))->format('Y-m-d'),
+                        'address' => $addresses[array_rand($addresses)],
                         'degree' => 'Arquitecto/a',
-                        'workplaces_info' => $faker->company,
-                        'practicing_since_year' => $faker->numberBetween(1990, 2023),
+                        'workplaces_info' => $companies[array_rand($companies)],
+                        'practicing_since_year' => rand(1990, 2023),
                         'is_fees_compliant' => ($status === 'Activo'),
-                        'is_fully_documented' => $faker->boolean(80),
+                        'is_fully_documented' => (rand(1, 100) > 20), // 80% chance true
                         'status' => $status,
                     ]
                 );
@@ -75,10 +79,10 @@ class DemoArquitectosDataSeeder extends Seeder
                 // 3. Create Collegiate Dues (Movements)
                 CollegiateDue::where('collegiate_id', $collegiate->id)->delete();
 
-                $dueCount = $faker->numberBetween(3, 10);
+                $dueCount = rand(3, 10);
                 for ($d = 0; $d < $dueCount; $d++) {
                     $month = Carbon::now()->subMonths($d);
-                    $isPaid = $d > 1 ? true : $faker->boolean(60); 
+                    $isPaid = $d > 1 ? true : (rand(1, 100) > 40); // older dues paid, newer might be pending
 
                     CollegiateDue::create([
                         'collegiate_id' => $collegiate->id,
@@ -92,26 +96,30 @@ class DemoArquitectosDataSeeder extends Seeder
                 }
 
                 // 4. Create some Tickets
-                if ($faker->boolean(30)) { 
+                if (rand(1, 100) <= 30) { 
+                    $categories = ['Soporte', 'Pagos', 'General'];
+                    $priorities = ['low', 'medium', 'high'];
+                    $statuses = ['open', 'in_progress', 'resolved', 'closed'];
+
                     $ticket = Ticket::create([
                         'school_id' => $schoolId,
                         'user_id' => $user->id,
-                        'subject' => $faker->sentence(4),
-                        'status' => $faker->randomElement(['open', 'in_progress', 'resolved', 'closed']),
-                        'priority' => $faker->randomElement(['low', 'medium', 'high']),
-                        'category' => $faker->randomElement(['Soporte', 'Pagos', 'General']),
+                        'subject' => "Consulta de $firstName",
+                        'status' => $statuses[array_rand($statuses)],
+                        'priority' => $priorities[array_rand($priorities)],
+                        'category' => $categories[array_rand($categories)],
                     ]);
                     
                     TicketMessage::create([
                         'ticket_id' => $ticket->id,
                         'user_id' => $user->id,
-                        'message' => $faker->paragraph,
+                        'message' => "Hola, tengo una consulta sobre mi estado actual. Quedo atento.",
                     ]);
                 }
             }
 
             DB::commit();
-            $this->command->info("50 Demo users and movements created successfully!");
+            $this->command->info("50 Demo users and movements created successfully without Faker!");
         } catch (\Exception $e) {
             DB::rollBack();
             $this->command->error("Error: " . $e->getMessage() . "\n" . $e->getTraceAsString());
