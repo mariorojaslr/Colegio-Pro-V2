@@ -33,6 +33,9 @@ class SchoolSettingsController extends Controller
             'mp_access_token' => 'nullable|string',
             'mp_public_key' => 'nullable|string',
             'mp_sandbox_mode' => 'boolean',
+            'primary_color' => 'nullable|string|max:20',
+            'secondary_color' => 'nullable|string|max:20',
+            'tertiary_color' => 'nullable|string|max:20',
         ]);
 
         $data = $request->except(['logo']);

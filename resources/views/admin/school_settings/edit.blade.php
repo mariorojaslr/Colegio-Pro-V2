@@ -77,6 +77,27 @@
 
                 <hr class="my-4">
 
+                <h5 class="fw-bold mb-3"><i class="bi bi-palette me-2 text-primary"></i> Apariencia y Colores Institucionales</h5>
+                <div class="row mb-3">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small">Color Primario</label>
+                        <input type="color" name="primary_color" class="form-control form-control-color w-100 rounded-4 shadow-sm" value="{{ old('primary_color', $school->primary_color ?? '#0f172a') }}" style="height: 50px;">
+                        <small class="text-muted d-block mt-1">Color principal para botones y menús.</small>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small">Color Secundario</label>
+                        <input type="color" name="secondary_color" class="form-control form-control-color w-100 rounded-4 shadow-sm" value="{{ old('secondary_color', $school->secondary_color ?? '#e2e8f0') }}" style="height: 50px;">
+                        <small class="text-muted d-block mt-1">Color de fondos o contrastes.</small>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold small">Color Terciario</label>
+                        <input type="color" name="tertiary_color" class="form-control form-control-color w-100 rounded-4 shadow-sm" value="{{ old('tertiary_color', $school->tertiary_color ?? '#64748b') }}" style="height: 50px;">
+                        <small class="text-muted d-block mt-1">Color de acento o detalles secundarios.</small>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
                 <h5 class="fw-bold mb-3"><i class="bi bi-calendar-check me-2 text-primary"></i> Facturación y Cuotas</h5>
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3">
