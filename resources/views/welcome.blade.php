@@ -157,8 +157,8 @@
         <div class="container-fluid px-4 px-xl-5">
             <div class="row g-4 text-center">
                 <div class="col-6 col-md-3">
-                    <h2 class="display-5 fw-bold text-theme-primary mb-0">+350</h2>
-                    <p class="text-theme-secondary small mt-2 fw-semibold">Profesionales Matriculados</p>
+                    <h2 class="display-5 fw-bold text-theme-primary mb-0">+{{ $school->collegiates()->count() ?? 0 }}</h2>
+                    <p class="text-theme-secondary small mt-2 fw-semibold">{{ $school->member_plural ?? 'Profesionales Matriculados' }}</p>
                 </div>
                 <div class="col-6 col-md-3">
                     <h2 class="display-5 fw-bold text-theme-primary mb-0">20+</h2>

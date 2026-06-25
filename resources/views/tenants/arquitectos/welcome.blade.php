@@ -267,7 +267,7 @@
             <div class="col-12 mb-4 text-center">
                 <div class="row g-3">
                     <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 oswald" style="color: var(--accent);">+350</h2>
+                        <h2 class="display-5 fw-bold mb-0 oswald" style="color: var(--accent);">+{{ $school->collegiates()->count() ?? 0 }}</h2>
                         <p class="text-muted small mt-2 fw-bold">Profesionales Matriculados</p>
                     </div>
                     <div class="col-6 col-md-3">
