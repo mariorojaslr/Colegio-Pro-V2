@@ -209,7 +209,6 @@
                                     : 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); // Imagen médicos
                 @endphp
                 <img src="{{ $aboutImage }}" alt="Institucional" class="img-fluid rounded-4 shadow-lg border border-theme" style="max-height: 350px; width: 100%; object-fit: cover;">
-                <p class="text-muted small mt-2">*(Puedes cambiar esta imagen desde CMS -> Sliders añadiendo una segunda imagen)*</p>
             </div>
         </div>
 
