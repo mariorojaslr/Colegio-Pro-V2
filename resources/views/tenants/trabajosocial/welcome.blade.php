@@ -193,7 +193,13 @@
 
     @if($sliderItems->count() > 0)
         <!-- SLIDER ACTIVO: Muestra solo las imágenes (Tapa todo) -->
-        <section class="p-0 position-relative" style="height: 100vh; overflow: hidden; background-color: #000;">
+        <style>
+            .hero-slider-section { height: 100vh; }
+            @media (max-width: 991px) { .hero-slider-section { height: 400px; } }
+            @media (max-width: 768px) { .hero-slider-section { height: 280px; } }
+            @media (max-width: 576px) { .hero-slider-section { height: 220px; } }
+        </style>
+        <section class="p-0 position-relative hero-slider-section" style="overflow: hidden; background-color: #000;">
             <div id="heroCarouselTS" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
                 <div class="carousel-inner h-100">
                     @foreach($sliderItems as $index => $item)
