@@ -300,7 +300,7 @@
         <div id="quienes-somos" class="row align-items-center mb-5 pb-5 pt-5">
             <div class="col-lg-6 mb-4">
                 @php
-                    $aboutImage = isset($slider) && $slider->items->count() > 1 ? $slider->items[1]->image_url : 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
+                    $aboutImage = 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
                 @endphp
                 <div style="position: relative; border-radius: 30px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
                     <img src="{{ $aboutImage }}" alt="Nosotros" class="img-fluid" style="width: 100%; height: 450px; object-fit: cover;">

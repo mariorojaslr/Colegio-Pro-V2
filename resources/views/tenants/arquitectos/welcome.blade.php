@@ -325,7 +325,7 @@
             </div>
             <div class="col-lg-7">
                 @php
-                    $aboutImage = isset($slider) && $slider->items->count() > 1 ? $slider->items[1]->image_url : 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
+                    $aboutImage = 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
                 @endphp
                 <img src="{{ $aboutImage }}" alt="Arquitectura" class="img-fluid" style="width: 100%; height: 350px; object-fit: cover; filter: grayscale(50%);">
             </div>

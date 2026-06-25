@@ -201,12 +201,9 @@
             </div>
             <div class="col-lg-6 text-center">
                 @php
-                    // Usamos una segunda imagen del slider si existe, sino un placeholder según el tema
-                    $aboutImage = isset($slider) && $slider->items->count() > 1 
-                                ? $slider->items[1]->image_url 
-                                : ($primary == '#10B981' 
+                    $aboutImage = $primary == '#10B981' 
                                     ? 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80' // Imagen corporativa
-                                    : 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); // Imagen médicos
+                                    : 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'; // Imagen médicos
                 @endphp
                 <img src="{{ $aboutImage }}" alt="Institucional" class="img-fluid rounded-4 shadow-lg border border-theme" style="max-height: 350px; width: 100%; object-fit: cover;">
             </div>
