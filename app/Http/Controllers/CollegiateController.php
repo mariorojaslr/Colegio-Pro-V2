@@ -483,10 +483,14 @@ class CollegiateController extends Controller
             'new_password' => 'required|min:8'
         ]);
 
-        $collegiateUser = \App\Models\User::where('email', $collegiate->email)->first();
+        if (!$collegiate->user_id) {
+            return redirect()->back()->with('error', 'El colegiado no tiene un usuario de acceso registrado. Debe activar su cuenta primero.');
+        }
+
+        $collegiateUser = \App\Models\User::find($collegiate->user_id);
 
         if (!$collegiateUser) {
-            return redirect()->back()->with('error', 'El colegiado no tiene un usuario de acceso registrado. Debe activar su cuenta primero.');
+            return redirect()->back()->with('error', 'Error de inconsistencia: El usuario asociado no existe.');
         }
 
         $collegiateUser->update([

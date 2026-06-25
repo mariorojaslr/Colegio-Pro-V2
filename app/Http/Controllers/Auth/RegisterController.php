@@ -109,6 +109,11 @@ class RegisterController extends Controller
             'school_id' => $collegiate->school_id,
         ]);
 
+        // Vincular el usuario creado con el registro de colegiado
+        $collegiate->update([
+            'user_id' => $user->id,
+        ]);
+
         $this->guard()->login($user);
 
         // Clear session
