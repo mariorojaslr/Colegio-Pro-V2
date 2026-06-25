@@ -5,6 +5,20 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PublicNewsController;
 use App\Http\Controllers\NewsArticleController;
 
+Route::get('/fix-prueba-domain', function () {
+    $school = \App\Models\School::find(6);
+    if ($school) {
+        $school->custom_domain = 'lab-colepro.gentepiola.net';
+        $school->slug = 'colegioprofesional';
+        $school->logo = 'logos/colegio_profesional_demo.png';
+        $school->primary_color = '#4338ca';
+        $school->secondary_color = '#0d9488';
+        $school->save();
+        return "Dominio, slug y colores vinculados exitosamente al ID 6 en la base de datos de producción.";
+    }
+    return "Error: No se encontró el colegio con ID 6.";
+});
+
 Route::get('change-language/{lang}', [LanguageController::class, 'switch'])->name('lang.switch');
 
 // === Rutas Públicas (Landing Pages y Autenticación) ===
