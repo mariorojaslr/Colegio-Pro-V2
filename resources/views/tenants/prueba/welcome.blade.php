@@ -210,8 +210,8 @@
                         <p class="text-muted small mt-2 fw-bold">Departamentos de La Rioja</p>
                     </div>
                     <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">12</h2>
-                        <p class="text-muted small mt-2 fw-bold">Convenios</p>
+                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">1</h2>
+                        <p class="text-muted small mt-2 fw-bold">Convenios Vigentes</p>
                     </div>
                 </div>
             </div>

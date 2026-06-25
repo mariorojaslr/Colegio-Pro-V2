@@ -169,7 +169,7 @@
                     <p class="text-theme-secondary small mt-2 fw-semibold">Departamentos de La Rioja</p>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h2 class="display-5 fw-bold text-theme-primary mb-0">12</h2>
+                    <h2 class="display-5 fw-bold text-theme-primary mb-0">1</h2>
                     <p class="text-theme-secondary small mt-2 fw-semibold">Convenios Vigentes</p>
                 </div>
             </div>
