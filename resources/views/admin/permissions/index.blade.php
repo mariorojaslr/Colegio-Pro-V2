@@ -7,7 +7,7 @@
             <h3 class="fw-bold mb-1" style="font-family: 'Outfit', sans-serif;"><i class="bi bi-shield-lock text-primary me-2"></i> Autoridades y Permisos</h3>
             <p class="text-muted mb-0">Gestiona los accesos y roles de la mesa directiva de la institución.</p>
         </div>
-        <button class="btn btn-primary fw-bold rounded-pill shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#addPermissionModal">
+        <button class="btn btn-primary fw-bold rounded-pill shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#addPermissionModal" onclick="resetPermissionsForm()">
             <i class="bi bi-plus-lg me-1"></i> Asignar Permisos
         </button>
     </div>
@@ -243,15 +243,40 @@
         }
     }
 
-    function editPermissions(userId, role, permissions) {
-        // Reset form
+    function resetPermissionsForm() {
         document.getElementById('permissionsForm').reset();
         document.querySelectorAll('.perm-checkbox').forEach(cb => cb.checked = false);
+        
+        document.getElementById('userSelectGroup').classList.remove('d-none');
+        document.getElementById('userSelect').setAttribute('required', 'required');
+        
+        let selectEl = document.getElementById('userSelect');
+        if (selectEl.tomselect) {
+            selectEl.tomselect.enable();
+            selectEl.tomselect.clear();
+        } else {
+            selectEl.disabled = false;
+        }
+        
+        document.getElementById('modal_user_id').value = '';
+        selectRole('admin_general');
+    }
+
+    function editPermissions(userId, role, permissions) {
+        resetPermissionsForm();
         
         // Disable user select and set hidden ID
         document.getElementById('userSelectGroup').classList.add('d-none');
         document.getElementById('userSelect').removeAttribute('required');
-        document.getElementById('modal_user_id').value = userId;
+        
+        let selectEl = document.getElementById('userSelect');
+        if (selectEl.tomselect) {
+            selectEl.tomselect.disable();
+        } else {
+            selectEl.disabled = true;
+        }
+        
+        document.getElementById('modal_user_id').value = 'usr_' + userId;
         document.getElementById('modal_user_id').name = "user_id";
 
         if (role === 'ADMIN_COLEGIO') {
