@@ -3,511 +3,413 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $school->name ?? 'Plataforma Demo' }}</title>
+    <title>{{ $school->name ?? 'Colegio Profesional' }}</title>
     
     <link rel="icon" type="image/png" href="{{ isset($school) && $school->logo ? asset($school->logo) : asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     
-    <!-- Fuente Tech/Clean -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --brand-main: #10b981; /* Esmeralda */
-            --brand-dark: #0f172a; /* Slate 900 */
-            --brand-light: #f8fafc; /* Slate 50 */
+            --primary: {{ $school->primary_color ?? '#4f46e5' }};
+            --secondary: {{ $school->secondary_color ?? '#06b6d4' }};
+            --dark: #0f172a;
+            --light: #f8fafc;
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             color: #334155;
-            background-color: var(--brand-light);
+            background-color: var(--light);
+            overflow-x: hidden;
         }
 
-        h1, h2, h3, .grotesk {
-            font-family: 'Space Grotesk', sans-serif;
+        h1, h2, h3, h4, h5, .font-heading {
+            font-family: 'Outfit', sans-serif;
         }
 
         /* NAVBAR */
-        .navbar-tech {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid #e2e8f0;
+        .navbar-custom {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 15px 0;
+            transition: all 0.3s ease;
         }
-
-        /* HERO */
-        @php
-            $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
-        @endphp
-        .hero-tech {
-            padding: 150px 0 100px;
-            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.1), transparent), 
-                        url('{{ $bgImage }}');
-            background-blend-mode: overlay;
-            background-size: cover;
-            background-position: center;
+        .navbar-brand img {
+            height: 45px;
+            transition: transform 0.3s ease;
         }
-
-        .btn-tech {
-            background-color: var(--brand-main);
-            color: #fff;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+        .navbar-brand:hover img {
+            transform: scale(1.05);
         }
-        .btn-tech:hover {
-            background-color: #059669;
-            color: #fff;
-            transform: translateY(-2px);
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark) !important;
+            margin: 0 10px;
+            position: relative;
         }
-
-        /* CARDS */
-        .tech-card {
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            padding: 30px;
-            transition: 0.3s;
-            height: 100%;
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
         }
-        .tech-card:hover {
-            border-color: var(--brand-main);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        .node-tech {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #e2e8f0;
-            text-align: center;
-            width: 220px;
-        }
-        .node-tech img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-            object-fit: cover;
-        }
-    
-        #chatbot-trigger {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .nav-link:hover::after {
+            width: 100%;
         }
         
-        #chatbot-trigger:hover {
-            transform: scale(1.15) rotate(-5deg);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.2) !important;
+        .btn-custom-login {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white !important;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-custom-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
         }
 
+        /* HERO SECTION - NO SLIDER */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.9), rgba(248,250,252,0.95)), 
+                        url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+            position: relative;
+            padding-top: 80px;
+        }
+        .hero-shape {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+            opacity: 0.1;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--dark);
+            margin-bottom: 25px;
+        }
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-text {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* FEATURES */
+        .features-section {
+            padding: 100px 0;
+            background-color: white;
+            position: relative;
+        }
+        .feature-card {
+            padding: 40px;
+            border-radius: 24px;
+            background: var(--light);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-color: rgba(79, 70, 229, 0.1);
+        }
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(6, 182, 212, 0.1));
+            color: var(--primary);
+        }
+
+        /* INFO BANNER */
+        .info-banner {
+            background: linear-gradient(135deg, var(--dark), #1e293b);
+            border-radius: 30px;
+            padding: 60px;
+            margin: 100px 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        .info-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 15s infinite linear;
+        }
+
+        /* STATS */
+        .stat-item {
+            text-align: center;
+            padding: 30px;
+        }
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--light);
+            padding: 80px 0 40px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 991px) {
+            .hero-title { font-size: 2.8rem; }
+            .info-banner { padding: 40px 20px; border-radius: 20px; }
+            .stat-number { font-size: 2.5rem; }
+        }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-tech fixed-top">
-        <div class="container-fluid px-4 px-xl-5 d-flex align-items-center justify-content-between py-2">
-            <a class="navbar-brand grotesk fw-bold d-flex align-items-center gap-2" href="/" style="color: var(--brand-dark);">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container-fluid px-4 px-lg-5">
+            <a class="navbar-brand" href="#">
                 @if(isset($school) && $school->logo)
-                    <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 80px;">
+                    <img src="{{ asset($school->logo) }}" alt="Logo Institucional">
                 @else
-                    <span class="material-icons" style="color: var(--brand-main);">cloud_done</span>
+                    <h3 class="m-0 font-heading fw-bold" style="color: var(--primary);">ColegioPro</h3>
                 @endif
-                {{ $school->name ?? 'Demo Plataforma' }}
             </a>
-            
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#demoNav">
-                <span class="material-icons" style="color: var(--brand-dark);">menu</span>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <i class="bi bi-list fs-1 text-dark"></i>
             </button>
-
-            <div class="collapse navbar-collapse" id="demoNav">
+            <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#quienes-somos">Características</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#novedades">Novedades</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#autoridades">Autoridades</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark fw-bold" href="#contacto">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#beneficios">Beneficios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
                 </ul>
-                <div class="d-flex gap-2">
-                    <a href="{{ route('login') }}" class="btn-tech">
-                        Acceder <span class="material-icons" style="font-size: 1.2rem;">arrow_forward</span>
+                <div class="d-flex">
+                    <a href="{{ route('login') }}" class="btn btn-custom-login">
+                        <i class="bi bi-person-circle me-2"></i> Portal Colegiados
                     </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    @php
-        $sliderItems = isset($slider) && $slider->items->count() > 0 ? $slider->items : collect([]);
-    @endphp
-
-    @if($sliderItems->count() > 0)
-        <!-- SLIDER ACTIVO: Muestra solo las imágenes (Tapa todo) -->
-        <style>
-            .hero-slider-section { height: 100vh; }
-            @media (max-width: 991px) { .hero-slider-section { height: 400px; } }
-            @media (max-width: 768px) { .hero-slider-section { height: 280px; } }
-            @media (max-width: 576px) { .hero-slider-section { height: 220px; } }
-        </style>
-        <section class="p-0 position-relative hero-slider-section" style="overflow: hidden; background-color: #000;">
-            <div id="heroCarouselDemo" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
-                <div class="carousel-inner h-100">
-                    @foreach($sliderItems as $index => $item)
-                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}" data-bs-interval="5000">
-                            @php
-                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset('storage/'.$item->image_url);
-                            @endphp
-                            @if($item->link)
-                                <a href="{{ $item->link }}" target="_blank" class="d-block w-100 h-100">
-                                    <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
-                                </a>
-                            @else
-                                <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
-                            @endif
+    <!-- HERO SECTION -->
+    <section id="inicio" class="hero-section">
+        <div class="hero-shape"></div>
+        <div class="container-fluid px-4 px-lg-5 hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-xl-5">
+                    <span class="hero-badge"><i class="bi bi-shield-check me-1"></i> Excelencia Profesional</span>
+                    <h1 class="hero-title">Impulsamos tu <span>Desarrollo Institucional</span></h1>
+                    <p class="hero-text">Somos la entidad líder que respalda, agrupa y potencia a los profesionales. Accede a tu portal exclusivo y gestiona todos tus trámites de manera 100% digital, rápida y segura.</p>
+                    
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <a href="{{ route('login') }}" class="btn btn-custom-login btn-lg px-5 py-3">Ingresar al Sistema <i class="bi bi-arrow-right ms-2"></i></a>
+                        <a href="#servicios" class="btn btn-outline-secondary btn-lg px-4 py-3 rounded-pill fw-bold bg-white">Conoce Más</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xl-6 offset-xl-1 d-none d-lg-block">
+                    <!-- Abstract Modern Composition instead of slider -->
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Profesionales" class="img-fluid rounded-4 shadow-lg" style="border: 8px solid white;">
+                        <div class="position-absolute bottom-0 start-0 translate-middle-x mb-5 bg-white p-4 rounded-4 shadow-lg text-center" style="z-index: 2; border-bottom: 4px solid var(--secondary);">
+                            <h3 class="fw-bold mb-0 text-dark">100%</h3>
+                            <span class="small text-muted fw-bold text-uppercase">Gestión Digital</span>
                         </div>
-                    @endforeach
-                </div>
-                @if($sliderItems->count() > 1)
-                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarouselDemo" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#heroCarouselDemo" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-                @endif
-            </div>
-        </section>
-    @else
-        <!-- SIN SLIDER: Muestra el diseño tradicional azul con texto -->
-        <section class="hero-tech">
-            <div class="container-fluid px-4 px-xl-5 text-center">
-                <span class="badge bg-light text-success border border-success mb-3 px-3 py-2 rounded-pill shadow-sm">Plataforma V2 Activa</span>
-                <h1 class="display-4 fw-bold mb-4" style="color: #ffffff; text-shadow: 0 4px 15px rgba(0,0,0,0.9);">Tu organización,<br>en la nube.</h1>
-                <p class="fs-5 mb-5 mx-auto" style="max-width: 600px; color: #f8fafc; text-shadow: 0 2px 8px rgba(0,0,0,0.9);">
-                    Gestión inteligente para colegios profesionales. Matrículas, cobros, noticias y portal de colegiados en un solo lugar.
-                </p>
-            </div>
-        </section>
-    @endif
-
-    <main class="container-fluid px-4 px-xl-5 py-5">
-        
-        <!-- STATS & SERVICES -->
-        <div id="quienes-somos" class="row g-4 mb-5 pb-5 border-bottom pt-5">
-            <div class="col-12 mb-5 text-center">
-                <div class="row g-3 bg-white p-4 rounded-4 shadow-sm border">
-                    <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">+{{ $school->collegiates()->count() ?? 0 }}</h2>
-                        <p class="text-muted small mt-2 fw-bold">Profesionales Matriculados</p>
                     </div>
-                    <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">{{ \Carbon\Carbon::parse('1990-12-20')->age }}</h2>
-                        <p class="text-muted small mt-2 fw-bold">Años de Trayectoria</p>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">18</h2>
-                        <p class="text-muted small mt-2 fw-bold">Departamentos de La Rioja</p>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 grotesk" style="color: var(--brand-main);">1</h2>
-                        <p class="text-muted small mt-2 fw-bold">Convenios Vigentes</p>
-                    </div>
-                </div>
-            </div>
-                <div class="tech-card text-center">
-                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">speed</span>
-                    <h4 class="grotesk fw-bold">Gestión Ágil</h4>
-                    <p class="text-muted small">Automatizá la revisión de legajos y el pago de cuotas mensuales de forma simple.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="tech-card text-center">
-                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">verified_user</span>
-                    <h4 class="grotesk fw-bold">Seguridad Total</h4>
-                    <p class="text-muted small">Validación de certificados por código QR y perfiles con auditoría completa.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="tech-card text-center">
-                    <span class="material-icons mb-3" style="font-size: 3rem; color: var(--brand-main);">devices</span>
-                    <h4 class="grotesk fw-bold">Multi-dispositivo</h4>
-                    <p class="text-muted small">Tus matriculados pueden acceder desde cualquier lugar con un diseño responsivo y PWA.</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- NOTICIAS -->
-        <div id="novedades" class="mb-5 pb-5 border-bottom pt-5">
-            <h2 class="grotesk fw-bold mb-4" style="color: var(--brand-dark);">Últimos Updates</h2>
-            @if(isset($latestNews) && $latestNews->count() > 0)
+    <!-- STATS -->
+    <section class="py-5 bg-white border-bottom">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-6 stat-item">
+                    <div class="stat-number">2.5K+</div>
+                    <div class="stat-label">Profesionales Activos</div>
+                </div>
+                <div class="col-md-3 col-6 stat-item border-start">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Cursos Anuales</div>
+                </div>
+                <div class="col-md-3 col-6 stat-item border-start">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Trámites Online</div>
+                </div>
+                <div class="col-md-3 col-6 stat-item border-start">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Soporte Técnico</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="servicios" class="features-section">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="text-center mb-5 pb-3">
+                <span class="text-uppercase fw-bold" style="color: var(--secondary); letter-spacing: 2px;">Nuestros Servicios</span>
+                <h2 class="display-5 fw-bold text-dark mt-2">Todo lo que necesitas en un solo lugar</h2>
+            </div>
+            
             <div class="row g-4">
-                @foreach($latestNews as $news)
-                <div class="col-md-4">
-                    <div class="tech-card p-0 overflow-hidden">
-                        @if($news->image_path)
-                            <img src="{{ asset($news->image_path) }}" class="w-100" style="height: 180px; object-fit: cover;">
-                        @else
-                            <div class="w-100 d-flex align-items-center justify-content-center" style="height: 180px; background: linear-gradient(135deg, var(--brand-main, #10b981) 0%, rgba(16, 185, 129, 0.8) 100%); position: relative; overflow: hidden;">
-                                <div style="position: absolute; width: 150%; height: 150%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); top: -25%; left: -25%;"></div>
-                                @if(isset($school) && $school->logo)
-                                    <img src="{{ asset($school->logo) }}" alt="Logo" style="max-height: 90px; opacity: 0.25; filter: grayscale(100%) brightness(200%); position: relative; z-index: 1;">
-                                @else
-                                    <span class="material-icons text-white" style="font-size: 5rem; opacity: 0.15; position: relative; z-index: 1;">article</span>
-                                @endif
-                            </div>
-                        @endif
-                        <div class="p-4 flex-grow-1 d-flex flex-column">
-                            <small class="text-muted fw-bold d-block mb-2">{{ $news->published_at->format('d M, Y') }}</small>
-                            <h5 class="fw-bold" style="line-height: 1.4;">{{ $news->title }}</h5>
-                            <p class="text-secondary small mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">{{ Str::limit(strip_tags($news->content), 100) }}</p>
-                            <a href="{{ route('news.show', $news->slug) }}" class="text-decoration-none fw-bold mt-auto d-inline-block" style="color: var(--brand-main);">Ver detalles &rarr;</a>
-                        </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-laptop"></i></div>
+                        <h4 class="fw-bold mb-3">Oficina Virtual</h4>
+                        <p class="text-muted mb-0">Gestiona tus cuotas, descarga certificados y actualiza tu legajo sin moverte de tu casa u oficina, disponible las 24 horas.</p>
                     </div>
                 </div>
-                @endforeach
-            </div>
-            @else
-            <div class="alert alert-light border text-center p-4">
-                <p class="mb-0 text-muted">No hay actualizaciones en el sistema de noticias.</p>
-            </div>
-            @endif
-        </div>
-
-        <!-- AUTORIDADES -->
-        <div id="autoridades" class="mb-5 pt-5">
-            <h2 class="grotesk fw-bold mb-4 text-center" style="color: var(--brand-dark);">Equipo Demo</h2>
-            @if(isset($boardMembers) && $boardMembers->count() > 0)
-                @foreach($boardMembers as $department => $members)
-                    <h5 class="text-center text-muted mb-4 mt-5">{{ $department }}</h5>
-                    <div class="d-flex flex-wrap justify-content-center gap-4">
-                        @foreach($members as $m)
-                        <div class="node-tech">
-                            @php
-                                $mName = $m->collegiate ? $m->collegiate->first_name . ' ' . $m->collegiate->last_name : $m->name;
-                                $mImageUrl = $m->collegiate && $m->collegiate->avatar_url ? $m->collegiate->avatar_url : $m->image_path;
-                            @endphp
-                            <img src="{{ $mImageUrl }}" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($mName) }}&background=10b981&color=fff'">
-                            <h6 class="fw-bold mb-1">{{ $mName }}</h6>
-                            <small class="text-muted">{{ $m->role }}</small>
-                        </div>
-                        @endforeach
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-mortarboard"></i></div>
+                        <h4 class="fw-bold mb-3">Capacitación Continua</h4>
+                        <p class="text-muted mb-0">Accede a una amplia oferta de cursos, diplomaturas y seminarios dictados por expertos, con inscripción y certificación automática.</p>
                     </div>
-                @endforeach
-            @else
-                <div class="alert alert-light border text-center p-4">
-                    <p class="mb-0 text-muted">Aún no hay autoridades configuradas para esta instancia.</p>
                 </div>
-            @endif
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-file-earmark-check"></i></div>
+                        <h4 class="fw-bold mb-3">Certificación Ética</h4>
+                        <p class="text-muted mb-0">Obtén tus certificados de habilitación profesional y libre deuda con un solo clic, firmados digitalmente para validación instantánea.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
+    </section>
 
-        <!-- CONTACTO -->
-        <div id="contacto" class="mb-5 pt-5 border-top">
-            <h2 class="grotesk fw-bold mb-4 text-center" style="color: var(--brand-dark);">Contacto</h2>
-            <div class="row g-4">
-                <div class="col-lg-5">
-                    <ul class="list-unstyled">
-                        <li class="d-flex mb-4 align-items-center">
-                            <span class="material-icons me-3 fs-3" style="color: var(--brand-main);">location_on</span>
-                            <div>
-                                <strong class="d-block grotesk">Dirección</strong>
-                                <span class="text-muted">{{ $school->address ?? 'San Martin 123' }}</span>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 align-items-center">
-                            <span class="material-icons me-3 fs-3" style="color: var(--brand-main);">phone</span>
-                            <div>
-                                <strong class="d-block grotesk">Teléfono</strong>
-                                <span class="text-muted">{{ $school->phone ?? '(011) 456-7890' }}</span>
-                            </div>
-                        </li>
-                        <li class="d-flex mb-4 align-items-center">
-                            <span class="material-icons me-3 fs-3" style="color: var(--brand-main);">email</span>
-                            <div>
-                                <strong class="d-block grotesk">Mail</strong>
-                                <span class="text-muted">{{ $school->email ?? 'info@demo.com' }}</span>
-                            </div>
-                        </li>
+    <!-- INFO BANNER -->
+    <section id="beneficios" class="container-fluid px-4 px-lg-5">
+        <div class="info-banner">
+            <div class="row align-items-center position-relative" style="z-index: 1;">
+                <div class="col-lg-8">
+                    <h2 class="display-4 fw-bold mb-4">La revolución en la gestión institucional ha llegado.</h2>
+                    <p class="fs-5 opacity-75 mb-0">Únete a la plataforma tecnológica más avanzada diseñada exclusivamente para colegios y consejos profesionales.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <a href="{{ route('login') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-bold text-dark shadow">Ingresar al Portal</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contacto">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="row gy-4">
+                <div class="col-lg-4">
+                    @if(isset($school) && $school->logo)
+                        <img src="{{ asset($school->logo) }}" alt="Logo" height="50" class="mb-4">
+                    @endif
+                    <p class="text-muted pe-lg-5">Modernizamos y elevamos el estándar de la gestión profesional, brindando herramientas de última generación para instituciones de vanguardia.</p>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-4 text-dark">Enlaces Útiles</h5>
+                    <ul class="list-unstyled mb-0 lh-lg text-muted">
+                        <li><a href="#" class="text-decoration-none text-muted hover-primary">Marco Institucional</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted hover-primary">Código de Ética</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted hover-primary">Reglamento Interno</a></li>
+                        <li><a href="{{ route('login') }}" class="text-decoration-none text-muted hover-primary">Portal Autogestión</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-7">
-                    @php
-                        $mapQuery = null;
-                        if(isset($school) && $school->latitude && $school->longitude) {
-                            $mapQuery = $school->latitude . ',' . $school->longitude;
-                        } elseif (isset($school) && $school->plus_code) {
-                            $mapQuery = $school->plus_code . ' ' . $school->address;
-                        } elseif (isset($school) && $school->address) {
-                            $mapQuery = $school->address;
-                        }
-                    @endphp
-
-                    @if(isset($school) && $school->map_embed_code)
-                        <div class="rounded-4 overflow-hidden shadow-sm h-100" style="min-height: 300px; border: 1px solid #e2e8f0;">
-                            {!! $school->map_embed_code !!}
-                        </div>
-                    @elseif($mapQuery)
-                        <div class="rounded-4 overflow-hidden shadow-sm h-100" style="min-height: 300px; border: 1px solid #e2e8f0;">
-                            <iframe width="100%" height="100%" style="border:0; min-height: 300px;" loading="lazy" allowfullscreen 
-                                src="https://maps.google.com/maps?q={{ urlencode($mapQuery) }}&t=&z=17&ie=UTF8&iwloc=&output=embed">
-                            </iframe>
-                        </div>
-                    @else
-                        <div class="rounded-4 bg-light d-flex align-items-center justify-content-center h-100 shadow-sm border" style="min-height: 300px;">
-                            <div class="text-center">
-                                <span class="material-icons text-muted mb-2" style="font-size: 3rem;">map</span>
-                                <p class="text-muted mb-0">Mapa no configurado</p>
-                            </div>
-                        </div>
-                    @endif
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-4 text-dark">Contacto</h5>
+                    <ul class="list-unstyled mb-0 lh-lg text-muted">
+                        <li><i class="bi bi-geo-alt me-2 text-primary"></i> Av. Tecnológica 1234, Piso 5</li>
+                        <li><i class="bi bi-envelope me-2 text-primary"></i> info@colegioprofesional.demo</li>
+                        <li><i class="bi bi-telephone me-2 text-primary"></i> 0800-333-PROFE (7763)</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </main>
-
-    <footer class="py-5 border-top" style="background-color: #fff;">
-        <div class="container text-center">
-            <p class="text-muted mb-0">&copy; {{ date('Y') }} Graficar Software de Mario Rojas. Todos los derechos reservados.</p>
+            <hr class="my-4 border-secondary opacity-10">
+            <div class="text-center text-muted small fw-medium">
+                &copy; {{ date('Y') }} {{ $school->name ?? 'Colegio Profesional' }}. Desarrollado con tecnología de vanguardia.
+            </div>
         </div>
     </footer>
 
-
-    <!-- Chatbot Widget -->
-    <div id="chatbot-widget" class="position-fixed" style="bottom: 120px; right: 25px; z-index: 1050; width: 400px; height: 550px; display: none; resize: both; overflow: hidden; min-width: 300px; min-height: 400px; max-width: 90vw; max-height: 90vh; background: transparent;">
-        <div class="card border-0 shadow-lg h-100" style="border-radius: 20px; overflow: hidden; display: flex; flex-direction: column;">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3" id="chatbot-header" style="cursor: move;">
-                <div class="fw-bold d-flex align-items-center">
-                    <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" class="me-2 shadow-sm" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; pointer-events: none;">
-                    Asistente Virtual
-                </div>
-                <button type="button" class="btn-close btn-close-white" onclick="toggleChatbot()"></button>
-            </div>
-            <div class="card-body bg-light flex-grow-1" id="chatbot-messages" style="overflow-y: auto;">
-                <div class="d-flex mb-3">
-                    <div class="bg-white text-dark p-3 rounded-4 shadow-sm" style="max-width: 85%;">
-                        Hola 👋 Soy el asistente virtual del {{ $school->name ?? 'Colegio' }}. ¿En qué te puedo ayudar hoy?
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-white border-0 py-3">
-                <form id="chatbot-form" class="d-flex gap-2" onsubmit="sendChatMessage(event)">
-                    <input type="text" id="chatbot-input" class="form-control rounded-pill bg-light border-0 px-3" placeholder="Escribe tu consulta..." required>
-                    <button type="submit" class="btn btn-primary rounded-circle" style="width: 40px; height: 40px;">
-                        <i class="bi bi-send"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <button id="chatbot-trigger" class="btn btn-light border border-2 border-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center p-0" style="bottom: 25px; right: 25px; z-index: 1040; width: 95px; height: 95px; background-color: white !important; overflow: hidden;" onclick="toggleChatbot()">
-        <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" style="width: 100%; height: 100%; object-fit: cover;">
-    </button>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const chatbotWidget = document.getElementById('chatbot-widget');
-
-        function toggleChatbot() {
-            if (chatbotWidget.style.display === 'none' || chatbotWidget.style.display === '') {
-                chatbotWidget.style.display = 'block';
+        // Efecto para la navbar al scrollear
+        window.addEventListener('scroll', function() {
+            var navbar = document.querySelector('.navbar-custom');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+                navbar.style.padding = '10px 0';
             } else {
-                chatbotWidget.style.display = 'none';
+                navbar.style.boxShadow = 'none';
+                navbar.style.padding = '15px 0';
             }
-        }
-        
-        // Draggable logic
-        let isDragging = false;
-        let currentX;
-        let currentY;
-        let initialX;
-        let initialY;
-        let xOffset = 0;
-        let yOffset = 0;
-
-        const header = document.getElementById("chatbot-header");
-
-        header.addEventListener("mousedown", dragStart);
-        document.addEventListener("mouseup", dragEnd);
-        document.addEventListener("mousemove", drag);
-
-        function dragStart(e) {
-            initialX = e.clientX - xOffset;
-            initialY = e.clientY - yOffset;
-            if (e.target === header || e.target.parentNode === header) {
-                isDragging = true;
-            }
-        }
-
-        function dragEnd(e) {
-            initialX = currentX;
-            initialY = currentY;
-            isDragging = false;
-        }
-
-        function drag(e) {
-            if (isDragging) {
-                e.preventDefault();
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-                xOffset = currentX;
-                yOffset = currentY;
-                setTranslate(currentX, currentY, chatbotWidget);
-            }
-        }
-
-        function setTranslate(xPos, yPos, el) {
-            el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
-        }
-
-        async function sendChatMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatbot-input');
-            const message = input.value.trim();
-            if (!message) return;
-
-            const messagesDiv = document.getElementById('chatbot-messages');
-            
-            // Append user message
-            messagesDiv.innerHTML += `
-                <div class="d-flex mb-3 justify-content-end">
-                    <div class="bg-primary text-white p-3 rounded-4 shadow-sm" style="max-width: 85%;">${message}</div>
-                </div>
-            `;
-            
-            input.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Fetch response
-            try {
-                const response = await fetch('{{ route("chatbot.ask") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ question: message, school_id: '{{ $school->id ?? 1 }}' })
-                });
-
-                const data = await response.json();
-                
-                // Append bot message
-                messagesDiv.innerHTML += `
-                    <div class="d-flex mb-3">
-                        <div class="bg-white text-dark p-3 rounded-4 shadow-sm border" style="max-width: 85%;">${data.answer}</div>
-                    </div>
-                `;
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
+        });
     </script>
 </body>
 </html>
