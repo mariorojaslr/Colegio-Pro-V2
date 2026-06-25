@@ -111,3 +111,22 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    fileInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (this.files[0].size > maxSize) {
+                    alert('La imagen es demasiado pesada. El tamaño máximo permitido es 2MB. Por favor, comprime la imagen e intenta nuevamente.');
+                    this.value = ''; // Limpiar el input
+                }
+            }
+        });
+    });
+});
+</script>
+@endpush
