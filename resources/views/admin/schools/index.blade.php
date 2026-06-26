@@ -132,7 +132,7 @@
                                 <a href="{{ route('admin.impersonate', $school->id) }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-sm" style="font-size: 0.8rem;">
                                     Ver Admin
                                 </a>
-                                <form action="{{ route('admin.schools.generate_demo', $school->id) }}" method="POST" onsubmit="return confirm('¿Crear o restablecer usuario demo (demo_{{ str_replace(\'-\', \'\', $school->slug) }}@gentepiola.net) para esta empresa?');">
+                                <form action="{{ route('admin.schools.generate_demo', $school->id) }}" method="POST" onsubmit="return confirm('¿Crear o restablecer usuario demo (demo_{{ str_replace(\"-\", \"\", $school->slug) }}@gentepiola.net) para esta empresa?');">
                                     @csrf
                                     <button type="submit" class="btn btn-warning btn-sm rounded-circle shadow-sm" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;" title="Generar Usuario Demo">
                                         <i class="bi bi-person-badge-fill text-dark"></i>
