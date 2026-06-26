@@ -195,8 +195,34 @@
                          Entrar como Admin <i class="bi bi-eye ms-2"></i>
                     </a>
                 </div>
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center mt-3 bg-dark bg-opacity-25 border border-dark">
+                    <label class="form-label text-muted small fw-bold mb-2 ls-1 text-uppercase text-start d-block">Acceso Rápido Demo</label>
+                    <div class="input-group input-group-sm mb-2">
+                        <span class="input-group-text bg-black border-dark text-muted"><i class="bi bi-envelope"></i></span>
+                        <input type="text" id="demoEmailInput" class="form-control bg-black text-white border-dark shadow-none" value="demo_{{ $school->slug }}@gentepiola.net" readonly>
+                        <button class="btn btn-warning shadow-sm" type="button" onclick="copyDemoEmail()" title="Copiar correo">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                    <div class="form-text small text-start" style="font-size: 0.75rem; color: #aaa;">Copia este correo para probar o dar demos.</div>
+                </div>
             </div>
         </div>
     </form>
 </div>
+
+<script>
+function copyDemoEmail() {
+    var copyText = document.getElementById("demoEmailInput");
+    copyText.select();
+    navigator.clipboard.writeText(copyText.value).then(function() {
+        var btn = copyText.nextElementSibling;
+        var originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check2 text-dark"></i>';
+        setTimeout(function() {
+            btn.innerHTML = originalHtml;
+        }, 1500);
+    });
+}
+</script>
 @endsection
