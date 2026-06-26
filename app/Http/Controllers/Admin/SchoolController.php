@@ -179,4 +179,27 @@ class SchoolController extends Controller
 
         return redirect()->route('admin.dashboard')->with('success', 'Configuración de colegio actualizada.');
     }
+
+    /**
+     * Genera o restablece el usuario Demo para la institución.
+     */
+    public function generateDemoUser(School $school)
+    {
+        // Limpiamos el slug para que quede más limpio en el correo (ej: "colegio-de-abogados" -> "colegiodeabogados")
+        $cleanSlug = str_replace('-', '', $school->slug);
+        $email = 'demo_' . $cleanSlug . '@gentepiola.net';
+        
+        // Hash de la contraseña universal de demostración
+        $hash = '$2y$12$7i4xvZnVDWj74aHyxcitQOg3GnMnFq0kYnKRf/Lb3cycvn8aYulMS'; 
+
+        $user = User::firstOrNew(['email' => $email]);
+        $user->name = 'Admin Demo';
+        $user->school_id = $school->id;
+        $user->role = 'ADMIN_COLEGIO';
+        $user->password = $hash;
+        $user->is_active = 1;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Usuario Demo listo: ' . $email);
+    }
 }

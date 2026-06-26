@@ -140,6 +140,7 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::post('/admin/colegios/guardar', [App\Http\Controllers\Admin\SchoolController::class, 'store'])->name('admin.schools.store');
     Route::get('/admin/colegios/{school}/editar', [App\Http\Controllers\Admin\SchoolController::class, 'edit'])->name('admin.schools.edit');
     Route::post('/admin/colegios/{school}/actualizar', [App\Http\Controllers\Admin\SchoolController::class, 'update'])->name('admin.schools.update');
+    Route::post('/admin/colegios/{school}/generar-demo', [App\Http\Controllers\Admin\SchoolController::class, 'generateDemoUser'])->name('admin.schools.generate_demo');
 
     // Comunicación masiva a todos los clientes (tenants)
     Route::post('/admin/notifications', [App\Http\Controllers\Admin\NotificationController::class, 'store'])->name('admin.notifications.store');
