@@ -27,8 +27,7 @@ class AgreementController extends Controller
             'name' => 'required|string|max:255',
             'logo' => 'nullable|image|max:2048',
             'description' => 'nullable|string',
-            'discount_percentage' => 'nullable|string|max:255',
-            'is_active' => 'boolean'
+            'discount_percentage' => 'nullable|string|max:255'
         ]);
 
         $schoolId = app('tenant') ? app('tenant')->id : 1;
@@ -58,8 +57,7 @@ class AgreementController extends Controller
             'name' => 'required|string|max:255',
             'logo' => 'nullable|image|max:2048',
             'description' => 'nullable|string',
-            'discount_percentage' => 'nullable|string|max:255',
-            'is_active' => 'boolean'
+            'discount_percentage' => 'nullable|string|max:255'
         ]);
 
         $data = $request->except('logo');
