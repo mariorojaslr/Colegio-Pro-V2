@@ -436,9 +436,14 @@
                         <div class="mt-2 pt-4 border-top border-theme">
                             <h6 class="fw-bold text-theme-dark mb-3">Síguenos en Redes</h6>
                             <div class="d-flex gap-2">
-                                <a href="{{ $school->facebook_url ?? '#' }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-circle"><span class="material-icons" style="font-size: 1rem;">facebook</span></a>
-                                <a href="{{ $school->instagram_url ?? '#' }}" target="_blank" class="btn btn-outline-danger btn-sm rounded-circle"><span class="material-icons" style="font-size: 1rem;">photo_camera</span></a>
-                                <a href="{{ $school->twitter_url ?? '#' }}" target="_blank" class="btn btn-outline-info btn-sm rounded-circle"><span class="material-icons" style="font-size: 1rem;">chat</span></a>
+                                @php
+                                    $fb = !empty($school->facebook_url) ? $school->facebook_url : '';
+                                    $ig = !empty($school->instagram_url) ? $school->instagram_url : '';
+                                    $tw = !empty($school->twitter_url) ? $school->twitter_url : '';
+                                @endphp
+                                <a {!! $fb ? 'href="'.$fb.'" target="_blank"' : 'href="javascript:void(0)"' !!} class="btn btn-outline-primary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-facebook fs-6"></i></a>
+                                <a {!! $ig ? 'href="'.$ig.'" target="_blank"' : 'href="javascript:void(0)"' !!} class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-instagram fs-6"></i></a>
+                                <a {!! $tw ? 'href="'.$tw.'" target="_blank"' : 'href="javascript:void(0)"' !!} class="btn btn-outline-info btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-twitter-x fs-6"></i></a>
                             </div>
                         </div>
                     </div>
