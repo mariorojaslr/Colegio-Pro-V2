@@ -545,6 +545,18 @@
                             <input type="text" class="form-control" name="address" value="{{ old('address', $collegiate->address) }}" placeholder="Calle, Número, Ciudad">
                         </div>
                         <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Departamento (Localidad)</label>
+                            <select name="city" class="form-select">
+                                @php
+                                    $departamentos = ['Capital', 'Chilecito', 'Arauco', 'Chamical', 'Famatina', 'General Belgrano', 'General Juan Facundo Quiroga', 'General Lamadrid', 'General Ocampo', 'General San Martín', 'Independencia', 'Rosario Vera Peñaloza', 'San Blas de los Sauces', 'Sanagasta', 'Vinchina', 'Castro Barros', 'Felipe Varela'];
+                                    $currentCity = old('city', $collegiate->city ?? 'Capital');
+                                @endphp
+                                @foreach($departamentos as $depto)
+                                    <option value="{{ $depto }}" {{ $currentCity == $depto ? 'selected' : '' }}>{{ $depto }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted">Dirección de Trabajo</label>
                             <input type="text" class="form-control" name="workplaces_info" value="{{ old('workplaces_info', $collegiate->workplaces_info) }}" placeholder="Clínica, Hospital o Consultorio">
                         </div>

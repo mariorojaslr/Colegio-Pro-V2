@@ -601,17 +601,45 @@
                             $departamentos = ['Capital', 'Chilecito', 'Arauco', 'Chamical', 'Famatina', 'General Belgrano', 'General Juan Facundo Quiroga', 'General Lamadrid', 'General Ocampo', 'General San Martín', 'Independencia', 'Rosario Vera Peñaloza', 'San Blas de los Sauces', 'Sanagasta', 'Vinchina', 'Castro Barros', 'Felipe Varela', 'Sanagasta'];
                         @endphp
                         @foreach($departamentos as $index => $depto)
+                            @php
+                                $deptCollegiates = isset($collegiates) ? $collegiates->where('city', $depto) : collect();
+                            @endphp
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed fw-bold text-theme-dark" type="button" data-bs-toggle="collapse" data-bs-target="#depto{{ $index }}">
                                         {{ $depto }}
+                                        <span class="badge bg-theme-primary ms-2 rounded-pill">{{ $deptCollegiates->count() }}</span>
                                     </button>
                                 </h2>
                                 <div id="depto{{ $index }}" class="accordion-collapse collapse" data-bs-parent="#accordionDeptos">
-                                    <div class="accordion-body bg-light">
-                                        <div class="text-center text-muted py-3 small">
-                                            <i class="bi bi-info-circle me-1"></i> Mostrando profesionales en {{ $depto }} (Próximamente)
-                                        </div>
+                                    <div class="accordion-body bg-light p-0">
+                                        @if($deptCollegiates->count() > 0)
+                                            <div class="list-group list-group-flush">
+                                                @foreach($deptCollegiates as $colegiado)
+                                                    <div class="list-group-item bg-transparent p-3 border-bottom">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <h6 class="mb-1 fw-bold">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                                                <div class="small text-muted">
+                                                                    <span class="me-3"><i class="bi bi-card-text me-1"></i> MP: {{ $colegiado->registration_number }}</span>
+                                                                    <span><i class="bi bi-person-vcard me-1"></i> DNI: {{ $colegiado->dni }}</span>
+                                                                </div>
+                                                            </div>
+                                                            @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                                                <span class="badge bg-success rounded-pill">Activo</span>
+                                                            @else
+                                                                <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="text-center text-muted py-4 small">
+                                                <i class="bi bi-info-circle fs-4 d-block mb-2 text-theme-secondary"></i> 
+                                                No hay profesionales registrados en este departamento.
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

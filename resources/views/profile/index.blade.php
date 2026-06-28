@@ -90,6 +90,19 @@
                                         <input type="text" name="address" class="form-control @error('address') is-invalid @enderror" value="{{ old('address', $collegiate->address ?? '') }}">
                                         @error('address') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     </div>
+                                    <div class="col-md-12 mt-3">
+                                        <label class="form-label small fw-bold text-muted">Departamento (Localidad)</label>
+                                        <select name="city" class="form-select @error('city') is-invalid @enderror">
+                                            @php
+                                                $departamentos = ['Capital', 'Chilecito', 'Arauco', 'Chamical', 'Famatina', 'General Belgrano', 'General Juan Facundo Quiroga', 'General Lamadrid', 'General Ocampo', 'General San Martín', 'Independencia', 'Rosario Vera Peñaloza', 'San Blas de los Sauces', 'Sanagasta', 'Vinchina', 'Castro Barros', 'Felipe Varela'];
+                                                $currentCity = old('city', $collegiate->city ?? 'Capital');
+                                            @endphp
+                                            @foreach($departamentos as $depto)
+                                                <option value="{{ $depto }}" {{ $currentCity == $depto ? 'selected' : '' }}>{{ $depto }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('city') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                    </div>
                                 </div>
 
                                 <div class="mt-4 text-end">
