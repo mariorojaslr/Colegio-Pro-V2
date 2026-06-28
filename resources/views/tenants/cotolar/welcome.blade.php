@@ -605,13 +605,13 @@
                                 $deptCollegiates = isset($collegiates) ? $collegiates->where('city', $depto) : collect();
                             @endphp
                             <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed fw-bold text-theme-dark" type="button" data-bs-toggle="collapse" data-bs-target="#depto{{ $index }}">
+                                <h2 class="accordion-header" id="heading{{ $index }}">
+                                    <button class="accordion-button collapsed fw-bold text-theme-dark" type="button" data-bs-toggle="collapse" data-bs-target="#depto{{ $index }}" aria-expanded="false" aria-controls="depto{{ $index }}">
                                         {{ $depto }}
                                         <span class="badge bg-theme-primary ms-2 rounded-pill">{{ $deptCollegiates->count() }}</span>
                                     </button>
                                 </h2>
-                                <div id="depto{{ $index }}" class="accordion-collapse collapse" data-bs-parent="#accordionDeptos">
+                                <div id="depto{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}">
                                     <div class="accordion-body bg-light p-0">
                                         @if($deptCollegiates->count() > 0)
                                             <div class="list-group list-group-flush">
