@@ -26,6 +26,7 @@ class Collegiate extends Model
         'custom_attributes',
         'birth_date',
         'address',
+        'city',
         'plus_code',
         'latitude',
         'longitude',
