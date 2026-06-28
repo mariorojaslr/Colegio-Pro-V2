@@ -136,10 +136,10 @@
     @if($sliderItems->count() > 0)
         <!-- SLIDER ACTIVO: Muestra solo las imágenes en el carrusel (Tapa todo) -->
         <style>
-            .hero-slider-section { aspect-ratio: 2.4; width: 100%; max-height: 800px; }
-            @media (max-width: 991px) { .hero-slider-section { aspect-ratio: auto; height: 400px; } }
-            @media (max-width: 768px) { .hero-slider-section { aspect-ratio: auto; height: 320px; } }
-            @media (max-width: 576px) { .hero-slider-section { aspect-ratio: auto; height: 250px; } }
+            .hero-slider-section { height: 800px; width: 100%; }
+            @media (max-width: 991px) { .hero-slider-section { height: 500px; } }
+            @media (max-width: 768px) { .hero-slider-section { height: 400px; } }
+            @media (max-width: 576px) { .hero-slider-section { height: 300px; } }
         </style>
         <section class="p-0 position-relative hero-slider-section" style="overflow: hidden; background-color: #000;">
             <div id="heroCarousel" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
