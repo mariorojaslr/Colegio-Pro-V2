@@ -353,6 +353,7 @@
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('collegiates.index') }}"><i class="bi bi-people-fill me-2 text-primary"></i> Padrón de Matriculados</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('student.lessons.index') }}"><i class="bi bi-mortarboard-fill me-2 text-primary"></i> Academia y Cursos</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.news.index') }}"><i class="bi bi-newspaper me-2 text-primary"></i> Prensa y Noticias</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.agreements.index') }}"><i class="bi bi-briefcase-fill me-2 text-primary"></i> Convenios Comerciales</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.certificate_types.index') }}"><i class="bi bi-file-earmark-text me-2 text-primary"></i> Trámites Habilitados</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics.index') }}"><i class="bi bi-scales me-2 text-primary"></i> Ética y Sanciones</a></li>

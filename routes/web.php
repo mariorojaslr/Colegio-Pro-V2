@@ -198,6 +198,7 @@ Route::middleware(['auth'])->group(function () {
     
     // Noticias Administrativas
     Route::resource('admin/news', NewsArticleController::class)->names('admin.news');
+    Route::resource('admin/agreements', \App\Http\Controllers\Admin\AgreementController::class)->names('admin.agreements');
 
     // Autoridades y Permisos
     Route::get('admin/permissions', [\App\Http\Controllers\Admin\RolePermissionController::class, 'index'])->name('admin.permissions.index');
