@@ -76,12 +76,15 @@ class PublicLandingController extends Controller
                                              ->take(3)
                                              ->get();
 
+        $agreements = \App\Models\Agreement::where('school_id', $schoolId)->where('is_active', true)->get();
+        $collegiates = \App\Models\Collegiate::where('school_id', $schoolId)->where('status', 'active')->get();
+
         $tenantSlug = $school->slug ?? 'default';
         if (view()->exists("tenants.{$tenantSlug}.welcome")) {
-            return view("tenants.{$tenantSlug}.welcome", compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers', 'latestNews'));
+            return view("tenants.{$tenantSlug}.welcome", compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers', 'latestNews', 'agreements', 'collegiates'));
         }
 
-        return view('welcome', compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers', 'latestNews'));
+        return view('welcome', compact('school', 'mainMenu', 'slider', 'plans', 'boardMembers', 'latestNews', 'agreements', 'collegiates'));
     }
 
     public function showPage($slug)
