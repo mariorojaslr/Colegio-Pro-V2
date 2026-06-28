@@ -106,4 +106,43 @@ class PublicLandingController extends Controller
 
         return view('landing.dynamic_page', compact('page', 'mainMenu'));
     }
+    
+    public function validateMatricula(Request $request)
+    {
+        $school = app('tenant') ?? \App\Models\School::where('slug', 'cotolar')->first() ?? \App\Models\School::first();
+        $query = $request->input('query');
+        
+        if (empty($query)) {
+            return response()->json(['success' => false, 'message' => 'Por favor, ingrese un DNI, matrícula o nombre para buscar.']);
+        }
+
+        $collegiate = \App\Models\Collegiate::where('school_id', $school->id ?? 1)
+            ->where(function($q) use ($query) {
+                $q->where('document_number', $query)
+                  ->orWhere('registration_number', $query)
+                  ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$query}%"])
+                  ->orWhereRaw("CONCAT(last_name, ' ', first_name) LIKE ?", ["%{$query}%"]);
+            })
+            ->first();
+
+        if (!$collegiate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontró ningún profesional matriculado con esos datos en nuestra jurisdicción.'
+            ]);
+        }
+
+        $isActive = in_array(strtolower($collegiate->status), ['active', 'activo']);
+
+        return response()->json([
+            'success' => true,
+            'collegiate' => [
+                'name' => mb_strtoupper($collegiate->first_name . ' ' . $collegiate->last_name, 'UTF-8'),
+                'document' => $collegiate->document_number,
+                'registration' => $collegiate->registration_number,
+                'status' => $isActive ? 'HABILITADO' : 'NO HABILITADO',
+                'is_active' => $isActive
+            ]
+        ]);
+        }
 }

@@ -71,7 +71,8 @@ Route::post('/v/{uuid}/burn', [\App\Http\Controllers\ValidationController::class
 
 Route::post('/chatbot/ask', [\App\Http\Controllers\ChatbotController::class, 'ask'])->name('chatbot.ask');
 
-Route::get('/', [\App\Http\Controllers\PublicLandingController::class, 'index']);
+Route::get('/', [\App\Http\Controllers\PublicLandingController::class, 'index'])->name('home');
+Route::post('/validar-matricula', [\App\Http\Controllers\PublicLandingController::class, 'validateMatricula'])->name('public.validate.matricula');
 Route::get('/noticias/{slug}', [\App\Http\Controllers\PublicNewsController::class, 'show'])->name('public.news.show');
 
 // Demo Registration

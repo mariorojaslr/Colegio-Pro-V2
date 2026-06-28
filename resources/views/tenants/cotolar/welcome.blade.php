@@ -704,12 +704,23 @@
     <div class="modal fade" id="modalMatricula" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
-                <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-shield-check text-theme-primary me-2"></i> Matrícula Habilitante</h5>
+                <div class="modal-header bg-theme-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-theme-dark"><i class="bi bi-shield-check text-theme-primary me-2"></i> Matrícula Habilitante</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4">
-                    <p>Podés validar la matrícula de cualquier profesional activo. Si tenés dudas sobre la habilitación de un profesional, podés buscarlo en el Padrón de Terapeutas o contactarnos directamente.</p>
+                <div class="modal-body p-4 pt-4">
+                    <p class="text-muted small mb-4">Validá la habilitación legal de cualquier profesional activo en nuestra jurisdicción ingresando su DNI, Matrícula o Nombre completo.</p>
+                    <form id="formValidarMatricula" onsubmit="event.preventDefault(); validarMatricula();">
+                        <div class="input-group mb-3 shadow-sm rounded-pill overflow-hidden border">
+                            <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" id="inputMatriculaSearch" class="form-control border-0 shadow-none" placeholder="Buscar por DNI, Matrícula o Nombre..." required>
+                            <button class="btn bg-theme-primary text-white fw-bold px-4 border-0" type="submit" id="btnValidar">Validar</button>
+                        </div>
+                    </form>
+                    
+                    <div id="resultadoMatricula" class="mt-4 d-none">
+                        <!-- Aquí va el resultado -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -878,5 +889,67 @@
     </script>
     
     <!-- Bootstrap JS for Modals -->
+    <!-- Scripts para validación de matrícula -->
+    <script>
+        function validarMatricula() {
+            const query = document.getElementById('inputMatriculaSearch').value;
+            const btn = document.getElementById('btnValidar');
+            const resContainer = document.getElementById('resultadoMatricula');
+            
+            if(!query) return;
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            resContainer.classList.add('d-none');
+
+            fetch('{{ route("public.validate.matricula") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                resContainer.classList.remove('d-none');
+                btn.disabled = false;
+                btn.innerHTML = 'Validar';
+
+                if (data.success) {
+                    const col = data.collegiate;
+                    const badgeClass = col.is_active ? 'bg-success' : 'bg-danger';
+                    const iconClass = col.is_active ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger';
+                    const msg = col.is_active ? 'El profesional se encuentra habilitado para ejercer.' : 'El profesional NO se encuentra habilitado en este momento.';
+
+                    resContainer.innerHTML = `
+                        <div class="card border-0 shadow-sm rounded-4" style="background-color: #f8f9fa; border-left: 5px solid ${col.is_active ? '#198754' : '#dc3545'} !important;">
+                            <div class="card-body p-4 text-center">
+                                <i class="bi ${iconClass} mb-2" style="font-size: 3rem;"></i>
+                                <h5 class="fw-bold text-dark mb-1">${col.name}</h5>
+                                <p class="text-muted mb-3 small">DNI: ${col.document} | Matrícula: ${col.registration}</p>
+                                <span class="badge ${badgeClass} px-3 py-2 fs-6 mb-3 rounded-pill">${col.status}</span>
+                                <p class="mb-0 small fw-bold text-dark">${msg}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resContainer.innerHTML = `
+                        <div class="alert alert-warning border-0 shadow-sm rounded-4 text-center p-4">
+                            <i class="bi bi-exclamation-triangle-fill text-warning mb-2" style="font-size: 2.5rem;"></i>
+                            <h6 class="fw-bold mt-2">Búsqueda sin resultados</h6>
+                            <p class="mb-0 small text-muted">${data.message}</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                btn.disabled = false;
+                btn.innerHTML = 'Validar';
+                resContainer.classList.remove('d-none');
+                resContainer.innerHTML = '<div class="alert alert-danger rounded-4 small">Ocurrió un error al consultar el servidor. Intente más tarde.</div>';
+            });
+        }
+    </script>
 </body>
 </html>
