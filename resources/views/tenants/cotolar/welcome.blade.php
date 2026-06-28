@@ -151,10 +151,10 @@
                             @endphp
                             @if($item->link)
                                 <a href="{{ $item->link }}" target="_blank" class="d-block w-100 h-100">
-                                    <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                                    <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: top center;" alt="{{ $item->title ?? 'Slider' }}">
                                 </a>
                             @else
-                                <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Slider' }}">
+                                <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: top center;" alt="{{ $item->title ?? 'Slider' }}">
                             @endif
                         </div>
                     @endforeach
