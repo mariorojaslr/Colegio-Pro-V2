@@ -330,6 +330,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Gestión de Trámites y Certificados Valorizados (Admin de Colegio)
+    Route::get('/gestion-tramites/{certificate_type}/preview', [\App\Http\Controllers\Admin\CertificateTypeController::class, 'preview'])->name('admin.certificate_types.preview');
     Route::resource('/gestion-tramites', \App\Http\Controllers\Admin\CertificateTypeController::class)->names('admin.certificate_types')->except(['create', 'show', 'edit']);
 
     // Configuración de la Empresa / Institución (Para el Admin del Colegio)

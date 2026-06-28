@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CertificateType;
 use Illuminate\Http\Request;
-
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 class CertificateTypeController extends Controller
 {
     public function index()
@@ -66,5 +67,36 @@ class CertificateTypeController extends Controller
         if ($certificate_type->school_id !== auth()->user()->school_id) abort(403);
         $certificate_type->delete();
         return back()->with('success', 'Eliminado correctamente.');
+    }
+
+    public function preview(CertificateType $certificate_type)
+    {
+        if ($certificate_type->school_id !== auth()->user()->school_id) abort(403);
+
+        $school = auth()->user()->school;
+
+        // Create a mock collegiate
+        $collegiate = new \App\Models\Collegiate([
+            'first_name' => 'Karina',
+            'last_name' => 'Arias',
+            'dni' => '12345678',
+            'registration_number' => 'MAT-0001',
+            'status' => 'active'
+        ]);
+
+        // Create a mock certificate
+        $certificate = new \App\Models\Certificate([
+            'uuid' => Str::uuid(),
+            'code' => 'DEMO-123456',
+            'issued_at' => now(),
+            'expires_at' => $certificate_type->validity_days ? now()->addDays($certificate_type->validity_days) : null,
+        ]);
+        
+        $certificate->setRelation('type', $certificate_type);
+
+        $pdf = Pdf::loadView('pdf.certificate', compact('certificate', 'school', 'collegiate'));
+        $pdf->setPaper('A4', 'landscape');
+
+        return $pdf->stream('Vista_Previa_Certificado.pdf');
     }
 }

@@ -53,9 +53,10 @@
                             <span class="badge bg-{{ $type->is_active ? 'success' : 'secondary' }} rounded-pill">{{ $type->is_active ? 'Activo' : 'Inactivo' }}</span>
                         </td>
                         <td class="px-4 py-3 text-center">
+                            <a href="{{ route('admin.certificate_types.preview', $type) }}" target="_blank" class="btn btn-sm btn-outline-info rounded-circle me-1" title="Vista Previa"><i class="bi bi-eye"></i></a>
                             <form action="{{ route('admin.certificate_types.destroy', $type) }}" method="POST" class="d-inline">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('¿Eliminar trámite?')"><i class="bi bi-trash"></i></button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('¿Eliminar trámite?')" title="Eliminar"><i class="bi bi-trash"></i></button>
                             </form>
                         </td>
                     </tr>
