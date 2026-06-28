@@ -70,7 +70,11 @@
                             <div class="col-md-12 mb-3">
                                 <label class="fw-bold">Subir Foto para el Carrusel</label>
                                 <input type="file" name="image" class="form-control" accept="image/*" required>
-                                <small class="text-muted">La imagen se subirá automáticamente a Bunny.net</small>
+                                <div class="alert alert-info mt-3 py-2 px-3 small border-0 shadow-sm" style="background-color: rgba(13, 110, 253, 0.05); border-left: 4px solid #0d6efd !important;">
+                                    <strong><i class="bi bi-aspect-ratio me-1"></i> Medidas Recomendadas:</strong> 
+                                    Para que tu slider se vea profesional, nítido y perfecto en todas las pantallas, la imagen debe tener exactamente <strong>1920 píxeles de ancho por 800 píxeles de alto (1920x800)</strong>. Mantén el peso del archivo por debajo de 2MB para asegurar una carga rápida.
+                                </div>
+                                <small class="text-muted"><i class="bi bi-cloud-arrow-up me-1"></i> La imagen se subirá automáticamente a Bunny.net</small>
                             </div>
                             
                             <div class="col-md-6 mb-2">
