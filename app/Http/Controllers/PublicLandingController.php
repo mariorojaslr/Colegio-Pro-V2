@@ -77,7 +77,7 @@ class PublicLandingController extends Controller
                                              ->get();
 
         $agreements = \App\Models\Agreement::where('school_id', $schoolId)->where('is_active', true)->get();
-        $collegiates = \App\Models\Collegiate::where('school_id', $schoolId)->where('status', 'active')->get();
+        $collegiates = \App\Models\Collegiate::where('school_id', $schoolId)->get();
 
         $tenantSlug = $school->slug ?? 'default';
         if (view()->exists("tenants.{$tenantSlug}.welcome")) {

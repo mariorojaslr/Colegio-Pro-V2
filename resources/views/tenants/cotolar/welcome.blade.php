@@ -529,6 +529,144 @@
         <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" style="width: 100%; height: 100%; object-fit: cover;">
     </button>
 
+    <!-- Modales Estadisticas -->
+    <!-- Modal 1: Terapeutas -->
+    <div class="modal fade" id="modalTerapeutas" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-theme-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-theme-dark"><i class="bi bi-people me-2 text-theme-primary"></i> Padrón de Terapeutas Ocupacionales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    <div class="input-group mb-4 shadow-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0 ps-0 py-2" id="searchTerapeutas" placeholder="Buscar por nombre, matrícula o DNI...">
+                    </div>
+                    <div class="list-group list-group-flush rounded-3 border shadow-sm" id="listTerapeutas">
+                        @if(isset($collegiates))
+                            @foreach($collegiates as $colegiado)
+                                <div class="list-group-item list-group-item-action p-3 terapeuta-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1 fw-bold t-name">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                            <div class="small text-muted">
+                                                <span class="me-3 t-mat"><i class="bi bi-card-text me-1"></i> MP: {{ $colegiado->registration_number }}</span>
+                                                <span class="t-dni"><i class="bi bi-person-vcard me-1"></i> DNI: {{ $colegiado->dni }}</span>
+                                            </div>
+                                        </div>
+                                        @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                            <span class="badge bg-success rounded-pill">Activo</span>
+                                        @else
+                                            <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Años Trayectoria -->
+    <div class="modal fade" id="modalAnios" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-5 text-center">
+                    <div class="display-1 text-theme-primary mb-3"><i class="bi bi-award"></i></div>
+                    <h3 class="fw-bold text-theme-dark mb-3">{{ \Carbon\Carbon::parse('1990-12-20')->age }} Años de Trayectoria</h3>
+                    <p class="text-muted">Desde nuestra fundación el <strong>20 de Diciembre de 1990</strong>, hemos trabajado incansablemente para regular y jerarquizar la profesión en toda la provincia de La Rioja.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Departamentos -->
+    <div class="modal fade" id="modalDepartamentos" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-theme-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-theme-dark"><i class="bi bi-geo-alt me-2 text-theme-primary"></i> Delegaciones por Departamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted mb-4">Conocé a los profesionales matriculados en cada uno de los 18 departamentos de la provincia de La Rioja.</p>
+                    <div class="accordion accordion-flush border rounded-4 overflow-hidden" id="accordionDeptos">
+                        @php
+                            $departamentos = ['Capital', 'Chilecito', 'Arauco', 'Chamical', 'Famatina', 'General Belgrano', 'General Juan Facundo Quiroga', 'General Lamadrid', 'General Ocampo', 'General San Martín', 'Independencia', 'Rosario Vera Peñaloza', 'San Blas de los Sauces', 'Sanagasta', 'Vinchina', 'Castro Barros', 'Felipe Varela', 'Sanagasta'];
+                        @endphp
+                        @foreach($departamentos as $index => $depto)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed fw-bold text-theme-dark" type="button" data-bs-toggle="collapse" data-bs-target="#depto{{ $index }}">
+                                        {{ $depto }}
+                                    </button>
+                                </h2>
+                                <div id="depto{{ $index }}" class="accordion-collapse collapse" data-bs-parent="#accordionDeptos">
+                                    <div class="accordion-body bg-light">
+                                        <div class="text-center text-muted py-3 small">
+                                            <i class="bi bi-info-circle me-1"></i> Mostrando profesionales en {{ $depto }} (Próximamente)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Convenios -->
+    <div class="modal fade" id="modalConvenios" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-theme-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-theme-dark"><i class="bi bi-briefcase me-2 text-theme-primary"></i> Convenios Comerciales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    @if(isset($agreements) && $agreements->count() > 0)
+                        <div class="row g-3">
+                            @foreach($agreements as $agreement)
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                                        <div class="card-body p-4 d-flex flex-column text-center">
+                                            <div class="mb-3 mx-auto">
+                                                @if($agreement->logo_url)
+                                                    <img src="{{ asset($agreement->logo_url) }}" alt="{{ $agreement->name }}" class="img-fluid rounded" style="max-height: 80px; object-fit: contain;">
+                                                @else
+                                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                                                        <i class="bi bi-shop fs-1 text-muted"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <h5 class="fw-bold mb-1">{{ $agreement->name }}</h5>
+                                            @if($agreement->discount_percentage)
+                                                <span class="badge bg-success rounded-pill mx-auto mb-3 px-3 py-2 fs-6">{{ $agreement->discount_percentage }}</span>
+                                            @endif
+                                            <p class="text-muted small mt-auto mb-0">{{ $agreement->description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <div class="display-1 text-muted mb-3"><i class="bi bi-inbox"></i></div>
+                            <h5 class="fw-bold text-muted">Aún no hay convenios activos</h5>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modales Servicios -->
     <div class="modal fade" id="modalMatricula" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
