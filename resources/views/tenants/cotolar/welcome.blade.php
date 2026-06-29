@@ -120,7 +120,7 @@
                     <li class="nav-item"><a class="nav-link text-theme-dark fw-bold" href="#contacto">Contacto</a></li>
                 </ul>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('login') }}" class="btn bg-theme-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 text-white text-decoration-none">
+                    <a href="/login" class="btn bg-theme-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 text-white text-decoration-none">
                         <span class="material-icons" style="font-size: 1.2rem;">login</span> Ingresar
                     </a>
                 </div>
