@@ -145,7 +145,7 @@
                 se encuentra debidamente registrado/a en esta Institución bajo la matrícula profesional número <strong>{{ $collegiate->registration_number ?? 'EN TRÁMITE' }}</strong>.
 
                 <p style="margin-top: 20px;">
-                    @if($certificate->type->requires_no_sanctions && !$collegiate->hasActiveSanctions())
+                    @if($certificate->type->requires_no_sanctions && $collegiate->is_ethics_compliant)
                         Asimismo, se certifica que a la fecha de expedición, el/la mencionado/a profesional <strong>no registra sanciones éticas ni disciplinarias</strong> vigentes que inhabiliten el ejercicio de su profesión.
                     @endif
                 </p>

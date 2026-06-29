@@ -96,7 +96,8 @@ class CertificateTypeController extends Controller
             'last_name' => 'Arias',
             'dni' => '12345678',
             'registration_number' => 'MAT-0001',
-            'status' => 'active'
+            'status' => 'active',
+            'is_ethics_compliant' => true
         ]);
 
         // Create a mock certificate
