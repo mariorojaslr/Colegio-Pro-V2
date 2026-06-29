@@ -112,41 +112,63 @@ Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_e
 @endsection
 
 @push('scripts')
-<!-- TinyMCE CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Summernote Lite -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 <script>
-    tinymce.init({
-        selector: '#templateEditor',
-        height: 500,
-        menubar: true,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-        ],
-        toolbar: 'variables | undo redo | blocks fontfamily fontsize | ' +
-        'bold italic forecolor | alignleft aligncenter ' +
-        'alignright alignjustify | bullist numlist outdent indent | ' +
-        'image table | removeformat | code | help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-        setup: function (editor) {
-            editor.ui.registry.addMenuButton('variables', {
-                text: 'Insertar Variable',
-                fetch: function (callback) {
-                    var items = [
-                        { type: 'menuitem', text: 'Nombre y Apellido', onAction: function () { editor.insertContent('@{{nombre}}'); } },
-                        { type: 'menuitem', text: 'Documento (DNI)', onAction: function () { editor.insertContent('@{{dni}}'); } },
-                        { type: 'menuitem', text: 'Nº Matrícula', onAction: function () { editor.insertContent('@{{matricula}}'); } },
-                        { type: 'menuitem', text: 'Fecha de Emisión', onAction: function () { editor.insertContent('@{{fecha_emision}}'); } },
-                        { type: 'menuitem', text: 'Válido Hasta', onAction: function () { editor.insertContent('@{{valido_hasta}}'); } }
-                    ];
-                    callback(items);
-                }
-            });
-            editor.on('change', function () {
-                editor.save();
-            });
+    $(document).ready(function() {
+        // Definir botón personalizado para variables
+        var VariablesButton = function (context) {
+            var ui = $.summernote.ui;
+            var button = ui.buttonGroup([
+                ui.button({
+                    className: 'dropdown-toggle',
+                    contents: '<b style="color:blue;">{x} Variables</b>',
+                    tooltip: 'Insertar Variable',
+                    data: {
+                        toggle: 'dropdown'
+                    }
+                }),
+                ui.dropdown({
+                    className: 'dropdown-menu',
+                    contents: 
+                        '<a class="dropdown-item" href="#" data-value="@{{nombre}}">Nombre y Apellido</a>' +
+                        '<a class="dropdown-item" href="#" data-value="@{{dni}}">Documento (DNI)</a>' +
+                        '<a class="dropdown-item" href="#" data-value="@{{matricula}}">Nº Matrícula</a>' +
+                        '<a class="dropdown-item" href="#" data-value="@{{fecha_emision}}">Fecha de Emisión</a>' +
+                        '<a class="dropdown-item" href="#" data-value="@{{valido_hasta}}">Válido Hasta</a>',
+                    callback: function ($dropdown) {
+                        $dropdown.find('a').click(function (e) {
+                            e.preventDefault();
+                            var value = $(this).data('value');
+                            context.invoke('editor.insertText', value);
+                        });
+                    }
+                })
+            ]);
+            return button.render();
         }
+
+        $('#templateEditor').summernote({
+            height: 500,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']],
+                ['custom', ['variables']]
+            ],
+            buttons: {
+                variables: VariablesButton
+            }
+        });
     });
 </script>
 @endpush
