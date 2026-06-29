@@ -101,12 +101,11 @@ class CertificateTypeController extends Controller
         ]);
 
         // Create a mock certificate
-        $certificate = new \App\Models\Certificate([
-            'uuid' => Str::uuid(),
-            'code' => 'DEMO-123456',
-            'issued_at' => now(),
-            'expires_at' => $certificate_type->validity_days ? now()->addDays($certificate_type->validity_days) : null,
-        ]);
+        $certificate = new \App\Models\Certificate();
+        $certificate->uuid = Str::uuid();
+        $certificate->code = 'DEMO-123456';
+        $certificate->issued_at = now();
+        $certificate->expires_at = $certificate_type->validity_days ? now()->addDays($certificate_type->validity_days) : null;
         
         $certificate->setRelation('type', $certificate_type);
 
