@@ -118,7 +118,7 @@ class PublicLandingController extends Controller
 
         $collegiate = \App\Models\Collegiate::where('school_id', $school->id ?? 1)
             ->where(function($q) use ($query) {
-                $q->where('document_number', $query)
+                $q->where('dni', $query)
                   ->orWhere('registration_number', $query)
                   ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$query}%"])
                   ->orWhereRaw("CONCAT(last_name, ' ', first_name) LIKE ?", ["%{$query}%"]);
@@ -138,7 +138,7 @@ class PublicLandingController extends Controller
             'success' => true,
             'collegiate' => [
                 'name' => mb_strtoupper($collegiate->first_name . ' ' . $collegiate->last_name, 'UTF-8'),
-                'document' => $collegiate->document_number,
+                'document' => $collegiate->dni,
                 'registration' => $collegiate->registration_number,
                 'status' => $isActive ? 'HABILITADO' : 'NO HABILITADO',
                 'is_active' => $isActive
