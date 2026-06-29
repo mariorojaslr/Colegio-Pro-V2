@@ -123,23 +123,36 @@ Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_e
 
 @push('scripts')
 <!-- TinyMCE CDN -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
         selector: '#templateEditor',
         height: 500,
-        menubar: false,
+        menubar: true,
         plugins: [
             'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
             'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
             'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
         ],
-        toolbar: 'undo redo | blocks | ' +
+        toolbar: 'variables | undo redo | blocks fontfamily fontsize | ' +
         'bold italic forecolor | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | ' +
-        'removeformat | code | help',
+        'image table | removeformat | code | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
         setup: function (editor) {
+            editor.ui.registry.addMenuButton('variables', {
+                text: 'Insertar Variable',
+                fetch: function (callback) {
+                    var items = [
+                        { type: 'menuitem', text: 'Nombre y Apellido', onAction: function () { editor.insertContent('@{{nombre}}'); } },
+                        { type: 'menuitem', text: 'Documento (DNI)', onAction: function () { editor.insertContent('@{{dni}}'); } },
+                        { type: 'menuitem', text: 'Nº Matrícula', onAction: function () { editor.insertContent('@{{matricula}}'); } },
+                        { type: 'menuitem', text: 'Fecha de Emisión', onAction: function () { editor.insertContent('@{{fecha_emision}}'); } },
+                        { type: 'menuitem', text: 'Válido Hasta', onAction: function () { editor.insertContent('@{{valido_hasta}}'); } }
+                    ];
+                    callback(items);
+                }
+            });
             editor.on('change', function () {
                 editor.save();
             });
