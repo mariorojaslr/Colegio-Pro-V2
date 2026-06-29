@@ -100,15 +100,18 @@
                             </ul>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small text-uppercase text-muted">Contenido de la Plantilla HTML</label>
-                            <textarea name="template_content" id="templateEditor" class="form-control" rows="15">{{ $certificate_type->template_content ?? 'Por la presente, el Consejo Directivo certifica y hace constar que el/la profesional:
+@php
+    $defaultTemplate = 'Por la presente, el Consejo Directivo certifica y hace constar que el/la profesional:
 
 <div style="text-align: center; font-size: 22px; font-weight: bold; margin: 20px 0;">@{{nombre}}</div>
 
 Con documento de identidad Nº <strong>@{{dni}}</strong>, se encuentra debidamente registrado/a en esta Institución bajo la matrícula profesional número <strong>@{{matricula}}</strong>.
 
-Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_emision}}.' }}</textarea>
+Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_emision}}.';
+@endphp
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Contenido de la Plantilla HTML</label>
+                            <textarea name="template_content" id="templateEditor" class="form-control" rows="15">{!! old('template_content', $certificate_type->template_content ?? $defaultTemplate) !!}</textarea>
                         </div>
                     </div>
                 </div>

@@ -127,11 +127,11 @@
             @if($certificate->type->template_content)
                 @php
                     $content = $certificate->type->template_content;
-                    $content = str_replace('{{nombre}}', $collegiate->first_name . ' ' . $collegiate->last_name, $content);
-                    $content = str_replace('{{dni}}', $collegiate->dni ?? 'No registrado', $content);
-                    $content = str_replace('{{matricula}}', $collegiate->registration_number ?? 'EN TRÁMITE', $content);
-                    $content = str_replace('{{fecha_emision}}', \Carbon\Carbon::parse($certificate->issued_at)->translatedFormat('d \d\e F \d\e Y'), $content);
-                    $content = str_replace('{{valido_hasta}}', $certificate->expires_at ? \Carbon\Carbon::parse($certificate->expires_at)->format('d/m/Y') : 'Ilimitada', $content);
+                    $content = str_replace('@{{nombre}}', $collegiate->first_name . ' ' . $collegiate->last_name, $content);
+                    $content = str_replace('@{{dni}}', $collegiate->dni ?? 'No registrado', $content);
+                    $content = str_replace('@{{matricula}}', $collegiate->registration_number ?? 'EN TRÁMITE', $content);
+                    $content = str_replace('@{{fecha_emision}}', \Carbon\Carbon::parse($certificate->issued_at)->translatedFormat('d \d\e F \d\e Y'), $content);
+                    $content = str_replace('@{{valido_hasta}}', $certificate->expires_at ? \Carbon\Carbon::parse($certificate->expires_at)->format('d/m/Y') : 'Ilimitada', $content);
                 @endphp
                 {!! $content !!}
             @else
