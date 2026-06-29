@@ -119,8 +119,8 @@
                     <li class="nav-item"><a class="nav-link text-theme-dark fw-bold" href="#autoridades">Autoridades</a></li>
                     <li class="nav-item"><a class="nav-link text-theme-dark fw-bold" href="#contacto">Contacto</a></li>
                 </ul>
-                <div class="d-flex gap-2">
-                    <a href="/login" class="btn bg-theme-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 text-white text-decoration-none">
+                <div class="d-flex gap-2" style="position: relative; z-index: 1060;">
+                    <a href="/login" onclick="window.location.href='/login'; return false;" class="btn bg-theme-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2 text-white text-decoration-none" style="cursor: pointer;">
                         <span class="material-icons" style="font-size: 1.2rem;">login</span> Ingresar
                     </a>
                 </div>
