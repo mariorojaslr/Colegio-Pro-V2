@@ -134,6 +134,8 @@ Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_e
 <!-- Summernote Local -->
 <link href="{{ asset('summernote/summernote-lite.min.css') }}" rel="stylesheet">
 <script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
+<!-- Summernote Spanish Lang -->
+<script src="{{ asset('summernote/lang/summernote-es-ES.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('#templateEditor').summernote({
