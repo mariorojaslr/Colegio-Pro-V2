@@ -110,7 +110,20 @@ Con documento de identidad Nº <strong>@{{dni}}</strong>, se encuentra debidamen
 Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_emision}}.';
 @endphp
                         <div class="mb-3">
-                            <label class="form-label fw-bold small text-uppercase text-muted">Contenido de la Plantilla HTML</label>
+                            <label class="form-label fw-bold small text-uppercase text-muted mb-2">Contenido de la Plantilla HTML</label>
+                            
+                            <!-- Botones de Variables Rápidas -->
+                            <div class="d-flex flex-wrap gap-2 mb-3 bg-light p-2 rounded border">
+                                <span class="small fw-bold text-muted d-flex align-items-center me-2">
+                                    <i class="bi bi-magic text-primary me-1"></i> Insertar:
+                                </span>
+                                <button type="button" class="btn btn-sm btn-outline-primary fw-bold" onclick="insertVar('@{{nombre}}')">Nombre y Apellido</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary fw-bold" onclick="insertVar('@{{dni}}')">DNI</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary fw-bold" onclick="insertVar('@{{matricula}}')">Nº Matrícula</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary fw-bold" onclick="insertVar('@{{fecha_emision}}')">Fecha de Emisión</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary fw-bold" onclick="insertVar('@{{valido_hasta}}')">Válido Hasta</button>
+                            </div>
+
                             <textarea name="template_content" id="templateEditor" class="form-control" rows="15">{!! old('template_content', $certificate_type->template_content ?? $defaultTemplate) !!}</textarea>
                         </div>
                     </div>
@@ -122,63 +135,31 @@ Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_e
 @endsection
 
 @push('scripts')
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Summernote Lite -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+<!-- CKEditor 4 -->
+<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
 <script>
-    $(document).ready(function() {
-        // Definir botón personalizado para variables
-        var VariablesButton = function (context) {
-            var ui = $.summernote.ui;
-            var button = ui.buttonGroup([
-                ui.button({
-                    className: 'dropdown-toggle',
-                    contents: '<b style="color:blue;">{x} Variables</b>',
-                    tooltip: 'Insertar Variable',
-                    data: {
-                        toggle: 'dropdown'
-                    }
-                }),
-                ui.dropdown({
-                    className: 'dropdown-menu',
-                    contents: 
-                        '<a class="dropdown-item" href="#" data-value="@{{nombre}}">Nombre y Apellido</a>' +
-                        '<a class="dropdown-item" href="#" data-value="@{{dni}}">Documento (DNI)</a>' +
-                        '<a class="dropdown-item" href="#" data-value="@{{matricula}}">Nº Matrícula</a>' +
-                        '<a class="dropdown-item" href="#" data-value="@{{fecha_emision}}">Fecha de Emisión</a>' +
-                        '<a class="dropdown-item" href="#" data-value="@{{valido_hasta}}">Válido Hasta</a>',
-                    callback: function ($dropdown) {
-                        $dropdown.find('a').click(function (e) {
-                            e.preventDefault();
-                            var value = $(this).data('value');
-                            context.invoke('editor.insertText', value);
-                        });
-                    }
-                })
-            ]);
-            return button.render();
-        }
-
-        $('#templateEditor').summernote({
-            height: 500,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-                ['fontname', ['fontname']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']],
-                ['custom', ['variables']]
-            ],
-            buttons: {
-                variables: VariablesButton
-            }
-        });
+    // Inicializar CKEditor 4
+    CKEDITOR.replace('templateEditor', {
+        height: 500,
+        language: 'es',
+        toolbar: [
+            { name: 'document', items: [ 'Source', '-', 'Preview', 'Print' ] },
+            { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+            { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll' ] },
+            '/',
+            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
+            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+            { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+            { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak' ] },
+            '/',
+            { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+            { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+            { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
+        ]
     });
+
+    function insertVar(variableName) {
+        CKEDITOR.instances.templateEditor.insertText(variableName);
+    }
 </script>
 @endpush
