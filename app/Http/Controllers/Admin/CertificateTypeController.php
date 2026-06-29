@@ -15,6 +15,11 @@ class CertificateTypeController extends Controller
         return view('admin.certificate_types.index', compact('types'));
     }
 
+    public function create()
+    {
+        return view('admin.certificate_types.create');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -32,10 +37,18 @@ class CertificateTypeController extends Controller
             'is_single_use' => $request->has('is_single_use'),
             'requires_clearance' => $request->has('requires_clearance'),
             'requires_no_sanctions' => $request->has('requires_no_sanctions'),
+            'template_content' => $request->template_content,
+            'has_qr' => $request->has('has_qr'),
             'is_active' => true,
         ]);
 
-        return back()->with('success', 'Trámite / Certificado creado exitosamente.');
+        return redirect()->route('admin.certificate_types.index')->with('success', 'Trámite / Certificado creado exitosamente.');
+    }
+
+    public function edit(CertificateType $certificate_type)
+    {
+        if ($certificate_type->school_id !== auth()->user()->school_id) abort(403);
+        return view('admin.certificate_types.edit', compact('certificate_type'));
     }
 
     public function update(Request $request, CertificateType $certificate_type)
@@ -56,10 +69,12 @@ class CertificateTypeController extends Controller
             'is_single_use' => $request->has('is_single_use'),
             'requires_clearance' => $request->has('requires_clearance'),
             'requires_no_sanctions' => $request->has('requires_no_sanctions'),
+            'template_content' => $request->template_content,
+            'has_qr' => $request->has('has_qr'),
             'is_active' => $request->has('is_active'),
         ]);
 
-        return back()->with('success', 'Trámite / Certificado actualizado.');
+        return redirect()->route('admin.certificate_types.index')->with('success', 'Trámite / Certificado actualizado.');
     }
 
     public function destroy(CertificateType $certificate_type)

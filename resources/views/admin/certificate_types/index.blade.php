@@ -8,9 +8,9 @@
             <p class="text-muted">Gestione los documentos valorizados que los colegiados pueden solicitar.</p>
         </div>
         <div class="col-auto">
-            <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#newTramiteModal">
+            <a href="{{ route('admin.certificate_types.create') }}" class="btn btn-primary rounded-pill px-4">
                 <i class="bi bi-plus-circle me-2"></i> Nuevo Trámite
-            </button>
+            </a>
         </div>
     </div>
 
@@ -54,6 +54,7 @@
                         </td>
                         <td class="px-4 py-3 text-center">
                             <a href="{{ route('admin.certificate_types.preview', $type) }}" target="_blank" class="btn btn-sm btn-outline-info rounded-circle me-1" title="Vista Previa"><i class="bi bi-eye"></i></a>
+                            <a href="{{ route('admin.certificate_types.edit', $type) }}" class="btn btn-sm btn-outline-primary rounded-circle me-1" title="Editar"><i class="bi bi-pencil"></i></a>
                             <form action="{{ route('admin.certificate_types.destroy', $type) }}" method="POST" class="d-inline">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('¿Eliminar trámite?')" title="Eliminar"><i class="bi bi-trash"></i></button>
@@ -71,62 +72,5 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="newTramiteModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4 shadow-lg">
-            <div class="modal-header border-bottom py-3 px-4">
-                <h5 class="modal-title fw-bold">Nuevo Trámite / Certificado</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('admin.certificate_types.store') }}" method="POST">
-                @csrf
-                <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-uppercase text-muted">Nombre del Trámite</label>
-                        <input type="text" name="name" class="form-control rounded-3" required placeholder="Ej: Certificado de Ética">
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <label class="form-label fw-bold small text-uppercase text-muted">Precio ($)</label>
-                            <input type="number" step="0.01" name="price" class="form-control rounded-3" value="0" required>
-                        </div>
-                        <div class="col-4">
-                            <label class="form-label fw-bold small text-uppercase text-muted">Validez (Días)</label>
-                            <input type="number" name="validity_days" class="form-control rounded-3" placeholder="Vacío = Ilimitado">
-                        </div>
-                        <div class="col-4 d-flex align-items-end">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="is_single_use" value="1" id="isSingleUse">
-                                <label class="form-check-label small fw-bold text-danger" for="isSingleUse">
-                                    Es de 1 solo uso
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <hr>
-                    <h6 class="fw-bold mb-3 small text-uppercase text-muted">Reglas de Restricción para solicitar</h6>
-                    
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" name="requires_clearance" value="1" id="reqClearance">
-                        <label class="form-check-label" for="reqClearance">
-                            Exigir Libre de Deuda (Estar al día con las cuotas)
-                        </label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" name="requires_no_sanctions" value="1" id="reqEthics">
-                        <label class="form-check-label" for="reqEthics">
-                            Exigir Habilitación Ética (No tener sanciones vigentes)
-                        </label>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 p-4 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">Guardar Trámite</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 @endsection

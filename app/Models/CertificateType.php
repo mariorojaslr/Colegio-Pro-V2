@@ -19,6 +19,8 @@ class CertificateType extends Model
         'requires_clearance',
         'requires_no_sanctions',
         'is_active',
+        'template_content',
+        'has_qr',
     ];
 
     public function school()
