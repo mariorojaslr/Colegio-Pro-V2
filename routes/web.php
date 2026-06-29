@@ -78,7 +78,7 @@ Route::get('/dev/fix-cache', function() {
     return '¡Base de datos y caché actualizados con éxito! Ya puedes volver y probar.';
 });
 
-Route::get('/', [PublicLandingController::class, 'index'])->name('landing');
+Route::get('/', [\App\Http\Controllers\PublicLandingController::class, 'index'])->name('landing');
 Route::post('/validar-matricula', [\App\Http\Controllers\PublicLandingController::class, 'validateMatricula'])->name('public.validate.matricula');
 Route::get('/noticias/{slug}', [\App\Http\Controllers\PublicNewsController::class, 'show'])->name('public.news.show');
 
