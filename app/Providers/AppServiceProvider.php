@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Forzar HTTPS en producción (evita bloqueo de Mixed Content para assets)
+        if (config('app.env') !== 'local') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Forzamos el uso de Bootstrap 5 para el paginado (evita flechas gigantes)
         \Illuminate\Pagination\Paginator::useBootstrapFive();
 
