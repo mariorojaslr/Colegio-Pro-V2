@@ -129,31 +129,32 @@ Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_e
 @endsection
 
 @push('scripts')
-<!-- CKEditor 4 -->
-<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+<!-- jQuery Local -->
+<script src="{{ asset('summernote/jquery.min.js') }}"></script>
+<!-- Summernote Local -->
+<link href="{{ asset('summernote/summernote-lite.min.css') }}" rel="stylesheet">
+<script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
 <script>
-    // Inicializar CKEditor 4
-    CKEDITOR.replace('templateEditor', {
-        height: 500,
-        language: 'es',
-        toolbar: [
-            { name: 'document', items: [ 'Source', '-', 'Preview', 'Print' ] },
-            { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-            { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll' ] },
-            '/',
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
-            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
-            { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-            { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak' ] },
-            '/',
-            { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-            { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
-        ]
+    $(document).ready(function() {
+        $('#templateEditor').summernote({
+            height: 500,
+            lang: 'es-ES',
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
     });
 
     function insertVar(variableName) {
-        CKEDITOR.instances.templateEditor.insertText(variableName);
+        $('#templateEditor').summernote('editor.insertText', variableName);
     }
 </script>
 @endpush
