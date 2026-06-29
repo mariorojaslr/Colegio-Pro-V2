@@ -71,7 +71,14 @@ Route::post('/v/{uuid}/burn', [\App\Http\Controllers\ValidationController::class
 
 Route::post('/chatbot/ask', [\App\Http\Controllers\ChatbotController::class, 'ask'])->name('chatbot.ask');
 
-Route::get('/', [\App\Http\Controllers\PublicLandingController::class, 'index'])->name('home');
+Route::get('/dev/fix-cache', function() {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    return '¡Base de datos y caché actualizados con éxito! Ya puedes volver y probar.';
+});
+
+Route::get('/', [PublicLandingController::class, 'index'])->name('landing');
 Route::post('/validar-matricula', [\App\Http\Controllers\PublicLandingController::class, 'validateMatricula'])->name('public.validate.matricula');
 Route::get('/noticias/{slug}', [\App\Http\Controllers\PublicNewsController::class, 'show'])->name('public.news.show');
 
