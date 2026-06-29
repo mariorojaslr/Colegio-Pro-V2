@@ -141,13 +141,12 @@ Se expide el presente certificado a solicitud del interesado/a, a los @{{fecha_e
             lang: 'es-ES',
             toolbar: [
                 ['style', ['style']],
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-                ['fontname', ['fontname']],
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
                 ['fontsize', ['fontsize']],
                 ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
+                ['para', ['ul', 'ol', 'paragraph', 'height']],
                 ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
+                ['insert', ['link', 'picture', 'video', 'hr']],
                 ['view', ['fullscreen', 'codeview', 'help']]
             ]
         });
