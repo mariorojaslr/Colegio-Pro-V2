@@ -139,6 +139,16 @@
             }
         }
 
+        .hero-slider-overlay {
+            background: linear-gradient(to right, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0.95) 45%, rgba(248, 250, 252, 0.65) 75%, rgba(248, 250, 252, 0.15) 100%);
+        }
+
+        @media (max-width: 991px) {
+            .hero-slider-overlay {
+                background: linear-gradient(to bottom, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0.95) 60%, rgba(248, 250, 252, 0.5) 85%, rgba(248, 250, 252, 0.15) 100%) !important;
+            }
+        }
+
         .hero-title {
             font-size: 4.2rem;
             font-weight: 900;
@@ -592,37 +602,71 @@
     @endphp
 
     @if($sliderItems->count() > 0)
-        <!-- SLIDER ACTIVO (Si el administrador configuró imágenes) -->
         <style>
-            .hero-slider-section { height: 75vh; margin-top: 96px; }
-            @media (max-width: 991px) { .hero-slider-section { height: 450px; } }
-            @media (max-width: 768px) { .hero-slider-section { height: 350px; } }
-            @media (max-width: 576px) { .hero-slider-section { height: 260px; } }
+            .hero-slider-section { min-height: 90vh; margin-top: 96px; display: flex; align-items: center; }
+            @media (max-width: 991px) { .hero-slider-section { min-height: 650px; } }
+            @media (max-width: 576px) { .hero-slider-section { min-height: 550px; } }
         </style>
         <section class="p-0 position-relative hero-slider-section" style="overflow: hidden; background-color: #000; border-radius: 0 0 32px 32px;">
             <div id="heroCarouselTS" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
                 <div class="carousel-inner h-100">
                     @foreach($sliderItems as $index => $item)
-                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}" data-bs-interval="5000">
+                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }} position-relative" data-bs-interval="5000">
                             @php
-                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset('storage/'.$item->image_url);
+                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset($item->image_url);
                             @endphp
-                            @if($item->link)
-                                <a href="{{ $item->link }}" target="_blank" class="d-block w-100 h-100">
-                                    <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Deslizador' }}">
-                                </a>
-                            @else
-                                <img src="{{ $imgSrc }}" class="d-block w-100 h-100" style="object-fit: cover; object-position: center;" alt="{{ $item->title ?? 'Deslizador' }}">
-                            @endif
+                            
+                            <!-- Imagen de fondo del slide -->
+                            <div class="w-100 h-100 position-absolute top-0 start-0 hero-slider-bg" style="background-image: url('{{ $imgSrc }}'); background-size: cover; background-position: center; z-index: 1;"></div>
+                            
+                            <!-- Capa de degradado responsivo y contenedor de textos -->
+                            <div class="hero-slider-overlay w-100 h-100 position-absolute top-0 start-0 d-flex align-items-center" style="z-index: 2;">
+                                <div class="container-fluid px-4 px-xl-5">
+                                    <div class="row">
+                                        <div class="col-lg-8 col-xl-7">
+                                            @if($index == 0)
+                                                <div class="badge bg-white text-primary border border-2 border-primary-subtle px-3 py-2 rounded-pill mb-4 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                                                    <i class="bi bi-people-fill text-danger"></i>
+                                                    Comunidad y Acción Social
+                                                </div>
+                                            @elseif($index == 1)
+                                                <div class="badge bg-white text-primary border border-2 border-primary-subtle px-3 py-2 rounded-pill mb-4 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                                                    <i class="bi bi-book-half text-danger"></i>
+                                                    Formación Profesional
+                                                </div>
+                                            @else
+                                                <div class="badge bg-white text-primary border border-2 border-primary-subtle px-3 py-2 rounded-pill mb-4 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                                                    <i class="bi bi-award-fill text-danger"></i>
+                                                    Respaldo Institucional
+                                                </div>
+                                            @endif
+                                            
+                                            <h1 class="hero-title">{!! $item->title ?? 'Defensa de Derechos, <br><span>Empatía & Compromiso.</span>' !!}</h1>
+                                            <p class="hero-subtitle">{{ $item->description ?? 'Agrupamos, jerarquizamos y respaldamos a los profesionales del Trabajo Social de La Rioja.' }}</p>
+                                            
+                                            <div class="d-flex flex-wrap gap-3">
+                                                @if($item->link)
+                                                    <a href="{{ $item->link }}" class="btn-portal"><i class="bi bi-arrow-right-circle me-2"></i>Más Información</a>
+                                                @else
+                                                    <a href="#quienes-somos" class="btn-portal"><i class="bi bi-info-circle me-2"></i>Nuestra Misión</a>
+                                                @endif
+                                                <a href="#contacto" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold border-2 d-inline-flex align-items-center gap-2">
+                                                    <i class="bi bi-envelope"></i> Contacto
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
                 @if($sliderItems->count() > 1)
-                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarouselTS" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarouselTS" data-bs-slide="prev" style="z-index: 10;">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(30, 58, 138, 0.4); border-radius: 50%; padding: 20px;"></span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#heroCarouselTS" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 20px;"></span>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarouselTS" data-bs-slide="next" style="z-index: 10;">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(30, 58, 138, 0.4); border-radius: 50%; padding: 20px;"></span>
                 </button>
                 @endif
             </div>
