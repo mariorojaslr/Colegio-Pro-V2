@@ -281,7 +281,7 @@
                 </button>
                 @endif
             </div>
-        </section>
+    @else
         <!-- SIN SLIDER: Muestra el diseño moderno con gradientes y tarjetas glassmorphic -->
         <section class="hero-ts">
             <div class="container-fluid px-4 px-xl-5 position-relative">
@@ -316,6 +316,7 @@
                 </div>
             </div>
         </section>
+    @endif
 
     <main class="container-fluid px-4 px-xl-5 py-5">
         
