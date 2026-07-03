@@ -255,6 +255,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('admin/chatbot', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'store'])->name('admin.chatbot.store')->middleware('role:OWNER,ADMIN_COLEGIO');
     Route::put('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'update'])->name('admin.chatbot.update')->middleware('role:OWNER,ADMIN_COLEGIO');
     Route::delete('admin/chatbot/{knowledge}', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'destroy'])->name('admin.chatbot.destroy')->middleware('role:OWNER,ADMIN_COLEGIO');
+    Route::post('admin/chatbot/ban-ip', [\App\Http\Controllers\ChatbotKnowledgeController::class, 'banIp'])->name('admin.chatbot.ban_ip')->middleware('role:OWNER,ADMIN_COLEGIO');
 
     // Asistente IA
     Route::get('/ai/asistente', [App\Http\Controllers\AIController::class, 'index'])->name('ai.index');

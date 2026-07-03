@@ -26,6 +26,7 @@
                 <thead class="bg-light">
                     <tr>
                         <th class="border-0 px-4 py-3 text-muted x-small text-uppercase ls-1">Pregunta Origen</th>
+                        <th class="border-0 px-4 py-3 text-muted x-small text-uppercase ls-1">IP Origen</th>
                         <th class="border-0 px-4 py-3 text-muted x-small text-uppercase ls-1">Palabras Clave (Keywords)</th>
                         <th class="border-0 px-4 py-3 text-muted x-small text-uppercase ls-1">Respuesta</th>
                         <th class="border-0 px-4 py-3 text-muted x-small text-uppercase ls-1">Estado</th>
@@ -36,6 +37,7 @@
                     @forelse($knowledges as $knowledge)
                     <tr>
                         <td class="px-4 py-3 fw-bold text-dark">{{ $knowledge->question }}</td>
+                        <td class="px-4 py-3 text-muted font-monospace small">{{ $knowledge->ip_address ?? 'S/D' }}</td>
                         <td class="px-4 py-3"><span class="badge bg-secondary rounded-pill bg-opacity-10 text-secondary border border-secondary">{{ $knowledge->keywords ?? 'Sin palabras clave' }}</span></td>
                         <td class="px-4 py-3 small text-muted text-truncate" style="max-width: 250px;">{{ $knowledge->answer ?? 'Sin respuesta aún' }}</td>
                         <td class="px-4 py-3">
@@ -51,17 +53,27 @@
                             </button>
                             <form action="{{ route('admin.chatbot.destroy', $knowledge) }}" method="POST" class="d-inline">
                                 @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('¿Seguro que deseas eliminar este conocimiento?')">
+                                <button class="btn btn-sm btn-outline-danger rounded-circle" title="Eliminar consulta" onclick="return confirm('¿Seguro que deseas eliminar este conocimiento?')">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
+                            @if($knowledge->ip_address)
+                            <form action="{{ route('admin.chatbot.ban_ip') }}" method="POST" class="d-inline ms-1">
+                                @csrf
+                                <input type="hidden" name="ip_address" value="{{ $knowledge->ip_address }}">
+                                <input type="hidden" name="knowledge_id" value="{{ $knowledge->id }}">
+                                <button class="btn btn-sm btn-outline-dark rounded-circle" title="Bloquear IP y eliminar consulta" onclick="return confirm('¿Seguro que deseas bloquear permanentemente la IP {{ $knowledge->ip_address }} y eliminar esta consulta?')">
+                                    <i class="bi bi-slash-circle text-danger"></i>
+                                </button>
+                            </form>
+                            @endif
                         </td>
                     </tr>
 
 
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">
+                        <td colspan="6" class="text-center py-5 text-muted">
                             <i class="bi bi-robot display-4 opacity-25 mb-3 d-block"></i>
                             <p>El bot aún no ha aprendido nada.<br>Añade conocimientos manualmente o espera a que los usuarios pregunten.</p>
                         </td>

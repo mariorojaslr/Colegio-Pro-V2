@@ -724,11 +724,18 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body p-4 bg-light">
-                        <p class="text-muted mb-4">Un usuario acaba de hacer una pregunta que el bot no supo responder. Por favor, enséñale qué contestar para la próxima vez.</p>
+                        <p class="text-muted mb-3">Un usuario acaba de hacer una pregunta que el bot no supo responder. Por favor, enséñale qué contestar para la próxima vez o elimínala.</p>
                         
+                        @if($firstPendingQuestion->ip_address)
+                        <div class="alert alert-secondary py-2 px-3 rounded-3 d-flex align-items-center gap-2 mb-3" style="font-size: 0.75rem;">
+                            <i class="bi bi-info-circle-fill text-secondary"></i>
+                            <span>Pregunta enviada desde la IP: <strong>{{ $firstPendingQuestion->ip_address }}</strong></span>
+                        </div>
+                        @endif
+
                         <div class="mb-3">
                             <label class="form-label text-muted small fw-bold">Pregunta del Usuario</label>
-                            <input type="text" class="form-control bg-white" value="{{ $firstPendingQuestion->question }}" readonly>
+                            <input type="text" class="form-control bg-white font-monospace" value="{{ $firstPendingQuestion->question }}" readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-muted small fw-bold">Palabras Clave (separadas por coma)</label>
@@ -740,18 +747,57 @@
                             <textarea name="answer" class="form-control" rows="4" required placeholder="Escribe aquí lo que el bot debe contestar..."></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer border-top-0 py-3">
-                        <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Más Tarde</button>
-                        <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Enseñar y Guardar</button>
+                    <div class="modal-footer border-top-0 py-3 d-flex justify-content-between align-items-center w-100">
+                        <div>
+                            <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold" onclick="deletePendingQuestion({{ $firstPendingQuestion->id }})">
+                                <i class="bi bi-trash me-1"></i> Borrar
+                            </button>
+                            @if($firstPendingQuestion->ip_address)
+                            <button type="button" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold ms-1" onclick="banIpAndClear({{ $firstPendingQuestion->id }}, '{{ $firstPendingQuestion->ip_address }}')">
+                                <i class="bi bi-slash-circle me-1"></i> Bloquear IP
+                            </button>
+                            @endif
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-light btn-sm rounded-pill px-3 fw-bold" data-bs-dismiss="modal">Más Tarde</button>
+                            <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold">Enseñar</button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
+        
+        {{-- Formularios auxiliares ocultos para acciones de modal --}}
+        <form id="delete-pending-form" method="POST" style="display:none;">
+            @csrf @method('DELETE')
+        </form>
+        <form id="ban-ip-pending-form" action="{{ route('admin.chatbot.ban_ip') }}" method="POST" style="display:none;">
+            @csrf
+            <input type="hidden" name="ip_address" id="ban-ip-field">
+            <input type="hidden" name="knowledge_id" id="ban-knowledge-id-field">
+        </form>
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var pendingModal = new bootstrap.Modal(document.getElementById('autoPendingQuestionModal'));
                 pendingModal.show();
             });
+
+            function deletePendingQuestion(id) {
+                if (confirm('¿Seguro que deseas eliminar esta pregunta definitivamente del sistema?')) {
+                    const form = document.getElementById('delete-pending-form');
+                    form.action = `/admin/chatbot/${id}`;
+                    form.submit();
+                }
+            }
+
+            function banIpAndClear(id, ip) {
+                if (confirm('¿Seguro que deseas bloquear permanentemente la IP ' + ip + ' para consultas de chatbot y eliminar esta pregunta del sistema?')) {
+                    document.getElementById('ban-ip-field').value = ip;
+                    document.getElementById('ban-knowledge-id-field').value = id;
+                    document.getElementById('ban-ip-pending-form').submit();
+                }
+            }
         </script>
         @endif
     @endif

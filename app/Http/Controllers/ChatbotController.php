@@ -13,6 +13,16 @@ class ChatbotController extends Controller
      */
     public function ask(Request $request)
     {
+        $ip = $request->ip();
+
+        // Verificar si la IP está baneada
+        $isBanned = \App\Models\BannedIp::where('ip_address', $ip)->exists();
+        if ($isBanned) {
+            return response()->json([
+                'answer' => 'Lo sentimos, las consultas de esta dirección IP han sido bloqueadas temporal o permanentemente por comportamiento indebido.'
+            ], 403);
+        }
+
         $question = strtolower($request->input('question'));
         $schoolId = $request->input('school_id');
 
@@ -50,11 +60,12 @@ class ChatbotController extends Controller
             return response()->json(['answer' => $bestMatch->answer]);
         }
 
-        // 2. Si no hay coincidencia, guardamos la pregunta como pendiente
+        // 2. Si no hay coincidencia, guardamos la pregunta como pendiente registrando la IP del usuario
         ChatbotKnowledge::create([
             'school_id' => $schoolId,
             'question'  => $request->input('question'),
-            'status'    => 'pending'
+            'status'    => 'pending',
+            'ip_address'=> $ip
         ]);
 
         return response()->json([

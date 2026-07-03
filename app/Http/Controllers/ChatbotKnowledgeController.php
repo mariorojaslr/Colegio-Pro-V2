@@ -54,4 +54,31 @@ class ChatbotKnowledgeController extends Controller
         $knowledge->delete();
         return redirect()->back()->with('success', 'Conocimiento eliminado.');
     }
+
+    public function banIp(Request $request)
+    {
+        $request->validate([
+            'ip_address' => 'required|string',
+            'knowledge_id' => 'nullable|integer',
+        ]);
+
+        $ip = $request->ip_address;
+
+        // No banee localhost
+        if ($ip !== '127.0.0.1' && $ip !== '::1' && !empty($ip)) {
+            \App\Models\BannedIp::firstOrCreate([
+                'ip_address' => $ip
+            ], [
+                'reason' => 'Baneado desde el panel de conocimiento del chatbot por comportamiento/actitudes inapropiadas.',
+                'school_id' => auth()->user()->school_id
+            ]);
+        }
+
+        // Eliminar la consulta del chatbot
+        if ($request->knowledge_id) {
+            ChatbotKnowledge::where('id', $request->knowledge_id)->delete();
+        }
+
+        return redirect()->back()->with('success', "IP {$ip} bloqueada de forma permanente y consulta eliminada.");
+    }
 }
