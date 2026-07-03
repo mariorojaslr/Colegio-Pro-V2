@@ -1094,12 +1094,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             <input type="text" class="form-control" id="baseConcept" placeholder="Ej. Pago Anual 2026 o Refinanciación Histórica" required>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label small fw-bold text-muted">Monto Total a Financiar</label>
+                            <label class="form-label small fw-bold text-muted">Monto Final a Pagar</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="totalAmount" placeholder="Total de la deuda" required step="0.01">
+                                <input type="number" class="form-control" id="totalAmount" placeholder="Monto neto acordado" required step="0.01">
                             </div>
-                            <div class="form-text text-muted" style="font-size: 0.65rem; line-height: 1.2; margin-top: 4px;">Ingresa el monto total de la deuda. Se dividirá automáticamente según la cantidad de cuotas que elijas abajo.</div>
+                            <div class="form-text text-muted" style="font-size: 0.65rem; line-height: 1.2; margin-top: 4px;">Ingresa el monto final neto acordado que el colegiado va a pagar (luego de aplicar descuentos). Si eliges cuotas, el sistema lo dividirá automáticamente.</div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted">Fecha del 1er Vencimiento</label>
