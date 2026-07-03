@@ -27,7 +27,7 @@ class CollegiateCertificateStoreController extends Controller
 
         // Check rules globally for this collegiate
         $hasSanctions = EthicsSanction::where('collegiate_id', $collegiate->id)
-                                      ->where('is_lifted', false)
+                                      ->where('status', 'active')
                                       ->where(function ($q) {
                                           $q->whereNull('end_date')
                                             ->orWhere('end_date', '>', now());
