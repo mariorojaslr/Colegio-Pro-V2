@@ -88,7 +88,7 @@
                                 <td class="px-3 py-2 border-0 text-center">
                                     @if($lastPaid)
                                         <span class="text-dark d-block fw-bold small">${{ number_format($lastPaid->amount, 0, ',', '.') }}</span>
-                                        <span class="text-secondary xx-small">{{ $lastPaid->paid_at->format('d/m/Y') }}</span>
+                                        <span class="text-secondary xx-small">{{ $lastPaid->paid_at ? $lastPaid->paid_at->format('d/m/Y') : 'Sin fecha' }}</span>
                                     @else
                                         <span class="text-finance-clean small fw-bold">S/P</span>
                                     @endif
