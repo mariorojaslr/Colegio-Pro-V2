@@ -48,12 +48,12 @@
                     @endphp
 
                     @if($canBuy)
-                        <form action="{{ route('collegiate.certificates.purchase', $type) }}" method="POST">
+                        <form action="{{ route('collegiates.certificates.purchase', $type) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-primary rounded-pill w-100 shadow-sm fw-bold">Solicitar y Generar</button>
                         </form>
                     @else
-                        <form action="{{ route('collegiate.certificates.purchase', $type) }}" method="POST">
+                        <form action="{{ route('collegiates.certificates.purchase', $type) }}" method="POST">
                             @csrf
                             <input type="hidden" name="request_exception" value="1">
                             <button type="submit" class="btn btn-outline-warning rounded-pill w-100 shadow-sm fw-bold" title="Pedir autorización especial">
@@ -105,7 +105,7 @@
                         <td class="px-4 py-3 text-muted font-monospace small">{{ $cert->code }}</td>
                         <td class="px-4 py-3 text-center">
                             @if($cert->status === 'active' || $cert->status === 'valid')
-                                <a href="{{ route('collegiate.certificates.download', $cert) }}" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill px-3"><i class="bi bi-download me-1"></i> Descargar</a>
+                                <a href="{{ route('collegiates.certificates.download', $cert) }}" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill px-3"><i class="bi bi-download me-1"></i> Descargar</a>
                             @else
                                 <span class="text-muted small">No disponible</span>
                             @endif
