@@ -694,6 +694,19 @@
             el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
         }
 
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
         async function sendChatMessage(e) {
             e.preventDefault();
             const input = document.getElementById('chatbot-input');
@@ -702,17 +715,17 @@
 
             const messagesDiv = document.getElementById('chatbot-messages');
             
-            // Append user message
+            // Append user message safely escaped
             messagesDiv.innerHTML += `
                 <div class="d-flex mb-3 justify-content-end">
-                    <div class="bg-primary text-white p-3 rounded-4 shadow-sm" style="max-width: 85%;">${message}</div>
+                    <div class="bg-primary text-white p-3 rounded-4 shadow-sm" style="max-width: 85%;">${escapeHTML(message)}</div>
                 </div>
             `;
             
             input.value = '';
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-                    // Fetch response
+            // Fetch response
             try {
                 const response = await fetch('{{ route("chatbot.ask") }}', {
                     method: 'POST',
@@ -725,10 +738,10 @@
 
                 const data = await response.json();
                 
-                // Append bot message
+                // Append bot response safely escaped
                 messagesDiv.innerHTML += `
                     <div class="d-flex mb-3">
-                        <div class="bg-white text-dark p-3 rounded-4 shadow-sm border" style="max-width: 85%;">${data.answer}</div>
+                        <div class="bg-white text-dark p-3 rounded-4 shadow-sm border" style="max-width: 85%;">${escapeHTML(data.answer)}</div>
                     </div>
                 `;
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
