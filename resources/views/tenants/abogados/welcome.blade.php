@@ -9,16 +9,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
-    <!-- Fuentes modernas y limpias -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Fuentes elegantes, distinguidas y legibles -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Colores inspirados en el sitio oficial pero modernizados */
-            --primary: #0a284b;   /* Azul oscuro institucional */
-            --accent: #1f7cec;    /* Azul claro vibrante / Celeste */
-            --light: #f8fafc;     /* Fondo principal súper limpio */
-            --dark: #0f172a;
+            --primary: #0f1d36;   /* Azul Marino Imperial */
+            --accent: #c5a880;    /* Bronce / Champagne Premium */
+            --accent-gold: #d4af37; /* Oro Fino */
+            --light: #faf9f6;     /* Blanco Marfil / Lujo */
+            --dark: #0b132b;
             --gray: #64748b;
         }
         
@@ -30,24 +30,28 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3, h4, h5, h6, .outfit-font {
-            font-family: 'Outfit', sans-serif;
+        h1, h2, h3, h4, h5, h6, .playfair {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
         }
 
-        /* NAVBAR CON EFECTO GLASSMORPHISM */
+        /* NAVBAR CON EFECTO GLASSMORPHISM DE LUJO */
         .navbar-law {
-            background-color: rgba(10, 40, 75, 0.9);
+            background-color: rgba(15, 29, 54, 0.95);
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 1rem 0;
+            border-bottom: 2px solid var(--accent);
+            padding: 1.2rem 0;
             transition: all 0.3s ease;
         }
         .navbar-law .navbar-brand {
             color: #fff !important;
-            letter-spacing: -0.5px;
-            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+            font-family: 'Playfair Display', serif;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
+        }
+        .navbar-law .navbar-brand span {
+            color: var(--accent);
         }
         .navbar-law .nav-link {
             color: rgba(255, 255, 255, 0.85) !important;
@@ -61,41 +65,41 @@
             transform: translateY(-2px);
         }
         .btn-law-nav {
-            background-color: var(--accent);
-            color: #fff;
-            font-weight: 600;
-            border-radius: 50px; /* Bordes redondeados modernos */
-            padding: 10px 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-gold));
+            color: #0f1d36 !important;
+            font-weight: 700;
+            border-radius: 0;
+            padding: 12px 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(31, 124, 236, 0.3);
+            box-shadow: 0 4px 15px rgba(197, 168, 128, 0.25);
             border: none;
         }
         .btn-law-nav:hover {
-            background-color: #3993ff;
-            color: #fff;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(31, 124, 236, 0.4);
+            box-shadow: 0 6px 20px rgba(197, 168, 128, 0.45);
         }
 
         /* HERO DINÁMICO */
         @php
-            // Se usa una imagen genérica de leyes/justicia, sin texto en inglés
             $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
         @endphp
         .hero-law {
-            height: 100vh;
+            height: 90vh;
             background-size: cover;
             background-position: center;
             display: flex;
             align-items: center;
             position: relative;
+            border-bottom: 3px solid var(--accent);
         }
         .hero-law::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            /* Oscurecer más el fondo para dar máximo contraste al texto blanco */
-            background: linear-gradient(135deg, rgba(10, 40, 75, 0.98) 0%, rgba(10, 40, 75, 0.85) 100%);
+            background: linear-gradient(135deg, rgba(15, 29, 54, 0.97) 0%, rgba(15, 29, 54, 0.85) 100%);
             z-index: 1;
         }
         .hero-law .container {
@@ -103,26 +107,24 @@
             position: relative;
         }
         .hero-law h1 {
-            font-size: 4rem;
+            font-size: 4.8rem;
             color: #fff;
             line-height: 1.1;
             margin-bottom: 1.5rem;
             font-weight: 700;
-            letter-spacing: -1px;
         }
         .hero-law h1 span {
-            color: #ffffff;
+            color: var(--accent);
             position: relative;
             display: inline-block;
-            border-bottom: 4px solid var(--accent);
         }
-        /* Eliminar el pseudo-elemento after porque ahora usamos border-bottom */
         .hero-law p {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3rem;
+            color: #e2e8f0;
             font-weight: 300;
-            max-width: 600px;
+            max-width: 650px;
             margin-bottom: 2.5rem;
+            line-height: 1.7;
         }
         
         /* TARJETAS DE VALORES RÁPIDOS (JUS / BONO) */
@@ -295,29 +297,32 @@
     <!-- HERO -->
     <section class="hero-law" style="background-image: url('{{ $bgImage }}');">
         <div class="container-fluid px-4 px-xl-5">
-            <div class="row">
-                <div class="col-lg-8">
-                    <h1 class="outfit-font">Defendiendo el<br>ejercicio <span>profesional.</span></h1>
-                    <p>Órgano oficial que rige la matrícula, defiende los derechos de los profesionales del derecho y promueve la excelencia en el ejercicio de la abogacía en La Rioja.</p>
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <div class="badge bg-transparent text-uppercase tracking-widest px-0 mb-3 fw-bold d-inline-flex align-items-center gap-2" style="color: var(--accent); font-size: 0.85rem; border-bottom: 2px solid var(--accent);">
+                        Consejo de Abogados y Procuradores de La Rioja
+                    </div>
+                    <h1 class="playfair">Defendiendo el<br>ejercicio <span>profesional.</span></h1>
+                    <p>Órgano oficial que rige la matrícula, defiende los derechos de los profesionales del derecho y promueve la excelencia en el ejercicio de la abogacía en toda la provincia.</p>
                     <div class="d-flex flex-wrap gap-3 mt-4">
-                        <a href="#servicios" class="btn btn-light rounded-pill px-4 py-3 border-0 text-primary fw-bold" style="box-shadow: 0 4px 15px rgba(255,255,255,0.3);">Explorar Servicios</a>
-                        <a href="#contacto" class="btn btn-outline-light rounded-pill px-4 py-3 fw-bold">Contacto Institucional</a>
+                        <a href="#servicios" class="btn btn-law-nav">Explorar Servicios</a>
+                        <a href="#contacto" class="btn btn-outline-light rounded-0 px-4 py-3 text-uppercase tracking-wider fw-bold">Contacto Institucional</a>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Tarjetas flotantes con valores actualizados -->
+        <!-- Tarjetas flotantes con valores actualizados en estilo oro/bronce -->
         <div class="quick-values-container d-none d-lg-flex">
-            <div class="quick-value-card">
-                <div class="text-muted small fw-bold text-uppercase mb-1">Valor JUS Actualizado</div>
-                <h3 class="outfit-font mb-0" style="color: var(--primary);">$39.580,99</h3>
-                <div class="text-success small mt-1"><i class="material-icons align-middle" style="font-size:14px;">info</i> Última act: 01/03/26</div>
+            <div class="quick-value-card" style="border-left-color: var(--accent-gold); background: var(--light); border: 1px solid rgba(197, 168, 128, 0.2);">
+                <div class="text-muted small fw-bold text-uppercase mb-1" style="letter-spacing: 1px;">Valor JUS Actualizado</div>
+                <h3 class="playfair mb-0" style="color: var(--primary); font-weight: 700;">$39.580,99</h3>
+                <div class="small mt-1" style="color: var(--accent-gold);"><i class="material-icons align-middle" style="font-size:14px;">info</i> Última act: 01/03/26</div>
             </div>
-            <div class="quick-value-card">
-                <div class="text-muted small fw-bold text-uppercase mb-1">Bono Profesional</div>
-                <h3 class="outfit-font mb-0" style="color: var(--primary);">$25.000</h3>
-                <div class="text-secondary small mt-1"><i class="material-icons align-middle" style="font-size:14px;">info</i> Act: 01/01/25</div>
+            <div class="quick-value-card" style="border-left-color: var(--accent-gold); background: var(--light); border: 1px solid rgba(197, 168, 128, 0.2);">
+                <div class="text-muted small fw-bold text-uppercase mb-1" style="letter-spacing: 1px;">Bono Profesional</div>
+                <h3 class="playfair mb-0" style="color: var(--primary); font-weight: 700;">$25.000</h3>
+                <div class="text-muted small mt-1"><i class="material-icons align-middle" style="font-size:14px;">info</i> Act: 01/01/25</div>
             </div>
         </div>
     </section>
@@ -376,7 +381,7 @@
                 
                 <div class="row g-4 mt-2">
                     <div class="col-md-4">
-                        <div class="card-law">
+                        <div class="card-law card-law-magic" data-bs-toggle="modal" data-bs-target="#modalMatricula">
                             <div class="icon-wrapper">
                                 <i class="material-icons fs-1">payments</i>
                             </div>
@@ -385,7 +390,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card-law">
+                        <div class="card-law card-law-magic" data-bs-toggle="modal" data-bs-target="#modalTramites">
                             <div class="icon-wrapper">
                                 <i class="material-icons fs-1">school</i>
                             </div>
@@ -394,7 +399,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card-law">
+                        <div class="card-law card-law-magic" data-bs-toggle="modal" data-bs-target="#modalAbogados">
                             <div class="icon-wrapper">
                                 <i class="material-icons fs-1">contact_page</i>
                             </div>
@@ -520,14 +525,307 @@
         </div>
     </footer>
 
-    <!-- Botón Flotante -->
-    <a href="{{ route('login') }}" class="btn btn-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center p-0" style="bottom: 25px; right: 25px; z-index: 1040; width: 60px; height: 60px; background-color: var(--accent); border:none;" title="Ingresar al Sistema">
-        <i class="material-icons" style="font-size: 1.8rem;">person</i>
-    </a>
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget" class="position-fixed" style="bottom: 120px; right: 25px; z-index: 1050; width: 400px; height: 550px; display: none; resize: both; overflow: hidden; min-width: 300px; min-height: 400px; max-width: 90vw; max-height: 90vh; background: transparent;">
+        <div class="card border-0 shadow-lg h-100" style="border-radius: 20px; overflow: hidden; display: flex; flex-direction: column;">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3" id="chatbot-header" style="cursor: move;">
+                <div class="fw-bold d-flex align-items-center">
+                    <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" class="me-2 shadow-sm" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; pointer-events: none;">
+                    Asistente Virtual
+                </div>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleChatbot()"></button>
+            </div>
+            <div class="card-body bg-light flex-grow-1" id="chatbot-messages" style="overflow-y: auto;">
+                <div class="d-flex mb-3">
+                    <div class="bg-white text-dark p-3 rounded-4 shadow-sm" style="max-width: 85%;">
+                        Hola 👋 Soy el asistente virtual del {{ $school->name ?? 'Consejo' }}. ¿En qué te puedo ayudar hoy?
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 py-3">
+                <form id="chatbot-form" class="d-flex gap-2" onsubmit="sendChatMessage(event)">
+                    <input type="text" id="chatbot-input" class="form-control rounded-pill bg-light border-0 px-3" placeholder="Escribe tu consulta..." required>
+                    <button type="submit" class="btn btn-primary rounded-circle" style="width: 40px; height: 40px; border:none; background-color:var(--accent);">
+                        <i class="material-icons text-white fs-5" style="line-height:40px; display:block; text-align:center;">send</i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Flotante Chatbot -->
+    <button id="chatbot-trigger" class="btn btn-light border border-2 border-primary rounded-circle shadow-lg position-fixed d-flex align-items-center justify-content-center p-0" style="bottom: 25px; right: 25px; z-index: 1040; width: 95px; height: 95px; background-color: white !important; overflow: hidden; border-color: var(--accent) !important;" onclick="toggleChatbot()">
+        <img src="{{ asset('media/bot_icon.png') }}" alt="Bot" style="width: 100%; height: 100%; object-fit: cover;">
+    </button>
+
+    <!-- MODALES INTERACTIVOS DE ABOGADOS -->
+    <!-- Modal 1: Padrón de Abogados -->
+    <div class="modal fade" id="modalAbogados" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0" style="background-color: var(--light);">
+                    <h5 class="modal-title fw-bold outfit-font text-dark"><i class="material-icons align-middle me-2" style="color: var(--accent);">people</i> Padrón de Abogados Matriculados</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    <div class="input-group mb-4 shadow-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="material-icons text-muted">search</i></span>
+                        <input type="text" class="form-control border-start-0 ps-0 py-2" id="searchAbogados" placeholder="Buscar por nombre, matrícula o DNI...">
+                    </div>
+                    <div class="list-group list-group-flush rounded-3 border shadow-sm" id="listAbogados">
+                        @if(isset($collegiates))
+                            @foreach($collegiates as $colegiado)
+                                <div class="list-group-item list-group-item-action p-3 abogado-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1 fw-bold t-name">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                            <div class="small text-muted">
+                                                <span class="me-3 t-mat"><i class="material-icons align-middle fs-6 me-1">badge</i> MP: {{ $colegiado->registration_number }}</span>
+                                                <span class="t-dni"><i class="material-icons align-middle fs-6 me-1">contact_mail</i> DNI: {{ $colegiado->dni }}</span>
+                                            </div>
+                                        </div>
+                                        @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                            <span class="badge bg-success rounded-pill">Activo</span>
+                                        @else
+                                            <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+
+                    <!-- Distribución Departamental en Padrón -->
+                    <h5 class="outfit-font text-dark mt-5 mb-4"><i class="material-icons align-middle me-2" style="color: var(--accent);">map</i> Distribución por Departamentos</h5>
+                    <div class="accordion accordion-flush border rounded-4 overflow-hidden" id="accordionDeptos">
+                        @php
+                            $departamentos = ['Capital', 'Chilecito', 'Arauco', 'Chamical', 'Famatina', 'General Belgrano', 'General Juan Facundo Quiroga', 'General Lamadrid', 'General Ocampo', 'General San Martin', 'Independencia', 'Rosario Vera Penaloza', 'San Blas de los Sauces', 'Sanagasta', 'Vinchina', 'Castro Barros', 'Felipe Varela'];
+                        @endphp
+                        @foreach($departamentos as $index => $depto)
+                            @php
+                                $deptCollegiates = isset($collegiates) ? $collegiates->where('city', $depto) : collect();
+                            @endphp
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ $index }}">
+                                    <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#depto{{ $index }}" aria-expanded="false" aria-controls="depto{{ $index }}">
+                                        {{ $depto }}
+                                        <span class="badge ms-2 rounded-pill text-white" style="background-color: var(--accent);">{{ $deptCollegiates->count() }}</span>
+                                    </button>
+                                </h2>
+                                <div id="depto{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}">
+                                    <div class="accordion-body bg-light p-0">
+                                        @if($deptCollegiates->count() > 0)
+                                            <div class="list-group list-group-flush">
+                                                @foreach($deptCollegiates as $colegiado)
+                                                    <div class="list-group-item bg-transparent p-3 border-bottom">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                 <h6 class="mb-1 fw-bold">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                                                 <div class="small text-muted">
+                                                                     <span class="me-3"><i class="material-icons align-middle fs-6 me-1">badge</i> MP: {{ $colegiado->registration_number }}</span>
+                                                                     <span><i class="material-icons align-middle fs-6 me-1">contact_mail</i> DNI: {{ $colegiado->dni }}</span>
+                                                                 </div>
+                                                            </div>
+                                                            @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                                                <span class="badge bg-success rounded-pill">Activo</span>
+                                                            @else
+                                                                <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="text-center text-muted py-4 small">
+                                                <i class="material-icons fs-4 d-block mb-2" style="color: var(--accent);">info</i> 
+                                                No hay profesionales registrados en este departamento.
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales Explicativos de Tarjetas de Servicios -->
+    <div class="modal fade" id="modalMatricula" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold outfit-font"><i class="material-icons align-middle me-2" style="color: var(--accent);">payments</i> Pago de Bonos y Matrícula</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>El pago de bonos profesionales y cuotas mensuales puede realizarse en línea con tarjetas de crédito/débito a través del Portal de Colegiados. Los valores vigentes son:</p>
+                    <ul>
+                        <li><strong>Valor JUS:</strong> $39.580,99 (Última actualización: 01/03/2026)</li>
+                        <li><strong>Bono Profesional Ley 4832:</strong> $25.000 (Actualización: 01/01/2025)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTramites" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold outfit-font"><i class="material-icons align-middle me-2" style="color: var(--accent);">school</i> Institutos de Derecho</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>El Consejo de Abogados cuenta con diversos institutos de especialización para el desarrollo y debate profesional. Próximos eventos y comisiones:</p>
+                    <ul>
+                        <li><strong>Instituto de Derecho Registral:</strong> Reunión de autoridades (Período 2026–2028).</li>
+                        <li><strong>Taller Régimen Penal Juvenil:</strong> Debate y análisis normativo.</li>
+                        <li><strong>Área Académica:</strong> Charlas y seminarios semanales para noveles abogados.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script Chatbot & Drag -->
+    <script>
+        const chatbotWidget = document.getElementById('chatbot-widget');
+
+        function toggleChatbot() {
+            if (chatbotWidget.style.display === 'none' || chatbotWidget.style.display === '') {
+                chatbotWidget.style.display = 'block';
+            } else {
+                chatbotWidget.style.display = 'none';
+            }
+        }
+        
+        // Draggable logic
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        const header = document.getElementById("chatbot-header");
+
+        header.addEventListener("mousedown", dragStart);
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("mousemove", drag);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+            if (e.target === header || e.target.parentNode === header) {
+                isDragging = true;
+            }
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                setTranslate(currentX, currentY, chatbotWidget);
+            }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+        }
+
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('chatbot-messages');
+            
+            // Append user message
+            messagesDiv.innerHTML += `
+                <div class="d-flex mb-3 justify-content-end">
+                    <div class="bg-primary text-white p-3 rounded-4 shadow-sm" style="max-width: 85%;">${message}</div>
+                </div>
+            `;
+            
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Fetch response
+            try {
+                const response = await fetch('{{ route("chatbot.ask") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ question: message, school_id: '{{ $school->id ?? 1 }}' })
+                });
+
+                const data = await response.json();
+                
+                // Append bot message
+                messagesDiv.innerHTML += `
+                    <div class="d-flex mb-3">
+                        <div class="bg-white text-dark p-3 rounded-4 shadow-sm border" style="max-width: 85%;">${data.answer}</div>
+                    </div>
+                `;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+
+    <!-- Buscador en vivo de Abogados -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchAbogados');
+            if(searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const value = this.value.toLowerCase();
+                    const items = document.querySelectorAll('.abogado-item');
+                    
+                    items.forEach(item => {
+                        const name = item.querySelector('.t-name').textContent.toLowerCase();
+                        const mat = item.querySelector('.t-mat').textContent.toLowerCase();
+                        const dni = item.querySelector('.t-dni').textContent.toLowerCase();
+                        
+                        if(name.includes(value) || mat.includes(value) || dni.includes(value)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
     <style>
         .hover-white:hover { color: #fff !important; }
+        .card-law-magic {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .card-law-magic:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(31, 124, 236, 0.15);
+            border-color: var(--accent) !important;
+        }
     </style>
 </body>
 </html>

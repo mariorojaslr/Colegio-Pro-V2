@@ -14,46 +14,55 @@
     
     <style>
         :root {
-            --ts-primary: #1e3a8a; /* Azul Profundo / Institucional */
-            --ts-secondary: #059669; /* Esmeralda / Compromiso */
-            --ts-light: #f8fafc; /* Gris Slate muy suave */
+            --ts-primary: #4f46e5; /* Índigo Moderno */
+            --ts-secondary: #0ea5e9; /* Celeste Eléctrico */
+            --ts-accent: #10b981; /* Verde Mentas / Empatía */
+            --ts-light: #f8fafc;
             --ts-dark: #0f172a;
+            --ts-grad: linear-gradient(135deg, #eef2ff 0%, #f0fdf4 100%);
         }
         
         body {
             font-family: 'Inter', sans-serif;
             color: var(--ts-dark);
-            background-color: var(--ts-light);
+            background: var(--ts-grad);
         }
 
         h1, h2, h3, h4, h5, h6, .playfair {
             font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
         }
 
         /* NAVBAR */
         .navbar-ts {
-            background-color: rgba(253, 250, 246, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(142, 68, 173, 0.2);
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(79, 70, 229, 0.1);
         }
         .navbar-ts .navbar-brand {
-            color: var(--ts-primary) !important;
-            font-weight: 700;
+            color: var(--ts-dark) !important;
+            font-weight: 800;
+        }
+        .navbar-ts .navbar-brand span {
+            background: linear-gradient(90deg, var(--ts-primary), var(--ts-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .btn-ts-nav {
-            background-color: var(--ts-secondary);
-            color: #fff;
+            background: linear-gradient(90deg, var(--ts-primary), var(--ts-secondary));
+            color: #fff !important;
             border-radius: 50px;
-            padding: 8px 25px;
+            padding: 10px 28px;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
             text-decoration: none;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            border: none;
         }
         .btn-ts-nav:hover {
-            background-color: #d35400;
-            color: #fff;
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.45);
         }
 
         /* HERO */
@@ -61,85 +70,108 @@
             $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : 'https://images.unsplash.com/photo-1529156069898-49953eb1f5bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80';
         @endphp
         .hero-ts {
-            padding: 180px 0 100px;
-            background: linear-gradient(135deg, rgba(248, 250, 252, 0.92) 0%, rgba(248, 250, 252, 0.98) 100%), url('{{ $bgImage }}');
+            padding: 200px 0 120px;
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.9) 0%, rgba(240, 253, 244, 0.95) 100%), url('{{ $bgImage }}');
             background-size: cover;
             background-position: center;
             position: relative;
         }
         .hero-ts h1 {
-            font-size: 4rem;
-            color: var(--ts-primary);
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             line-height: 1.1;
             margin-bottom: 1.5rem;
         }
         .hero-ts p {
-            font-size: 1.25rem;
-            color: #555;
+            font-size: 1.3rem;
+            color: #475569;
             margin-bottom: 2rem;
+            line-height: 1.7;
         }
         
         /* SECTIONS */
         .section-title {
-            color: var(--ts-primary);
-            margin-bottom: 3rem;
+            color: #1e1b4b;
+            margin-bottom: 3.5rem;
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            font-weight: 800;
+        }
+        .section-title span {
+            background: linear-gradient(90deg, var(--ts-primary), var(--ts-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .section-title::after {
             content: '';
             display: block;
-            width: 80px;
-            height: 4px;
-            background-color: var(--ts-secondary);
+            width: 60px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--ts-primary), var(--ts-accent));
             margin: 15px auto 0;
-            border-radius: 2px;
+            border-radius: 10px;
         }
 
-        /* CARDS */
+        /* CARDS GLASSMORPHIC */
         .card-ts {
-            background: #fff;
-            border-radius: 20px;
-            border: none;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            padding: 2.5rem;
             height: 100%;
-            transition: 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         .card-ts:hover {
-            box-shadow: 0 20px 45px rgba(142, 68, 173, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.08) !important;
+            border-color: rgba(79, 70, 229, 0.2);
+            background: rgba(255, 255, 255, 0.9);
         }
         .card-ts img {
-            border-radius: 15px;
+            border-radius: 18px;
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
         }
 
         /* ORG CHART */
         .org-ts-node {
-            background: #fff;
-            border-radius: 20px;
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            width: 250px;
-            border-top: 5px solid var(--ts-primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            width: 260px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-top: 6px solid var(--ts-primary);
+            transition: all 0.3s ease;
+        }
+        .org-ts-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(79, 70, 229, 0.1);
         }
         .org-ts-node img {
-            width: 90px;
-            height: 90px;
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 1rem;
-            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.2);
+            margin-bottom: 1.2rem;
+            border: 4px solid #fff;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15);
         }
         
         .footer-ts {
-            background-color: var(--ts-primary);
-            color: #fff;
-            padding: 4rem 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #cbd5e1;
+            padding: 5rem 0 3rem;
             text-align: center;
         }
     
@@ -150,6 +182,27 @@
         #chatbot-trigger:hover {
             transform: scale(1.15) rotate(-5deg);
             box-shadow: 0 15px 25px rgba(0,0,0,0.2) !important;
+        }
+
+        .stat-ts-magic {
+            transition: all 0.3s ease;
+            padding: 15px;
+            border-radius: 15px;
+        }
+        .stat-ts-magic:hover {
+            transform: translateY(-5px);
+            background-color: var(--ts-light);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 2px solid var(--ts-primary);
+        }
+        .card-ts-magic {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .card-ts-magic:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(142, 68, 173, 0.15) !important;
+            border: 1px solid var(--ts-secondary) !important;
         }
 
     </style>
@@ -229,66 +282,90 @@
                 @endif
             </div>
         </section>
-    @else
-        <!-- SIN SLIDER: Muestra el diseño tradicional azul con texto -->
+        <!-- SIN SLIDER: Muestra el diseño moderno con gradientes y tarjetas glassmorphic -->
         <section class="hero-ts">
             <div class="container-fluid px-4 px-xl-5 position-relative">
-                <div class="row align-items-center">
+                <div class="row align-items-center g-5">
                     <div class="col-lg-6">
+                        <div class="badge bg-white text-indigo border px-3 py-2 rounded-pill mb-3 fw-bold shadow-sm d-inline-flex align-items-center gap-2" style="color: var(--ts-primary);">
+                            <span class="material-icons fs-6" style="color: var(--ts-accent);">verified</span>
+                            Organismo Oficial de Regulación
+                        </div>
                         <h1 class="playfair">Empatía, <br>Derechos & <br>Comunidad.</h1>
-                        <p>Órgano oficial que agrupa, regula y defiende a los profesionales del Trabajo Social, velando por la ética y el compromiso social.</p>
+                        <p>Órgano oficial que agrupa, regula y defiende a los profesionales del Trabajo Social en toda la provincia, promoviendo la ética y el compromiso social transformador.</p>
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+                            <a href="#quienes-somos" class="btn-ts-nav">Nuestra Misión</a>
+                            <a href="#contacto" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold border-2 d-inline-flex align-items-center gap-2">
+                                <span class="material-icons">mail</span> Contacto
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-lg-6 text-center">
-                        @if(isset($school) && $school->logo)
-                            <img src="{{ asset($school->logo) }}" alt="Logo Gigante" class="img-fluid opacity-75" style="max-height: 350px; filter: drop-shadow(0 20px 30px rgba(142,68,173,0.2));">
-                        @endif
+                    <div class="col-lg-5 offset-lg-1 text-center">
+                        <div class="position-relative d-inline-block">
+                            <!-- Efecto de circulo resplandeciente de fondo -->
+                            <div class="position-absolute bg-primary rounded-circle opacity-10 blur-3xl" style="width: 300px; height: 300px; top: 10%; left: 10%; filter: blur(40px);"></div>
+                            <div class="card border-0 shadow-lg p-5 rounded-4" style="background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.4);">
+                                @if(isset($school) && $school->logo)
+                                    <img src="{{ asset($school->logo) }}" alt="Logo Gigante" class="img-fluid" style="max-height: 280px; filter: drop-shadow(0 15px 25px rgba(79,70,229,0.15));">
+                                @endif
+                                <h5 class="mt-4 fw-bold text-dark mb-1">{{ $school->name ?? 'Colegio' }}</h5>
+                                <span class="text-muted small">La Rioja, Argentina</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-    @endif
 
     <main class="container-fluid px-4 px-xl-5 py-5">
         
         <!-- STATS & SERVICES -->
         <div class="row g-4 mb-5 pb-5 border-bottom pt-4">
             <div class="col-12 mb-4 text-center">
-                <div class="row g-3 bg-white p-4 rounded-4 shadow-sm">
+                <div class="row g-3 bg-white p-4 rounded-4 shadow-sm align-items-center">
                     <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">+{{ $school->collegiates()->count() ?? 0 }}</h2>
-                        <p class="text-muted small mt-2 fw-bold">Profesionales Matriculados</p>
+                        <div class="stat-ts-magic" data-bs-toggle="modal" data-bs-target="#modalTrabajadoresSociales" style="cursor: pointer; border: 2px solid transparent;">
+                            <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">+{{ $school->collegiates()->count() ?? 0 }}</h2>
+                            <p class="text-muted small mt-2 fw-bold mb-0">Profesionales Matriculados</p>
+                        </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">{{ \Carbon\Carbon::parse('1990-12-20')->age }}</h2>
-                        <p class="text-muted small mt-2 fw-bold">Años de Trayectoria</p>
+                        <div class="stat-ts-magic" data-bs-toggle="modal" data-bs-target="#modalAnios" style="cursor: pointer; border: 2px solid transparent;">
+                            <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">{{ \Carbon\Carbon::parse('1990-12-20')->age }}</h2>
+                            <p class="text-muted small mt-2 fw-bold mb-0">Años de Trayectoria</p>
+                        </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">18</h2>
-                        <p class="text-muted small mt-2 fw-bold">Departamentos de La Rioja</p>
+                        <div class="stat-ts-magic" data-bs-toggle="modal" data-bs-target="#modalDepartamentos" style="cursor: pointer; border: 2px solid transparent;">
+                            <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">18</h2>
+                            <p class="text-muted small mt-2 fw-bold mb-0">Departamentos de La Rioja</p>
+                        </div>
                     </div>
                     <div class="col-6 col-md-3">
-                        <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">1</h2>
-                        <p class="text-muted small mt-2 fw-bold">Convenios Vigentes</p>
+                        <div class="stat-ts-magic" data-bs-toggle="modal" data-bs-target="#modalConvenios" style="cursor: pointer; border: 2px solid transparent;">
+                            <h2 class="display-5 fw-bold mb-0 playfair" style="color: var(--ts-primary);">{{ isset($agreements) ? $agreements->count() : 0 }}</h2>
+                            <p class="text-muted small mt-2 fw-bold mb-0">Convenios Vigentes</p>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-4">
-                <div class="card-ts p-4 text-center shadow-sm">
+                <div class="card-ts p-4 text-center shadow-sm card-ts-magic" data-bs-toggle="modal" data-bs-target="#modalMatricula">
                     <span class="material-icons mb-3" style="font-size: 3rem; color: var(--ts-secondary);">badge</span>
                     <h4 class="playfair mb-2" style="font-size: 1.2rem;">Matrícula Habilitante</h4>
                     <p class="text-muted small mb-0">Verificá la habilitación legal de cualquier profesional.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card-ts p-4 text-center shadow-sm">
+                <div class="card-ts p-4 text-center shadow-sm card-ts-magic" data-bs-toggle="modal" data-bs-target="#modalTramites">
                     <span class="material-icons mb-3" style="font-size: 3rem; color: var(--ts-secondary);">assignment</span>
                     <h4 class="playfair mb-2" style="font-size: 1.2rem;">Trámites</h4>
                     <p class="text-muted small mb-0">Información para iniciar o renovar tu matriculación.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card-ts p-4 text-center shadow-sm">
+                <div class="card-ts p-4 text-center shadow-sm card-ts-magic" data-bs-toggle="modal" data-bs-target="#modalAtencion">
                     <span class="material-icons mb-3" style="font-size: 3rem; color: var(--ts-secondary);">support_agent</span>
                     <h4 class="playfair mb-2" style="font-size: 1.2rem;">Atención</h4>
                     <p class="text-muted small mb-0">Consultas presenciales y asistencia administrativa.</p>
@@ -623,6 +700,249 @@
                 console.error('Error:', error);
             }
         }
+    </script>
+
+    <!-- MODALES INTERACTIVOS TRABAJO SOCIAL -->
+    <!-- Modal 1: Padrón de Trabajadores Sociales -->
+    <div class="modal fade" id="modalTrabajadoresSociales" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0" style="background-color: var(--ts-light);">
+                    <h5 class="modal-title fw-bold playfair text-dark"><i class="bi bi-people me-2" style="color: var(--ts-primary);"></i> Padrón de Trabajadores Sociales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    <div class="input-group mb-4 shadow-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0 ps-0 py-2" id="searchTrabajadoresSociales" placeholder="Buscar por nombre, matrícula o DNI...">
+                    </div>
+                    <div class="list-group list-group-flush rounded-3 border shadow-sm" id="listTrabajadoresSociales">
+                        @if(isset($collegiates))
+                            @foreach($collegiates as $colegiado)
+                                <div class="list-group-item list-group-item-action p-3 trabajador-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1 fw-bold t-name">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                            <div class="small text-muted">
+                                                <span class="me-3 t-mat"><i class="bi bi-card-text me-1"></i> MP: {{ $colegiado->registration_number }}</span>
+                                                <span class="t-dni"><i class="bi bi-person-vcard me-1"></i> DNI: {{ $colegiado->dni }}</span>
+                                            </div>
+                                        </div>
+                                        @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                            <span class="badge bg-success rounded-pill">Activo</span>
+                                        @else
+                                            <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Años Trayectoria -->
+    <div class="modal fade" id="modalAnios" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-5 text-center">
+                    <div class="display-1 mb-3" style="color: var(--ts-secondary);"><i class="bi bi-award"></i></div>
+                    <h3 class="fw-bold playfair text-dark mb-3">{{ \Carbon\Carbon::parse('1990-12-20')->age }} Años de Trayectoria</h3>
+                    <p class="text-muted">El Consejo Profesional de Trabajo Social de La Rioja ha liderado por décadas la jerarquización del ejercicio profesional y el firme compromiso con el bienestar y desarrollo de nuestra comunidad.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Departamentos -->
+    <div class="modal fade" id="modalDepartamentos" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0" style="background-color: var(--ts-light);">
+                    <h5 class="modal-title fw-bold playfair text-dark"><i class="bi bi-geo-alt me-2" style="color: var(--ts-primary);"></i> Distribución por Departamentos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted mb-4">Profesionales matriculados con delegación activa por departamento en la provincia de La Rioja.</p>
+                    <div class="accordion accordion-flush border rounded-4 overflow-hidden" id="accordionDeptos">
+                        @php
+                            $departamentos = ['Capital', 'Chilecito', 'Arauco', 'Chamical', 'Famatina', 'General Belgrano', 'General Juan Facundo Quiroga', 'General Lamadrid', 'General Ocampo', 'General San Martin', 'Independencia', 'Rosario Vera Penaloza', 'San Blas de los Sauces', 'Sanagasta', 'Vinchina', 'Castro Barros', 'Felipe Varela'];
+                        @endphp
+                        @foreach($departamentos as $index => $depto)
+                            @php
+                                $deptCollegiates = isset($collegiates) ? $collegiates->where('city', $depto) : collect();
+                            @endphp
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ $index }}">
+                                    <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#depto{{ $index }}" aria-expanded="false" aria-controls="depto{{ $index }}">
+                                        {{ $depto }}
+                                        <span class="badge ms-2 rounded-pill text-white" style="background-color: var(--ts-primary);">{{ $deptCollegiates->count() }}</span>
+                                    </button>
+                                </h2>
+                                <div id="depto{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}">
+                                    <div class="accordion-body bg-light p-0">
+                                        @if($deptCollegiates->count() > 0)
+                                            <div class="list-group list-group-flush">
+                                                @foreach($deptCollegiates as $colegiado)
+                                                    <div class="list-group-item bg-transparent p-3 border-bottom">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                 <h6 class="mb-1 fw-bold">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                                                 <div class="small text-muted">
+                                                                     <span class="me-3"><i class="bi bi-card-text me-1"></i> MP: {{ $colegiado->registration_number }}</span>
+                                                                     <span><i class="bi bi-person-vcard me-1"></i> DNI: {{ $colegiado->dni }}</span>
+                                                                 </div>
+                                                            </div>
+                                                            @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                                                <span class="badge bg-success rounded-pill">Activo</span>
+                                                            @else
+                                                                <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="text-center text-muted py-4 small">
+                                                <i class="bi bi-info-circle fs-4 d-block mb-2" style="color: var(--ts-primary);"></i> 
+                                                No hay profesionales registrados en este departamento.
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Convenios -->
+    <div class="modal fade" id="modalConvenios" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0" style="background-color: var(--ts-light);">
+                    <h5 class="modal-title fw-bold playfair text-dark"><i class="bi bi-briefcase me-2" style="color: var(--ts-primary);"></i> Convenios Comerciales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    @if(isset($agreements) && $agreements->count() > 0)
+                        <div class="row g-3">
+                            @foreach($agreements as $agreement)
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                                        <div class="card-body p-4 d-flex flex-column text-center">
+                                            <div class="mb-3 mx-auto">
+                                                @if($agreement->logo_url)
+                                                    <img src="{{ asset($agreement->logo_url) }}" alt="{{ $agreement->name }}" class="img-fluid rounded" style="max-height: 80px; object-fit: contain;">
+                                                @else
+                                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                                                        <i class="bi bi-shop fs-1 text-muted"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <h5 class="fw-bold mb-1">{{ $agreement->name }}</h5>
+                                            @if($agreement->discount_percentage)
+                                                <span class="badge bg-success rounded-pill mx-auto mb-3 px-3 py-2 fs-6">{{ $agreement->discount_percentage }}</span>
+                                            @endif
+                                            <p class="text-muted small mt-auto mb-0">{{ $agreement->description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center p-5 rounded-4 bg-white border shadow-sm">
+                            <span class="material-icons text-muted fs-1 mb-3">card_membership</span>
+                            <p class="text-muted mb-0">No hay convenios comerciales activos actualmente.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales de Servicios -->
+    <div class="modal fade" id="modalMatricula" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold playfair"><i class="bi bi-shield-check me-2" style="color: var(--ts-primary);"></i> Matrícula Habilitante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>Puedes validar la habilitación de cualquier profesional en nuestra jurisdicción. Para certificar oficialmente la vigencia de la matrícula, puedes solicitar el certificado de habilitación a través de la plataforma.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTramites" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold playfair"><i class="bi bi-file-earmark-text me-2" style="color: var(--ts-primary);"></i> Trámites y Requisitos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Título habilitante de Lic. en Trabajo Social o equivalente (Copia legalizada)</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Documento Nacional de Identidad</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Constancia de CUIL</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> 2 fotos carnet claras de frente</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAtencion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold playfair"><i class="bi bi-headset me-2" style="color: var(--ts-primary);"></i> Atención al Profesional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>El Consejo ofrece atención en su sede central en los siguientes horarios:</p>
+                    <ul>
+                        <li><strong>Lunes a Viernes:</strong> 9:00 hs a 13:00 hs.</li>
+                        <li><strong>Canal telefónico y online:</strong> De 9:00 hs a 17:00 hs.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT BUSCADOR EN VIVO TRABAJO SOCIAL -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchTrabajadoresSociales');
+            if(searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const value = this.value.toLowerCase();
+                    const items = document.querySelectorAll('.trabajador-item');
+                    
+                    items.forEach(item => {
+                        const name = item.querySelector('.t-name').textContent.toLowerCase();
+                        const mat = item.querySelector('.t-mat').textContent.toLowerCase();
+                        const dni = item.querySelector('.t-dni').textContent.toLowerCase();
+                        
+                        if(name.includes(value) || mat.includes(value) || dni.includes(value)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html>

@@ -60,6 +60,34 @@
             transform: scale(1.15) rotate(-5deg);
             box-shadow: 0 15px 25px rgba(0,0,0,0.2) !important;
         }
+
+        .stat-magic {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+        }
+        .stat-magic:hover {
+            transform: translateY(-3px);
+            border: 2px solid var(--theme-primary);
+            box-shadow: 5px 5px 0px var(--theme-secondary);
+            background-color: white;
+        }
+
+        .card-magic {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            border: 2px solid var(--theme-primary) !important;
+        }
+        .card-magic:hover {
+            transform: translateY(-5px) translateX(-2px);
+            box-shadow: 8px 8px 0px var(--theme-secondary);
+        }
     </style>
 </head>
 <body>
@@ -163,20 +191,28 @@
         <div class="container-fluid px-4 px-xl-5">
             <div class="row g-4 text-center">
                 <div class="col-6 col-md-3">
-                    <h2 class="display-5 fw-bold text-theme-primary mb-0">+{{ $school->collegiates()->count() ?? 0 }}</h2>
-                    <p class="text-theme-secondary small mt-2 fw-semibold">{{ $school->member_plural ?? 'Profesionales Matriculados' }}</p>
+                    <div class="stat-magic" data-bs-toggle="modal" data-bs-target="#modalCollegiates">
+                        <h2 class="display-5 fw-bold text-theme-primary mb-0">+{{ $collegiates->count() ?? 0 }}</h2>
+                        <p class="text-theme-secondary small mt-2 fw-semibold mb-0">{{ $school->member_plural ?? 'Profesionales Matriculados' }}</p>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h2 class="display-5 fw-bold text-theme-primary mb-0">{{ \Carbon\Carbon::parse('1990-12-20')->age }}</h2>
-                    <p class="text-theme-secondary small mt-2 fw-semibold">Años de Trayectoria</p>
+                    <div class="stat-magic" data-bs-toggle="modal" data-bs-target="#modalAnios">
+                        <h2 class="display-5 fw-bold text-theme-primary mb-0">{{ \Carbon\Carbon::parse('1990-12-20')->age }}</h2>
+                        <p class="text-theme-secondary small mt-2 fw-semibold mb-0">Años de Trayectoria</p>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h2 class="display-5 fw-bold text-theme-primary mb-0">18</h2>
-                    <p class="text-theme-secondary small mt-2 fw-semibold">Departamentos de La Rioja</p>
+                    <div class="stat-magic" data-bs-toggle="modal" data-bs-target="#modalDepartamentos">
+                        <h2 class="display-5 fw-bold text-theme-primary mb-0">18</h2>
+                        <p class="text-theme-secondary small mt-2 fw-semibold mb-0">Departamentos de La Rioja</p>
+                    </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <h2 class="display-5 fw-bold text-theme-primary mb-0">1</h2>
-                    <p class="text-theme-secondary small mt-2 fw-semibold">Convenios Vigentes</p>
+                    <div class="stat-magic" data-bs-toggle="modal" data-bs-target="#modalConvenios">
+                        <h2 class="display-5 fw-bold text-theme-primary mb-0">{{ isset($agreements) ? $agreements->count() : 0 }}</h2>
+                        <p class="text-theme-secondary small mt-2 fw-semibold mb-0">Convenios Vigentes</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -212,7 +248,7 @@
         <!-- SERVICIOS CARDS -->
         <div class="row g-4 mb-5 pb-5 border-bottom border-theme">
             <div class="col-md-4">
-                <div class="card h-100 border-theme rounded-4 p-4 text-center shadow-hover-up bg-theme-card">
+                <div class="card h-100 border-theme rounded-4 p-4 text-center card-magic bg-theme-card" data-bs-toggle="modal" data-bs-target="#modalMatricula">
                     <div class="mb-3">
                         <span class="material-icons text-theme-primary" style="font-size: 3rem;">badge</span>
                     </div>
@@ -221,7 +257,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card h-100 border-theme rounded-4 p-4 text-center shadow-hover-up bg-theme-card">
+                <div class="card h-100 border-theme rounded-4 p-4 text-center card-magic bg-theme-card" data-bs-toggle="modal" data-bs-target="#modalTramites">
                     <div class="mb-3">
                         <span class="material-icons text-theme-primary" style="font-size: 3rem;">assignment</span>
                     </div>
@@ -230,7 +266,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card h-100 border-theme rounded-4 p-4 text-center shadow-hover-up bg-theme-card">
+                <div class="card h-100 border-theme rounded-4 p-4 text-center card-magic bg-theme-card" data-bs-toggle="modal" data-bs-target="#modalAtencion">
                     <div class="mb-3">
                         <span class="material-icons text-theme-primary" style="font-size: 3rem;">support_agent</span>
                     </div>
@@ -591,6 +627,246 @@
                 console.error('Error:', error);
             }
         }
+    </script>
+
+    <!-- Modales Estadisticas Dinámicos -->
+    <!-- Modal 1: Padrón -->
+    <div class="modal fade" id="modalCollegiates" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-theme-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-theme-dark"><i class="bi bi-people me-2 text-theme-primary"></i> Padrón de {{ $school->member_plural ?? 'Profesionales Matriculados' }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    <div class="input-group mb-4 shadow-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0 ps-0 py-2" id="searchCollegiates" placeholder="Buscar por nombre, matrícula o DNI...">
+                    </div>
+                    <div class="list-group list-group-flush rounded-3 border shadow-sm" id="listCollegiates">
+                        @if(isset($collegiates))
+                            @foreach($collegiates as $colegiado)
+                                <div class="list-group-item list-group-item-action p-3 collegiate-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1 fw-bold t-name">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                            <div class="small text-muted">
+                                                <span class="me-3 t-mat"><i class="bi bi-card-text me-1"></i> MP: {{ $colegiado->registration_number }}</span>
+                                                <span class="t-dni"><i class="bi bi-person-vcard me-1"></i> DNI: {{ $colegiado->dni }}</span>
+                                            </div>
+                                        </div>
+                                        @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                            <span class="badge bg-success rounded-pill">Activo</span>
+                                        @else
+                                            <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Años Trayectoria -->
+    <div class="modal fade" id="modalAnios" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-5 text-center">
+                    <div class="display-1 text-theme-primary mb-3"><i class="bi bi-award"></i></div>
+                    <h3 class="fw-bold text-theme-dark mb-3">{{ \Carbon\Carbon::parse('1990-12-20')->age }} Años de Trayectoria</h3>
+                    <p class="text-muted">Desde nuestra fundación el <strong>20 de Diciembre de 1990</strong>, trabajamos incansablemente regulando y dignificando la profesión en beneficio de toda la provincia de La Rioja.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Departamentos -->
+    <div class="modal fade" id="modalDepartamentos" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-theme-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-theme-dark"><i class="bi bi-geo-alt me-2 text-theme-primary"></i> Delegaciones por Departamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted mb-4">Distribución territorial de los profesionales activos e inscriptos en los 18 departamentos de la provincia.</p>
+                    <div class="accordion accordion-flush border rounded-4 overflow-hidden" id="accordionDeptos">
+                        @php
+                            $departamentos = ['Capital', 'Chilecito', 'Arauco', 'Chamical', 'Famatina', 'General Belgrano', 'General Juan Facundo Quiroga', 'General Lamadrid', 'General Ocampo', 'General San Martin', 'Independencia', 'Rosario Vera Penaloza', 'San Blas de los Sauces', 'Sanagasta', 'Vinchina', 'Castro Barros', 'Felipe Varela'];
+                        @endphp
+                        @foreach($departamentos as $index => $depto)
+                            @php
+                                $deptCollegiates = isset($collegiates) ? $collegiates->where('city', $depto) : collect();
+                            @endphp
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ $index }}">
+                                    <button class="accordion-button collapsed fw-bold text-theme-dark" type="button" data-bs-toggle="collapse" data-bs-target="#depto{{ $index }}" aria-expanded="false" aria-controls="depto{{ $index }}">
+                                        {{ $depto }}
+                                        <span class="badge bg-theme-primary ms-2 rounded-pill">{{ $deptCollegiates->count() }}</span>
+                                    </button>
+                                </h2>
+                                <div id="depto{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}">
+                                    <div class="accordion-body bg-light p-0">
+                                        @if($deptCollegiates->count() > 0)
+                                            <div class="list-group list-group-flush">
+                                                @foreach($deptCollegiates as $colegiado)
+                                                    <div class="list-group-item bg-transparent p-3 border-bottom">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <h6 class="mb-1 fw-bold">{{ $colegiado->last_name }}, {{ $colegiado->first_name }}</h6>
+                                                                <div class="small text-muted">
+                                                                    <span class="me-3"><i class="bi bi-card-text me-1"></i> MP: {{ $colegiado->registration_number }}</span>
+                                                                    <span><i class="bi bi-person-vcard me-1"></i> DNI: {{ $colegiado->dni }}</span>
+                                                                </div>
+                                                            </div>
+                                                            @if(strtolower($colegiado->status) == 'active' || strtolower($colegiado->status) == 'activo')
+                                                                <span class="badge bg-success rounded-pill">Activo</span>
+                                                            @else
+                                                                <span class="badge bg-secondary rounded-pill">{{ $colegiado->status }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="text-center text-muted py-4 small">
+                                                <i class="bi bi-info-circle fs-4 d-block mb-2 text-theme-secondary"></i> 
+                                                No hay profesionales registrados en este departamento.
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Convenios -->
+    <div class="modal fade" id="modalConvenios" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-theme-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-theme-dark"><i class="bi bi-briefcase me-2 text-theme-primary"></i> Convenios Comerciales Vigentes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    @if(isset($agreements) && $agreements->count() > 0)
+                        <div class="row g-3">
+                            @foreach($agreements as $agreement)
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                                        <div class="card-body p-4 d-flex flex-column text-center">
+                                            <div class="mb-3 mx-auto">
+                                                @if($agreement->logo_url)
+                                                    <img src="{{ asset($agreement->logo_url) }}" alt="{{ $agreement->name }}" class="img-fluid rounded" style="max-height: 80px; object-fit: contain;">
+                                                @else
+                                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                                                        <i class="bi bi-shop fs-1 text-muted"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <h5 class="fw-bold mb-1">{{ $agreement->name }}</h5>
+                                            @if($agreement->discount_percentage)
+                                                <span class="badge bg-success rounded-pill mx-auto mb-3 px-3 py-2 fs-6">{{ $agreement->discount_percentage }}</span>
+                                            @endif
+                                            <p class="text-muted small mt-auto mb-0">{{ $agreement->description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center p-5 bg-theme-card rounded-4 border border-theme shadow-sm">
+                            <span class="material-icons text-muted fs-1 mb-3">card_membership</span>
+                            <p class="text-muted mb-0">No hay convenios comerciales registrados en este momento.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales Servicios -->
+    <div class="modal fade" id="modalMatricula" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-shield-check text-theme-primary me-2"></i> Matrícula Habilitante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>Habilita el ejercicio legal de los profesionales inscriptos en nuestra circunscripción. El cumplimiento de la matrícula asegura el ejercicio ético y regulado de la actividad profesional.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTramites" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-file-earmark-text text-theme-primary me-2"></i> Trámites y Requisitos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>Los requisitos generales para iniciar o renovar tu inscripción profesional incluyen:</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Fotocopia autenticada del Título Universitario</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Documento Nacional de Identidad</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Certificado de ética / antecedentes profesionales</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Foto tipo carnet actualizada</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAtencion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-headset text-theme-primary me-2"></i> Atención al Profesional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>Nuestro equipo de administración se encuentra disponible para asesorarte de Lunes a Viernes de 8:00 hs a 13:00 hs en nuestras oficinas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT BUSCADOR EN VIVO DE COLEGIADOS GENERAL -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchCollegiates');
+            if(searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const value = this.value.toLowerCase();
+                    const items = document.querySelectorAll('.collegiate-item');
+                    
+                    items.forEach(item => {
+                        const name = item.querySelector('.t-name').textContent.toLowerCase();
+                        const mat = item.querySelector('.t-mat').textContent.toLowerCase();
+                        const dni = item.querySelector('.t-dni').textContent.toLowerCase();
+                        
+                        if(name.includes(value) || mat.includes(value) || dni.includes(value)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html>
