@@ -117,19 +117,26 @@
 
         /* HERO SECTION */
         @php
-            $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80';
+            $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : asset('images/trabajosocial_hero.png');
         @endphp
 
         .hero-ts {
             position: relative;
             padding: 180px 0 100px;
-            background: linear-gradient(135deg, rgba(248, 250, 252, 0.92) 0%, rgba(239, 246, 255, 0.96) 100%), url('{{ $bgImage }}');
+            background: linear-gradient(to right, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0.95) 45%, rgba(248, 250, 252, 0.65) 75%, rgba(248, 250, 252, 0.15) 100%), url('{{ $bgImage }}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             min-height: 90vh;
             display: flex;
             align-items: center;
+        }
+
+        @media (max-width: 991px) {
+            .hero-ts {
+                background: linear-gradient(to bottom, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0.95) 60%, rgba(248, 250, 252, 0.5) 85%, rgba(248, 250, 252, 0.15) 100%), url('{{ $bgImage }}') !important;
+                background-attachment: scroll !important; /* Desactivar fixed en moviles para mejorar rendimiento */
+            }
         }
 
         .hero-title {
@@ -625,7 +632,7 @@
         <section class="hero-ts">
             <div class="container-fluid px-4 px-xl-5">
                 <div class="row align-items-center g-5">
-                    <div class="col-lg-6">
+                    <div class="col-lg-8 col-xl-7">
                         <div class="badge bg-white text-primary border border-2 border-primary-subtle px-3 py-2 rounded-pill mb-4 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
                             <i class="bi bi-patch-check-fill text-danger"></i>
                             Organismo Regulador de la Matrícula
@@ -637,33 +644,6 @@
                             <a href="#contacto" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold border-2 d-inline-flex align-items-center gap-2">
                                 <i class="bi bi-envelope"></i> Contacto
                             </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 text-center">
-                        <div class="collage-container">
-                            <div class="collage-card-main">
-                                @if(isset($school) && $school->logo)
-                                    <img src="{{ asset($school->logo) }}" alt="Logo Gigante">
-                                @endif
-                                <h4 class="mt-4 fw-bold text-dark mb-1">C.P.T.S. La Rioja</h4>
-                                <span class="text-muted small fw-bold">Persona Jurídica de Derecho Público</span>
-                            </div>
-                            
-                            <!-- Badges flotantes -->
-                            <div class="collage-badge collage-badge-1">
-                                <div class="bg-success-subtle text-success p-2 rounded-circle d-flex"><i class="bi bi-check-lg fs-5"></i></div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold">Ley Prov. Nº 8.522</h6>
-                                    <small class="text-muted">Marco Regulatorio Oficial</small>
-                                </div>
-                            </div>
-                            <div class="collage-badge collage-badge-2">
-                                <div class="bg-primary-subtle text-primary p-2 rounded-circle d-flex"><i class="bi bi-shield-check fs-5"></i></div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold">Matrícula Segura</h6>
-                                    <small class="text-muted">Transparencia en el ejercicio</small>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
