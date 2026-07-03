@@ -8,10 +8,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- App Name -->
-    <title>Colegio-Pro | Gestión Profesional</title>
+    <title>{{ isset($currentTenant) ? $currentTenant->name : 'Colegio-Pro | Gestión Profesional' }}</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('media/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ isset($currentTenant) && $currentTenant->logo ? asset($currentTenant->logo) : asset('media/favicon.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,9 +25,13 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-                    <img src="{{ asset('media/logo.png') }}" alt="Logo" height="30" class="me-2">
-                    COLEGIO<span style="color: var(--accent-color)">-PRO</span>
+                <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ url('/') }}">
+                    @if(isset($currentTenant) && $currentTenant->logo)
+                        <img src="{{ asset($currentTenant->logo) }}" alt="Logo" height="38" style="border-radius: 50%;">
+                    @else
+                        <img src="{{ asset('media/logo.png') }}" alt="Logo" height="30">
+                    @endif
+                    <span>{{ isset($currentTenant) ? $currentTenant->name : 'COLEGIO-PRO' }}</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

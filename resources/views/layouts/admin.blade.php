@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colegio-Pro | Dashboard Administrativo</title>
+    <title>{{ isset($currentTenant) ? $currentTenant->name . ' | Panel de Administración' : 'Colegio-Pro | Dashboard Administrativo' }}</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('media/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ isset($currentTenant) && $currentTenant->logo ? asset($currentTenant->logo) : asset('media/favicon.png') }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -54,6 +54,10 @@ class IdentifyTenant
         // Share with all views
         \Illuminate\Support\Facades\View::share('currentTenant', $tenant);
 
+        if ($tenant) {
+            config(['app.name' => $tenant->name]);
+        }
+
         return $next($request);
     }
 }

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Colegio-Pro | Gestión Profesional')</title>
+    <title>@yield('title', isset($currentTenant) ? $currentTenant->name : 'Colegio-Pro | Gestión Profesional')</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('media/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ isset($currentTenant) && $currentTenant->logo ? asset($currentTenant->logo) : asset('media/favicon.png') }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
