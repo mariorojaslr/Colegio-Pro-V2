@@ -152,6 +152,81 @@ class DemoUsersSeeder extends Seeder
                 }
             }
 
+            // 5. Cargar 20 colegiados de padrón de prueba (DNI 99...) para TODAS las escuelas excepto Cotolar
+            $allSchools = School::where('slug', '!=', 'cotolar')->get();
+            foreach ($allSchools as $sObj) {
+                $this->command->info("Creando 20 colegiados de padrón de prueba para: {$sObj->name}...");
+                
+                // Eliminar previamente para evitar duplicados
+                Collegiate::where('school_id', $sObj->id)->where('first_name', 'LIKE', 'Prueba%')->delete();
+
+                // Mapear prefijos
+                $regPrefix = 'DEM';
+                if ($sObj->slug === 'abogados') $regPrefix = 'ABO';
+                elseif ($sObj->slug === 'arquitectos') $regPrefix = 'ARQ';
+                elseif ($sObj->slug === 'kinesiologo-school') $regPrefix = 'KIN';
+                elseif ($sObj->slug === 'trabajosocial') $regPrefix = 'TS';
+                else $regPrefix = strtoupper(substr($sObj->slug, 0, 3));
+
+                $degree = 'Profesional';
+                if ($sObj->slug === 'abogados') $degree = 'Abogado/a';
+                elseif ($sObj->slug === 'arquitectos') $degree = 'Arquitecto/a';
+                elseif ($sObj->slug === 'kinesiologo-school') $degree = 'Kinesiólogo/a';
+                elseif ($sObj->slug === 'trabajosocial') $degree = 'Trabajador/a Social';
+
+                for ($p = 1; $p <= 20; $p++) {
+                    $firstName = "Prueba " . $firstNames[($p * 5) % count($firstNames)];
+                    $lastName = $lastNames[($p * 11) % count($lastNames)];
+                    
+                    $cleanFirstName = strtolower(str_replace(['á','é','í','ó','ú','ñ','í',' ','\''], ['a','e','i','o','u','n','i','',''], $firstName));
+                    $cleanLastName = strtolower(str_replace(['á','é','í','ó','ú','ñ','í',' ','\''], ['a','e','i','o','u','n','i','',''], $lastName));
+                    
+                    $email = "prueba.{$sObj->slug}.{$p}@colegiopro.com";
+                    $depto = $departamentos[$p % count($departamentos)];
+                    $address = $addresses[$p % count($addresses)] . ", " . $depto;
+                    // DNI que empiece con 99 y luego el ID de la escuela y el indice
+                    $dni = "99" . $sObj->id . str_pad($p, 4, '0', STR_PAD_LEFT);
+                    $regNumber = "{$regPrefix}-PRU-" . str_pad($p + 1000, 4, '0', STR_PAD_LEFT);
+                    $avatarUrl = "https://i.pravatar.cc/150?u=" . urlencode($email);
+
+                    $collegiate = Collegiate::create([
+                        'school_id' => $sObj->id,
+                        'user_id' => null, // null para que puedan registrarse
+                        'registration_number' => $regNumber,
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'email' => $email,
+                        'dni' => $dni,
+                        'phone' => '3824 ' . (990000 + ($p * 123)),
+                        'avatar_url' => $avatarUrl,
+                        'birth_date' => Carbon::now()->subYears(rand(25, 60))->subDays(rand(1, 365))->format('Y-m-d'),
+                        'address' => $address,
+                        'city' => $depto,
+                        'degree' => $degree,
+                        'workplaces_info' => 'Estudio / Consultorio (Prueba)',
+                        'practicing_since_year' => Carbon::now()->subYears(rand(2, 20))->year,
+                        'is_fees_compliant' => true,
+                        'is_ethics_compliant' => true,
+                        'is_fully_documented' => true,
+                        'status' => 'Activo',
+                    ]);
+
+                    // Agregar cuotas pagadas
+                    for ($d = 0; $d < 5; $d++) {
+                        $month = Carbon::now()->subMonths($d);
+                        CollegiateDue::create([
+                            'collegiate_id' => $collegiate->id,
+                            'amount' => 6000.00,
+                            'concept' => 'Cuota Mensual ' . $month->translatedFormat('F Y'),
+                            'due_type' => 'mensualidad',
+                            'due_date' => $month->copy()->endOfMonth(),
+                            'status' => 'paid',
+                            'paid_at' => $month->copy()->addDays(rand(1, 20)),
+                        ]);
+                    }
+                }
+            }
+
             DB::commit();
             $this->command->info("¡Poblado de datos demo completado exitosamente!");
         } catch (\Exception $e) {
