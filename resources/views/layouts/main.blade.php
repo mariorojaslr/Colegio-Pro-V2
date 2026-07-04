@@ -358,6 +358,7 @@
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.ethics.index') }}"><i class="bi bi-scales me-2 text-primary"></i> Ética y Sanciones</a></li>
                                         <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.compliance.index') }}"><i class="bi bi-shield-check me-2 text-primary"></i> Auditoría de Legajos</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('compliance_requirements.index') }}"><i class="bi bi-list-check me-2 text-primary"></i> Requisitos de Legajo</a></li>
                                     </ul>
                                 </li>
 
