@@ -607,9 +607,9 @@
 
     @if($sliderItems->count() > 0)
         <style>
-            .hero-slider-section { min-height: 90vh; margin-top: 96px; display: flex; align-items: center; }
-            @media (max-width: 991px) { .hero-slider-section { min-height: 650px; } }
-            @media (max-width: 576px) { .hero-slider-section { min-height: 550px; } }
+            .hero-slider-section { height: 90vh; margin-top: 96px; display: flex; align-items: center; }
+            @media (max-width: 991px) { .hero-slider-section { height: 650px; } }
+            @media (max-width: 576px) { .hero-slider-section { height: 550px; } }
         </style>
         <section class="p-0 position-relative hero-slider-section" style="overflow: hidden; background-color: #000; border-radius: 0 0 32px 32px;">
             <div id="heroCarouselTS" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
