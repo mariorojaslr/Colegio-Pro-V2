@@ -118,7 +118,9 @@
         /* HERO SECTION */
         @php
             $bgImage = isset($slider) && $slider->items->count() > 0 
-                ? (Str::startsWith($slider->items->first()->image_url, ['http://', 'https://']) ? $slider->items->first()->image_url : asset('storage/' . $slider->items->first()->image_url)) 
+                ? (Str::startsWith($slider->items->first()->image_url, ['http://', 'https://']) 
+                    ? $slider->items->first()->image_url 
+                    : (Str::startsWith($slider->items->first()->image_url, 'images/') ? asset($slider->items->first()->image_url) : asset('storage/' . $slider->items->first()->image_url))) 
                 : asset('images/trabajosocial_hero.png');
         @endphp
 
