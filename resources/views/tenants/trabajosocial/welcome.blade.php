@@ -144,12 +144,12 @@
         }
 
         .hero-slider-overlay {
-            background: linear-gradient(to right, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0.95) 45%, rgba(248, 250, 252, 0.65) 75%, rgba(248, 250, 252, 0.15) 100%);
+            background: transparent !important;
         }
 
         @media (max-width: 991px) {
             .hero-slider-overlay {
-                background: linear-gradient(to bottom, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0.95) 60%, rgba(248, 250, 252, 0.5) 85%, rgba(248, 250, 252, 0.15) 100%) !important;
+                background: transparent !important;
             }
         }
 
