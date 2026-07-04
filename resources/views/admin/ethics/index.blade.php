@@ -341,7 +341,12 @@
                     <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">Confirmar y Habilitar</button>
                 </div>
             </form>
-       <!-- Modal Nueva Regla -->
+        </div>
+    </div>
+</div>
+@endforeach
+
+<!-- Modal Nueva Regla -->
 <div class="modal fade modal-custom-blur" id="newRuleModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 rounded-4 shadow-lg">
