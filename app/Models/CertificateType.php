@@ -21,6 +21,14 @@ class CertificateType extends Model
         'is_active',
         'template_content',
         'has_qr',
+        'background_path',
+        'page_size',
+        'page_orientation',
+        'design_settings',
+    ];
+
+    protected $casts = [
+        'design_settings' => 'array',
     ];
 
     public function school()

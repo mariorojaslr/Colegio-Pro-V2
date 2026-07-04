@@ -54,7 +54,8 @@
                         </td>
                         <td class="px-4 py-3 text-center">
                             <a href="{{ route('admin.certificate_types.preview', $type) }}" target="_blank" class="btn btn-sm btn-outline-info rounded-circle me-1" title="Vista Previa"><i class="bi bi-eye"></i></a>
-                            <a href="{{ route('admin.certificate_types.edit', $type) }}" class="btn btn-sm btn-outline-primary rounded-circle me-1" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="{{ route('admin.certificate_types.export_bulk_view', $type) }}" class="btn btn-sm btn-outline-success rounded-circle me-1" title="Impresión Masiva / Imprenta"><i class="bi bi-printer"></i></a>
+                            <a href="{{ route('admin.certificate_types.edit', $type) }}" class="btn btn-sm btn-outline-primary rounded-circle me-1" title="Editar / Diseñar"><i class="bi bi-pencil"></i></a>
                             <form action="{{ route('admin.certificate_types.destroy', $type) }}" method="POST" class="d-inline">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('¿Eliminar trámite?')" title="Eliminar"><i class="bi bi-trash"></i></button>

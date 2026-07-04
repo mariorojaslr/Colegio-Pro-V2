@@ -343,6 +343,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Gestión de Trámites y Certificados Valorizados (Admin de Colegio)
     Route::get('/gestion-tramites/{certificate_type}/preview', [\App\Http\Controllers\Admin\CertificateTypeController::class, 'preview'])->name('admin.certificate_types.preview');
+    Route::get('/gestion-tramites/{certificate_type}/export-bulk', [\App\Http\Controllers\Admin\CertificateTypeController::class, 'exportBulkView'])->name('admin.certificate_types.export_bulk_view');
+    Route::post('/gestion-tramites/{certificate_type}/export-bulk', [\App\Http\Controllers\Admin\CertificateTypeController::class, 'exportBulkPdf'])->name('admin.certificate_types.export_bulk_pdf');
+    Route::post('/gestion-tramites/{certificate_type}/email-bulk', [\App\Http\Controllers\Admin\CertificateTypeController::class, 'emailBulkPdfToImprenta'])->name('admin.certificate_types.email_bulk');
     Route::resource('/gestion-tramites', \App\Http\Controllers\Admin\CertificateTypeController::class)->names('admin.certificate_types')->parameters(['gestion-tramites' => 'certificate_type'])->except(['show']);
 
     // Configuración de la Empresa / Institución (Para el Admin del Colegio)
