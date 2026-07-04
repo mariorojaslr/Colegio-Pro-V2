@@ -247,8 +247,8 @@
                 @endforeach
                 
                 <div class="mt-4 pt-3 border-top">
-                    <button class="btn btn-outline-dark btn-sm rounded-pill w-100 mb-2">Administrar Comisión</button>
-                    <button class="btn btn-outline-dark btn-sm rounded-pill w-100 mb-3">Ver Libro de Actas Digital</button>
+                    <button class="btn btn-outline-dark btn-sm rounded-pill w-100 mb-2" data-bs-toggle="modal" data-bs-target="#adminCommissionModal">Administrar Comisión</button>
+                    <button class="btn btn-outline-dark btn-sm rounded-pill w-100 mb-3" data-bs-toggle="modal" data-bs-target="#digitalActBookModal">Ver Libro de Actas Digital</button>
                 </div>
 
                 <div class="border-top pt-3">
@@ -399,6 +399,76 @@
                     <button type="submit" class="btn btn-dark rounded-pill px-4 shadow-sm">Guardar Regla</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Info Administrar Comisión -->
+<div class="modal fade modal-custom-blur" id="adminCommissionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-bottom py-3 px-4 bg-primary text-white">
+                <h5 class="modal-title fw-bold text-white"><i class="bi-people-fill me-2"></i> Gestión del Cuerpo de Veedores</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 text-start">
+                <p class="text-secondary small mb-4">
+                    Este panel permite al Administrador del Colegio gestionar formalmente los integrantes activos que componen la <strong>Comisión de Ética Profesional del Colegio de Trabajo Social</strong>.
+                </p>
+                <h6 class="text-uppercase small fw-bold text-dark mb-3">Funciones del Módulo:</h6>
+                <ul class="list-group list-group-flush small mb-0">
+                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
+                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
+                        <span>Designación del Presidente de la Comisión de Ética.</span>
+                    </li>
+                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
+                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
+                        <span>Asignación y relevo de cargos de Veedores (Titulares y Suplentes).</span>
+                    </li>
+                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
+                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
+                        <span>Administración de vigencias y mandatos de la comisión activa.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Info Libro de Actas Digital -->
+<div class="modal fade modal-custom-blur" id="digitalActBookModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-bottom py-3 px-4 bg-success text-white">
+                <h5 class="modal-title fw-bold text-white"><i class="bi-book-half me-2"></i> Libro de Actas Digital</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 text-start">
+                <p class="text-secondary small mb-4">
+                    Permite acceder al registro oficial, inmutable y digitalizado de todas las sesiones celebradas, dictámenes firmados y resoluciones disciplinarias de la Comisión.
+                </p>
+                <h6 class="text-uppercase small fw-bold text-dark mb-3">Funciones del Módulo:</h6>
+                <ul class="list-group list-group-flush small mb-0">
+                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
+                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
+                        <span>Descarga y visualización de Actas en formato PDF foliado.</span>
+                    </li>
+                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
+                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
+                        <span>Integración de firma electrónica para los veedores activos.</span>
+                    </li>
+                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
+                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
+                        <span>Historial cronológico completo de resoluciones disciplinarias dictadas.</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Entendido</button>
+            </div>
         </div>
     </div>
 </div>
