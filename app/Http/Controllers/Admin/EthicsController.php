@@ -42,6 +42,35 @@ class EthicsController extends Controller
         // Reglas parametrizadas
         $rules = \App\Models\EthicsRule::where('school_id', $schoolId)->get();
 
+        if ($rules->isEmpty()) {
+            \App\Models\EthicsRule::create([
+                'school_id' => $schoolId,
+                'name' => 'Violación grave del deber de confidencialidad y secreto profesional',
+                'description' => 'Revelación injustificada de datos personales, familiares o informes sociales de sujetos de intervención o sectores vulnerables.',
+                'penalty_type' => 'temporary',
+                'penalty_days' => 180,
+            ]);
+
+            \App\Models\EthicsRule::create([
+                'school_id' => $schoolId,
+                'name' => 'Desvío de recursos asistenciales y falsedad en informes socioeconómicos',
+                'description' => 'Adjudicación fraudulenta de subsidios, manipulación de diagnósticos sociales para beneficio propio o de terceros, y desvío de recursos del sector de asistencia social.',
+                'penalty_type' => 'permanent',
+                'penalty_days' => null,
+            ]);
+
+            \App\Models\EthicsRule::create([
+                'school_id' => $schoolId,
+                'name' => 'Abuso de poder y hostigamiento contra destinatarios de servicios sociales',
+                'description' => 'Trato denigrante, coacción o uso inapropiado del rol profesional para ejercer presión sobre personas vulnerables en programas de asistencia.',
+                'penalty_type' => 'temporary',
+                'penalty_days' => 90,
+            ]);
+
+            // Recargar reglas
+            $rules = \App\Models\EthicsRule::where('school_id', $schoolId)->get();
+        }
+
         return view('admin.ethics.index', compact('activeSanctions', 'history', 'commissionMembers', 'rules'));
     }
 

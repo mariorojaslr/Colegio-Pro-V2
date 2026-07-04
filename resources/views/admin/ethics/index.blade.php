@@ -1,5 +1,109 @@
 @extends('layouts.main')
 
+@section('styles')
+<style>
+    /* Estilos Premium para Modales de Ética */
+    .modal-custom-blur {
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        background-color: rgba(0, 0, 0, 0.6) !important;
+    }
+    
+    .modal-custom-blur .modal-content {
+        border-radius: 20px !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6) !important;
+        overflow: hidden;
+    }
+
+    body.dark-mode .modal-custom-blur .modal-content {
+        background-color: #000000 !important;
+        border: 2px solid rgba(255, 255, 255, 0.25) !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95) !important;
+    }
+    
+    body:not(.dark-mode) .modal-custom-blur .modal-content {
+        background-color: #ffffff !important;
+        border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Título y Header del Modal */
+    .modal-custom-blur .modal-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+        padding: 1.5rem 1.75rem !important;
+    }
+    
+    body.dark-mode .modal-custom-blur .modal-header {
+        border-bottom: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Forzado de campos y bordes definidos (Límites Marcados) */
+    .modal-custom-blur .form-control,
+    .modal-custom-blur .form-select {
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem !important;
+        transition: all 0.25s ease-in-out !important;
+    }
+
+    body:not(.dark-mode) .modal-custom-blur .form-control,
+    body:not(.dark-mode) .modal-custom-blur .form-select {
+        background-color: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+        color: #1e293b !important;
+    }
+
+    body:not(.dark-mode) .modal-custom-blur .form-control:focus,
+    body:not(.dark-mode) .modal-custom-blur .form-select:focus {
+        background-color: #ffffff !important;
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.15) !important;
+    }
+
+    body.dark-mode .modal-custom-blur .form-control,
+    body.dark-mode .modal-custom-blur .form-select {
+        background-color: #111111 !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .modal-custom-blur .form-control:focus,
+    body.dark-mode .modal-custom-blur .form-select:focus {
+        background-color: #000000 !important;
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.3) !important;
+    }
+
+    /* Labels y Leyendas */
+    .modal-custom-blur label {
+        font-size: 0.75rem !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    body.dark-mode .modal-custom-blur label {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+    
+    body:not(.dark-mode) .modal-custom-blur label {
+        color: #475569 !important;
+    }
+
+    .modal-custom-blur .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    body.dark-mode .modal-custom-blur .text-muted {
+        color: #64748b !important;
+    }
+
+    /* Botones de acción del Modal */
+    .modal-custom-blur .modal-footer {
+        border-top: none !important;
+        padding: 0 1.75rem 1.75rem 1.75rem !important;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="row g-4 mb-4">
     <div class="col-12 col-xl-8">
@@ -158,8 +262,8 @@
 </div>
 
 <!-- Modal Nueva Sanción -->
-<div class="modal fade" id="newSanctionModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade modal-custom-blur" id="newSanctionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 rounded-4 shadow-lg">
             <div class="modal-header border-bottom py-3 px-4 bg-danger text-white">
                 <h5 class="modal-title fw-bold text-white"><i class="bi-shield-slash-fill me-2"></i> Registrar Fallo Disciplinario</h5>
@@ -168,41 +272,42 @@
             <form action="{{ route('admin.ethics.create_sanction') }}" method="POST">
                 @csrf
                 <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label text-dark fw-bold small text-uppercase">Colegiado a Sancionar</label>
-                        <select name="collegiate_id" class="form-select border-0 bg-light rounded-3 py-2 px-3 shadow-none custom-select-arrow" required>
-                             <option value="">Seleccionar colegiado...</option>
-                             @foreach(\App\Models\Collegiate::where('school_id', auth()->user()->school_id)->get() as $c)
-                                <option value="{{ $c->id }}">{{ $c->first_name }} {{ $c->last_name }} ({{ $c->registration_number }})</option>
-                             @endforeach
-                        </select>
-                    </div>
-                    <div class="row mb-3">
-                             <label class="form-label text-dark fw-bold small text-uppercase">Regla de Sanción</label>
-                             <select name="rule_id" class="form-select border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Colegiado a Sancionar</label>
+                            <select name="collegiate_id" class="form-select shadow-none custom-select-arrow" required>
+                                 <option value="">Seleccionar colegiado...</option>
+                                 @foreach(\App\Models\Collegiate::where('school_id', auth()->user()->school_id)->get() as $c)
+                                    <option value="{{ $c->id }}">{{ $c->first_name }} {{ $c->last_name }} ({{ $c->registration_number }})</option>
+                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Regla de Sanción</label>
+                            <select name="rule_id" class="form-select shadow-none" required>
                                  <option value="">Seleccionar Regla...</option>
                                  @foreach($rules as $rule)
-                                    <option value="{{ $rule->id }}">{{ $rule->name }}</option>
+                                    <option value="{{ $rule->id }}">{{ $rule->name }} ({{ $rule->penalty_type == 'temporary' ? 'Temporal: ' . $rule->penalty_days . ' días' : 'Permanente' }})</option>
                                  @endforeach
-                             </select>
+                            </select>
                         </div>
-                        <div class="col-4">
-                             <label class="form-label text-dark fw-bold small text-uppercase">Fecha Inicio</label>
-                             <input type="date" name="start_date" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-uppercase">Fecha Inicio</label>
+                            <input type="date" name="start_date" class="form-control shadow-none" required>
                         </div>
-                        <div class="col-4">
-                             <label class="form-label text-dark fw-bold small text-uppercase">Fecha Fin</label>
-                             <input type="date" name="end_date" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none">
-                             <span class="xx-small text-muted">Vacio = Perm.</span>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-uppercase">Fecha Fin</label>
+                            <input type="date" name="end_date" class="form-control shadow-none">
+                            <span class="xx-small text-muted d-block mt-1">Vacio = Perm.</span>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-dark fw-bold small text-uppercase">Notas Adicionales / Nro Expediente</label>
-                        <input type="text" name="notes" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" placeholder="Ej: Exp. 1234/26">
-                    </div>
-                    <div class="mb-0">
-                        <label class="form-label text-dark fw-bold small text-uppercase">Argumentación y Fallo Detallado</label>
-                        <textarea name="arguments" class="form-control border-0 bg-light rounded-3 px-3 py-2 shadow-none" rows="4" placeholder="Describa el dictamen de la comisión..."></textarea>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Notas Adicionales / Nro Expediente</label>
+                            <input type="text" name="notes" class="form-control shadow-none" placeholder="Ej: Exp. 1234/26">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Argumentación y Fallo Detallado</label>
+                            <textarea name="arguments" class="form-control shadow-none" rows="4" placeholder="Describa el dictamen de la comisión..." required></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
@@ -215,20 +320,20 @@
 </div>
 
 @foreach($activeSanctions as $sanction)
-<div class="modal fade" id="liftSanctionModal{{ $sanction->id }}" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade modal-custom-blur" id="liftSanctionModal{{ $sanction->id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 rounded-4 shadow-lg">
-            <div class="modal-header border-bottom py-3 px-4">
-                <h5 class="modal-title fw-bold">Levantar Sanción Disciplinaria</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header border-bottom py-3 px-4 bg-primary text-white">
+                <h5 class="modal-title fw-bold text-white"><i class="bi-shield-check-fill me-2"></i> Levantar Sanción Disciplinaria</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.ethics.lift_sanction', $sanction->id) }}" method="POST">
                 @csrf
                 <div class="modal-body p-4">
                     <p class="text-secondary small mb-4">Está por restablecer la habilitación ética del colegiado <strong>{{ $sanction->collegiate->first_name }} {{ $sanction->collegiate->last_name }}</strong>. Este acto requiere respaldo documental en el acta de la comisión.</p>
                     <div class="mb-0">
-                        <label class="form-label text-dark fw-bold small text-uppercase">Justificación del Levantamiento</label>
-                        <textarea name="lifted_reason" class="form-control border-0 bg-light rounded-3 px-3 py-2 shadow-none" rows="3" placeholder="Ej: Cumplimiento de plazo o apelación aprobada..." required></textarea>
+                        <label class="form-label fw-bold small text-uppercase">Justificación del Levantamiento</label>
+                        <textarea name="lifted_reason" class="form-control shadow-none" rows="3" placeholder="Ej: Cumplimiento de plazo o apelación aprobada..." required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
@@ -236,14 +341,9 @@
                     <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">Confirmar y Habilitar</button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-@endforeach
-
-<!-- Modal Nueva Regla -->
-<div class="modal fade" id="newRuleModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+       <!-- Modal Nueva Regla -->
+<div class="modal fade modal-custom-blur" id="newRuleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 rounded-4 shadow-lg">
             <div class="modal-header border-bottom py-3 px-4 bg-dark text-white">
                 <h5 class="modal-title fw-bold text-white"><i class="bi-file-earmark-ruled me-2"></i> Nueva Regla Disciplinaria</h5>
@@ -252,26 +352,26 @@
             <form action="{{ route('admin.ethics.store_rule') }}" method="POST">
                 @csrf
                 <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label text-dark fw-bold small text-uppercase">Nombre de la Falta</label>
-                        <input type="text" name="name" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" placeholder="Ej: Falta de pago reiterada" required>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6">
-                             <label class="form-label text-dark fw-bold small text-uppercase">Gravedad (Tipo)</label>
-                             <select name="penalty_type" class="form-select border-0 bg-light rounded-3 py-2 px-3 shadow-none" required>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Nombre de la Falta</label>
+                            <input type="text" name="name" class="form-control shadow-none" placeholder="Ej: Falta de pago reiterada" required>
+                        </div>
+                        <div class="col-md-6">
+                             <label class="form-label fw-bold small text-uppercase">Gravedad (Tipo)</label>
+                             <select name="penalty_type" class="form-select shadow-none" required>
                                  <option value="temporary">Temporal (Suspensión)</option>
                                  <option value="permanent">Permanente (Expulsión)</option>
-                             </select>
+                              </select>
                         </div>
-                        <div class="col-6">
-                             <label class="form-label text-dark fw-bold small text-uppercase">Días de Sanción</label>
-                             <input type="number" name="penalty_days" class="form-control border-0 bg-light rounded-3 py-2 px-3 shadow-none" placeholder="Ej: 30" min="1">
+                        <div class="col-md-6">
+                             <label class="form-label fw-bold small text-uppercase">Días de Sanción</label>
+                             <input type="number" name="penalty_days" class="form-control shadow-none" placeholder="Ej: 30" min="1">
                         </div>
-                    </div>
-                    <div class="mb-0">
-                        <label class="form-label text-dark fw-bold small text-uppercase">Descripción (Opcional)</label>
-                        <textarea name="description" class="form-control border-0 bg-light rounded-3 px-3 py-2 shadow-none" rows="2" placeholder="Detalles de la regla..."></textarea>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Descripción (Opcional)</label>
+                            <textarea name="description" class="form-control shadow-none" rows="3" placeholder="Detalles de la regla..."></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
