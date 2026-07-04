@@ -807,5 +807,6 @@
     <x-promo-banner />
 
     @yield('scripts')
+    @stack('scripts')
 </body>
 </html>
