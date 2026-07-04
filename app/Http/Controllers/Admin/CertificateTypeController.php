@@ -66,7 +66,14 @@ class CertificateTypeController extends Controller
     public function edit(CertificateType $certificate_type)
     {
         if ($certificate_type->school_id !== auth()->user()->school_id) abort(403);
-        return view('admin.certificate_types.edit', compact('certificate_type'));
+        
+        $boardMembers = \App\Models\BoardMember::where('school_id', auth()->user()->school_id)
+            ->orderBy('name')
+            ->get();
+            
+        $selectedSignatoryIds = $certificate_type->signatories()->pluck('board_members.id')->toArray();
+
+        return view('admin.certificate_types.edit', compact('certificate_type', 'boardMembers', 'selectedSignatoryIds'));
     }
 
     public function update(Request $request, CertificateType $certificate_type)
@@ -113,6 +120,10 @@ class CertificateTypeController extends Controller
             'design_settings' => $designSettings,
             'is_active' => $request->has('is_active'),
         ]);
+
+        // Sincronizar firmas
+        $signatories = $request->input('signatory_ids', []);
+        $certificate_type->signatories()->sync($signatories);
 
         return redirect()->route('admin.certificate_types.index')->with('success', 'Trámite / Certificado actualizado.');
     }

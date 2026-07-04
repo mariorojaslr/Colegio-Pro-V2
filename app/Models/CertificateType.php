@@ -35,4 +35,9 @@ class CertificateType extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    public function signatories()
+    {
+        return $this->belongsToMany(BoardMember::class, 'certificate_type_board_member', 'certificate_type_id', 'board_member_id');
+    }
 }

@@ -43,7 +43,17 @@
             position: absolute;
             z-index: 10;
             box-sizing: border-box;
+            /* Evitamos que el texto se corte, salvo el cuerpo que tiene max-width */
             white-space: nowrap;
+        }
+        
+        .cuerpo-field {
+            position: absolute;
+            z-index: 10;
+            box-sizing: border-box;
+            white-space: normal;
+            width: 80%;
+            max-width: 80%;
         }
         
         .qr-container {
@@ -60,6 +70,15 @@
             height: 100%;
             display: block;
         }
+        
+        .firma-field {
+            position: absolute;
+            z-index: 10;
+            box-sizing: border-box;
+            text-align: center;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -72,14 +91,12 @@
             $bgBase64 = 'data:image/' . pathinfo($bgPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($bgData);
         }
         
-        // Configuraciones de diseño
+        // Configuraciones de diseño consolidadas
         $defaultSettings = [
-            'nombre' => ['x' => 50, 'y' => 42, 'font_size' => 24, 'font_weight' => 'bold', 'text_align' => 'center', 'color' => '#1e3a8a', 'visible' => true],
-            'dni' => ['x' => 33, 'y' => 55, 'font_size' => 14, 'font_weight' => 'normal', 'text_align' => 'left', 'color' => '#334155', 'visible' => true],
-            'matricula' => ['x' => 67, 'y' => 55, 'font_size' => 14, 'font_weight' => 'bold', 'text_align' => 'left', 'color' => '#1e3a8a', 'visible' => true],
-            'fecha_emision' => ['x' => 50, 'y' => 70, 'font_size' => 12, 'font_weight' => 'normal', 'text_align' => 'center', 'color' => '#64748b', 'visible' => true],
-            'valido_hasta' => ['x' => 50, 'y' => 76, 'font_size' => 12, 'font_weight' => 'normal', 'text_align' => 'center', 'color' => '#64748b', 'visible' => true],
-            'qr' => ['x' => 84, 'y' => 80, 'width' => 80, 'height' => 80, 'visible' => true]
+            'titulo' => ['x' => 50, 'y' => 15, 'font_size' => 28, 'font_weight' => 'bold', 'text_align' => 'center', 'color' => '#1e3a8a', 'text' => 'CERTIFICADO', 'visible' => true],
+            'cuerpo' => ['x' => 50, 'y' => 40, 'font_size' => 15, 'font_weight' => 'normal', 'text_align' => 'center', 'color' => '#333333', 'visible' => true],
+            'qr' => ['x' => 84, 'y' => 80, 'width' => 80, 'height' => 80, 'visible' => true],
+            'firmas' => []
         ];
         
         $settings = array_merge($defaultSettings, $certificate_type->design_settings ?? []);
@@ -92,111 +109,62 @@
                 <img class="background-img" src="{{ $bgBase64 }}" alt="Fondo Certificado">
             @endif
 
-            <!-- Variable Nombre -->
-            @if($settings['nombre']['visible'] ?? true)
+            <!-- Título de Cabecera -->
+            @if($settings['titulo']['visible'] ?? true)
                 @php
-                    $align = $settings['nombre']['text_align'] ?? 'center';
-                    // Calcular offset para centrado aproximado en DomPDF (ya que absolute usa la esquina izquierda del elemento)
-                    // Para text_align center, usamos left: X% y transform translate(-50%)
-                    $styleStr = "left: " . $settings['nombre']['x'] . "%; top: " . $settings['nombre']['y'] . "%;";
-                    if ($align === 'center') {
-                        $styleStr .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
-                    } elseif ($align === 'right') {
-                        $styleStr .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
+                    $tAlign = $settings['titulo']['text_align'] ?? 'center';
+                    $tStyle = "left: " . $settings['titulo']['x'] . "%; top: " . $settings['titulo']['y'] . "%;";
+                    if ($tAlign === 'center') {
+                        $tStyle .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
+                    } elseif ($tAlign === 'right') {
+                        $tStyle .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
                     }
-                    $styleStr .= " font-size: " . ($settings['nombre']['font_size'] ?? 24) . "px;";
-                    $styleStr .= " font-weight: " . ($settings['nombre']['font_weight'] ?? 'bold') . ";";
-                    $styleStr .= " color: " . ($settings['nombre']['color'] ?? '#1e3a8a') . ";";
+                    $tStyle .= " font-size: " . ($settings['titulo']['font_size'] ?? 28) . "px;";
+                    $tStyle .= " font-weight: " . ($settings['titulo']['font_weight'] ?? 'bold') . ";";
+                    $tStyle .= " color: " . ($settings['titulo']['color'] ?? '#1e3a8a') . ";";
+                    $tStyle .= " text-align: " . $tAlign . ";";
                 @endphp
-                <div class="draggable-field" style="{{ $styleStr }}">
-                    {{ $collegiate->first_name }} {{ $collegiate->last_name }}
+                <div class="draggable-field" style="{{ $tStyle }}">
+                    {{ $settings['titulo']['text'] ?? 'CERTIFICADO' }}
                 </div>
             @endif
 
-            <!-- Variable DNI -->
-            @if($settings['dni']['visible'] ?? true)
+            <!-- Cuerpo del Certificado (Párrafo Libre con Variables) -->
+            @if($settings['cuerpo']['visible'] ?? true)
                 @php
-                    $align = $settings['dni']['text_align'] ?? 'left';
-                    $styleStr = "left: " . $settings['dni']['x'] . "%; top: " . $settings['dni']['y'] . "%;";
-                    if ($align === 'center') {
-                        $styleStr .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
-                    } elseif ($align === 'right') {
-                        $styleStr .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
+                    $cAlign = $settings['cuerpo']['text_align'] ?? 'center';
+                    $cStyle = "left: " . $settings['cuerpo']['x'] . "%; top: " . $settings['cuerpo']['y'] . "%;";
+                    if ($cAlign === 'center') {
+                        $cStyle .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
+                    } elseif ($cAlign === 'right') {
+                        $cStyle .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
                     }
-                    $styleStr .= " font-size: " . ($settings['dni']['font_size'] ?? 14) . "px;";
-                    $styleStr .= " font-weight: " . ($settings['dni']['font_weight'] ?? 'normal') . ";";
-                    $styleStr .= " color: " . ($settings['dni']['color'] ?? '#334155') . ";";
+                    $cStyle .= " font-size: " . ($settings['cuerpo']['font_size'] ?? 15) . "px;";
+                    $cStyle .= " font-weight: " . ($settings['cuerpo']['font_weight'] ?? 'normal') . ";";
+                    $cStyle .= " color: " . ($settings['cuerpo']['color'] ?? '#333333') . ";";
+                    $cStyle .= " text-align: " . $cAlign . ";";
+                    
+                    // Reemplazo de variables dinámicas en PHP
+                    $cuerpoTexto = $certificate_type->template_content ?: "Por la presente, el Consejo Directivo certifica y hace constar que el/la profesional:\n\n{{nombre}}\n\nCon documento de identidad Nº {{dni}}, se encuentra debidamente registrado/a en esta Institución bajo la matrícula profesional número {{matricula}}.\n\nSe expide el presente certificado a solicitud del interesado/a, a los {{fecha_emision}}.";
+                    
+                    $cuerpoTexto = str_replace('{{nombre}}', $collegiate->first_name . ' ' . $collegiate->last_name, $cuerpoTexto);
+                    $cuerpoTexto = str_replace('{{dni}}', $collegiate->dni, $cuerpoTexto);
+                    $cuerpoTexto = str_replace('{{matricula}}', $collegiate->registration_number, $cuerpoTexto);
+                    $cuerpoTexto = str_replace('{{fecha_emision}}', \Carbon\Carbon::parse(now())->format('d/m/Y'), $cuerpoTexto);
+                    $cuerpoTexto = str_replace('{{valido_hasta}}', $certificate_type->validity_days ? \Carbon\Carbon::parse(now())->addDays($certificate_type->validity_days)->format('d/m/Y') : 'Ilimitado', $cuerpoTexto);
                 @endphp
-                <div class="draggable-field" style="{{ $styleStr }}">
-                    DNI: {{ $collegiate->dni }}
+                <div class="cuerpo-field" style="{{ $cStyle }}">
+                    {!! nl2br(e($cuerpoTexto)) !!}
                 </div>
             @endif
 
-            <!-- Variable Matrícula -->
-            @if($settings['matricula']['visible'] ?? true)
-                @php
-                    $align = $settings['matricula']['text_align'] ?? 'left';
-                    $styleStr = "left: " . $settings['matricula']['x'] . "%; top: " . $settings['matricula']['y'] . "%;";
-                    if ($align === 'center') {
-                        $styleStr .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
-                    } elseif ($align === 'right') {
-                        $styleStr .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
-                    }
-                    $styleStr .= " font-size: " . ($settings['matricula']['font_size'] ?? 14) . "px;";
-                    $styleStr .= " font-weight: " . ($settings['matricula']['font_weight'] ?? 'bold') . ";";
-                    $styleStr .= " color: " . ($settings['matricula']['color'] ?? '#1e3a8a') . ";";
-                @endphp
-                <div class="draggable-field" style="{{ $styleStr }}">
-                    M.P. Nº {{ $collegiate->registration_number }}
-                </div>
-            @endif
-
-            <!-- Variable Fecha Emisión -->
-            @if($settings['fecha_emision']['visible'] ?? true)
-                @php
-                    $align = $settings['fecha_emision']['text_align'] ?? 'center';
-                    $styleStr = "left: " . $settings['fecha_emision']['x'] . "%; top: " . $settings['fecha_emision']['y'] . "%;";
-                    if ($align === 'center') {
-                        $styleStr .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
-                    } elseif ($align === 'right') {
-                        $styleStr .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
-                    }
-                    $styleStr .= " font-size: " . ($settings['fecha_emision']['font_size'] ?? 12) . "px;";
-                    $styleStr .= " font-weight: " . ($settings['fecha_emision']['font_weight'] ?? 'normal') . ";";
-                    $styleStr .= " color: " . ($settings['fecha_emision']['color'] ?? '#64748b') . ";";
-                @endphp
-                <div class="draggable-field" style="{{ $styleStr }}">
-                    {{ \Carbon\Carbon::parse(now())->format('d/m/Y') }}
-                </div>
-            @endif
-
-            <!-- Variable Válido Hasta -->
-            @if(($settings['valido_hasta']['visible'] ?? true) && $certificate_type->validity_days)
-                @php
-                    $align = $settings['valido_hasta']['text_align'] ?? 'center';
-                    $styleStr = "left: " . $settings['valido_hasta']['x'] . "%; top: " . $settings['valido_hasta']['y'] . "%;";
-                    if ($align === 'center') {
-                        $styleStr .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
-                    } elseif ($align === 'right') {
-                        $styleStr .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
-                    }
-                    $styleStr .= " font-size: " . ($settings['valido_hasta']['font_size'] ?? 12) . "px;";
-                    $styleStr .= " font-weight: " . ($settings['valido_hasta']['font_weight'] ?? 'normal') . ";";
-                    $styleStr .= " color: " . ($settings['valido_hasta']['color'] ?? '#64748b') . ";";
-                @endphp
-                <div class="draggable-field" style="{{ $styleStr }}">
-                    Vence el: {{ \Carbon\Carbon::parse(now())->addDays($certificate_type->validity_days)->format('d/m/Y') }}
-                </div>
-            @endif
-
-            <!-- Bloque Código QR -->
+            <!-- Código QR -->
             @if(($settings['qr']['visible'] ?? true) && $certificate_type->has_qr)
                 @php
                     $qrWidth = $settings['qr']['width'] ?? 80;
                     $qrHeight = $settings['qr']['height'] ?? 80;
                     $qrStyle = "left: " . $settings['qr']['x'] . "%; top: " . $settings['qr']['y'] . "%; width: " . $qrWidth . "px; height: " . $qrHeight . "px;";
                     
-                    // Generación del código QR en base64 para DomPDF
                     $validationUrl = route('validation.show', $collegiate->uuid ?? \Illuminate\Support\Str::uuid());
                     $qrBase64 = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(150)->margin(1)->generate($validationUrl));
                 @endphp
@@ -204,6 +172,26 @@
                     <img src="data:image/png;base64,{{ $qrBase64 }}" alt="QR Code">
                 </div>
             @endif
+
+            <!-- Firmas de Autoridades Seleccionadas -->
+            @foreach($certificate_type->signatories as $signatory)
+                @php
+                    $fConfig = $settings['firmas'][$signatory->id] ?? null;
+                @endphp
+                @if($fConfig && ($fConfig['visible'] ?? true))
+                    @php
+                        $fStyle = "left: " . $fConfig['x'] . "%; top: " . $fConfig['y'] . "%;";
+                        // Centrar la firma con respecto a su punto de inserción para DomPDF
+                        $fStyle .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
+                        $fStyle .= " font-size: " . ($fConfig['font_size'] ?? 11) . "px;";
+                        $fStyle .= " color: " . ($fConfig['color'] ?? '#047857') . ";";
+                    @endphp
+                    <div class="firma-field" style="{{ $fStyle }}">
+                        <strong>{{ $signatory->name }}</strong><br>
+                        <span style="font-size: 8px; color: #666666;">{{ $signatory->role }}</span>
+                    </div>
+                @endif
+            @endforeach
         </div>
     @endforeach
 
