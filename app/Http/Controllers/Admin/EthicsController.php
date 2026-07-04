@@ -34,9 +34,40 @@ class EthicsController extends Controller
             ->latest()
             ->paginate(15);
 
-        // Miembros de la comisión de ética (Simulados: Admnistradores de la misma escuela)
-        $commissionMembers = \App\Models\User::where('school_id', $schoolId)
-            ->where('role', 'ADMIN_COLEGIO')
+        // Miembros reales del Tribunal de Ética (desde la tabla board_members)
+        $commissionMembers = \App\Models\BoardMember::where('school_id', $schoolId)
+            ->where('department', 'Tribunal de Ética')
+            ->with('collegiate')
+            ->orderBy('order')
+            ->get();
+            
+        // Autogenerar veedores iniciales si la tabla de la escuela está vacía
+        if ($commissionMembers->isEmpty()) {
+            $colls = Collegiate::where('school_id', $schoolId)->limit(3)->get();
+            $roles = ['Presidente', 'Vocal', 'Suplente'];
+            foreach ($colls as $idx => $coll) {
+                \App\Models\BoardMember::create([
+                    'school_id' => $schoolId,
+                    'collegiate_id' => $coll->id,
+                    'department' => 'Tribunal de Ética',
+                    'role' => $roles[$idx] ?? 'Vocal',
+                    'name' => $coll->first_name . ' ' . $coll->last_name,
+                    'is_substitute' => ($roles[$idx] ?? 'Vocal') === 'Suplente',
+                    'order' => $idx
+                ]);
+            }
+            // Recargar miembros
+            $commissionMembers = \App\Models\BoardMember::where('school_id', $schoolId)
+                ->where('department', 'Tribunal de Ética')
+                ->with('collegiate')
+                ->orderBy('order')
+                ->get();
+        }
+
+        // Cargar todos los colegiados para la administración de la comisión
+        $collegiates = Collegiate::where('school_id', $schoolId)
+            ->orderBy('last_name')
+            ->orderBy('first_name')
             ->get();
             
         // Reglas parametrizadas
@@ -71,7 +102,7 @@ class EthicsController extends Controller
             $rules = \App\Models\EthicsRule::where('school_id', $schoolId)->get();
         }
 
-        return view('admin.ethics.index', compact('activeSanctions', 'history', 'commissionMembers', 'rules'));
+        return view('admin.ethics.index', compact('activeSanctions', 'history', 'commissionMembers', 'rules', 'collegiates'));
     }
 
     /**
@@ -152,5 +183,112 @@ class EthicsController extends Controller
         ]);
 
         return back()->with('success', 'Sanción levantada y registrada en el historial.');
+    }
+
+    /**
+     * Añadir un miembro al Tribunal de Ética.
+     */
+    public function addCommissionMember(Request $request)
+    {
+        $schoolId = auth()->user()->school_id;
+
+        $request->validate([
+            'collegiate_id' => 'required|exists:collegiates,id',
+            'role' => 'required|string|in:Presidente,Vocal,Suplente',
+        ]);
+
+        // Validar pertenencia del colegiado
+        $collegiate = Collegiate::where('id', $request->collegiate_id)
+            ->where('school_id', $schoolId)
+            ->firstOrFail();
+
+        // Validar si ya es miembro del Tribunal de Ética
+        $exists = \App\Models\BoardMember::where('school_id', $schoolId)
+            ->where('department', 'Tribunal de Ética')
+            ->where('collegiate_id', $collegiate->id)
+            ->exists();
+
+        if ($exists) {
+            return back()->with('error', 'El colegiado ya forma parte del Tribunal de Ética.');
+        }
+
+        // Crear miembro en board_members
+        \App\Models\BoardMember::create([
+            'school_id' => $schoolId,
+            'collegiate_id' => $collegiate->id,
+            'department' => 'Tribunal de Ética',
+            'role' => $request->role,
+            'name' => $collegiate->first_name . ' ' . $collegiate->last_name,
+            'is_substitute' => $request->role === 'Suplente',
+            'order' => $request->role === 'Presidente' ? 0 : ($request->role === 'Vocal' ? 1 : 2)
+        ]);
+
+        return back()->with('success', 'Miembro añadido al Tribunal de Ética correctamente.');
+    }
+
+    /**
+     * Remover un miembro del Tribunal de Ética.
+     */
+    public function removeCommissionMember(\App\Models\BoardMember $member)
+    {
+        $schoolId = auth()->user()->school_id;
+
+        if ($member->school_id !== $schoolId || $member->department !== 'Tribunal de Ética') {
+            abort(403);
+        }
+
+        $member->delete();
+
+        return back()->with('success', 'Miembro removido del Tribunal de Ética.');
+    }
+
+    /**
+     * Descargar Libro de Actas completo en PDF.
+     */
+    public function downloadActBookPdf()
+    {
+        $schoolId = auth()->user()->school_id;
+        $school = \App\Models\School::findOrFail($schoolId);
+        
+        $sanctions = EthicsSanction::with('collegiate')
+            ->whereHas('collegiate', function($q) use ($schoolId) {
+                $q->where('school_id', $schoolId);
+            })
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $commissionMembers = \App\Models\BoardMember::where('school_id', $schoolId)
+            ->where('department', 'Tribunal de Ética')
+            ->with('collegiate')
+            ->orderBy('order')
+            ->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.ethics.pdf.act_book', compact('sanctions', 'school', 'commissionMembers'));
+        
+        return $pdf->download('libro-de-actas-' . strtolower(str_replace(' ', '-', $school->name)) . '.pdf');
+    }
+
+    /**
+     * Descargar acta de sanción individual en PDF.
+     */
+    public function downloadSanctionActPdf(EthicsSanction $sanction)
+    {
+        $schoolId = auth()->user()->school_id;
+        
+        if ($sanction->collegiate->school_id !== $schoolId) {
+            abort(403);
+        }
+
+        $school = \App\Models\School::findOrFail($schoolId);
+        
+        $commissionMembers = \App\Models\BoardMember::where('school_id', $schoolId)
+            ->where('department', 'Tribunal de Ética')
+            ->with('collegiate')
+            ->orderBy('order')
+            ->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.ethics.pdf.sanction_act', compact('sanction', 'school', 'commissionMembers'));
+        
+        return $pdf->download('acta-resolucion-' . $sanction->id . '-' . strtolower(str_replace(' ', '-', $sanction->collegiate->last_name)) . '.pdf');
     }
 }

@@ -331,6 +331,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/gestion-etica/reglas/{rule}', [\App\Http\Controllers\Admin\EthicsController::class, 'destroyRule'])->name('admin.ethics.destroy_rule');
     Route::post('/gestion-etica/sancion', [\App\Http\Controllers\Admin\EthicsController::class, 'createSanction'])->name('admin.ethics.create_sanction');
     Route::post('/gestion-etica/levantar/{sanction}', [\App\Http\Controllers\Admin\EthicsController::class, 'liftSanction'])->name('admin.ethics.lift_sanction');
+    Route::post('/gestion-etica/comision', [\App\Http\Controllers\Admin\EthicsController::class, 'addCommissionMember'])->name('admin.ethics.commission.store');
+    Route::delete('/gestion-etica/comision/{member}', [\App\Http\Controllers\Admin\EthicsController::class, 'removeCommissionMember'])->name('admin.ethics.commission.destroy');
+    Route::get('/gestion-etica/libro-actas/pdf', [\App\Http\Controllers\Admin\EthicsController::class, 'downloadActBookPdf'])->name('admin.ethics.act-book.pdf');
+    Route::get('/gestion-etica/sanciones/{sanction}/pdf', [\App\Http\Controllers\Admin\EthicsController::class, 'downloadSanctionActPdf'])->name('admin.ethics.sanctions.pdf');
 
     // CRUD de Tipos de Infracciones Éticas
     Route::resource('/gestion-etica/tipos-infraccion', \App\Http\Controllers\EthicsInfractionTypeController::class)->names('admin.ethics_infractions')->except(['create', 'show', 'edit']);

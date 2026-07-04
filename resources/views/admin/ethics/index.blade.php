@@ -405,69 +405,183 @@
 
 <!-- Modal Info Administrar Comisión -->
 <div class="modal fade modal-custom-blur" id="adminCommissionModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 rounded-4 shadow-lg">
             <div class="modal-header border-bottom py-3 px-4 bg-primary text-white">
-                <h5 class="modal-title fw-bold text-white"><i class="bi-people-fill me-2"></i> Gestión del Cuerpo de Veedores</h5>
+                <h5 class="modal-title fw-bold text-white"><i class="bi-people-fill me-2"></i> Cuerpo de Veedores (Tribunal de Ética)</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4 text-start">
                 <p class="text-secondary small mb-4">
-                    Este panel permite al Administrador del Colegio gestionar formalmente los integrantes activos que componen la <strong>Comisión de Ética Profesional del Colegio de Trabajo Social</strong>.
+                    Administrá los integrantes de la Comisión de Ética. Los veedores aquí designados se verán reflejados automáticamente en el organigrama público de la landing page.
                 </p>
-                <h6 class="text-uppercase small fw-bold text-dark mb-3">Funciones del Módulo:</h6>
-                <ul class="list-group list-group-flush small mb-0">
-                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
-                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
-                        <span>Designación del Presidente de la Comisión de Ética.</span>
-                    </li>
-                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
-                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
-                        <span>Asignación y relevo de cargos de Veedores (Titulares y Suplentes).</span>
-                    </li>
-                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
-                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
-                        <span>Administración de vigencias y mandatos de la comisión activa.</span>
-                    </li>
-                </ul>
+                
+                <h6 class="text-uppercase small fw-bold text-dark mb-3">Veedores Designados</h6>
+                <div class="table-responsive mb-4">
+                    <table class="table table-sm table-hover align-middle small">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Rol</th>
+                                <th class="text-center" style="width: 80px;">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($commissionMembers as $member)
+                                <tr>
+                                    <td class="fw-bold text-dark">{{ $member->name }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-primary-soft text-primary px-2.5 py-1" style="background: rgba(30, 58, 138, 0.1); font-size: 0.75rem;">
+                                            {{ $member->role }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <form action="{{ route('admin.ethics.commission.destroy', $member->id) }}" method="POST" onsubmit="return confirm('¿Remover a este miembro del Tribunal?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-link text-danger p-0" title="Eliminar veedor">
+                                                <i class="bi bi-trash-fill fs-5"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-3">No hay veedores designados en la comisión.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr class="my-4">
+
+                <h6 class="text-uppercase small fw-bold text-dark mb-3">Agregar Nuevo Veedor</h6>
+                <form action="{{ route('admin.ethics.commission.store') }}" method="POST">
+                    @csrf
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-uppercase">Seleccionar Colegiado</label>
+                            <select name="collegiate_id" class="form-select shadow-none" required>
+                                <option value="">Seleccionar profesional...</option>
+                                @foreach($collegiates as $c)
+                                    <option value="{{ $c->id }}">{{ $c->first_name }} {{ $c->last_name }} ({{ $c->registration_number }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold small text-uppercase">Rol / Cargo</label>
+                            <select name="role" class="form-select shadow-none" required>
+                                <option value="Presidente">Presidente</option>
+                                <option value="Vocal" selected>Vocal</option>
+                                <option value="Suplente">Suplente</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-bold">Agregar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer border-0 p-4 pt-0">
-                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Entendido</button>
+            <div class="modal-footer border-top p-3">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal Info Libro de Actas Digital -->
+<!-- Modal Libro de Actas Digital -->
 <div class="modal fade modal-custom-blur" id="digitalActBookModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content border-0 rounded-4 shadow-lg">
             <div class="modal-header border-bottom py-3 px-4 bg-success text-white">
-                <h5 class="modal-title fw-bold text-white"><i class="bi-book-half me-2"></i> Libro de Actas Digital</h5>
+                <h5 class="modal-title fw-bold text-white"><i class="bi-book-half me-2"></i> Libro de Actas Digital (Resoluciones)</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4 text-start">
                 <p class="text-secondary small mb-4">
-                    Permite acceder al registro oficial, inmutable y digitalizado de todas las sesiones celebradas, dictámenes firmados y resoluciones disciplinarias de la Comisión.
+                    Este registro digital contiene el historial oficial e inmutable de resoluciones emitidas por la Comisión de Ética. Podés descargar cada acta individual firmada o el libro completo compilado.
                 </p>
-                <h6 class="text-uppercase small fw-bold text-dark mb-3">Funciones del Módulo:</h6>
-                <ul class="list-group list-group-flush small mb-0">
-                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
-                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
-                        <span>Descarga y visualización de Actas en formato PDF foliado.</span>
-                    </li>
-                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
-                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
-                        <span>Integración de firma electrónica para los veedores activos.</span>
-                    </li>
-                    <li class="list-group-item px-0 py-2 border-0 d-flex align-items-start bg-transparent">
-                        <i class="bi-check-circle-fill text-success me-2 mt-1"></i>
-                        <span>Historial cronológico completo de resoluciones disciplinarias dictadas.</span>
-                    </li>
-                </ul>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="text-uppercase small fw-bold text-dark mb-0">Listado de Actas y Fallos</h6>
+                    <a href="{{ route('admin.ethics.act-book.pdf') }}" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-file-pdf-fill fs-5"></i> Descargar Libro de Actas Completo
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle small mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Acta Nº</th>
+                                <th>Fecha Fallo</th>
+                                <th>Colegiado Sancionado</th>
+                                <th>Motivo / Tipificación</th>
+                                <th>Tipo Penalidad</th>
+                                <th>Estado</th>
+                                <th class="text-center" style="width: 140px;">Descargar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $sancId = 1;
+                            @endphp
+                            @foreach($activeSanctions as $s)
+                                <tr>
+                                    <td class="fw-bold text-dark">ACTA-TS-{{ str_pad($sancId++, 3, '0', STR_PAD_LEFT) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($s->start_date)->format('d/m/Y') }}</td>
+                                    <td class="fw-bold">{{ $s->collegiate->first_name }} {{ $s->collegiate->last_name }}</td>
+                                    <td>{{ $s->reason }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-danger-soft text-danger px-2.5 py-1" style="background: rgba(220, 38, 38, 0.1); font-size: 0.75rem;">
+                                            {{ $s->type == 'temporary' ? 'Temporal' : 'Permanente' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-warning text-dark px-2 py-0.5" style="font-size: 0.7rem;">Inhabilitado</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('admin.ethics.sanctions.pdf', $s->id) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1">
+                                            <i class="bi bi-file-pdf"></i> Acta
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            @foreach($history as $s)
+                                <tr>
+                                    <td class="fw-bold text-dark">ACTA-TS-{{ str_pad($sancId++, 3, '0', STR_PAD_LEFT) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($s->start_date)->format('d/m/Y') }}</td>
+                                    <td class="fw-bold">{{ $s->collegiate->first_name }} {{ $s->collegiate->last_name }}</td>
+                                    <td>{{ $s->reason }}</td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-secondary-soft text-secondary px-2.5 py-1" style="background: rgba(100, 116, 139, 0.1); font-size: 0.75rem;">
+                                            {{ $s->type == 'temporary' ? 'Temporal' : 'Permanente' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-success text-white px-2 py-0.5" style="font-size: 0.7rem;">Levantada</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('admin.ethics.sanctions.pdf', $s->id) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1">
+                                            <i class="bi bi-file-pdf"></i> Acta
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            @if($activeSanctions->isEmpty() && $history->isEmpty())
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-4">No se registran actas firmadas ni sanciones en la base de datos.</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="modal-footer border-0 p-4 pt-0">
-                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Entendido</button>
+            <div class="modal-footer border-top p-3">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
