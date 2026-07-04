@@ -176,6 +176,12 @@
             margin-bottom: 2.2rem;
         }
 
+        .hero-slider-section .hero-subtitle {
+            color: #ffffff !important;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95) !important;
+            font-weight: 500 !important;
+        }
+
         /* COLLAGE HERO DERECHO */
         .collage-container {
             position: relative;
