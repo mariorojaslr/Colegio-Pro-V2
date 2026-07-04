@@ -117,7 +117,9 @@
 
         /* HERO SECTION */
         @php
-            $bgImage = isset($slider) && $slider->items->count() > 0 ? $slider->items->first()->image_url : asset('images/trabajosocial_hero.png');
+            $bgImage = isset($slider) && $slider->items->count() > 0 
+                ? (Str::startsWith($slider->items->first()->image_url, ['http://', 'https://']) ? $slider->items->first()->image_url : asset('storage/' . $slider->items->first()->image_url)) 
+                : asset('images/trabajosocial_hero.png');
         @endphp
 
         .hero-ts {
@@ -613,7 +615,9 @@
                     @foreach($sliderItems as $index => $item)
                         <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }} position-relative" data-bs-interval="5000">
                             @php
-                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset($item->image_url);
+                                $imgSrc = Str::startsWith($item->image_url, ['http://', 'https://']) 
+                                    ? $item->image_url 
+                                    : (Str::startsWith($item->image_url, 'images/') ? asset($item->image_url) : asset('storage/' . $item->image_url));
                             @endphp
                             
                             <!-- Imagen de fondo del slide -->

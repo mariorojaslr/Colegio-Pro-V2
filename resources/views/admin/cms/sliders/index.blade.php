@@ -42,7 +42,9 @@
                                     <form action="{{ route('admin.cms.sliders.items.destroy', $item->id) }}" method="POST" class="position-absolute" style="top: -10px; right: -10px; z-index: 10;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-close shadow bg-white rounded-circle p-2 border border-2 border-danger" onclick="return confirm('¿Eliminar imagen?')" title="Eliminar" style="opacity: 1; width: 1.5em; height: 1.5em;"></button>
+                                        <button type="submit" class="btn btn-danger btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow border border-2 border-white" onclick="return confirm('¿Eliminar imagen?')" title="Eliminar" style="width: 32px; height: 32px; font-size: 0.85rem;">
+                                            <i class="bi bi-trash-fill text-white"></i>
+                                        </button>
                                     </form>
                                     <img src="{{ Str::startsWith($item->image_url, ['http://', 'https://']) ? $item->image_url : asset('storage/'.$item->image_url) }}" class="card-img-top" alt="{{ $item->title }}" style="height: 150px; object-fit: cover;">
                                     <div class="card-body p-2">
