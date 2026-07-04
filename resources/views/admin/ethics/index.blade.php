@@ -101,6 +101,21 @@
         border-top: none !important;
         padding: 0 1.75rem 1.75rem 1.75rem !important;
     }
+
+    /* Corregir list-group en Comisión de Ética */
+    .list-group-item {
+        background-color: transparent !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    body.dark-mode .list-group-item {
+        color: #ffffff !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    body:not(.dark-mode) .list-group-item {
+        color: #1e293b !important;
+    }
 </style>
 @endsection
 
