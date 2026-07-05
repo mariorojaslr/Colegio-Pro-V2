@@ -111,6 +111,20 @@
 @endsection
 
 @section('content')
+@php
+    // Configuracion por defecto del lienzo
+    $defaultSettings = [
+        'titulo' => ['x' => 50, 'y' => 15, 'font_size' => 28, 'font_weight' => 'bold', 'text_align' => 'center', 'color' => '#1e3a8a', 'text' => 'CERTIFICADO', 'visible' => true],
+        'cuerpo' => ['x' => 50, 'y' => 40, 'font_size' => 15, 'font_weight' => 'normal', 'text_align' => 'center', 'color' => '#333333', 'visible' => true],
+        'qr' => ['x' => 84, 'y' => 80, 'width' => 80, 'height' => 80, 'visible' => true],
+        'firmas' => []
+    ];
+    
+    $settings = array_merge($defaultSettings, $certificate_type->design_settings ?? []);
+    
+    // Texto por defecto del cuerpo
+    $cuerpoTextoRaw = $certificate_type->template_content ?: "Por la presente, el Consejo Directivo certifica y hace constar que el/la profesional:\n\n{{nombre}}\n\nCon documento de identidad Nº {{dni}}, se encuentra debidamente registrado/a en esta Institución bajo la matrícula profesional número {{matricula}}.\n\nSe expide el presente certificado a solicitud del interesado/a, a los {{fecha_emision}}.";
+@endphp
 <div class="container-fluid">
     <div class="row align-items-center mb-4">
         <div class="col">
@@ -294,20 +308,6 @@
                         <!-- Lienzo del Certificado -->
                         <div id="certificateCanvas" class="canvas-a4-landscape">
                             @if($certificate_type->background_path)
-                                @php
-                                    // Configuracion por defecto del lienzo
-                                    $defaultSettings = [
-                                        'titulo' => ['x' => 50, 'y' => 15, 'font_size' => 28, 'font_weight' => 'bold', 'text_align' => 'center', 'color' => '#1e3a8a', 'text' => 'CERTIFICADO', 'visible' => true],
-                                        'cuerpo' => ['x' => 50, 'y' => 40, 'font_size' => 15, 'font_weight' => 'normal', 'text_align' => 'center', 'color' => '#333333', 'visible' => true],
-                                        'qr' => ['x' => 84, 'y' => 80, 'width' => 80, 'height' => 80, 'visible' => true],
-                                        'firmas' => []
-                                    ];
-                                    
-                                    $settings = array_merge($defaultSettings, $certificate_type->design_settings ?? []);
-                                    
-                                    // Texto por defecto del cuerpo
-                                    $cuerpoTextoRaw = $certificate_type->template_content ?: "Por la presente, el Consejo Directivo certifica y hace constar que el/la profesional:\n\n{{nombre}}\n\nCon documento de identidad Nº {{dni}}, se encuentra debidamente registrado/a en esta Institución bajo la matrícula profesional número {{matricula}}.\n\nSe expide el presente certificado a solicitud del interesado/a, a los {{fecha_emision}}.";
-                                @endphp
 
                                 <!-- Bloque Título de Encabezado -->
                                 <div id="var_titulo" class="draggable-var draggable-titulo {{ ($settings['titulo']['visible'] ?? true) ? '' : 'd-none' }}" data-var="titulo" style="left: {{ $settings['titulo']['x'] }}%; top: {{ $settings['titulo']['y'] }}%; font-size: {{ $settings['titulo']['font_size'] ?? 28 }}px; font-weight: {{ $settings['titulo']['font_weight'] ?? 'bold' }}; color: {{ $settings['titulo']['color'] ?? '#1e3a8a' }};">
