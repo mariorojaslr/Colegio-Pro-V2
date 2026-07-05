@@ -391,11 +391,11 @@
                                                         </td>
                                                         <td class="py-3 border-0 text-center">
                                                             @if($due->status == 'paid')
-                                                                <span class="badge bg-success rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">PAGADO</span>
+                                                                <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: rgba(25, 135, 84, 0.18); color: #2ea861; border: 1.5px solid rgba(25, 135, 84, 0.35); font-size: 9px; letter-spacing: 0.5px;">PAGADO</span>
                                                             @elseif($due->status == 'pending')
-                                                                <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">PENDIENTE</span>
+                                                                <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1.5px solid rgba(245, 158, 11, 0.35); font-size: 9px; letter-spacing: 0.5px;">PENDIENTE</span>
                                                             @else
-                                                                <span class="badge bg-danger rounded-pill px-3 py-1 fw-bold text-uppercase" style="font-size: 9px">VENCIDO</span>
+                                                                <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: rgba(220, 38, 38, 0.18); color: #ef4444; border: 1.5px solid rgba(220, 38, 38, 0.35); font-size: 9px; letter-spacing: 0.5px;">VENCIDO</span>
                                                             @endif
                                                         </td>
                                                         <td class="py-3 border-0 text-end fw-bold">
