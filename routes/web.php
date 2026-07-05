@@ -187,7 +187,6 @@ Route::middleware(['auth', 'role:OWNER,ADMIN_INTERNO'])->group(function () {
     Route::delete('/admin/questions/{question}', [\App\Http\Controllers\Admin\ExamController::class, 'destroyQuestion'])->name('admin.exams.questions.destroy');
     
     // Gestión de Facturación Global (OWNER)
-    Route::get('/admin/billing-history', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.history');
     Route::get('/admin/billing-download/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'downloadInvoice'])->name('admin.billing.download_global');
 
     // Gestión de Recursos (PDF, Slides, etc)
@@ -324,6 +323,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/mi-facturacion/generar-cuotas', [\App\Http\Controllers\Admin\BillingController::class, 'generateMonthlyDues'])->name('admin.billing.generate_dues');
     Route::post('/mi-facturacion/pago-presencial', [\App\Http\Controllers\Admin\BillingController::class, 'payInPerson'])->name('admin.billing.pay_in_person');
     Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'download'])->name('billing.download');
+    Route::get('/mi-facturacion/historial/{collegiate}', [\App\Http\Controllers\Admin\BillingController::class, 'collegiateHistory'])->name('admin.billing.history');
 
     // Gestión de Ética y Sanciones (Admin de Colegio)
     Route::get('/gestion-etica', [\App\Http\Controllers\Admin\EthicsController::class, 'index'])->name('admin.ethics.index');
