@@ -98,11 +98,11 @@
                             </td>
                             <td class="py-3 text-center">
                                 @if($due->status === 'paid')
-                                    <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: rgba(25, 135, 84, 0.18); color: #2ea861; border: 1.5px solid rgba(25, 135, 84, 0.35); font-size: 9px; letter-spacing: 0.5px;">Pagado</span>
+                                    <span class="badge rounded-pill fw-bold text-uppercase" style="background-color: #198754 !important; color: #ffffff !important; font-size: 9px; padding: 5px 12px; letter-spacing: 0.5px;">Pagado</span>
                                 @elseif($due->status === 'pending')
-                                    <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1.5px solid rgba(245, 158, 11, 0.35); font-size: 9px; letter-spacing: 0.5px;">Pendiente</span>
+                                    <span class="badge rounded-pill fw-bold text-uppercase" style="background-color: #ffc107 !important; color: #000000 !important; font-size: 9px; padding: 5px 12px; letter-spacing: 0.5px;">Pendiente</span>
                                 @else
-                                    <span class="badge rounded-pill px-3 py-1 fw-bold text-uppercase" style="background-color: rgba(220, 38, 38, 0.18); color: #ef4444; border: 1.5px solid rgba(220, 38, 38, 0.35); font-size: 9px; letter-spacing: 0.5px;">Vencido</span>
+                                    <span class="badge rounded-pill fw-bold text-uppercase" style="background-color: #dc3545 !important; color: #ffffff !important; font-size: 9px; padding: 5px 12px; letter-spacing: 0.5px;">Vencido</span>
                                 @endif
                             </td>
                             <td class="py-3 text-center font-monospace text-muted small">
