@@ -934,7 +934,7 @@
                 <div class="alert alert-info bg-info bg-opacity-10 text-info border-0 small mb-3">
                     <i class="bi bi-info-circle me-1"></i> Arrastra las esquinas para encuadrar correctamente el documento.
                 </div>
-                <div class="flex-grow-1 bg-dark rounded-3 d-flex align-items-center justify-content-center" style="overflow: hidden; width: 100%; min-height: 250px; height: 100%;">
+                <div class="flex-grow-1 bg-dark rounded-3 d-flex align-items-center justify-content-center" style="overflow: hidden; width: 100%; min-height: 480px; height: 100%;">
                     <img id="imageToCrop" style="max-width: 100%; max-height: 100%; display: block;">
                 </div>
                 <div class="mt-3">
@@ -1019,14 +1019,34 @@ document.addEventListener('DOMContentLoaded', function() {
             const parentModal = bootstrap.Modal.getInstance(parentModalEl) || new bootstrap.Modal(parentModalEl);
             parentModal.hide();
             
+            // Destruir cropper anterior si existe
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+
+            // Escuchar el evento shown para inicializar Cropper cuando el modal esté completamente dibujado con su tamaño real
+            const initCropper = function() {
+                cropper = new Cropper(imageToCrop, {
+                    viewMode: 1,
+                    autoCropArea: 0.9,
+                    background: false,
+                    responsive: true,
+                    restore: false,
+                    checkCrossOrigin: false,
+                    modal: true,
+                    guides: true,
+                    center: true,
+                    highlight: true,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false
+                });
+                cropperModalEl.removeEventListener('shown.bs.modal', initCropper);
+            };
+            cropperModalEl.addEventListener('shown.bs.modal', initCropper);
+
             cropperModal.show();
-            
-            if (cropper) cropper.destroy();
-            cropper = new Cropper(imageToCrop, {
-                viewMode: 1,
-                autoCropArea: 0.9,
-                background: false
-            });
         };
         reader.readAsDataURL(file);
 
