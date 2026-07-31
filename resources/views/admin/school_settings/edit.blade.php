@@ -122,7 +122,7 @@
                     </div>
                     <div class="col-md-6 mb-3 d-flex align-items-center mt-3 mt-md-0">
                         <div class="form-check form-switch fs-5 mt-3">
-                            <input class="form-check-input" type="checkbox" role="switch" id="autoBilling" name="auto_billing_enabled" {{ old('auto_billing_enabled', $school->auto_billing_enabled) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" role="switch" id="autoBilling" name="auto_billing_enabled" value="1" {{ old('auto_billing_enabled', $school->auto_billing_enabled) ? 'checked' : '' }}>
                             <label class="form-check-label fs-6 ms-2" for="autoBilling">Activar Generación Automática de Cuotas</label>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <div class="form-check form-switch fs-5">
-                            <input class="form-check-input" type="checkbox" role="switch" id="mpSandbox" name="mp_sandbox_mode" {{ old('mp_sandbox_mode', $school->mp_sandbox_mode) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" role="switch" id="mpSandbox" name="mp_sandbox_mode" value="1" {{ old('mp_sandbox_mode', $school->mp_sandbox_mode) ? 'checked' : '' }}>
                             <label class="form-check-label fs-6 ms-2 text-warning" for="mpSandbox"><i class="bi bi-exclamation-triangle-fill"></i> Modo de Prueba Activo (Sandbox)</label>
                         </div>
                         <small class="text-muted d-block ms-5">Si está encendido, los pagos no se cobrarán realmente (ideal para hacer pruebas iniciales).</small>
