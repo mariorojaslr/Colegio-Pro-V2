@@ -22,7 +22,7 @@
                 <h5 class="fw-bold mb-3"><i class="bi bi-building me-2 text-primary"></i> Datos Principales</h5>
                 
                 <div class="row mb-4">
-                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
                         @if($school->logo)
                             <img src="{{ Str::startsWith($school->logo, 'http') ? $school->logo : asset($school->logo) }}" alt="Logo" class="img-fluid rounded-3 border mb-2" style="max-height: 120px;">
                         @else
@@ -33,11 +33,26 @@
                         <div class="mt-2">
                             <label class="form-label fw-bold small">Actualizar Logo</label>
                             <input type="file" name="logo" class="form-control form-control-sm" accept="image/*">
-                            <small class="text-muted d-block mt-1">Formato PNG o JPG. Max 2MB.</small>
+                            <small class="text-muted d-block mt-1">Formato PNG o JPG.</small>
                         </div>
                     </div>
                     
-                    <div class="col-md-8">
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        @if($school->about_image)
+                            <img src="{{ Str::startsWith($school->about_image, 'http') ? $school->about_image : asset($school->about_image) }}" alt="Nosotros" class="img-fluid rounded-3 border mb-2" style="max-height: 120px; object-fit: cover;">
+                        @else
+                            <div class="bg-light rounded-3 d-flex align-items-center justify-content-center mb-2 mx-auto" style="height: 120px; width: 120px;">
+                                <i class="bi bi-image text-muted fs-1"></i>
+                            </div>
+                        @endif
+                        <div class="mt-2">
+                            <label class="form-label fw-bold small">Imagen "Quiénes Somos"</label>
+                            <input type="file" name="about_image" class="form-control form-control-sm" accept="image/*">
+                            <small class="text-muted d-block mt-1">Formato PNG o JPG.</small>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold small">Teléfono / WhatsApp</label>

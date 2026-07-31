@@ -11,7 +11,7 @@ class School extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'slug', 'custom_domain', 'logo', 'logo_icon', 
+        'name', 'slug', 'custom_domain', 'logo', 'logo_icon', 'about_image',
         'member_singular', 'member_plural',
         'primary_color', 'secondary_color', 'tertiary_color',
         'is_active', 'storage_used', 'traffic_used', 'user_count', 'plan_category',

@@ -795,7 +795,7 @@
             <div class="row align-items-center g-5">
                 <div class="col-lg-6">
                     @php
-                        $aboutImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+                        $aboutImage = $school->about_image ? (Str::startsWith($school->about_image, 'http') ? $school->about_image : asset($school->about_image)) : 'https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
                     @endphp
                     <div style="position: relative; border-radius: 32px; overflow: hidden; box-shadow: var(--ts-shadow-lg);">
                         <img src="{{ $aboutImage }}" alt="Nosotros" class="img-fluid" style="width: 100%; height: 420px; object-fit: cover;">

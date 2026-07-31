@@ -36,9 +36,10 @@ class SchoolSettingsController extends Controller
             'primary_color' => 'nullable|string|max:20',
             'secondary_color' => 'nullable|string|max:20',
             'tertiary_color' => 'nullable|string|max:20',
+            'about_image' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:4096',
         ]);
 
-        $data = $request->except(['logo']);
+        $data = $request->except(['logo', 'about_image']);
         $data['auto_billing_enabled'] = $request->has('auto_billing_enabled');
         $data['mp_sandbox_mode'] = $request->has('mp_sandbox_mode');
 
@@ -51,6 +52,18 @@ class SchoolSettingsController extends Controller
 
             if ($result['success']) {
                 $data['logo'] = $result['url'];
+            }
+        }
+
+        if ($request->hasFile('about_image')) {
+            $file = $request->file('about_image');
+            $extension = $file->getClientOriginalExtension();
+            $remoteName = "logos/{$school->slug}/about_" . time() . ".{$extension}";
+            
+            $result = $bunny->uploadFile($file->getPathname(), $remoteName);
+
+            if ($result['success']) {
+                $data['about_image'] = $result['url'];
             }
         }
 
