@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $school->name ?? 'Consejo Profesional de Trabajo Social de La Rioja' }}</title>
+    <title>{{ $school->name ?? 'Colegio-Pro' }}</title>
     
     <link rel="icon" type="image/png" href="{{ isset($school) && $school->logo ? asset($school->logo) : asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,23 +12,38 @@
     <!-- Google Fonts: Outfit (títulos) e Inter (cuerpo) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    
+    @php
+        $primary = $school->primary_color ?? '#2980B9';
+        $secondary = $school->secondary_color ?? '#2E86C1';
+        $bgLight = '#D6EAF8';
+        $bgCard = '#EAF2F8';
+        $textDark = '#154360';
+        $border = '#A9CCE3';
+        if($primary == '#10B981') {
+            $bgLight = '#f8fafc';
+            $bgCard = '#ffffff';
+            $textDark = '#1e293b';
+            $border = '#e2e8f0';
+        }
+    @endphp
     <style>
         :root {
-            --ts-primary: #1E3A8A; /* Azul Institucional Profundo */
-            --ts-primary-rgb: 30, 58, 138;
-            --ts-secondary: #DC2626; /* Rojo / Coral de Acento */
-            --ts-secondary-rgb: 220, 38, 38;
-            --ts-dark: #0F172A; /* Slate 900 */
-            --ts-light: #F8FAFC; /* Slate 50 */
-            --ts-slate-300: #CBD5E1;
-            --ts-gradient-primary: linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%);
-            --ts-gradient-light: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
-            --ts-gradient-accent: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
-            --ts-card-bg: rgba(255, 255, 255, 0.85);
-            --ts-glass-border: rgba(30, 58, 138, 0.08);
-            --ts-shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-            --ts-shadow-md: 0 10px 15px -3px rgba(30, 58, 138, 0.05), 0 4px 6px -4px rgba(30, 58, 138, 0.05);
-            --ts-shadow-lg: 0 20px 25px -5px rgba(30, 58, 138, 0.1), 0 8px 10px -6px rgba(30, 58, 138, 0.1);
+            --ts-primary: {{ $primary }};
+            --ts-primary-rgb: 41, 128, 185;
+            --ts-secondary: {{ $secondary }};
+            --ts-secondary-rgb: 46, 134, 193;
+            --ts-dark: {{ $textDark }};
+            --ts-light: {{ $bgLight }};
+            --ts-slate-300: {{ $border }};
+            --ts-gradient-primary: linear-gradient(135deg, {{ $primary }} 0%, {{ $textDark }} 100%);
+            --ts-gradient-light: linear-gradient(135deg, {{ $bgLight }} 0%, #ffffff 100%);
+            --ts-gradient-accent: linear-gradient(135deg, {{ $secondary }} 0%, #154360 100%);
+            --ts-card-bg: rgba(255, 255, 255, 0.95);
+            --ts-glass-border: {{ $border }};
+            --ts-shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --ts-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+            --ts-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
         
         body {
@@ -580,11 +595,10 @@
                 @if(isset($school) && $school->logo)
                     <img src="{{ asset($school->logo) }}" alt="Logo" style="height: 64px;">
                 @else
-                    <span class="fs-4 fw-bold text-primary"><i class="bi bi-people-fill me-2"></i>C.P.T.S.</span>
+                    <span class="fs-4 fw-bold text-primary"><i class="bi bi-people-fill me-2"></i>{{ $school->name }}</span>
                 @endif
                 <div class="d-none d-md-flex flex-column lh-1 ms-1">
-                    <span class="fs-5 fw-extrabold text-dark tracking-tight">TRABAJO SOCIAL</span>
-                    <span class="text-muted small fw-bold">CONSEJO PROFESIONAL LA RIOJA</span>
+                    <span class="fs-5 fw-extrabold text-dark tracking-tight">{{ strtoupper($school->name) }}</span><span class="text-muted small fw-bold">COLEGIO PROFESIONAL</span>
                 </div>
             </a>
             
@@ -653,8 +667,8 @@
                                                 </div>
                                             @endif
                                             
-                                            <h1 class="hero-title">{!! $item->title ?? 'Defensa de Derechos, <br><span>Empatía & Compromiso.</span>' !!}</h1>
-                                            <p class="hero-subtitle">{{ $item->description ?? 'Agrupamos, jerarquizamos y respaldamos a los profesionales del Trabajo Social de La Rioja.' }}</p>
+                                            <h1 class="hero-title">{!! $item->title ?? 'Excelencia Profesional, <br><span>Ética & Compromiso.</span>' !!}</h1>
+                                            <p class="hero-subtitle">{{ $item->description ?? 'Agrupamos, jerarquizamos y respaldamos a los profesionales en toda la jurisdicción.' }}</p>
                                             
                                             <div class="d-flex flex-wrap gap-3">
                                                 @if($item->link)
@@ -693,8 +707,8 @@
                             <i class="bi bi-patch-check-fill text-danger"></i>
                             Organismo Regulador de la Matrícula
                         </div>
-                        <h1 class="hero-title">Defensa de Derechos, <br><span>Empatía & Compromiso.</span></h1>
-                        <p class="hero-subtitle">Agrupamos, jerarquizamos y respaldamos a los profesionales del Trabajo Social de La Rioja, promoviendo el ejercicio ético, legal y solidario en toda nuestra provincia.</p>
+                        <h1 class="hero-title">Excelencia Profesional, <br><span>Ética & Compromiso.</span></h1>
+                        <p class="hero-subtitle">Agrupamos, jerarquizamos y respaldamos a los profesionales de nuestra disciplina, promoviendo el ejercicio ético, legal y solidario en toda la jurisdicción.</p>
                         <div class="d-flex flex-wrap gap-3">
                             <a href="#quienes-somos" class="btn-portal"><i class="bi bi-info-circle me-2"></i>Nuestra Misión</a>
                             <a href="#contacto" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-bold border-2 d-inline-flex align-items-center gap-2">
@@ -713,7 +727,7 @@
         <section class="stats-floating-bar container mb-5">
             <div class="row g-4 justify-content-center">
                 <div class="col-6 col-lg-3">
-                    <div class="stat-card-3d" data-bs-toggle="modal" data-bs-target="#modalTrabajadoresSociales">
+                    <div class="stat-card-3d" data-bs-toggle="modal" data-bs-target="#modalMatriculados">
                         <div class="stat-card-icon"><i class="bi bi-people-fill"></i></div>
                         <h2 class="display-6 fw-bold mb-0 text-dark tracking-tight">+{{ $collegiates->count() ?? 0 }}</h2>
                         <p class="text-muted small mt-2 fw-bold mb-0">Profesionales Matriculados</p>
@@ -776,38 +790,12 @@
             </div>
         </section>
 
-        <!-- SECCIÓN DE HITO HISTÓRICO (NUEVO REGISTRO LEY 8.522) -->
-        <section class="container shadow-sm border border-light" style="border-radius: 40px; overflow: hidden;">
-            <div class="section-history">
-                <div class="row align-items-center g-5 history-content">
-                    <div class="col-lg-7">
-                        <span class="history-badge"><i class="bi bi-bank me-2"></i>Hito Institucional</span>
-                        <h2 class="display-5 fw-bold mb-4">Sanción de la Ley Provincial Nº 8.522</h2>
-                        <p class="lead mb-4" style="opacity: 0.95;">
-                            Creado formalmente en <strong>agosto de 2009</strong>, el Consejo Profesional de Trabajo Social obtuvo mediante esta legislación el rango de <strong>Persona Jurídica de Derecho Público</strong>.
-                        </p>
-                        <p class="mb-0" style="opacity: 0.85; font-size: 1.05rem;">
-                            La publicación de la Ley en el Boletín Oficial, realizada el 11 de agosto de 2009, otorgó la delegación oficial para centralizar el gobierno de las matrículas, vigilar el cumplimiento ético de la profesión y fiscalizar la labor de los trabajadores sociales en todo el territorio de La Rioja.
-                        </p>
-                    </div>
-                    <div class="col-lg-5 text-center">
-                        <div class="bg-white text-dark p-5 rounded-4 shadow-lg border border-light mx-auto" style="max-width: 320px;">
-                            <div class="text-danger display-3 mb-3"><i class="bi bi-calendar-check-fill"></i></div>
-                            <h3 class="fw-extrabold text-dark mb-1">11 de Agosto</h3>
-                            <h5 class="text-muted fw-bold mb-4">de 2009</h5>
-                            <span class="badge bg-danger rounded-pill px-4 py-2 fs-6">Fundación Oficial</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- NUESTRA MISIÓN -->
         <section id="quienes-somos" class="py-5">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6">
                     @php
-                        $aboutImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+                        $aboutImage = $school->about_image ? (Str::startsWith($school->about_image, 'http') ? $school->about_image : asset($school->about_image)) : 'https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
                     @endphp
                     <div style="position: relative; border-radius: 32px; overflow: hidden; box-shadow: var(--ts-shadow-lg);">
                         <img src="{{ $aboutImage }}" alt="Nosotros" class="img-fluid" style="width: 100%; height: 420px; object-fit: cover;">
@@ -1039,7 +1027,7 @@
                         <img src="{{ asset($school->logo) }}" alt="Logo" class="footer-logo mb-3">
                     @endif
                     <h4 class="text-white fw-bold">{{ $school->name }}</h4>
-                    <p class="mb-0 text-white-50">Garantizando la ética y la excelencia en el ejercicio del Trabajo Social.</p>
+                    <p class="mb-0 text-white-50">Garantizando la ética y la excelencia en el ejercicio profesional.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <div class="d-flex gap-3 justify-content-center justify-content-md-end mb-3">
@@ -1075,7 +1063,7 @@
             <div class="card-body bg-light flex-grow-1" id="chatbot-messages" style="overflow-y: auto;">
                 <div class="d-flex mb-3">
                     <div class="bg-white text-dark p-3 rounded-4 shadow-sm" style="max-width: 85%;">
-                        Hola 👋 Soy el asistente virtual del {{ $school->name ?? 'Consejo' }}. ¿En qué te puedo ayudar hoy?
+                        Hola 👋 Soy el asistente virtual del {{ $school->name ?? 'Colegio' }}. ¿En qué te puedo ayudar hoy?
                     </div>
                 </div>
             </div>
@@ -1209,8 +1197,8 @@
 
     <!-- MODALES INTERACTIVOS PREMIUM -->
     
-    <!-- Modal 1: Padrón de Trabajadores Sociales -->
-    <div class="modal fade" id="modalTrabajadoresSociales" tabindex="-1" aria-hidden="true">
+    <!-- Modal 1: Padrón de Profesionales Matriculados -->
+    <div class="modal fade" id="modalMatriculados" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
             <div class="modal-content modal-content-premium">
                 <div class="modal-header modal-header-premium">
@@ -1220,9 +1208,9 @@
                 <div class="modal-body modal-body-premium">
                     <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden border bg-white p-1">
                         <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" class="form-control border-0 shadow-none ps-1 py-2" id="searchTrabajadoresSociales" placeholder="Buscar por nombre, matrícula o DNI...">
+                        <input type="text" class="form-control border-0 shadow-none ps-1 py-2" id="searchMatriculados" placeholder="Buscar por nombre, matrícula o DNI...">
                     </div>
-                    <div class="list-group list-group-flush rounded-4 border shadow-sm bg-white overflow-hidden" id="listTrabajadoresSociales" style="max-height: 400px; overflow-y: auto;">
+                    <div class="list-group list-group-flush rounded-4 border shadow-sm bg-white overflow-hidden" id="listMatriculados" style="max-height: 400px; overflow-y: auto;">
                         @if(isset($collegiates) && $collegiates->count() > 0)
                             @foreach($collegiates as $colegiado)
                                 <div class="list-group-item list-group-item-premium trabajador-item">
@@ -1266,10 +1254,7 @@
                     <div class="display-1 text-danger mb-4"><i class="bi bi-calendar2-heart-fill"></i></div>
                     <h3 class="fw-bold text-dark mb-3">{{ \Carbon\Carbon::parse('2009-08-11')->age }} Años de Trayectoria</h3>
                     <p class="text-muted leading-relaxed mb-0 text-start">
-                        El Consejo Profesional de Trabajo Social de La Rioja fue creado formalmente en <strong>agosto de 2009</strong>, mediante la sanción y posterior publicación de la <strong>Ley Provincial Nº 8.522</strong> (publicada en el Boletín Oficial el <strong>11 de agosto de 2009</strong>). 
-                    </p>
-                    <p class="text-muted leading-relaxed mt-3 text-start">
-                        Esta legislación le otorgó el carácter de Persona Jurídica de Derecho Público para fiscalizar el correcto ejercicio de la profesión, centralizar las matrículas y velar por el código de ética en todo el territorio provincial. Desde entonces, trabajamos incansablemente por jerarquizar el rol del trabajador social.
+                        Desde nuestra creación trabajamos incansablemente por jerarquizar la profesión. Hemos trabajado para regular y fiscalizar el correcto ejercicio, centralizar las matrículas y velar por el código de ética en todo el territorio provincial.
                     </p>
                 </div>
             </div>
@@ -1397,7 +1382,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-body-premium">
-                    <p class="text-muted small mb-4">Validá la habilitación legal de cualquier profesional en Trabajo Social de nuestra jurisdicción ingresando su DNI, Matrícula o Nombre completo.</p>
+                    <p class="text-muted small mb-4">Validá la habilitación legal de cualquier profesional en nuestra jurisdicción ingresando su DNI, Matrícula o Nombre completo.</p>
                     
                     <form id="formValidarMatricula" onsubmit="event.preventDefault(); validarMatricula();">
                         <div class="input-group mb-3 shadow-sm rounded-pill overflow-hidden border bg-white p-1">
@@ -1426,7 +1411,7 @@
                 <div class="modal-body modal-body-premium">
                     <p class="text-muted small mb-4">A continuación, te detallamos la documentación obligatoria que debés presentar en soporte digital u original para iniciar tu trámite de matriculación profesional:</p>
                     <ul class="list-group list-group-flush rounded-4 overflow-hidden border shadow-sm">
-                        <li class="list-group-item bg-white p-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Título Original habilitante de Lic. en Trabajo Social o equivalente (Legalizado y registrado).</li>
+                        <li class="list-group-item bg-white p-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Título Original habilitante o equivalente (Legalizado y registrado).</li>
                         <li class="list-group-item bg-white p-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Fotocopia color del Documento Nacional de Identidad (Ambas caras).</li>
                         <li class="list-group-item bg-white p-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Constancia de CUIL emitida por ANSES.</li>
                         <li class="list-group-item bg-white p-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Certificado de Reincidencia o Antecedentes Penales vigente.</li>
@@ -1541,7 +1526,7 @@
             });
 
             // Live Search padrón
-            const searchInput = document.getElementById('searchTrabajadoresSociales');
+            const searchInput = document.getElementById('searchMatriculados');
             if(searchInput) {
                 searchInput.addEventListener('keyup', function() {
                     const value = this.value.toLowerCase();
