@@ -112,7 +112,7 @@
                                     <input type="file" name="document" id="file-front-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
                                     <input type="file" id="camera-front-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
                                     
-                                    <input type="file" name="document_back" id="file-back-{{ $requirement->id }}" class="visually-hidden file-input-back" onchange="previewSelection(this, 'badge-back-{{ $$requirement->id }}')">
+                                    <input type="file" name="document_back" id="file-back-{{ $requirement->id }}" class="visually-hidden file-input-back" onchange="previewSelection(this, 'badge-back-{{ $requirement->id }}')">
                                     <input type="file" id="camera-back-{{ $requirement->id }}" class="visually-hidden file-input-back" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-back-{{ $requirement->id }}')">
                                     
                                     <div class="row g-2 mb-2">
