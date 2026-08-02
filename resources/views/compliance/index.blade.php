@@ -103,21 +103,22 @@
                         @endif
 
                         @if($requirement->delivery_method === 'digital' || $requirement->delivery_method === 'both')
-                            <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" class="form-compliance" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <input type="file" name="document" id="file-{{ $requirement->id }}" class="d-none" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
+                                <input type="hidden" name="cropped_image" class="cropped-image-input">
+                                <input type="file" name="document" id="file-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="handleComplianceUpload(this, event)">
+                                <input type="file" id="camera-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="handleComplianceUpload(this, event)">
                                 
                                 <div class="row g-2">
                                     <div class="col-6">
-                                        <button type="button" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small" onclick="document.getElementById('file-{{ $requirement->id }}').click()">
+                                        <label for="file-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block" style="cursor: pointer;">
                                             <i class="bi bi-folder2-open me-2"></i> ARCHIVO
-                                        </button>
+                                        </label>
                                     </div>
                                     <div class="col-6">
-                                        <input type="file" name="document" id="camera-{{ $requirement->id }}" class="d-none" accept="image/*" capture="environment" onchange="document.getElementById('form-{{ $requirement->id }}').submit()">
-                                        <button type="button" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm" onclick="document.getElementById('camera-{{ $requirement->id }}').click()">
+                                        <label for="camera-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block" style="cursor: pointer;">
                                             <i class="bi bi-camera me-2"></i> ESCANEAR
-                                        </button>
+                                        </label>
                                     </div>
                                 </div>
 
@@ -152,4 +153,130 @@
     .xx-small { font-size: 10px; }
     .ls-1 { letter-spacing: 1px; }
 </style>
+
+<!-- Modal para Cropper.js -->
+<div class="modal fade" id="cropperModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true" style="z-index: 9999;">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark">Ajustar / Recortar Documento</h5>
+                <button type="button" class="btn-close cancel-crop"></button>
+            </div>
+            <div class="modal-body text-center p-4 d-flex flex-column" style="min-height: 75vh;">
+                <div class="alert alert-info bg-info bg-opacity-10 text-info border-0 small mb-3">
+                    <i class="bi bi-info-circle me-1"></i> Arrastra las esquinas para encuadrar correctamente el documento.
+                </div>
+                <div class="flex-grow-1 bg-dark rounded-3 d-flex align-items-center justify-content-center" style="overflow: hidden; width: 100%; min-height: 480px; height: 100%;">
+                    <img id="imageToCrop" style="max-width: 100%; max-height: 100%; display: block;">
+                </div>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill me-2 btn-rotate-left"><i class="bi bi-arrow-counterclockwise"></i> Rotar Izq</button>
+                    <button type="button" class="btn btn-outline-secondary rounded-pill btn-rotate-right"><i class="bi bi-arrow-clockwise"></i> Rotar Der</button>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold cancel-crop">Cancelar</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold confirm-crop">Confirmar Recorte</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let cropper = null;
+    let currentInput = null;
+    let currentForm = null;
+    const cropperModalEl = document.getElementById('cropperModal');
+    let cropperModal = null;
+    if(cropperModalEl) {
+        cropperModal = new bootstrap.Modal(cropperModalEl);
+    }
+    const imageToCrop = document.getElementById('imageToCrop');
+
+    window.handleComplianceUpload = function(input, event) {
+        if (!input || !input.files || !input.files.length) return;
+        
+        const form = input.closest('form');
+        const file = input.files[0];
+        
+        // Si no es imagen, hacer submit directo
+        if (!file.type.startsWith('image/')) {
+            // Asegurarnos de que este input tenga name="document" y el otro no
+            form.querySelectorAll('input[type="file"]').forEach(i => i.removeAttribute('name'));
+            input.setAttribute('name', 'document');
+            form.submit();
+            return;
+        }
+
+        // Es una imagen, usar Cropper
+        currentInput = input;
+        currentForm = form;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imageToCrop.src = e.target.result;
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            
+            const initCropper = function() {
+                cropper = new Cropper(imageToCrop, {
+                    viewMode: 1,
+                    autoCropArea: 0.9,
+                    background: false,
+                    responsive: true,
+                    restore: false,
+                    checkCrossOrigin: false,
+                    modal: true,
+                    guides: true,
+                    center: true,
+                    highlight: true,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true
+                });
+                cropperModalEl.removeEventListener('shown.bs.modal', initCropper);
+            };
+            cropperModalEl.addEventListener('shown.bs.modal', initCropper);
+            cropperModal.show();
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const confirmBtn = document.querySelector('.confirm-crop');
+    if (confirmBtn) {
+        confirmBtn.onclick = function() {
+            if (!cropper) return;
+            const canvas = cropper.getCroppedCanvas({ maxWidth: 1600, maxHeight: 1600 });
+            const base64 = canvas.toDataURL('image/jpeg', 0.85);
+            
+            currentForm.querySelector('.cropped-image-input').value = base64;
+            // No enviar el archivo original (ya que es pesado y usamos base64)
+            currentForm.querySelectorAll('input[type="file"]').forEach(i => i.removeAttribute('name'));
+            
+            cropperModal.hide();
+            
+            // Submitear formulario despues de ocultar
+            setTimeout(() => {
+                currentForm.submit();
+            }, 300);
+        };
+    }
+
+    document.querySelectorAll('.cancel-crop').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if(cropperModal) cropperModal.hide();
+            if(currentInput) currentInput.value = ''; // limpiar
+        });
+    });
+
+    const rotateLeft = document.querySelector('.btn-rotate-left');
+    if(rotateLeft) rotateLeft.addEventListener('click', () => { if(cropper) cropper.rotate(-90); });
+    const rotateRight = document.querySelector('.btn-rotate-right');
+    if(rotateRight) rotateRight.addEventListener('click', () => { if(cropper) cropper.rotate(90); });
+});
+</script>
 @endsection
