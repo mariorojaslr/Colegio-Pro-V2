@@ -144,6 +144,25 @@ class CollegiateController extends Controller
 
         $collegiate->update($data);
 
+        // Si el colegiado tiene usuario de acceso, sincronizamos su email y nombre
+        if ($collegiate->user_id) {
+            $accesoUser = \App\Models\User::find($collegiate->user_id);
+            if ($accesoUser) {
+                // Verificar si el email ya está en uso por otro usuario
+                $existingUser = \App\Models\User::where('email', $request->email)->where('id', '!=', $collegiate->user_id)->first();
+                if ($existingUser) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'email' => ['El email ingresado ya está asociado a otra cuenta de usuario en el sistema.']
+                    ]);
+                }
+                
+                $accesoUser->update([
+                    'name' => $request->first_name . ' ' . $request->last_name,
+                    'email' => $request->email,
+                ]);
+            }
+        }
+
         return back()->with('success', 'Ficha del colegiado actualizada correctamente.');
     }
 
