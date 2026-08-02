@@ -14,7 +14,7 @@ class BillingService
      * Genera las cuotas del mes actual para una escuela específica.
      * Solo facturará a los colegiados activos con billing_profile = 'mensual'.
      * Evita duplicados (idempotente).
-     *
+     */
     public function generateMonthlyDuesForSchool(School $school): array
     {
         $activeFee = MembershipFee::where('school_id', $school->id)->where('is_active', true)->first();
