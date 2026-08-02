@@ -15,30 +15,37 @@ class BillingService
      * Solo facturará a los colegiados activos con billing_profile = 'mensual'.
      * Evita duplicados (idempotente).
      *
-     * @param School $school
-     * @return int Número de cuotas generadas
-     */
-    public function generateMonthlyDuesForSchool(School $school): int
+    public function generateMonthlyDuesForSchool(School $school): array
     {
         $activeFee = MembershipFee::where('school_id', $school->id)->where('is_active', true)->first();
 
         if (!$activeFee) {
-            return 0;
+            return [
+                'status' => 'error',
+                'message' => 'Debe definir un valor de cuota activo primero.'
+            ];
         }
 
-        // Filtramos colegiados activos y con perfil mensual
-        $collegiates = Collegiate::where('school_id', $school->id)
+        $allCollegiates = Collegiate::where('school_id', $school->id)
             ->where('status', 'active')
-            ->where(function($query) {
-                $query->where('billing_profile', 'mensual')
-                      ->orWhereNull('billing_profile'); // retrocompatibilidad
-            })
             ->get();
+            
+        $totalActive = $allCollegiates->count();
+        $generatedCount = 0;
+        $updatedCount = 0;
+        $exceptedCount = 0;
+        $alreadyPaidCount = 0;
+        $alreadyGeneratedCount = 0;
 
-        $dueDate = Carbon::now()->endOfMonth(); // Vencimiento a fin de mes (o se podría usar billing_day)
-        $count = 0;
+        $dueDate = Carbon::now()->endOfMonth();
 
-        foreach ($collegiates as $collegiate) {
+        foreach ($allCollegiates as $collegiate) {
+            // Excepciones: por ejemplo perfil 'anual' u otros exceptuados
+            if ($collegiate->billing_profile === 'anual') {
+                $exceptedCount++;
+                continue;
+            }
+
             // Buscar si ya existe una cuota para este mes
             $existingDue = CollegiateDue::where('collegiate_id', $collegiate->id)
                 ->whereYear('due_date', $dueDate->year)
@@ -56,14 +63,31 @@ class BillingService
                 
                 // Si se generó deuda, el usuario pasa a no estar al día
                 $collegiate->update(['is_fees_compliant' => false]);
-                $count++;
-            } elseif ($existingDue->status === 'pending' && $existingDue->amount != $activeFee->amount) {
-                // Ya existe, está pendiente, pero el monto es diferente (el admin corrigió el valor de la cuota)
-                $existingDue->update(['amount' => $activeFee->amount]);
-                $count++;
+                $generatedCount++;
+            } else {
+                if ($existingDue->status === 'paid') {
+                    $alreadyPaidCount++;
+                } elseif ($existingDue->status === 'pending') {
+                    if ($existingDue->amount != $activeFee->amount) {
+                        // Ya existe, está pendiente, pero el monto es diferente (el admin corrigió el valor de la cuota)
+                        $existingDue->update(['amount' => $activeFee->amount]);
+                        $updatedCount++;
+                    } else {
+                        $alreadyGeneratedCount++;
+                    }
+                }
             }
         }
 
-        return $count;
+        return [
+            'status' => 'success',
+            'total_active' => $totalActive,
+            'generated' => $generatedCount,
+            'updated' => $updatedCount,
+            'excepted' => $exceptedCount,
+            'already_paid' => $alreadyPaidCount,
+            'already_generated' => $alreadyGeneratedCount,
+            'total_processed' => $generatedCount + $updatedCount
+        ];
     }
 }
