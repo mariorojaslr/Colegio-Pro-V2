@@ -39,13 +39,14 @@ class BillingService
         $count = 0;
 
         foreach ($collegiates as $collegiate) {
-            // Evitar duplicados en el mismo mes
-            $exists = CollegiateDue::where('collegiate_id', $collegiate->id)
+            // Buscar si ya existe una cuota para este mes
+            $existingDue = CollegiateDue::where('collegiate_id', $collegiate->id)
                 ->whereYear('due_date', $dueDate->year)
                 ->whereMonth('due_date', $dueDate->month)
-                ->exists();
+                ->first();
 
-            if (!$exists) {
+            if (!$existingDue) {
+                // No existe, la creamos
                 CollegiateDue::create([
                     'collegiate_id' => $collegiate->id,
                     'amount' => $activeFee->amount,
@@ -55,6 +56,10 @@ class BillingService
                 
                 // Si se generó deuda, el usuario pasa a no estar al día
                 $collegiate->update(['is_fees_compliant' => false]);
+                $count++;
+            } elseif ($existingDue->status === 'pending' && $existingDue->amount != $activeFee->amount) {
+                // Ya existe, está pendiente, pero el monto es diferente (el admin corrigió el valor de la cuota)
+                $existingDue->update(['amount' => $activeFee->amount]);
                 $count++;
             }
         }
