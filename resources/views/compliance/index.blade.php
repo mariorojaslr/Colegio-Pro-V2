@@ -106,22 +106,75 @@
                             <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" class="form-compliance" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="cropped_image" class="cropped-image-input">
-                                <input type="file" name="document" id="file-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="handleComplianceUpload(this, event)">
-                                <input type="file" id="camera-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="handleComplianceUpload(this, event)">
                                 
-                                <div class="row g-2">
-                                    <div class="col-6">
-                                        <label for="file-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block" style="cursor: pointer;">
-                                            <i class="bi bi-folder2-open me-2"></i> ARCHIVO
-                                        </label>
+                                @if(Str::contains(strtolower($requirement->name), 'dni') || Str::contains(strtolower($requirement->name), 'documento'))
+                                    <input type="hidden" name="cropped_image_back" class="cropped-image-back-input">
+                                    <input type="file" name="document" id="file-front-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
+                                    <input type="file" id="camera-front-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
+                                    
+                                    <input type="file" name="document_back" id="file-back-{{ $requirement->id }}" class="visually-hidden file-input-back" onchange="previewSelection(this, 'badge-back-{{ $$requirement->id }}')">
+                                    <input type="file" id="camera-back-{{ $requirement->id }}" class="visually-hidden file-input-back" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-back-{{ $requirement->id }}')">
+                                    
+                                    <div class="row g-2 mb-2">
+                                        <div class="col-12 d-flex justify-content-between align-items-center">
+                                            <span class="small fw-bold text-muted">Frente</span>
+                                            <span class="badge bg-success visually-hidden" id="badge-front-{{ $requirement->id }}"><i class="bi bi-check"></i> Listo</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="file-front-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
+                                                <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                            </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="camera-front-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
+                                                <i class="bi bi-camera me-2"></i> ESCANEAR
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div class="col-6">
-                                        <label for="camera-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block" style="cursor: pointer;">
-                                            <i class="bi bi-camera me-2"></i> ESCANEAR
-                                        </label>
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12 d-flex justify-content-between align-items-center">
+                                            <span class="small fw-bold text-muted">Dorso</span>
+                                            <span class="badge bg-success visually-hidden" id="badge-back-{{ $requirement->id }}"><i class="bi bi-check"></i> Listo</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="file-back-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
+                                                <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                            </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="camera-back-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
+                                                <i class="bi bi-camera me-2"></i> ESCANEAR
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
-
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold btn-process-upload">Siguiente Paso <i class="bi bi-arrow-right"></i></button>
+                                    </div>
+                                @else
+                                    <input type="file" name="document" id="file-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-{{ $requirement->id }}')">
+                                    <input type="file" id="camera-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-{{ $requirement->id }}')">
+                                    
+                                    <div class="row g-2">
+                                        <div class="col-12 d-flex justify-content-between align-items-center mb-1">
+                                            <span class="small fw-bold text-muted d-none">Documento</span>
+                                            <span class="badge bg-success visually-hidden" id="badge-{{ $requirement->id }}"><i class="bi bi-check"></i> Seleccionado</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="file-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
+                                                <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                            </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="camera-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
+                                                <i class="bi bi-camera me-2"></i> ESCANEAR
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold btn-process-upload" style="display: none;" id="btn-submit-{{ $requirement->id }}">Siguiente Paso <i class="bi bi-arrow-right"></i></button>
+                                    </div>
+                                @endif
+                                
                                 <div class="mt-3 text-center">
                                     <span class="xx-small text-muted fw-bold ls-1 uppercase">SOPORTA: PDF, EXCEL, WORD, IMÁGENES (MÁX. 10MB)</span>
                                 </div>
@@ -186,9 +239,36 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    window.previewSelection = function(input, badgeId) {
+        const badge = document.getElementById(badgeId);
+        if (input.files && input.files.length > 0) {
+            if (badge) badge.classList.remove('visually-hidden');
+            
+            // Si es un documento simple, mostrar el boton de submit
+            const form = input.closest('form');
+            const submitBtn = form.querySelector('.btn-process-upload');
+            if(submitBtn && submitBtn.style.display === 'none') {
+                submitBtn.style.display = 'block';
+            }
+            
+            // Deseleccionar el otro input gemelo (si eligió file, limpiar camera, y viceversa)
+            const inputsOfSameClass = form.querySelectorAll('.' + input.className.split(' ').join('.'));
+            inputsOfSameClass.forEach(otherInput => {
+                if (otherInput !== input) {
+                    otherInput.value = ''; // clear sibling
+                }
+            });
+        } else {
+            if (badge) badge.classList.add('visually-hidden');
+        }
+    };
+
     let cropper = null;
     let currentInput = null;
     let currentForm = null;
+    let isFront = true;
+    let nextCallback = null;
+
     const cropperModalEl = document.getElementById('cropperModal');
     let cropperModal = null;
     if(cropperModalEl) {
@@ -196,33 +276,85 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     const imageToCrop = document.getElementById('imageToCrop');
 
-    window.handleComplianceUpload = function(input, event) {
-        if (!input || !input.files || !input.files.length) return;
-        
-        const form = input.closest('form');
-        const file = input.files[0];
-        
-        // Si no es imagen, hacer submit directo
-        if (!file.type.startsWith('image/')) {
-            // Asegurarnos de que este input tenga name="document" y el otro no
-            form.querySelectorAll('input[type="file"]').forEach(i => i.removeAttribute('name'));
-            input.setAttribute('name', 'document');
-            form.submit();
+    document.querySelectorAll('.btn-process-upload').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            
+            // Obtener el input seleccionado real (el file o el camera)
+            const frontInputs = form.querySelectorAll('.file-input-front');
+            let frontInput = null;
+            frontInputs.forEach(i => { if(i.files.length > 0) frontInput = i; });
+            
+            const backInputs = form.querySelectorAll('.file-input-back');
+            let backInput = null;
+            backInputs.forEach(i => { if(i.files.length > 0) backInput = i; });
+
+            if (!frontInput && !form.querySelector('.cropped-image-input').value) {
+                alert('Debes seleccionar al menos el documento principal (Frente).');
+                return;
+            }
+            
+            const backInputNeeded = form.querySelector('.cropped-image-back-input');
+            if (backInputNeeded && !backInput && !backInputNeeded.value) {
+                alert('Debes seleccionar también el dorso del documento.');
+                return;
+            }
+
+            processImage(frontInput, form, true, function() {
+                if (backInput) {
+                    processImage(backInput, form, false, function() {
+                        submitFormSafe(form);
+                    });
+                } else {
+                    submitFormSafe(form);
+                }
+            });
+        });
+    });
+
+    function submitFormSafe(form) {
+        // Asegurarnos de que si hay duplicados de input (file y camera), solo se mande uno
+        ['.file-input-front', '.file-input-back'].forEach(cls => {
+            const inputs = form.querySelectorAll(cls);
+            let hasNamed = false;
+            inputs.forEach(i => {
+                if (i.files.length > 0 && !hasNamed) {
+                    hasNamed = true;
+                } else {
+                    i.removeAttribute('name');
+                }
+            });
+        });
+        form.submit();
+    }
+
+    function processImage(input, form, front, onComplete) {
+        if (!input || !input.files || !input.files.length) {
+            onComplete();
             return;
         }
 
-        // Es una imagen, usar Cropper
+        const file = input.files[0];
+        if (!file.type.startsWith('image/')) {
+            onComplete();
+            return;
+        }
+
         currentInput = input;
         currentForm = form;
+        isFront = front;
+        nextCallback = onComplete;
 
         const reader = new FileReader();
         reader.onload = function(e) {
             imageToCrop.src = e.target.result;
+            
             if (cropper) {
                 cropper.destroy();
                 cropper = null;
             }
-            
+
             const initCropper = function() {
                 cropper = new Cropper(imageToCrop, {
                     viewMode: 1,
@@ -244,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cropperModal.show();
         };
         reader.readAsDataURL(file);
-    };
+    }
 
     const confirmBtn = document.querySelector('.confirm-crop');
     if (confirmBtn) {
@@ -253,15 +385,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const canvas = cropper.getCroppedCanvas({ maxWidth: 1600, maxHeight: 1600 });
             const base64 = canvas.toDataURL('image/jpeg', 0.85);
             
-            currentForm.querySelector('.cropped-image-input').value = base64;
-            // No enviar el archivo original (ya que es pesado y usamos base64)
-            currentForm.querySelectorAll('input[type="file"]').forEach(i => i.removeAttribute('name'));
+            if (isFront) {
+                currentForm.querySelector('.cropped-image-input').value = base64;
+            } else {
+                currentForm.querySelector('.cropped-image-back-input').value = base64;
+            }
+            currentInput.removeAttribute('name');
+            currentInput.value = '';
             
             cropperModal.hide();
             
-            // Submitear formulario despues de ocultar
             setTimeout(() => {
-                currentForm.submit();
+                if(nextCallback) nextCallback();
             }, 300);
         };
     }
@@ -269,7 +404,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.cancel-crop').forEach(btn => {
         btn.addEventListener('click', function() {
             if(cropperModal) cropperModal.hide();
-            if(currentInput) currentInput.value = ''; // limpiar
         });
     });
 
