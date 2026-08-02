@@ -476,7 +476,16 @@
         @if(session('success'))
             <div class="container mt-4">
                 <div class="alert alert-success bg-success bg-opacity-10 border-0 text-success fw-bold rounded-4 shadow-sm alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                    <i class="bi bi-check-circle-fill me-2"></i> {!! session('success') !!}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+
+        @if(session('info'))
+            <div class="container mt-4">
+                <div class="alert alert-info bg-info bg-opacity-10 border-0 text-info fw-bold rounded-4 shadow-sm alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle-fill me-2"></i> {!! session('info') !!}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
@@ -485,7 +494,7 @@
         @if(session('error'))
             <div class="container mt-4">
                 <div class="alert alert-danger bg-danger bg-opacity-10 border-0 text-danger fw-bold rounded-4 shadow-sm alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> {!! session('error') !!}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>

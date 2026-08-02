@@ -176,12 +176,38 @@ class BillingController extends Controller
             return back()->with('error', 'Debe definir un valor de cuota activo primero.');
         }
 
-        $count = $billingService->generateMonthlyDuesForSchool($school);
+        $result = $billingService->generateMonthlyDuesForSchool($school);
 
-        if ($count > 0) {
-            return back()->with('success', "Se generaron $count cuotas para el mes actual.");
+        if (isset($result['status']) && $result['status'] === 'error') {
+            return back()->with('error', $result['message']);
+        }
+
+        $message = "<strong>Informe de Liquidación:</strong><br>";
+        $message .= "<ul>";
+        $message .= "<li>Total de colegiados activos: <strong>{$result['total_active']}</strong></li>";
+        $message .= "<li>Cuotas generadas exitosamente: <strong>{$result['generated']}</strong></li>";
+        
+        if ($result['updated'] > 0) {
+            $message .= "<li>Cuotas pendientes actualizadas al nuevo monto: <strong>{$result['updated']}</strong></li>";
+        }
+        
+        if ($result['already_generated'] > 0) {
+            $message .= "<li>Cuotas ya generadas previamente: <strong>{$result['already_generated']}</strong></li>";
+        }
+
+        if ($result['already_paid'] > 0) {
+            $message .= "<li>Excluidos (ya la pagaron por adelantado): <strong>{$result['already_paid']}</strong></li>";
+        }
+        
+        if ($result['excepted'] > 0) {
+            $message .= "<li>Exceptuados (perfil anual u otras reglas): <strong>{$result['excepted']}</strong></li>";
+        }
+        $message .= "</ul>";
+
+        if ($result['total_processed'] > 0) {
+            return back()->with('success', $message);
         } else {
-            return back()->with('info', "No se generaron cuotas nuevas (ya estaban generadas o no hay colegiados con perfil mensual).");
+            return back()->with('info', "<strong>La liquidación para el período que estás tratando ya fue hecha.</strong><br><br>" . $message);
         }
     }
 }
