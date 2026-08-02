@@ -114,11 +114,6 @@
                 @php
                     $tAlign = $settings['titulo']['text_align'] ?? 'center';
                     $tStyle = "left: " . $settings['titulo']['x'] . "%; top: " . $settings['titulo']['y'] . "%;";
-                    if ($tAlign === 'center') {
-                        $tStyle .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
-                    } elseif ($tAlign === 'right') {
-                        $tStyle .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
-                    }
                     $tStyle .= " font-size: " . ($settings['titulo']['font_size'] ?? 28) . "px;";
                     $tStyle .= " font-weight: " . ($settings['titulo']['font_weight'] ?? 'bold') . ";";
                     $tStyle .= " color: " . ($settings['titulo']['color'] ?? '#1e3a8a') . ";";
@@ -134,11 +129,6 @@
                 @php
                     $cAlign = $settings['cuerpo']['text_align'] ?? 'center';
                     $cStyle = "left: " . $settings['cuerpo']['x'] . "%; top: " . $settings['cuerpo']['y'] . "%;";
-                    if ($cAlign === 'center') {
-                        $cStyle .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
-                    } elseif ($cAlign === 'right') {
-                        $cStyle .= " transform: translate(-100%, 0); -webkit-transform: translate(-100%, 0);";
-                    }
                     $cStyle .= " font-size: " . ($settings['cuerpo']['font_size'] ?? 15) . "px;";
                     $cStyle .= " font-weight: " . ($settings['cuerpo']['font_weight'] ?? 'normal') . ";";
                     $cStyle .= " color: " . ($settings['cuerpo']['color'] ?? '#333333') . ";";
@@ -181,8 +171,6 @@
                 @if($fConfig && ($fConfig['visible'] ?? true))
                     @php
                         $fStyle = "left: " . $fConfig['x'] . "%; top: " . $fConfig['y'] . "%;";
-                        // Centrar la firma con respecto a su punto de inserción para DomPDF
-                        $fStyle .= " transform: translate(-50%, 0); -webkit-transform: translate(-50%, 0);";
                         $fStyle .= " font-size: " . ($fConfig['font_size'] ?? 11) . "px;";
                         $fStyle .= " color: " . ($fConfig['color'] ?? '#047857') . ";";
                     @endphp
