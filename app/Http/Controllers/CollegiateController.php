@@ -14,7 +14,7 @@ class CollegiateController extends Controller
         $user = Auth::user();
         if (!$user->hasPermission('manage_users') && !$user->isOwner()) abort(403);
 
-        $schoolId = $user->isOwner() ? request('school_id', School::first()->id) : $user->school_id;
+        $schoolId = $user->isOwner() ? request('school_id', \App\Models\School::first()->id) : $user->school_id;
 
         $baseQuery = $user->isOwner() ? Collegiate::query() : $user->school->collegiates();
 
