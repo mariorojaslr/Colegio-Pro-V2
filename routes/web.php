@@ -297,6 +297,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/admin/certificates/{certificate}/reject', [\App\Http\Controllers\Admin\CertificateController::class, 'reject'])->name('admin.certificates.reject');
     Route::post('/revision-documentos/{document}/aprobar', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'approve'])->name('admin.compliance.approve');
     Route::post('/revision-documentos/{document}/rechazar', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'reject'])->name('admin.compliance.reject');
+    Route::post('/revision-documentos/{collegiate}/{requirement}/marcar-fisico', [\App\Http\Controllers\Admin\ComplianceReviewController::class, 'markPhysical'])->name('admin.compliance.mark_physical');
 
     // Gestión de Notificaciones y Cobranza
     Route::post('/notificaciones/aviso/{collegiate}', [\App\Http\Controllers\CollegiateNotificationController::class, 'sendWarning'])->name('notifications.warning');

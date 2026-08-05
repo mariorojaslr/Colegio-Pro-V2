@@ -107,7 +107,7 @@
                                 @csrf
                                 <input type="hidden" name="cropped_image" class="cropped-image-input">
                                 
-                                @if(Str::contains(strtolower($requirement->name), 'dni') || Str::contains(strtolower($requirement->name), 'documento'))
+                                @if($requirement->delivery_format === 'digital_front_back' || Str::contains(strtolower($requirement->name), 'dni') || Str::contains(strtolower($requirement->name), 'documento'))
                                     <input type="hidden" name="cropped_image_back" class="cropped-image-back-input">
                                     <input type="file" name="document" id="file-front-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
                                     <input type="file" id="camera-front-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">

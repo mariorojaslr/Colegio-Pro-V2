@@ -76,6 +76,37 @@ class ComplianceReviewController extends Controller
     }
 
     /**
+     * Marca un documento físico como entregado.
+     */
+    public function markPhysical(Collegiate $collegiate, \App\Models\ComplianceRequirement $requirement)
+    {
+        if (Auth::user()->school_id !== $collegiate->school_id) abort(403);
+        if ($requirement->school_id !== $collegiate->school_id) abort(403);
+
+        $expiresAt = null;
+        if ($requirement->expiration_months) {
+            $expiresAt = now()->addMonths($requirement->expiration_months);
+        }
+
+        $document = CollegiateDocument::updateOrCreate(
+            [
+                'collegiate_id' => $collegiate->id,
+                'compliance_requirement_id' => $requirement->id,
+            ],
+            [
+                'file_url' => '#physical',
+                'status' => 'approved',
+                'admin_notes' => 'Entregado físicamente y verificado por ' . Auth::user()->name . ' el ' . now()->format('d/m/Y'),
+                'expires_at' => $expiresAt,
+            ]
+        );
+
+        $this->updateCollegiateStatus($collegiate);
+
+        return back()->with('success', "¡Requisito presencial '{$requirement->name}' marcado como entregado!");
+    }
+
+    /**
      * Lógica interna para actualizar el estado global del colegiado.
      */
     private function updateCollegiateStatus(Collegiate $collegiate)

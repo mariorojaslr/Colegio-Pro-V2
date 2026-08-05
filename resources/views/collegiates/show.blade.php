@@ -250,7 +250,11 @@
                                                                         </div>
                                                                     </div>
                                                                 @else
-                                                                    <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3">Ver Documento</a>
+                                                                    @if($doc->file_url === '#physical')
+                                                                        <span class="badge bg-light text-dark border py-2 px-3 rounded-pill fw-bold"><i class="bi bi-person-check me-1 text-success"></i> Entregado Físico</span>
+                                                                    @else
+                                                                        <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3">Ver Documento</a>
+                                                                    @endif
                                                                 @endif
                                                                 
                                                                 @if(auth()->user()->isOwner() || auth()->user()->role === 'ADMIN_COLEGIO')
@@ -271,7 +275,10 @@
                                                                 @endif
                                                             @else
                                                                 @if($req->delivery_format == 'physical_only')
-                                                                    <button class="btn btn-sm btn-outline-warning rounded-pill px-3 fw-bold" disabled><i class="bi bi-person-badge me-1"></i> Presencial</button>
+                                                                    <form action="{{ route('admin.compliance.mark_physical', [$collegiate->id, $req->id]) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold" onclick="return confirm('¿Confirmas que el colegiado entregó físicamente este requisito?')"><i class="bi bi-check-circle me-1"></i> Marcar Entregado</button>
+                                                                    </form>
                                                                 @else
                                                                     <button class="btn btn-sm btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $req->id }}">Subir <i class="bi bi-cloud-arrow-up ms-1"></i></button>
                                                                 @endif
