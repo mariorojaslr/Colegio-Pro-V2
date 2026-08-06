@@ -20,6 +20,11 @@ class IdentifyTenant
         
         $tenant = null;
 
+        // Redirect legacy domain to new domain
+        if ($host === 'cotolar.gentepiola.net') {
+            return redirect()->to(str_replace('cotolar.gentepiola.net', 'cotolar.com', $request->fullUrl()), 301);
+        }
+
         // 1. Check via custom domain first
         $tenant = \App\Models\School::where('custom_domain', $host)->first();
 
