@@ -37,12 +37,14 @@ class Collegiate extends Model
         'historical_debt',
         'historical_debt_months',
         'observations',
+        'is_exempt_from_fees',
     ];
 
     protected $casts = [
         'is_ethics_compliant' => 'boolean',
         'is_fees_compliant' => 'boolean',
         'is_fully_documented' => 'boolean',
+        'is_exempt_from_fees' => 'boolean',
         'ethics_expiry' => 'date',
         'fees_expiry' => 'date',
         'custom_attributes' => 'array',

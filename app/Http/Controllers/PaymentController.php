@@ -24,7 +24,16 @@ class PaymentController extends Controller
         $pendingDues = $collegiate->pendingDues;
         $paidDues = $collegiate->dues()->where('status', 'paid')->orderBy('paid_at', 'desc')->get();
 
-        return view('student.payments.index', compact('collegiate', 'pendingDues', 'paidDues'));
+        $annualConcept = null;
+        $currentMonth = now()->month;
+        if ($currentMonth >= 1 && $currentMonth <= 3 && $collegiate->billing_profile !== 'anual') {
+            $annualConcept = \App\Models\BillingConcept::where('school_id', $collegiate->school_id)
+                                                       ->where('type', 'annual')
+                                                       ->where('is_active', true)
+                                                       ->first();
+        }
+
+        return view('student.payments.index', compact('collegiate', 'pendingDues', 'paidDues', 'annualConcept'));
     }
 
     /**
@@ -86,6 +95,65 @@ class PaymentController extends Controller
         }
 
         return redirect()->route('payment.index')->with('success', '¡Pago procesado exitosamente (Modo Sandbox MP)! Su cuenta ha sido actualizada.');
+    }
+
+    public function generateAnnualPayment(Request $request)
+    {
+        $user = Auth::user();
+        $collegiate = Collegiate::where('user_id', $user->id)->first();
+        if (!$collegiate) return back()->with('error', 'Sin perfil asociado.');
+
+        $currentMonth = now()->month;
+        if ($currentMonth < 1 || $currentMonth > 3) {
+            return back()->with('error', 'El Pago Anual Anticipado solo está disponible entre Enero y Marzo.');
+        }
+
+        if ($collegiate->billing_profile === 'anual') {
+            return back()->with('error', 'Ya posee el perfil de Pago Anual.');
+        }
+
+        $concept = \App\Models\BillingConcept::where('school_id', $collegiate->school_id)
+                                             ->where('type', 'annual')
+                                             ->where('is_active', true)
+                                             ->first();
+                                             
+        if (!$concept) {
+            return back()->with('error', 'El pago anual no está configurado por el colegio.');
+        }
+
+        $request->validate([
+            'date_1' => 'required|date|after_or_equal:today',
+            'date_2' => 'required|date|after_or_equal:date_1',
+        ]);
+
+        $amountPerInstallment = $concept->default_amount / 2;
+
+        // Generar Cuota 1
+        \App\Models\CollegiateDue::create([
+            'collegiate_id' => $collegiate->id,
+            'billing_concept_id' => $concept->id,
+            'amount' => $amountPerInstallment,
+            'due_date' => $request->date_1,
+            'concept' => $concept->name . ' (Cuota 1/2)',
+            'due_type' => 'extraordinary',
+            'status' => 'pending'
+        ]);
+
+        // Generar Cuota 2
+        \App\Models\CollegiateDue::create([
+            'collegiate_id' => $collegiate->id,
+            'billing_concept_id' => $concept->id,
+            'amount' => $amountPerInstallment,
+            'due_date' => $request->date_2,
+            'concept' => $concept->name . ' (Cuota 2/2)',
+            'due_type' => 'extraordinary',
+            'status' => 'pending'
+        ]);
+
+        // Cambiar perfil
+        $collegiate->update(['billing_profile' => 'anual']);
+
+        return back()->with('success', 'Acuerdo de Pago Anual generado exitosamente. Podrá pagar las cuotas desde su estado de cuenta.');
     }
 
     /**

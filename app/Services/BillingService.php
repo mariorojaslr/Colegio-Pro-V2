@@ -41,7 +41,7 @@ class BillingService
 
         foreach ($allCollegiates as $collegiate) {
             // Excepciones: por ejemplo perfil 'anual' u otros exceptuados
-            if ($collegiate->billing_profile === 'anual') {
+            if ($collegiate->billing_profile === 'anual' || $collegiate->is_exempt_from_fees) {
                 $exceptedCount++;
                 continue;
             }

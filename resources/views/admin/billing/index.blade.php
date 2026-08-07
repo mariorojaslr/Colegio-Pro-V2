@@ -11,13 +11,19 @@
                         <p class="text-secondary xx-small mb-0 text-uppercase ls-1">Gestión de cuotas societarias y estados de cuenta</p>
                     </div>
                     <div class="d-flex gap-2">
+                        <button class="btn btn-outline-dark rounded-pill px-3 btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#customDueModal">
+                            <i class="bi-plus-circle me-1"></i> Nueva Novedad / Deuda
+                        </button>
                         <button class="btn btn-outline-dark rounded-pill px-3 btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#feesConfigModal">
                             <i class="bi-gear-fill me-1"></i> Cuotas
+                        </button>
+                        <button class="btn btn-outline-dark rounded-pill px-3 btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#conceptsModal">
+                            <i class="bi-tags-fill me-1"></i> Conceptos
                         </button>
                         <form action="{{ route('admin.billing.generate_dues') }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-primary rounded-pill px-3 btn-sm shadow-sm fw-bold" onclick="return confirm('¿Generar cuotas societarias para todos los socios activos? Esto generará deuda en sus estados de cuenta.')">
-                                <i class="bi-plus-circle-fill me-1"></i> Generar Masivo
+                                <i class="bi-lightning-charge-fill me-1"></i> Generar Masivo
                             </button>
                         </form>
                     </div>
@@ -246,6 +252,156 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Conceptos Facturables -->
+<div class="modal fade" id="conceptsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-bottom py-3 px-4 bg-light">
+                <h5 class="modal-title fw-bold"><i class="bi-tags-fill me-2 text-primary"></i>Catálogo de Conceptos Facturables</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="table-responsive mb-4">
+                    <table class="table table-sm align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Tipo</th>
+                                <th>Monto Base</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($billingConcepts as $concept)
+                                <tr>
+                                    <td class="fw-bold">{{ $concept->name }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            @if($concept->type == 'enrollment') Inscripción
+                                            @elseif($concept->type == 'annual') Anual
+                                            @elseif($concept->type == 'penalty') Multa/Recargo
+                                            @else Otro @endif
+                                        </span>
+                                    </td>
+                                    <td class="text-primary fw-bold">${{ number_format($concept->default_amount, 0, ',', '.') }}</td>
+                                    <td>
+                                        @if($concept->is_active)
+                                            <span class="badge bg-success-soft text-success">Activo</span>
+                                        @else
+                                            <span class="badge bg-danger-soft text-danger">Suspendido</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <form action="{{ route('admin.billing.toggle_concept', $concept) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-{{ $concept->is_active ? 'warning' : 'success' }} px-2 py-1" title="{{ $concept->is_active ? 'Suspender' : 'Activar' }}">
+                                                    <i class="bi-{{ $concept->is_active ? 'pause-fill' : 'play-fill' }}"></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('admin.billing.destroy_concept', $concept) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar concepto definitivamente? Solo posible si no ha sido usado.');">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger px-2 py-1" title="Eliminar">
+                                                    <i class="bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="5" class="text-center text-muted small py-3">No hay conceptos creados.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr>
+                <h6 class="fw-bold mb-3">Crear Nuevo Concepto</h6>
+                <form action="{{ route('admin.billing.store_concept') }}" method="POST" class="row g-3">
+                    @csrf
+                    <div class="col-md-5">
+                        <input type="text" name="name" class="form-control form-control-sm" placeholder="Ej. Inscripción Inicial" required>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="type" class="form-select form-select-sm" required>
+                            <option value="other">Otro</option>
+                            <option value="enrollment">Inscripción / Matrícula</option>
+                            <option value="annual">Pago Anual Anticipado</option>
+                            <option value="penalty">Multa / Rehabilitación</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="default_amount" class="form-control form-control-sm" placeholder="$ Monto" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Crear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Cargar Deuda Histórica / Novedad -->
+<div class="modal fade" id="customDueModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{{ route('admin.billing.store_custom') }}" method="POST" class="modal-content border-0 shadow-lg rounded-4">
+            @csrf
+            <div class="modal-header border-bottom py-3 bg-light">
+                <h5 class="modal-title fw-bold text-dark"><i class="bi-plus-circle me-2 text-primary"></i>Nueva Novedad / Deuda Histórica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Colegiado a quien se le aplica</label>
+                    <select name="collegiate_id" class="form-select" required>
+                        <option value="">Seleccionar Colegiado...</option>
+                        @foreach(\App\Models\Collegiate::where('school_id', auth()->user()->school_id)->where('status', 'active')->orderBy('last_name')->get() as $c)
+                            <option value="{{ $c->id }}">{{ $c->last_name }} {{ $c->first_name }} (MAT: {{ $c->registration_number }})</option>
+                        @endforeach
+                    </select>
+                    <div class="form-text">Busque y seleccione al profesional.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Concepto de Cobro</label>
+                    <select name="billing_concept_id" id="billingConceptSelect" class="form-select" onchange="updateConceptAmount()">
+                        <option value="">-- Concepto Manual (Escribir debajo) --</option>
+                        @foreach($billingConcepts->where('is_active', true) as $concept)
+                            <option value="{{ $concept->id }}" data-amount="{{ $concept->default_amount }}">
+                                {{ $concept->name }} (${{ number_format($concept->default_amount, 0, ',', '.') }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3" id="manualConceptWrapper">
+                    <label class="form-label small fw-bold text-muted">Descripción del Concepto Manual</label>
+                    <input type="text" name="concept" id="manualConceptInput" class="form-control" placeholder="Ej. Saldo deudor 2024 / Cuota inscripción curso">
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label small fw-bold text-muted">Monto ($)</label>
+                        <input type="number" step="0.01" name="amount" class="form-control fw-bold text-primary" required placeholder="0.00">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="form-label small fw-bold text-muted">Fecha de Vencimiento</label>
+                        <input type="date" name="due_date" class="form-control" required value="{{ date('Y-m-d') }}">
+                    </div>
+                </div>
+                
+                <div class="alert alert-info border-0 rounded-3 small mb-0 mt-2">
+                    <i class="bi-info-circle-fill me-2"></i> Esta deuda aparecerá en el estado de cuenta del profesional inmediatamente.
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Generar Cargo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -306,5 +462,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     statusSelect.addEventListener('change', performSearch);
 });
+
+function updateConceptAmount() {
+    const select = document.getElementById('billingConceptSelect');
+    const amountInput = document.querySelector('input[name="amount"]');
+    const manualInputWrapper = document.getElementById('manualConceptWrapper');
+    const manualInput = document.getElementById('manualConceptInput');
+
+    if (select.value === "") {
+        // Manual entry
+        manualInputWrapper.style.display = 'block';
+        manualInput.setAttribute('required', 'required');
+        amountInput.value = '';
+    } else {
+        // Selected concept
+        manualInputWrapper.style.display = 'none';
+        manualInput.removeAttribute('required');
+        manualInput.value = '';
+        
+        const selectedOption = select.options[select.selectedIndex];
+        if (selectedOption.dataset.amount) {
+            amountInput.value = selectedOption.dataset.amount;
+        }
+    }
+}
+document.addEventListener('DOMContentLoaded', updateConceptAmount);
 </script>
 @endsection

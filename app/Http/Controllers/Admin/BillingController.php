@@ -59,8 +59,9 @@ class BillingController extends Controller
         ];
 
         $activeFee = MembershipFee::where('school_id', $schoolId)->where('is_active', true)->latest()->first();
+        $billingConcepts = \App\Models\BillingConcept::where('school_id', $schoolId)->get();
 
-        return view('admin.billing.index', compact('stats', 'collegiates', 'activeFee', 'search', 'statusFilter'));
+        return view('admin.billing.index', compact('stats', 'collegiates', 'activeFee', 'search', 'statusFilter', 'billingConcepts'));
     }
 
     /**
@@ -113,8 +114,8 @@ class BillingController extends Controller
         $methodNames = [
             'efectivo' => 'Efectivo',
             'transferencia' => 'Transferencia',
-            'debito' => 'Tarjeta de Débito',
-            'credito' => 'Tarjeta de Crédito'
+            'tarjeta_financiada' => 'Tarjeta (Financiada por tarjeta)',
+            'tarjeta_cuota' => 'Tarjeta (Valor de la cuota)'
         ];
         
         $methodLabel = $methodNames[$request->payment_method] ?? 'Otro';
@@ -209,5 +210,112 @@ class BillingController extends Controller
         } else {
             return back()->with('info', "<strong>La liquidación para el período que estás tratando ya fue hecha.</strong><br><br>" . $message);
         }
+    }
+
+    /**
+     * Generar un cargo personalizado / deuda histórica para un colegiado.
+     */
+    public function storeCustom(Request $request)
+    {
+        $request->validate([
+            'collegiate_id' => 'required|exists:collegiates,id',
+            'amount' => 'required|numeric|min:0',
+            'billing_concept_id' => 'nullable|exists:billing_concepts,id',
+            'concept' => 'required_without:billing_concept_id|string|max:255',
+            'due_date' => 'required|date'
+        ]);
+
+        $collegiate = Collegiate::findOrFail($request->collegiate_id);
+        
+        if (!auth()->user()->isOwner() && $collegiate->school_id !== auth()->user()->school_id) {
+            abort(403);
+        }
+
+        $conceptName = $request->concept;
+        $dueType = 'extraordinary';
+
+        if ($request->filled('billing_concept_id')) {
+            $billingConcept = \App\Models\BillingConcept::find($request->billing_concept_id);
+            if ($billingConcept) {
+                $conceptName = $billingConcept->name;
+                $dueType = $billingConcept->type;
+            }
+        }
+
+        CollegiateDue::create([
+            'collegiate_id' => $collegiate->id,
+            'billing_concept_id' => $request->billing_concept_id,
+            'amount' => $request->amount,
+            'due_date' => $request->due_date,
+            'concept' => $conceptName,
+            'due_type' => $dueType,
+            'status' => 'pending'
+        ]);
+
+        $collegiate->update(['is_fees_compliant' => false]);
+
+        return back()->with('success', 'La novedad financiera fue generada correctamente y ya figura en el estado de cuenta.');
+    }
+
+    // --- CRUD Conceptos Facturables --- //
+
+    public function storeConcept(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'default_amount' => 'required|numeric|min:0',
+            'type' => 'required|string',
+        ]);
+
+        \App\Models\BillingConcept::create([
+            'school_id' => auth()->user()->school_id,
+            'name' => $request->name,
+            'default_amount' => $request->default_amount,
+            'type' => $request->type,
+            'is_active' => true,
+        ]);
+
+        return back()->with('success', 'Concepto facturable creado exitosamente.');
+    }
+
+    public function updateConcept(Request $request, \App\Models\BillingConcept $concept)
+    {
+        if (!auth()->user()->isOwner() && $concept->school_id !== auth()->user()->school_id) abort(403);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'default_amount' => 'required|numeric|min:0',
+            'type' => 'required|string',
+        ]);
+
+        $concept->update([
+            'name' => $request->name,
+            'default_amount' => $request->default_amount,
+            'type' => $request->type,
+        ]);
+
+        return back()->with('success', 'Concepto facturable actualizado.');
+    }
+
+    public function toggleConcept(\App\Models\BillingConcept $concept)
+    {
+        if (!auth()->user()->isOwner() && $concept->school_id !== auth()->user()->school_id) abort(403);
+        
+        $concept->update(['is_active' => !$concept->is_active]);
+        
+        $status = $concept->is_active ? 'activado' : 'suspendido';
+        return back()->with('success', "El concepto ha sido {$status}.");
+    }
+
+    public function destroyConcept(\App\Models\BillingConcept $concept)
+    {
+        if (!auth()->user()->isOwner() && $concept->school_id !== auth()->user()->school_id) abort(403);
+
+        if ($concept->collegiateDues()->exists()) {
+            return back()->with('error', 'No se puede eliminar este concepto porque ya ha sido utilizado en cobros. Puede suspenderlo en su lugar.');
+        }
+
+        $concept->delete();
+        return back()->with('success', 'Concepto eliminado exitosamente.');
     }
 }

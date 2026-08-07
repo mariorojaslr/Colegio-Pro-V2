@@ -646,8 +646,8 @@
                         <select name="payment_method" class="form-select border-0 shadow-sm rounded-3 py-2" required>
                             <option value="efectivo">Efectivo en Oficina</option>
                             <option value="transferencia">Transferencia Bancaria</option>
-                            <option value="debito">Tarjeta de Débito</option>
-                            <option value="credito">Tarjeta de Crédito</option>
+                            <option value="tarjeta_financiada">Tarjeta (Financiada por tarjeta)</option>
+                            <option value="tarjeta_cuota">Tarjeta (Valor de la cuota)</option>
                         </select>
                     </div>
 

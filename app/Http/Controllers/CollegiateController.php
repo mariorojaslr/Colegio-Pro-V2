@@ -141,6 +141,9 @@ class CollegiateController extends Controller
             $customAttributes['financial_situation_note'] = $request->financial_situation_note;
         }
         $data['custom_attributes'] = $customAttributes;
+        
+        // Mapear billing_profile exento a is_exempt_from_fees
+        $data['is_exempt_from_fees'] = ($request->billing_profile === 'exento');
 
         $collegiate->update($data);
 

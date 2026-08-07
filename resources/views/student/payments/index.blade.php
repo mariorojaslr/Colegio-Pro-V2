@@ -26,6 +26,53 @@
             </div>
         @endif
 
+        @if(isset($annualConcept))
+            <div class="col-12 mb-2">
+                <div class="card shadow-sm border-0 rounded-4 bg-primary text-white bg-gradient">
+                    <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h4 class="fw-bold mb-1"><i class="bi-calendar2-check-fill me-2"></i>Pago Anual Anticipado Disponible</h4>
+                            <p class="mb-0 opacity-75">Puede abonar el año completo por adelantado. Monto total equivalente a 10 cuotas: <strong>${{ number_format($annualConcept->default_amount, 0, ',', '.') }}</strong></p>
+                        </div>
+                        <button type="button" class="btn btn-light rounded-pill px-4 fw-bold text-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#annualPaymentModal">
+                            Generar Pago Anual
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Pago Anual -->
+            <div class="modal fade" id="annualPaymentModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 rounded-4 shadow-lg">
+                        <div class="modal-header border-bottom py-3 px-4">
+                            <h5 class="modal-title fw-bold text-dark">Generar Pago Anual Anticipado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form action="{{ route('payment.annual') }}" method="POST">
+                            @csrf
+                            <div class="modal-body p-4 text-start">
+                                <p class="text-secondary small mb-4">Puede dividir el pago anual en hasta 2 cuotas en las fechas que prefiera (entre enero y marzo). El sistema generará estas cuotas en su estado de cuenta para que proceda a abonarlas.</p>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label text-dark fw-bold small text-uppercase">Fecha Vencimiento Cuota 1 (50%)</label>
+                                    <input type="date" name="date_1" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-dark fw-bold small text-uppercase">Fecha Vencimiento Cuota 2 (50%)</label>
+                                    <input type="date" name="date_2" class="form-control" value="{{ \Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0 p-4 pt-0">
+                                <button type="button" class="btn btn-light rounded-pill px-4 text-dark" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">Generar Acuerdo</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="col-lg-7">
             <div class="card shadow-sm border-0 rounded-4 mb-4">
                 <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">

@@ -11,6 +11,7 @@ class CollegiateDue extends Model
 
     protected $fillable = [
         'collegiate_id',
+        'billing_concept_id',
         'amount',
         'due_date',
         'concept',
@@ -28,5 +29,10 @@ class CollegiateDue extends Model
     public function collegiate()
     {
         return $this->belongsTo(Collegiate::class);
+    }
+
+    public function billingConcept()
+    {
+        return $this->belongsTo(BillingConcept::class);
     }
 }

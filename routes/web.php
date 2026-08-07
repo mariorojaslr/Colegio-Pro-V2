@@ -281,7 +281,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Motor de Pagos y Liquidaciones
     Route::get('/mis-pagos', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
-    Route::post('/pagar/cuotas', [\App\Http\Controllers\PaymentController::class, 'payDues'])->name('payment.dues');
+    Route::post('/pagos/procesar', [\App\Http\Controllers\PaymentController::class, 'payDues'])->name('payment.dues');
+    Route::post('/pagos/anual', [\App\Http\Controllers\PaymentController::class, 'generateAnnualPayment'])->name('payment.annual');
     Route::post('/pagar/reserva/{booking}', [\App\Http\Controllers\PaymentController::class, 'payBooking'])->name('payment.booking');
 
     // Gestión del Plan de Documentación (Requisitos de Cumplimiento)
@@ -322,6 +323,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/finanzas', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('admin.billing.index');
     Route::post('/mi-facturacion/cuota', [\App\Http\Controllers\Admin\BillingController::class, 'updateFee'])->name('admin.billing.update_fee');
     Route::post('/mi-facturacion/generar-cuotas', [\App\Http\Controllers\Admin\BillingController::class, 'generateMonthlyDues'])->name('admin.billing.generate_dues');
+    Route::post('/mi-facturacion/generar-novedad', [\App\Http\Controllers\Admin\BillingController::class, 'storeCustom'])->name('admin.billing.store_custom');
+    Route::post('/mi-facturacion/conceptos', [\App\Http\Controllers\Admin\BillingController::class, 'storeConcept'])->name('admin.billing.store_concept');
+    Route::put('/mi-facturacion/conceptos/{concept}', [\App\Http\Controllers\Admin\BillingController::class, 'updateConcept'])->name('admin.billing.update_concept');
+    Route::post('/mi-facturacion/conceptos/{concept}/toggle', [\App\Http\Controllers\Admin\BillingController::class, 'toggleConcept'])->name('admin.billing.toggle_concept');
+    Route::delete('/mi-facturacion/conceptos/{concept}', [\App\Http\Controllers\Admin\BillingController::class, 'destroyConcept'])->name('admin.billing.destroy_concept');
     Route::post('/mi-facturacion/pago-presencial', [\App\Http\Controllers\Admin\BillingController::class, 'payInPerson'])->name('admin.billing.pay_in_person');
     Route::get('/mi-facturacion/descargar/{invoice}', [\App\Http\Controllers\Admin\BillingController::class, 'download'])->name('billing.download');
     Route::get('/mi-facturacion/historial/{collegiate}', [\App\Http\Controllers\Admin\BillingController::class, 'collegiateHistory'])->name('admin.billing.history');
