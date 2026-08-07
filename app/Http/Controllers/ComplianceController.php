@@ -78,9 +78,13 @@ class ComplianceController extends Controller
         $url = null;
         $url_back = null;
 
+        // Buscar documento existente para limpiar archivos viejos de Bunny
+        $existingDoc = CollegiateDocument::where('collegiate_id', $collegiate->id)
+            ->where('compliance_requirement_id', $requirement->id)
+            ->first();
+
         // --- PROCESAR FRENTE ---
         if ($request->filled('cropped_image')) {
-            // Es una imagen base64 desde Cropper.js
             $base64 = $request->input('cropped_image');
             $data = explode(',', $base64);
             if (count($data) > 1) {
@@ -92,7 +96,6 @@ class ComplianceController extends Controller
                 if ($result['success']) $url = $result['url'];
             }
         } elseif ($request->hasFile('document')) {
-            // Archivo normal (PDF, o imagen sin cropper)
             $file = $request->file('document');
             $extension = strtolower($file->getClientOriginalExtension());
             $remoteName = "docs/{$user->school->slug}/{$collegiate->registration_number}/" . Str::slug($requirement->name) . "_" . time() . ".{$extension}";
@@ -124,6 +127,19 @@ class ComplianceController extends Controller
             if ($result['success']) $url_back = $result['url'];
         }
 
+        // Borrar archivos viejos si fueron reemplazados exitosamente
+        if ($existingDoc) {
+            $pullZoneUrl = config('services.bunny.storage.pull_zone_url');
+            if ($url && $existingDoc->file_url) {
+                $oldPath = str_replace($pullZoneUrl . '/', '', $existingDoc->file_url);
+                $this->bunny->deleteFile($oldPath);
+            }
+            if ($url_back && $existingDoc->file_url_back) {
+                $oldPathBack = str_replace($pullZoneUrl . '/', '', $existingDoc->file_url_back);
+                $this->bunny->deleteFile($oldPathBack);
+            }
+        }
+
         // Buscar o crear el registro
         CollegiateDocument::updateOrCreate(
             [
@@ -131,8 +147,8 @@ class ComplianceController extends Controller
                 'compliance_requirement_id' => $requirement->id,
             ],
             [
-                'file_url' => $url,
-                'file_url_back' => $url_back,
+                'file_url' => $url ?: ($existingDoc ? $existingDoc->file_url : null),
+                'file_url_back' => $url_back ?: ($existingDoc ? $existingDoc->file_url_back : null),
                 'status' => 'pending',
                 'admin_notes' => null, // Limpiar notas previas si re-sube
             ]
