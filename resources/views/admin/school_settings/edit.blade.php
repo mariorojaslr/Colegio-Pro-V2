@@ -135,24 +135,24 @@
                     <div class="col-12 mb-3">
                         @if($school->mp_access_token)
                             <div class="alert alert-success d-flex align-items-center rounded-4 border-0 shadow-sm">
-                                <i class="bi bi-check-circle-fill fs-3 me-3"></i>
-                                <div>
-                                    <h6 class="mb-1 fw-bold">Mercado Pago Vinculado</h6>
-                                    <p class="mb-0 small">Su colegio ya está conectado a Mercado Pago y listo para recibir pagos automáticamente en su billetera.</p>
+                                <i class="bi bi-check-circle-fill fs-3 me-3 text-success"></i>
+                                <div class="text-dark">
+                                    <h6 class="mb-1 fw-bold text-dark">Mercado Pago Vinculado</h6>
+                                    <p class="mb-0 small text-dark">Su colegio ya está conectado a Mercado Pago y listo para recibir pagos automáticamente en su billetera.</p>
                                 </div>
                                 <div class="ms-auto">
-                                    <a href="{{ route('mercadopago.redirect') }}" class="btn btn-outline-success btn-sm rounded-pill fw-bold">Actualizar Vinculación</a>
+                                    <a href="{{ route('mercadopago.redirect') }}" class="btn btn-success btn-sm rounded-pill fw-bold text-white shadow-sm">Actualizar Vinculación</a>
                                 </div>
                             </div>
                         @else
                             <div class="alert alert-warning d-flex align-items-center rounded-4 border-0 shadow-sm">
-                                <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
-                                <div>
-                                    <h6 class="mb-1 fw-bold">Mercado Pago No Vinculado</h6>
-                                    <p class="mb-0 small">No podrá procesar pagos reales hasta no vincular su cuenta de Mercado Pago.</p>
+                                <i class="bi bi-exclamation-triangle-fill fs-3 me-3 text-warning-emphasis"></i>
+                                <div class="text-dark">
+                                    <h6 class="mb-1 fw-bold text-dark">Mercado Pago No Vinculado</h6>
+                                    <p class="mb-0 small text-dark">No podrá procesar pagos reales hasta no vincular su cuenta de Mercado Pago.</p>
                                 </div>
                                 <div class="ms-auto">
-                                    <a href="{{ route('mercadopago.redirect') }}" class="btn btn-primary btn-sm rounded-pill fw-bold">Vincular Ahora</a>
+                                    <a href="{{ route('mercadopago.redirect') }}" class="btn btn-primary btn-sm rounded-pill fw-bold shadow-sm">Vincular Ahora</a>
                                 </div>
                             </div>
                         @endif
