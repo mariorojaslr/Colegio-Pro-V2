@@ -288,6 +288,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pagos/anual', [\App\Http\Controllers\PaymentController::class, 'generateAnnualPayment'])->name('payment.annual');
     Route::post('/pagar/reserva/{booking}', [\App\Http\Controllers\PaymentController::class, 'payBooking'])->name('payment.booking');
 
+    // Billeteras Virtuales
+    Route::get('/admin/wallets', [\App\Http\Controllers\WalletController::class, 'index'])->name('admin.wallets.index');
+
     // Gestión del Plan de Documentación (Requisitos de Cumplimiento)
     Route::get('/requisitos', [\App\Http\Controllers\ComplianceRequirementController::class, 'index'])->name('compliance_requirements.index');
     Route::post('/requisitos', [\App\Http\Controllers\ComplianceRequirementController::class, 'store'])->name('compliance_requirements.store');

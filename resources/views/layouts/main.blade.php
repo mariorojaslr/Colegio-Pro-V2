@@ -362,7 +362,15 @@
                                     </ul>
                                 </li>
 
-                                <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') ? 'text-primary' : 'text-muted' }}" href="{{ route('admin.billing.index') }}">Sector Económico</a></li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'billing') || str_contains($currentRoute, 'wallets') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
+                                        Sector Económico
+                                    </a>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 p-2 mt-2">
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.billing.index') }}"><i class="bi bi-receipt me-2 text-primary"></i> Facturación</a></li>
+                                        <li><a class="dropdown-item py-2 x-small fw-bold" href="{{ route('admin.wallets.index') }}"><i class="bi bi-wallet2 me-2 text-primary"></i> Billeteras Virtuales</a></li>
+                                    </ul>
+                                </li>
                                 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle px-3 x-small fw-bold ls-1 text-uppercase {{ str_contains($currentRoute, 'cms') || str_contains($currentRoute, 'school_settings') ? 'text-primary' : 'text-muted' }}" href="#" data-bs-toggle="dropdown">
