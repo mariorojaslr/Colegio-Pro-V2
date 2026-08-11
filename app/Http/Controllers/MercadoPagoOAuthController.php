@@ -16,8 +16,8 @@ class MercadoPagoOAuthController extends Controller
     {
         $school = auth()->user()->school;
         
-        $clientId = env('MP_MARKETPLACE_CLIENT_ID');
-        $redirectUri = urlencode(env('MP_MARKETPLACE_REDIRECT_URI'));
+        $clientId = config('services.mercadopago.client_id');
+        $redirectUri = urlencode(config('services.mercadopago.redirect_uri'));
         $state = $school->id; // Usamos el ID como identificador
 
         $url = "https://auth.mercadopago.com/authorization?client_id={$clientId}&response_type=code&platform_id=mp&state={$state}&redirect_uri={$redirectUri}";
@@ -44,11 +44,11 @@ class MercadoPagoOAuthController extends Controller
 
         // Intercambiar el authorization_code por los tokens reales
         $response = Http::asForm()->post('https://api.mercadopago.com/oauth/token', [
-            'client_id' => env('MP_MARKETPLACE_CLIENT_ID'),
-            'client_secret' => env('MP_MARKETPLACE_CLIENT_SECRET'),
+            'client_id' => config('services.mercadopago.client_id'),
+            'client_secret' => config('services.mercadopago.client_secret'),
             'grant_type' => 'authorization_code',
             'code' => $code,
-            'redirect_uri' => env('MP_MARKETPLACE_REDIRECT_URI'),
+            'redirect_uri' => config('services.mercadopago.redirect_uri'),
         ]);
 
         if ($response->successful()) {

@@ -48,4 +48,10 @@ return [
         ],
     ],
 
+    'mercadopago' => [
+        'client_id' => env('MP_MARKETPLACE_CLIENT_ID'),
+        'client_secret' => env('MP_MARKETPLACE_CLIENT_SECRET'),
+        'redirect_uri' => env('MP_MARKETPLACE_REDIRECT_URI'),
+    ],
+
 ];
