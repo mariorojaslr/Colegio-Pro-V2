@@ -17,7 +17,7 @@ class MercadoPagoOAuthController extends Controller
         $school = auth()->user()->school;
         
         $clientId = env('MP_MARKETPLACE_CLIENT_ID');
-        $redirectUri = urlencode(route('mercadopago.callback'));
+        $redirectUri = urlencode(env('MP_MARKETPLACE_REDIRECT_URI'));
         $state = $school->id; // Usamos el ID como identificador
 
         $url = "https://auth.mercadopago.com/authorization?client_id={$clientId}&response_type=code&platform_id=mp&state={$state}&redirect_uri={$redirectUri}";
@@ -48,7 +48,7 @@ class MercadoPagoOAuthController extends Controller
             'client_secret' => env('MP_MARKETPLACE_CLIENT_SECRET'),
             'grant_type' => 'authorization_code',
             'code' => $code,
-            'redirect_uri' => route('mercadopago.callback'),
+            'redirect_uri' => env('MP_MARKETPLACE_REDIRECT_URI'),
         ]);
 
         if ($response->successful()) {
