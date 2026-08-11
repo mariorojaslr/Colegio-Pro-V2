@@ -282,6 +282,9 @@ Route::middleware(['auth'])->group(function () {
     // Motor de Pagos y Liquidaciones
     Route::get('/mis-pagos', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
     Route::post('/pagos/procesar', [\App\Http\Controllers\PaymentController::class, 'payDues'])->name('payment.dues');
+    Route::get('/pagos/exito', [\App\Http\Controllers\PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/pagos/pendiente', [\App\Http\Controllers\PaymentController::class, 'pending'])->name('payment.pending');
+    Route::get('/pagos/fallo', [\App\Http\Controllers\PaymentController::class, 'failure'])->name('payment.failure');
     Route::post('/pagos/anual', [\App\Http\Controllers\PaymentController::class, 'generateAnnualPayment'])->name('payment.annual');
     Route::post('/pagar/reserva/{booking}', [\App\Http\Controllers\PaymentController::class, 'payBooking'])->name('payment.booking');
 
@@ -377,4 +380,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tramites', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'index'])->name('collegiates.certificates.store');
     Route::post('/tramites/{type}/purchase', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'purchase'])->name('collegiates.certificates.purchase');
     Route::get('/tramites/descargar/{certificate}', [\App\Http\Controllers\CollegiateCertificateStoreController::class, 'download'])->name('collegiates.certificates.download');
+
+    // Rutas de Vinculación OAuth (Mercado Pago Connect)
+    Route::get('/admin/mercadopago/vincular', [\App\Http\Controllers\MercadoPagoOAuthController::class, 'redirect'])->name('mercadopago.redirect');
 });
+
+// Ruta maestra central para el retorno de MP (Fuera del middleware auth porque MP nos manda acá y podríamos perder la sesión temporal)
+Route::get('/mp/callback', [\App\Http\Controllers\MercadoPagoOAuthController::class, 'callback'])->name('mercadopago.callback');
+
+// Ruta Webhook de Mercado Pago (Recibe los IPN POST automáticos)
+Route::post('/webhook/mercadopago', [\App\Http\Controllers\MercadoPagoWebhookController::class, 'handle'])->name('mercadopago.webhook');
+

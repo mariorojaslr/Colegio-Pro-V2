@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Collegiate;
+use App\Models\CollegiatePayment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -57,44 +60,78 @@ class PaymentController extends Controller
         $dues = \App\Models\CollegiateDue::whereIn('id', $duesIds)->where('collegiate_id', $collegiate->id)->get();
         $totalAmount = $dues->sum('amount');
 
-        /* 
-         * INTEGRACIÓN MERCADO PAGO (PREPARADA)
-         * Cuando el cliente provea su ACCESS_TOKEN, se habilita este bloque:
-         * 
-         * \MercadoPago\SDK::setAccessToken(env('MP_ACCESS_TOKEN'));
-         * $preference = new \MercadoPago\Preference();
-         * 
-         * $item = new \MercadoPago\Item();
-         * $item->title = 'Cuotas Societarias - ' . $collegiate->registration_number;
-         * $item->quantity = 1;
-         * $item->unit_price = $totalAmount;
-         * $preference->items = array($item);
-         * 
-         * $preference->back_urls = array(
-         *    "success" => route('payment.success'),
-         *    "failure" => route('payment.failure'),
-         *    "pending" => route('payment.pending')
-         * );
-         * $preference->auto_return = "approved";
-         * $preference->save();
-         * 
-         * return redirect($preference->init_point);
-         */
+        $school = $collegiate->school;
 
-        // LÓGICA DE SIMULACIÓN DE PASARELA (Fallback temporal hasta cargar credenciales)
+        if (!$school->mp_access_token) {
+            return back()->with('error', 'El colegio aún no ha configurado Mercado Pago. Por favor intente más tarde.');
+        }
+
+        // Crear Comprobante Interno
+        $externalReference = Str::uuid()->toString();
+
+        $payment = CollegiatePayment::create([
+            'school_id' => $school->id,
+            'collegiate_id' => $collegiate->id,
+            'amount' => $totalAmount,
+            'gateway' => 'mercadopago',
+            'external_reference' => $externalReference,
+            'status' => 'pending',
+        ]);
+
+        // Vincular cuotas al comprobante
         foreach ($dues as $due) {
-            $due->update([
-                'status' => 'paid',
-                'paid_at' => now(),
-                'payment_reference' => 'MP-SIMULADO-' . uniqid()
+            $due->update(['collegiate_payment_id' => $payment->id]);
+        }
+
+        // Generar items para la preferencia
+        $items = [];
+        foreach ($dues as $due) {
+            $items[] = [
+                'title' => $due->concept ?? 'Cuota Societaria',
+                'quantity' => 1,
+                'unit_price' => (float) $due->amount,
+                'currency_id' => 'ARS'
+            ];
+        }
+
+        // Crear la preferencia en Mercado Pago
+        $webhookUrl = route('mercadopago.webhook', ['school_id' => $school->id]);
+
+        $response = Http::withToken($school->mp_access_token)
+            ->post('https://api.mercadopago.com/checkout/preferences', [
+                'items' => $items,
+                'external_reference' => $externalReference,
+                'notification_url' => $webhookUrl,
+                'back_urls' => [
+                    'success' => route('payment.success'),
+                    'pending' => route('payment.pending'),
+                    'failure' => route('payment.failure')
+                ],
+                'auto_return' => 'approved',
             ]);
+
+        if ($response->successful()) {
+            $preference = $response->json();
+            $initPoint = $school->mp_sandbox_mode ? $preference['sandbox_init_point'] : $preference['init_point'];
+            return redirect()->away($initPoint);
         }
 
-        if ($collegiate->pendingDues->where('status', 'overdue')->count() === 0) {
-            $collegiate->update(['is_fees_compliant' => true]);
-        }
+        return back()->with('error', 'Ocurrió un error al generar la orden de pago en Mercado Pago.');
+    }
 
-        return redirect()->route('payment.index')->with('success', '¡Pago procesado exitosamente (Modo Sandbox MP)! Su cuenta ha sido actualizada.');
+    public function success(Request $request)
+    {
+        return redirect()->route('payment.index')->with('success', '¡Pago procesado exitosamente! El sistema actualizará su cuenta automáticamente en breve.');
+    }
+
+    public function pending(Request $request)
+    {
+        return redirect()->route('payment.index')->with('warning', 'Su pago está pendiente. El estado de cuenta se actualizará una vez que se confirme el cobro.');
+    }
+
+    public function failure(Request $request)
+    {
+        return redirect()->route('payment.index')->with('error', 'El pago ha sido rechazado o cancelado.');
     }
 
     public function generateAnnualPayment(Request $request)

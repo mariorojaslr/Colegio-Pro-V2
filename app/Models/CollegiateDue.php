@@ -35,4 +35,9 @@ class CollegiateDue extends Model
     {
         return $this->belongsTo(BillingConcept::class);
     }
+
+    public function collegiatePayment()
+    {
+        return $this->belongsTo(CollegiatePayment::class);
+    }
 }

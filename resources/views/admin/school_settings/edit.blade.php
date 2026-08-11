@@ -132,21 +132,30 @@
 
                 <h5 class="fw-bold mb-3"><i class="bi bi-credit-card me-2 text-primary"></i> Pasarela de Pagos (Mercado Pago)</h5>
                 <div class="row mb-3">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Access Token (Credencial de Producción/Prueba)</label>
-                        <input type="text" name="mp_access_token" class="form-control" value="{{ old('mp_access_token', $school->mp_access_token) }}" placeholder="APP_USR-...">
-                        <small class="text-muted">Token para crear las preferencias de pago (cobros).</small>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold small">Public Key</label>
-                        <input type="text" name="mp_public_key" class="form-control" value="{{ old('mp_public_key', $school->mp_public_key) }}" placeholder="APP_USR-... o TEST-...">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <div class="form-check form-switch fs-5">
-                            <input class="form-check-input" type="checkbox" role="switch" id="mpSandbox" name="mp_sandbox_mode" value="1" {{ old('mp_sandbox_mode', $school->mp_sandbox_mode) ? 'checked' : '' }}>
-                            <label class="form-check-label fs-6 ms-2 text-warning" for="mpSandbox"><i class="bi bi-exclamation-triangle-fill"></i> Modo de Prueba Activo (Sandbox)</label>
-                        </div>
-                        <small class="text-muted d-block ms-5">Si está encendido, los pagos no se cobrarán realmente (ideal para hacer pruebas iniciales).</small>
+                    <div class="col-12 mb-3">
+                        @if($school->mp_access_token)
+                            <div class="alert alert-success d-flex align-items-center rounded-4 border-0 shadow-sm">
+                                <i class="bi bi-check-circle-fill fs-3 me-3"></i>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">Mercado Pago Vinculado</h6>
+                                    <p class="mb-0 small">Su colegio ya está conectado a Mercado Pago y listo para recibir pagos automáticamente en su billetera.</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <a href="{{ route('mercadopago.redirect') }}" class="btn btn-outline-success btn-sm rounded-pill fw-bold">Actualizar Vinculación</a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="alert alert-warning d-flex align-items-center rounded-4 border-0 shadow-sm">
+                                <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">Mercado Pago No Vinculado</h6>
+                                    <p class="mb-0 small">No podrá procesar pagos reales hasta no vincular su cuenta de Mercado Pago.</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <a href="{{ route('mercadopago.redirect') }}" class="btn btn-primary btn-sm rounded-pill fw-bold">Vincular Ahora</a>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
 

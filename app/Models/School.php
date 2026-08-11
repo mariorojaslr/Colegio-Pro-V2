@@ -93,6 +93,11 @@ class School extends Model
         return $this->hasMany(ComplianceRequirement::class);
     }
 
+    public function wallets()
+    {
+        return $this->hasMany(Wallet::class);
+    }
+
     /**
      * Verifica si el Tenant tiene espacio disponible según su plan.
      */
