@@ -126,6 +126,9 @@ Route::post('activar-cuenta/registrar', [App\Http\Controllers\Auth\AccountActiva
 
 Auth::routes();
 
+// Acceso rápido universal para Colegiados con Legajo o Teléfono y Código PIN de 4 dígitos
+Route::post('/login/pin', [App\Http\Controllers\Auth\LoginController::class, 'loginWithPin'])->name('login.pin');
+
 // Permite cerrar sesión a través de una petición GET (evita errores 405 si el usuario escribe la URL o recarga la página)
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout.get');
 
@@ -202,6 +205,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/mi-perfil', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/mi-perfil/avatar', [App\Http\Controllers\ProfileController::class, 'uploadAvatar'])->name('profile.avatar');
     Route::post('/mi-perfil/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/mi-perfil/pin', [App\Http\Controllers\ProfileController::class, 'updatePin'])->name('profile.pin');
     
     // Noticias Administrativas
     Route::resource('admin/news', NewsArticleController::class)->names('admin.news');

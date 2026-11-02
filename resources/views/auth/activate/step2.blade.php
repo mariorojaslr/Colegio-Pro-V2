@@ -96,20 +96,26 @@
     <div class="login-box" style="max-height: 90vh; overflow-y: auto;">
         
         <h4 class="text-center fw-bold mb-2">¡Hola, {{ explode(' ', $collegiate->first_name)[0] }}!</h4>
-        <p class="text-center text-muted-custom mb-4 small">Hemos encontrado tu perfil. Completa estos datos para crear tu contraseña de acceso seguro.</p>
+        <p class="text-center text-muted-custom mb-3 small">Hemos encontrado tu perfil. Configura tu <strong>código PIN de validación de 4 dígitos</strong> para que a partir de ahora ingreses al instante con tu N° de Legajo o Teléfono.</p>
 
-        <div class="user-card">
+        <div class="user-card mb-3">
             <div class="user-avatar">
                 {{ substr($collegiate->first_name, 0, 1) }}
             </div>
             <div>
                 <h6 class="mb-0 fw-bold">{{ $collegiate->first_name }} {{ $collegiate->last_name }}</h6>
-                <p class="mb-0 text-muted-custom small">Matrícula: {{ $collegiate->registration_number }}</p>
+                <p class="mb-0 text-muted-custom small">Legajo / Matrícula: <strong>#{{ $collegiate->registration_number }}</strong></p>
             </div>
         </div>
 
+        @if(session('info'))
+            <div class="alert alert-info mb-3 p-3 rounded-3 text-center small">
+                {{ session('info') }}
+            </div>
+        @endif
+
         @if(session('error'))
-            <div class="alert alert-danger mb-4 p-3 rounded-3 text-center small">
+            <div class="alert alert-danger mb-3 p-3 rounded-3 text-center small">
                 {{ session('error') }}
             </div>
         @endif
@@ -118,7 +124,20 @@
             @csrf
             
             <div class="mb-3">
-                <label for="email" class="form-label text-muted-custom small fw-bold">Correo Electrónico</label>
+                <label for="phone" class="form-label text-muted-custom small fw-bold">Teléfono Celular <span class="text-warning">* (Para tu acceso rápido)</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">phone_android</i></span>
+                    <input id="phone" type="text" class="form-control border-start-0 ps-0 @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', $collegiate->phone) }}" required placeholder="Ej. 3804123456">
+                </div>
+                @error('phone')
+                    <span class="text-danger small mt-1 d-block">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label text-muted-custom small fw-bold">Correo Electrónico <span class="text-warning">*</span></label>
                 <div class="input-group">
                     <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">email</i></span>
                     <input id="email" type="email" class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" name="email" value="{{ old('email', $collegiate->email) }}" required placeholder="tu@email.com">
@@ -130,43 +149,60 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
-                <label for="phone" class="form-label text-muted-custom small fw-bold">Teléfono Celular</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">phone</i></span>
-                    <input id="phone" type="text" class="form-control border-start-0 ps-0 @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone', $collegiate->phone) }}" required placeholder="Ej. 11 1234 5678">
+            <!-- Sección Destacada: Código PIN de 4 Dígitos -->
+            <div class="p-3 mb-3 rounded-3" style="background: rgba(15, 23, 42, 0.9); border: 2px solid {{ $currentTenant->primary_color ?? '#3b82f6' }};">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="material-icons text-warning me-2 fs-5">pin</i>
+                    <h6 class="fw-bold mb-0 text-white">Código PIN de 4 Dígitos</h6>
                 </div>
-                @error('phone')
-                    <span class="text-danger small mt-1 d-block">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+                <p class="x-small text-muted-custom mb-3" style="font-size: 0.78rem;">
+                    Este código numérico de 4 dígitos será tu llave rápida. Podrás ingresar simplemente escribiendo tu Legajo o Teléfono y este PIN.
+                </p>
+
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label for="pin" class="form-label text-muted-custom small fw-bold">Crear PIN (4 dígitos)</label>
+                        <input id="pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" class="form-control text-center fs-4 fw-bold letter-spacing-2 @error('pin') is-invalid @enderror" name="pin" required placeholder="••••" style="letter-spacing: 6px;">
+                        @error('pin')
+                            <span class="text-danger small mt-1 d-block" style="font-size: 0.72rem;">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-6">
+                        <label for="pin_confirmation" class="form-label text-muted-custom small fw-bold">Repetir PIN</label>
+                        <input id="pin_confirmation" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" class="form-control text-center fs-4 fw-bold letter-spacing-2" name="pin_confirmation" required placeholder="••••" style="letter-spacing: 6px;">
+                    </div>
+                </div>
             </div>
 
+            <!-- Contraseña opcional complementaria -->
             <div class="mb-3">
-                <label for="password" class="form-label text-muted-custom small fw-bold">Crear Contraseña</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">lock</i></span>
-                    <input id="password" type="password" class="form-control border-start-0 ps-0 @error('password') is-invalid @enderror" name="password" required placeholder="Mínimo 8 caracteres">
-                </div>
-                @error('password')
-                    <span class="text-danger small mt-1 d-block">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="password_confirmation" class="form-label text-muted-custom small fw-bold">Repetir Contraseña</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">lock_outline</i></span>
-                    <input id="password_confirmation" type="password" class="form-control border-start-0 ps-0" name="password_confirmation" required placeholder="Confirma tu contraseña">
+                <a class="text-muted-custom small text-decoration-none d-flex align-items-center" data-bs-toggle="collapse" href="#passwordCollapse" role="button" aria-expanded="false" style="cursor: pointer;">
+                    <i class="material-icons fs-6 me-1">lock</i> <span class="text-decoration-underline">¿Deseas agregar también una contraseña tradicional? (Opcional)</span>
+                </a>
+                <div class="collapse mt-2" id="passwordCollapse">
+                    <div class="p-3 bg-dark-subtle rounded-3 border border-secondary">
+                        <div class="mb-2">
+                            <label for="password" class="form-label text-muted-custom small fw-bold">Contraseña adicional</label>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Opcional - Mínimo 4 caracteres">
+                            @error('password')
+                                <span class="text-danger small mt-1 d-block">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="mb-0">
+                            <label for="password_confirmation" class="form-label text-muted-custom small fw-bold">Confirmar contraseña</label>
+                            <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="Confirmar contraseña">
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="d-grid gap-2 mt-4">
-                <button type="submit" class="btn btn-primary-custom d-flex align-items-center justify-content-center">
-                    Crear mi cuenta y entrar <i class="material-icons ms-2 fs-5">login</i>
+                <button type="submit" class="btn btn-primary-custom d-flex align-items-center justify-content-center py-3 fw-bold">
+                    <i class="material-icons me-2 fs-5">check_circle</i> Confirmar y Activar mi Cuenta
                 </button>
             </div>
         </form>

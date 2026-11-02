@@ -15,6 +15,7 @@ class Collegiate extends Model
         'email',
         'dni',
         'phone',
+        'login_pin',
         'status',
         'avatar_url',
         'is_ethics_compliant',
@@ -56,6 +57,15 @@ class Collegiate extends Model
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    /**
+     * Relación con el usuario del sistema autenticado
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

@@ -107,4 +107,34 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Tu contraseña ha sido actualizada exitosamente.');
     }
+
+    /**
+     * Permite al usuario colegiado configurar o actualizar su PIN de 4 dígitos para acceso rápido
+     */
+    public function updatePin(Request $request)
+    {
+        $request->validate([
+            'pin' => ['required', 'regex:/^[0-9]{4}$/'],
+            'pin_confirmation' => 'required|same:pin',
+        ], [
+            'pin.required' => 'Ingresa tu nuevo código PIN de 4 dígitos.',
+            'pin.regex' => 'El PIN debe contener exactamente 4 dígitos numéricos.',
+            'pin_confirmation.required' => 'Debes confirmar tu nuevo código PIN.',
+            'pin_confirmation.same' => 'Los dos códigos PIN no coinciden.',
+        ]);
+
+        $user = auth()->user();
+        $pinHash = \Illuminate\Support\Facades\Hash::make($request->pin);
+
+        $user->login_pin = $pinHash;
+        $user->save();
+
+        $collegiate = \App\Models\Collegiate::where('user_id', $user->id)->first();
+        if ($collegiate) {
+            $collegiate->login_pin = $pinHash;
+            $collegiate->save();
+        }
+
+        return back()->with('success', '¡Tu código PIN de 4 dígitos ha sido configurado con éxito! A partir de ahora puedes usarlo para ingresar rápidamente.');
+    }
 }

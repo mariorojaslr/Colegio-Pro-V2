@@ -619,9 +619,9 @@
             <div style="font-size: 10px; font-weight: 800; color: #db2777;">Lili</div>
         </a>
         @else
-        <a href="{{ route('collegiates.index') }}" class="text-center text-decoration-none {{ request()->routeIs('collegiates.*') ? 'text-primary fw-bold' : 'text-muted' }}">
-            <i class="bi bi-people m-0" style="font-size: 1.4rem"></i>
-            <div style="font-size: 10px">Comunidad</div>
+        <a href="{{ route('collegiates.certificates.store') }}" class="text-center text-decoration-none {{ request()->routeIs('collegiates.certificates.*') ? 'text-primary fw-bold' : 'text-muted' }}">
+            <i class="bi bi-file-earmark-check m-0" style="font-size: 1.4rem"></i>
+            <div style="font-size: 10px">Trámites</div>
         </a>
         <a href="{{ route('ai.index') }}" class="text-center text-decoration-none {{ request()->routeIs('ai.*') ? 'text-primary fw-bold' : 'text-muted' }}">
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm overflow-hidden" style="width: 55px; height: 55px; margin-top: -30px; border: 4px solid white; background: #fff;">

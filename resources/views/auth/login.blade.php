@@ -46,13 +46,50 @@
             background: rgba(30, 41, 59, 0.7); /* Slate 800 with transparency for glass effect */
             backdrop-filter: blur(15px);
             border-radius: 16px;
-            padding: 3.5rem 2.5rem 2.5rem; /* Flexible padding */
+            padding: 3rem 2.2rem 2.2rem;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
             border: 1px solid #ffffff;
             position: relative;
             animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Selector de Tipo de Acceso (OLED Rolls-Royce) */
+        .auth-toggle-wrapper {
+            background: #0b0f19;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 4px;
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        .auth-toggle-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .auth-toggle-btn.active {
+            background: {{ $currentTenant->primary_color ?? '#3b82f6' }};
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        .pin-digit-input {
+            letter-spacing: 12px;
+            font-size: 1.6rem;
+            text-align: center;
+            font-weight: 800;
         }
 
         .login-logo-container {
@@ -163,68 +200,176 @@
             @if(isset($currentTenant) && $currentTenant->logo)
                 <img src="{{ asset($currentTenant->logo) }}" alt="Logo">
             @else
-                <p class="logo-text">{{ $currentTenant->name ?? 'MultiPOS' }}</p>
+                <p class="logo-text">{{ $currentTenant->name ?? 'Colegio-Pro' }}</p>
             @endif
         </div>
 
-        <h4 class="text-center fw-bold mb-4">Iniciar sesión</h4>
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <div class="mb-3">
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+        @if(session('success'))
+            <div class="alert alert-success mb-3 p-3 rounded-3 text-center small text-white" style="background-color: #065f46; border: 1px solid #059669;">
+                {{ session('success') }}
             </div>
+        @endif
 
-            <div class="mb-3">
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Contraseña">
-                @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+        @if(session('info'))
+            <div class="alert alert-info mb-3 p-3 rounded-3 text-center small text-white" style="background-color: #1e3a8a; border: 1px solid #2563eb;">
+                {{ session('info') }}
             </div>
+        @endif
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="remember">
-                        Recordarme
-                    </label>
-                </div>
-                @if (Route::has('password.request'))
-                    <a class="text-muted-custom fw-bold small text-decoration-none" href="{{ route('password.request') }}" style="color: {{ $currentTenant->primary_color ?? '#3b82f6' }} !important;">
-                        ¿Olvidaste tu contraseña?
-                    </a>
-                @endif
+        @if(session('error'))
+            <div class="alert alert-danger mb-3 p-3 rounded-3 text-center small text-white" style="background-color: #7f1d1d; border: 1px solid #dc2626;">
+                {{ session('error') }}
             </div>
+        @endif
 
-            <button type="submit" class="btn btn-primary mb-3">
-                Ingresar
+        <!-- Selector de Modo de Acceso (Pestañas) -->
+        <div class="auth-toggle-wrapper">
+            <button type="button" class="auth-toggle-btn active" id="btnTabPin" onclick="switchLoginTab('pin')">
+                <i class="material-icons fs-5">pin</i> Acceso con PIN
             </button>
-            
-            <a href="{{ route('activate.step1') }}" class="btn btn-demo">
-                <i class="material-icons fs-5">person_add</i> ¿Eres colegiado y es tu primer ingreso? Activa tu cuenta
+            <button type="button" class="auth-toggle-btn" id="btnTabEmail" onclick="switchLoginTab('email')">
+                <i class="material-icons fs-5">alternate_email</i> Con Contraseña
+            </button>
+        </div>
+
+        <!-- FORMULARIO 1: ACCESO RÁPIDO CON LEGAJO/TELÉFONO Y PIN DE 4 DÍGITOS -->
+        <div id="formSectionPin">
+            <form method="POST" action="{{ route('login.pin') }}">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label text-muted-custom small fw-bold">N° de Legajo o Teléfono Celular</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-white"><i class="material-icons fs-5">badge</i></span>
+                        <input id="identifier" type="text" class="form-control @error('identifier') is-invalid @enderror" name="identifier" value="{{ old('identifier') }}" required autofocus placeholder="Ej. 220 o 3804123456">
+                    </div>
+                    @error('identifier')
+                        <span class="text-danger small mt-1 d-block">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label class="form-label text-muted-custom small fw-bold mb-0">Código PIN (4 dígitos)</label>
+                        <a href="{{ route('activate.step1') }}" class="text-info small text-decoration-none" style="font-size: 0.78rem;">¿Olvidaste tu PIN?</a>
+                    </div>
+                    <div class="input-group mt-1">
+                        <span class="input-group-text bg-dark border-secondary text-white"><i class="material-icons fs-5">lock</i></span>
+                        <input id="login_pin_input" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" class="form-control pin-digit-input @error('pin') is-invalid @enderror" name="pin" required placeholder="••••">
+                    </div>
+                    @error('pin')
+                        <span class="text-danger small mt-1 d-block">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember_pin" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="form-check-label text-white" for="remember_pin">
+                            Recordarme en este dispositivo
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-3 fw-bold py-3 fs-6">
+                    <i class="material-icons align-middle me-1">login</i> Ingresar con mi PIN
+                </button>
+            </form>
+        </div>
+
+        <!-- FORMULARIO 2: ACCESO TRADICIONAL CON EMAIL Y CONTRASEÑA -->
+        <div id="formSectionEmail" style="display: none;">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label text-muted-custom small fw-bold">Correo Electrónico</label>
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" placeholder="tu@correo.com">
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted-custom small fw-bold">Contraseña</label>
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="current-password" placeholder="Contraseña">
+                    @error('password')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="form-check-label text-white" for="remember">
+                            Recordarme
+                        </label>
+                    </div>
+                    @if (Route::has('password.request'))
+                        <a class="text-muted-custom fw-bold small text-decoration-none" href="{{ route('password.request') }}" style="color: {{ $currentTenant->primary_color ?? '#3b82f6' }} !important;">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    @endif
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-3 fw-bold py-3 fs-6">
+                    Ingresar con Contraseña
+                </button>
+            </form>
+        </div>
+
+        <!-- ENLACES DE ACCIÓN Y PRIMER INGRESO -->
+        <div class="mt-3">
+            <a href="{{ route('activate.step1') }}" class="btn btn-demo py-2">
+                <i class="material-icons fs-5">how_to_reg</i> ¿Primer ingreso? Activa tu cuenta con tu Legajo
             </a>
             
-            <a href="{{ route('demo.fast') }}" class="btn-demo">
+            <a href="{{ route('demo.fast') }}" class="btn-demo py-2 mt-2">
                 <span class="material-icons" style="font-size: 18px;">auto_awesome</span> ACCESO DEMO (PRUEBA)
             </a>
+        </div>
 
-            <div class="text-center text-muted-custom mt-4">
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
-                @endif
-                <br><br>
-                <a href="{{ route('register') }}" class="text-info fw-bold">No tengo cuenta, quiero Registrararme</a>
-            </div>
-        </form>
+        <div class="text-center text-muted-custom mt-3">
+            <a href="{{ route('register') }}" class="text-info fw-bold small">¿No figuras en el padrón? Solicitar Registro</a>
+        </div>
     </div>
+
+    <script>
+        function switchLoginTab(tab) {
+            const secPin = document.getElementById('formSectionPin');
+            const secEmail = document.getElementById('formSectionEmail');
+            const btnPin = document.getElementById('btnTabPin');
+            const btnEmail = document.getElementById('btnTabEmail');
+
+            if (tab === 'pin') {
+                secPin.style.display = 'block';
+                secEmail.style.display = 'none';
+                btnPin.classList.add('active');
+                btnEmail.classList.remove('active');
+                const idInput = document.getElementById('identifier');
+                if (idInput) idInput.focus();
+            } else {
+                secPin.style.display = 'none';
+                secEmail.style.display = 'block';
+                btnPin.classList.remove('active');
+                btnEmail.classList.add('active');
+                const emailInput = document.getElementById('email');
+                if (emailInput) emailInput.focus();
+            }
+        }
+
+        // Si hubo errores en email o password tradicional, abrir pestaña de contraseña automáticamente
+        @if($errors->has('email') || $errors->has('password'))
+            switchLoginTab('email');
+        @endif
+    </script>
 
 </body>
 </html>

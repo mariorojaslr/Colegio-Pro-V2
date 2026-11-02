@@ -47,6 +47,33 @@
                             @endif
                         </div>
                     </div>
+
+                    <!-- Tarjeta de Código PIN de 4 Dígitos -->
+                    <div class="card border-0 shadow-sm rounded-4 mt-4">
+                        <div class="card-header bg-white border-bottom p-3">
+                            <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-shield-lock-fill text-primary me-2"></i> PIN de Acceso Rápido</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            <p class="x-small text-muted mb-3" style="font-size: 0.8rem;">
+                                Configura tu código PIN de 4 dígitos para ingresar velozmente con tu Legajo o Teléfono Celular.
+                            </p>
+                            <form action="{{ route('profile.pin') }}" method="POST">
+                                @csrf
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold text-muted">Nuevo PIN (4 dígitos)</label>
+                                    <input type="password" name="pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" class="form-control text-center fw-bold fs-5 @error('pin') is-invalid @enderror" placeholder="••••" required style="letter-spacing: 6px;">
+                                    @error('pin') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">Confirmar PIN</label>
+                                    <input type="password" name="pin_confirmation" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" class="form-control text-center fw-bold fs-5" placeholder="••••" required style="letter-spacing: 6px;">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold btn-sm py-2">
+                                    <i class="bi bi-key-fill me-1"></i> Guardar mi PIN
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Columna Derecha: Datos Personales -->
