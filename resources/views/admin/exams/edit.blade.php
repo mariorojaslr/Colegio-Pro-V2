@@ -68,7 +68,7 @@
                     <div class="row g-3">
                         @foreach($question->options as $option)
                             <div class="col-md-6">
-                                <div class="p-3 rounded-4 border {{ $option->is_correct ? 'border-success bg-success bg-opacity-5' : 'border-light-subtle bg-light' }} d-flex align-items-center gap-3">
+                                <div class="p-3 rounded-4 border {{ $option->is_correct ? 'border-success bg-success bg-opacity-10' : 'border-light-subtle bg-light' }} d-flex align-items-center gap-3">
                                     <i class="bi {{ $option->is_correct ? 'bi-check-circle-fill text-success' : 'bi-circle text-muted' }}"></i>
                                     <span class="small fw-medium {{ $option->is_correct ? 'text-success fw-bold' : 'text-dark' }}">{{ $option->option_text }}</span>
                                 </div>

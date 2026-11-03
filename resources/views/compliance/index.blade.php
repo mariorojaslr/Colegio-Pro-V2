@@ -234,9 +234,57 @@
                             </div>
                         @endif
                     @else
-                        <div class="bg-success bg-opacity-5 border border-success border-opacity-10 rounded-4 p-3 text-center">
-                             <span class="text-success fw-bold small"><i class="bi bi-check2-all me-2"></i> DOCUMENTO VERIFICADO</span>
-                             <div class="xx-small text-success opacity-75 mt-1 uppercase">HABILITADO EN LEGAJO</div>
+                        {{-- Estado de Documento Aprobado y Homologado (Alto contraste garantizado) --}}
+                        <div class="verified-document-banner p-3 rounded-4 text-center shadow-sm">
+                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-shield-fill-check fs-5"></i>
+                                <span class="fw-bold small verified-title" style="letter-spacing: 0.5px;">
+                                    DOCUMENTO VERIFICADO Y HOMOLOGADO
+                                </span>
+                            </div>
+                            <div class="small fw-semibold mt-1 verified-sub">
+                                Habilitado y en regla en tu legajo oficial
+                            </div>
+                            <div class="mt-2 pt-2 border-top border-success border-opacity-25">
+                                <a class="small fw-bold text-decoration-underline cursor-pointer verified-link" data-bs-toggle="collapse" href="#collapseUpload-{{ $requirement->id }}" role="button" aria-expanded="false">
+                                    <i class="bi bi-arrow-repeat me-1"></i> ¿Deseas subir una nueva versión o reemplazo?
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- Formulario colapsado para reemplazar/actualizar si el colegiado lo requiere --}}
+                        <div class="collapse mt-3" id="collapseUpload-{{ $requirement->id }}">
+                            <div class="p-3 rounded-4 border bg-light shadow-sm">
+                                <div class="small fw-bold text-dark mb-2">
+                                    <i class="bi bi-cloud-arrow-up text-primary me-1"></i> Subir nueva versión del documento:
+                                </div>
+                                <form action="{{ route('compliance.upload', $requirement) }}" id="form-reup-{{ $requirement->id }}" class="form-compliance" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="cropped_image" class="cropped-image-input">
+                                    
+                                    <input type="file" name="document" id="file-reup-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-reup-{{ $requirement->id }}')">
+                                    <input type="file" id="camera-reup-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-reup-{{ $requirement->id }}')">
+                                    
+                                    <div class="row g-2">
+                                        <div class="col-12 d-flex justify-content-between align-items-center mb-1">
+                                            <span class="badge bg-success visually-hidden" id="badge-reup-{{ $requirement->id }}"><i class="bi bi-check"></i> Seleccionado</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="file-reup-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
+                                                <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                            </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="camera-reup-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
+                                                <i class="bi bi-camera me-2"></i> ESCANEAR
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold btn-process-upload" style="display: none;" id="btn-submit-reup-{{ $requirement->id }}">Subir Actualización <i class="bi bi-arrow-right"></i></button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -258,6 +306,41 @@
     .card-prestige:hover { transform: translateY(-5px); }
     .xx-small { font-size: 10px; }
     .ls-1 { letter-spacing: 1px; }
+
+    /* Recuadro de verificación de documento en alto contraste */
+    .verified-document-banner {
+        background-color: #f0fdf4 !important;
+        border: 1.5px solid rgba(22, 163, 74, 0.3) !important;
+    }
+    .verified-document-banner .verified-title {
+        color: #14532d !important;
+    }
+    .verified-document-banner .verified-sub {
+        color: #166534 !important;
+    }
+    .verified-document-banner .verified-link {
+        color: #15803d !important;
+    }
+    .verified-document-banner i {
+        color: #16a34a !important;
+    }
+
+    body.dark-mode .verified-document-banner {
+        background-color: #052e16 !important;
+        border: 1.5px solid rgba(74, 222, 128, 0.4) !important;
+    }
+    body.dark-mode .verified-document-banner .verified-title {
+        color: #4ade80 !important;
+    }
+    body.dark-mode .verified-document-banner .verified-sub {
+        color: #bbf7d0 !important;
+    }
+    body.dark-mode .verified-document-banner .verified-link {
+        color: #86efac !important;
+    }
+    body.dark-mode .verified-document-banner i {
+        color: #4ade80 !important;
+    }
 </style>
 
 <!-- Modal para Cropper.js -->
