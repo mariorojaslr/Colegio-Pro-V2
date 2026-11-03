@@ -12,19 +12,30 @@
                         <h1 class="display-5 fw-bold mb-2 shadow-text" style="font-family: 'Outfit', sans-serif;">Mi <span class="text-gradient-gold">Legajo Digital</span></h1>
                         <p class="lead opacity-75 mb-0 fs-5 text-white-50">Mantenga su documentación al día para asegurar su habilitación profesional.</p>
                     </div>
-                    <div class="col-md-4 text-md-end">
-                        <div class="bg-white bg-opacity-10 p-4 rounded-4 backdrop-blur border border-white border-opacity-10">
+                    <div class="col-md-5 text-md-end">
+                        <div class="bg-white bg-opacity-10 p-4 rounded-4 backdrop-blur border border-white border-opacity-10 text-start">
                             @php
-                                $total = $mandatoryReqsCount;
-                                $uploaded = $validMandatoryDocsCount;
-                                $percent = $total > 0 ? ($uploaded / $total) * 100 : 100;
+                                $total = $totalReqsCount > 0 ? $totalReqsCount : $mandatoryReqsCount;
+                                $approved = $validMandatoryDocsCount;
+                                $inReview = $pendingDocsCount;
+                                $percentApproved = $total > 0 ? round(($approved / $total) * 100) : 0;
+                                $percentReview = $total > 0 ? round(($inReview / $total) * 100) : 0;
                             @endphp
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-white-50 small fw-bold uppercase">Progreso Documental ({{ $uploaded }}/{{ $total }})</span>
-                                <span class="text-warning fw-bold">{{ round($percent) }}%</span>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-white small fw-bold text-uppercase ls-1">Progreso Documental</span>
+                                <span class="text-white fw-bold">{{ $approved + $inReview }} de {{ $total }} subidos</span>
                             </div>
-                            <div class="progress" style="height: 10px; border-radius: 10px; background: rgba(255,255,255,0.1)">
-                                <div class="progress-bar bg-warning shadow-accent" role="progressbar" style="width: {{ $percent }}%"></div>
+                            
+                            {{-- Barra de Progreso de Doble Color Progresiva --}}
+                            <div class="progress" style="height: 12px; border-radius: 10px; background: rgba(255,255,255,0.15)">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ $percentApproved }}%" title="{{ $approved }} Aprobados"></div>
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $percentReview }}%" title="{{ $inReview }} En espera de validación"></div>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mt-3 pt-2 border-top border-white border-opacity-10 small">
+                                <span class="badge bg-success px-2 py-1"><i class="bi bi-check-circle-fill me-1"></i> {{ $approved }} Aprobados</span>
+                                <span class="badge bg-warning text-dark px-2 py-1"><i class="bi bi-clock-history me-1"></i> {{ $inReview }} En espera de validación</span>
+                                <span class="badge bg-secondary px-2 py-1"><i class="bi bi-file-earmark me-1"></i> {{ $missingDocsCount }} Pendientes de subir</span>
                             </div>
                         </div>
                     </div>
@@ -49,14 +60,14 @@
 
                     $statusConfig = [
                         'missing' => ['label' => 'Sin Cargar', 'class' => 'bg-secondary-subtle text-muted', 'icon' => 'bi-file-earmark-plus'],
-                        'pending' => ['label' => 'En Revisión', 'class' => 'bg-warning-subtle text-warning', 'icon' => 'bi-hourglass-split'],
-                        'approved' => ['label' => 'Aprobado y Vigente', 'class' => 'bg-success-subtle text-success', 'icon' => 'bi-patch-check-fill'],
-                        'rejected' => ['label' => 'Rechazado', 'class' => 'bg-danger-subtle text-danger', 'icon' => 'bi-exclamation-octagon-fill'],
-                        'expired' => ['label' => 'Vencido - Renovar', 'class' => 'bg-danger-subtle text-danger', 'icon' => 'bi-calendar-x-fill'],
+                        'pending' => ['label' => 'Subido - En Validación', 'class' => 'bg-warning text-dark border border-warning', 'icon' => 'bi-clock-history text-warning'],
+                        'approved' => ['label' => 'Aprobado y Vigente', 'class' => 'bg-success text-white', 'icon' => 'bi-patch-check-fill text-success'],
+                        'rejected' => ['label' => 'Rechazado', 'class' => 'bg-danger text-white', 'icon' => 'bi-exclamation-octagon-fill text-danger'],
+                        'expired' => ['label' => 'Vencido - Renovar', 'class' => 'bg-danger text-white', 'icon' => 'bi-calendar-x-fill text-danger'],
                     ];
                 @endphp
                 <div class="card-prestige p-4 border-0 bg-white shadow-sm h-100" style="border-radius: 30px">
-                    <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="d-flex align-items-center">
                             <div class="bg-light p-3 rounded-4 me-3">
                                 <i class="bi {{ $statusConfig[$status]['icon'] }} fs-3 {{ $status == 'missing' ? 'text-muted' : '' }}"></i>
@@ -72,6 +83,46 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- CARTEL EVIDENTE SEGÚN ESTADO --}}
+                    @if($status === 'pending')
+                        <div class="alert alert-warning border border-warning border-opacity-75 rounded-4 p-3 mb-3 shadow-sm" style="background: rgba(245, 158, 11, 0.15);">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-clock-history fs-2 text-warning me-3"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-1 text-dark">Documento subido, espere la validación</h6>
+                                    <p class="small text-muted mb-0">Ya recibimos tu archivo correctamente. La administración del colegio lo está revisando para su aprobación formal.</p>
+                                </div>
+                            </div>
+                            @if($doc && $doc->file_url && $doc->file_url !== '#physical')
+                            <div class="mt-3 pt-2 border-top border-warning border-opacity-25 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-dark rounded-pill px-3 fw-bold">
+                                    <i class="bi bi-file-earmark-text me-1"></i> Ver archivo subido
+                                </a>
+                                <a class="small text-muted text-decoration-underline" data-bs-toggle="collapse" href="#collapseUpload-{{ $requirement->id }}" role="button" aria-expanded="false">
+                                    ¿Deseas reemplazar el archivo?
+                                </a>
+                            </div>
+                            @endif
+                        </div>
+                    @elseif($status === 'approved')
+                        <div class="alert alert-success border border-success border-opacity-50 rounded-4 p-3 mb-3 shadow-sm" style="background: rgba(16, 185, 129, 0.12);">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill fs-2 text-success me-3"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-1 text-success">Documento Aprobado y Vigente</h6>
+                                        <p class="small text-muted mb-0">Requisito verificado con éxito por la institución.</p>
+                                    </div>
+                                </div>
+                                @if($doc && $doc->file_url && $doc->file_url !== '#physical')
+                                <a href="{{ $doc->file_url }}" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold">
+                                    <i class="bi bi-eye me-1"></i> Ver documento
+                                </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
 
                     @if($status == 'rejected' && $doc->admin_notes)
                         <div class="alert alert-danger border-0 rounded-4 mb-4 small fw-medium">
@@ -103,82 +154,84 @@
                         @endif
 
                         @if($requirement->delivery_method === 'digital' || $requirement->delivery_method === 'both')
-                            <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" class="form-compliance" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" name="cropped_image" class="cropped-image-input">
-                                
-                                @if($requirement->delivery_format === 'digital_front_back' || Str::contains(strtolower($requirement->name), 'dni') || Str::contains(strtolower($requirement->name), 'documento'))
-                                    <input type="hidden" name="cropped_image_back" class="cropped-image-back-input">
-                                    <input type="file" name="document" id="file-front-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
-                                    <input type="file" id="camera-front-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
+                            <div class="{{ $status === 'pending' ? 'collapse' : '' }}" id="collapseUpload-{{ $requirement->id }}">
+                                <form action="{{ route('compliance.upload', $requirement) }}" id="form-{{ $requirement->id }}" class="form-compliance" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="cropped_image" class="cropped-image-input">
                                     
-                                    <input type="file" name="document_back" id="file-back-{{ $requirement->id }}" class="visually-hidden file-input-back" onchange="previewSelection(this, 'badge-back-{{ $requirement->id }}')">
-                                    <input type="file" id="camera-back-{{ $requirement->id }}" class="visually-hidden file-input-back" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-back-{{ $requirement->id }}')">
+                                    @if($requirement->delivery_format === 'digital_front_back' || Str::contains(strtolower($requirement->name), 'dni') || Str::contains(strtolower($requirement->name), 'documento'))
+                                        <input type="hidden" name="cropped_image_back" class="cropped-image-back-input">
+                                        <input type="file" name="document" id="file-front-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
+                                        <input type="file" id="camera-front-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-front-{{ $requirement->id }}')">
+                                        
+                                        <input type="file" name="document_back" id="file-back-{{ $requirement->id }}" class="visually-hidden file-input-back" onchange="previewSelection(this, 'badge-back-{{ $requirement->id }}')">
+                                        <input type="file" id="camera-back-{{ $requirement->id }}" class="visually-hidden file-input-back" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-back-{{ $requirement->id }}')">
+                                        
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-12 d-flex justify-content-between align-items-center">
+                                                <span class="small fw-bold text-muted">Frente</span>
+                                                <span class="badge bg-success visually-hidden" id="badge-front-{{ $requirement->id }}"><i class="bi bi-check"></i> Listo</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="file-front-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
+                                                    <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                                </label>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="camera-front-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
+                                                    <i class="bi bi-camera me-2"></i> ESCANEAR
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-12 d-flex justify-content-between align-items-center">
+                                                <span class="small fw-bold text-muted">Dorso</span>
+                                                <span class="badge bg-success visually-hidden" id="badge-back-{{ $requirement->id }}"><i class="bi bi-check"></i> Listo</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="file-back-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
+                                                    <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                                </label>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="camera-back-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
+                                                    <i class="bi bi-camera me-2"></i> ESCANEAR
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold btn-process-upload">Siguiente Paso <i class="bi bi-arrow-right"></i></button>
+                                        </div>
+                                    @else
+                                        <input type="file" name="document" id="file-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-{{ $requirement->id }}')">
+                                        <input type="file" id="camera-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-{{ $requirement->id }}')">
+                                        
+                                        <div class="row g-2">
+                                            <div class="col-12 d-flex justify-content-between align-items-center mb-1">
+                                                <span class="small fw-bold text-muted d-none">Documento</span>
+                                                <span class="badge bg-success visually-hidden" id="badge-{{ $requirement->id }}"><i class="bi bi-check"></i> Seleccionado</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="file-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
+                                                    <i class="bi bi-folder2-open me-2"></i> ARCHIVO
+                                                </label>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="camera-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
+                                                    <i class="bi bi-camera me-2"></i> ESCANEAR
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold btn-process-upload" style="display: none;" id="btn-submit-{{ $requirement->id }}">Siguiente Paso <i class="bi bi-arrow-right"></i></button>
+                                        </div>
+                                    @endif
                                     
-                                    <div class="row g-2 mb-2">
-                                        <div class="col-12 d-flex justify-content-between align-items-center">
-                                            <span class="small fw-bold text-muted">Frente</span>
-                                            <span class="badge bg-success visually-hidden" id="badge-front-{{ $requirement->id }}"><i class="bi bi-check"></i> Listo</span>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="file-front-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
-                                                <i class="bi bi-folder2-open me-2"></i> ARCHIVO
-                                            </label>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="camera-front-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
-                                                <i class="bi bi-camera me-2"></i> ESCANEAR
-                                            </label>
-                                        </div>
+                                    <div class="mt-3 text-center">
+                                        <span class="xx-small text-muted fw-bold ls-1 uppercase">SOPORTA: PDF, EXCEL, WORD, IMÁGENES (MÁX. 10MB)</span>
                                     </div>
-                                    <div class="row g-2 mb-3">
-                                        <div class="col-12 d-flex justify-content-between align-items-center">
-                                            <span class="small fw-bold text-muted">Dorso</span>
-                                            <span class="badge bg-success visually-hidden" id="badge-back-{{ $requirement->id }}"><i class="bi bi-check"></i> Listo</span>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="file-back-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
-                                                <i class="bi bi-folder2-open me-2"></i> ARCHIVO
-                                            </label>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="camera-back-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
-                                                <i class="bi bi-camera me-2"></i> ESCANEAR
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2">
-                                        <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold btn-process-upload">Siguiente Paso <i class="bi bi-arrow-right"></i></button>
-                                    </div>
-                                @else
-                                    <input type="file" name="document" id="file-{{ $requirement->id }}" class="visually-hidden file-input-front" onchange="previewSelection(this, 'badge-{{ $requirement->id }}')">
-                                    <input type="file" id="camera-{{ $requirement->id }}" class="visually-hidden file-input-front" accept="image/*" capture="environment" onchange="previewSelection(this, 'badge-{{ $requirement->id }}')">
-                                    
-                                    <div class="row g-2">
-                                        <div class="col-12 d-flex justify-content-between align-items-center mb-1">
-                                            <span class="small fw-bold text-muted d-none">Documento</span>
-                                            <span class="badge bg-success visually-hidden" id="badge-{{ $requirement->id }}"><i class="bi bi-check"></i> Seleccionado</span>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="file-{{ $requirement->id }}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-bold small m-0 d-block cursor-pointer">
-                                                <i class="bi bi-folder2-open me-2"></i> ARCHIVO
-                                            </label>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="camera-{{ $requirement->id }}" class="btn btn-dark w-100 rounded-pill py-2 fw-bold small shadow-sm m-0 d-block cursor-pointer">
-                                                <i class="bi bi-camera me-2"></i> ESCANEAR
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold btn-process-upload" style="display: none;" id="btn-submit-{{ $requirement->id }}">Siguiente Paso <i class="bi bi-arrow-right"></i></button>
-                                    </div>
-                                @endif
-                                
-                                <div class="mt-3 text-center">
-                                    <span class="xx-small text-muted fw-bold ls-1 uppercase">SOPORTA: PDF, EXCEL, WORD, IMÁGENES (MÁX. 10MB)</span>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         @endif
                     @else
                         <div class="bg-success bg-opacity-5 border border-success border-opacity-10 rounded-4 p-3 text-center">

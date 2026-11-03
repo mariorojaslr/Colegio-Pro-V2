@@ -330,31 +330,74 @@
                     <div class="position-absolute top-0 end-0 p-4 opacity-10">
                         <i class="bi bi-folder-check display-1 text-primary"></i>
                     </div>
-                    <h5 class="fw-bold mb-4 position-relative" style="z-index: 2;">Papeles de <span class="text-primary">Legajo</span></h5>
+                    <h5 class="fw-bold mb-3 position-relative" style="z-index: 2;">Papeles de <span class="text-primary">Legajo</span></h5>
                     
-                    <div class="d-flex align-items-center gap-4 mb-4 position-relative" style="z-index: 2;">
-                        <!-- Vu Meter Circular -->
-                        <div class="position-relative" style="width: 100px; height: 100px;">
-                            @php $docPercent = $docsTotal > 0 ? round(($docsApproved / $docsTotal) * 100) : 100; @endphp
+                    @php 
+                        $totalDocsCount = $docsTotal > 0 ? $docsTotal : 1;
+                        $approvedPercent = round(($docsApproved / $totalDocsCount) * 100);
+                        $underReviewPercent = round(($docsUnderReview / $totalDocsCount) * 100);
+                        $combinedPercent = min(100, $approvedPercent + $underReviewPercent);
+                    @endphp
+
+                    <div class="d-flex align-items-center gap-4 mb-3 position-relative" style="z-index: 2;">
+                        <!-- Vu Meter Circular Bicolor Progresivo -->
+                        <div class="position-relative flex-shrink-0" style="width: 100px; height: 100px;">
                             <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
-                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
-                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="{{ $docPercent == 100 ? '#10b981' : '#f59e0b' }}" stroke-width="3" stroke-dasharray="{{ $docPercent }}, 100"/>
+                                <!-- Fondo gris (faltantes) -->
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3.5"/>
+                                <!-- Segmento Ámbar / Amarillo (En espera de validación) -->
+                                @if($combinedPercent > 0)
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-dasharray="{{ $combinedPercent }}, 100"/>
+                                @endif
+                                <!-- Segmento Verde (Aprobados y validados) -->
+                                @if($approvedPercent > 0)
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10b981" stroke-width="3.5" stroke-dasharray="{{ $approvedPercent }}, 100"/>
+                                @endif
                             </svg>
                             <div class="position-absolute top-50 start-50 translate-middle text-center">
-                                <h4 class="fw-bold mb-0 lh-1" style="color: {{ $docPercent == 100 ? '#10b981' : '#f59e0b' }}">{{ $docsApproved }}</h4>
+                                <h4 class="fw-bold mb-0 lh-1" style="color: {{ $docsApproved == $docsTotal ? '#10b981' : ($docsUnderReview > 0 ? '#d97706' : '#64748b') }}">
+                                    {{ $docsApproved }}
+                                </h4>
                                 <span class="x-small text-muted fw-bold">/ {{ $docsTotal }}</span>
                             </div>
                         </div>
                         
                         <div>
-                            @if($docPercent == 100)
-                                <h6 class="fw-bold text-success mb-1">¡Todo en Regla!</h6>
-                                <p class="small text-muted mb-0">Tu documentación está completa y aprobada.</p>
+                            @if($docsApproved == $docsTotal && $docsTotal > 0)
+                                <h6 class="fw-bold text-success mb-1">¡Legajo al Día!</h6>
+                                <p class="small text-muted mb-2">Toda tu documentación está completa y aprobada.</p>
+                            @elseif($docsUnderReview > 0 && $docsMissing == 0)
+                                <h6 class="fw-bold text-warning mb-1">En Validación Administrativa</h6>
+                                <p class="small text-muted mb-2">Tus {{ $docsUnderReview }} documento(s) subidos están en proceso de revisión por la administración.</p>
+                            @elseif($docsUnderReview > 0)
+                                <h6 class="fw-bold text-warning mb-1">Legajo en Progreso</h6>
+                                <p class="small text-muted mb-2">Tienes {{ $docsUnderReview }} en revisión y te falta presentar {{ $docsMissing }}.</p>
                             @else
-                                <h6 class="fw-bold text-warning mb-1">Acción Requerida</h6>
-                                <p class="small text-muted mb-0">Tienes {{ $docsPending }} documento(s) pendiente(s).</p>
-                                <a href="{{ route('compliance.index') }}" class="btn btn-sm btn-warning rounded-pill mt-2 px-3 fw-bold shadow-sm">Subir Ahora <i class="bi bi-arrow-right ms-1"></i></a>
+                                <h6 class="fw-bold text-danger mb-1">Documentación Pendiente</h6>
+                                <p class="small text-muted mb-2">Faltan subir {{ $docsMissing }} documento(s) para completar tu legajo.</p>
                             @endif
+
+                            <div class="d-flex flex-wrap gap-1 mb-2">
+                                @if($docsApproved > 0)
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1" style="font-size: 0.72rem;">
+                                        <i class="bi bi-check-circle-fill me-1"></i>{{ $docsApproved }} Aprobado{{ $docsApproved > 1 ? 's' : '' }}
+                                    </span>
+                                @endif
+                                @if($docsUnderReview > 0)
+                                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-2 py-1" style="font-size: 0.72rem;">
+                                        <i class="bi bi-hourglass-split me-1"></i>{{ $docsUnderReview }} En validación
+                                    </span>
+                                @endif
+                                @if($docsMissing > 0)
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2 py-1" style="font-size: 0.72rem;">
+                                        <i class="bi bi-cloud-arrow-up me-1"></i>{{ $docsMissing }} Por subir
+                                    </span>
+                                @endif
+                            </div>
+
+                            <a href="{{ route('compliance.index') }}" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold shadow-sm">
+                                <i class="bi bi-folder2-open me-1"></i> Ver Mi Legajo
+                            </a>
                         </div>
                     </div>
                 </div>

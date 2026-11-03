@@ -30,25 +30,41 @@ class ComplianceController extends Controller
 
         if (!$collegiate) abort(404, 'No se encontró el perfil de colegiado.');
 
-        // Obtener requisitos del colegio y documentos ya subidos por este usuario
+        // Obtener requisitos del colegio y documentos ya subidos por este usuario indexados por compliance_requirement_id
         $requirements = ComplianceRequirement::where('school_id', $school->id)->get();
-        $myDocuments = CollegiateDocument::where('collegiate_id', $collegiate->id)->get()->keyBy('requirement_id');
+        $myDocuments = CollegiateDocument::where('collegiate_id', $collegiate->id)->get()->keyBy('compliance_requirement_id');
 
+        $totalReqsCount = $requirements->count();
         $mandatoryReqsCount = $requirements->where('is_mandatory', true)->count();
         
         $validMandatoryDocsCount = 0;
+        $pendingDocsCount = 0; // Documentos subidos en espera de validación
+
         foreach ($requirements as $req) {
-            if ($req->is_mandatory && isset($myDocuments[$req->id])) {
+            if (isset($myDocuments[$req->id])) {
                 $doc = $myDocuments[$req->id];
                 if ($doc->status === 'approved') {
                     if (!$doc->expires_at || $doc->expires_at > now()) {
                         $validMandatoryDocsCount++;
                     }
+                } elseif ($doc->status === 'pending') {
+                    $pendingDocsCount++;
                 }
             }
         }
 
-        return view('compliance.index', compact('requirements', 'myDocuments', 'collegiate', 'mandatoryReqsCount', 'validMandatoryDocsCount'));
+        $missingDocsCount = max(0, $totalReqsCount - ($validMandatoryDocsCount + $pendingDocsCount));
+
+        return view('compliance.index', compact(
+            'requirements', 
+            'myDocuments', 
+            'collegiate', 
+            'totalReqsCount',
+            'mandatoryReqsCount', 
+            'validMandatoryDocsCount',
+            'pendingDocsCount',
+            'missingDocsCount'
+        ));
     }
 
     /**
@@ -154,6 +170,6 @@ class ComplianceController extends Controller
             ]
         );
 
-        return back()->with('success', 'Documento enviado para revisión.');
+        return back()->with('success', "¡Documento '{$requirement->name}' subido con éxito! Tu archivo ya se encuentra registrado y en espera de validación administrativa.");
     }
 }

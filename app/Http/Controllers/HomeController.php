@@ -170,7 +170,9 @@ class HomeController extends Controller
         // Datos para Vu-Meters del Colegiado
         $docsTotal = 0;
         $docsApproved = 0;
-        $docsPending = 0;
+        $docsUnderReview = 0; // Subidos en espera de validación
+        $docsPending = 0; // Faltantes por subir
+        $docsMissing = 0;
         
         $duesTotalCount = 0;
         $duesPendingCount = 0;
@@ -181,9 +183,17 @@ class HomeController extends Controller
             $requirements = $school->complianceRequirements()->get();
             $docsTotal = $requirements->count();
             
+            // Documentos aprobados por el colegio
             $docsApproved = $collegiate->documents()->whereIn('compliance_requirement_id', $requirements->pluck('id'))
                                        ->where('status', 'approved')->count();
-            $docsPending = $docsTotal - $docsApproved;
+
+            // Documentos ya subidos por el colegiado en espera de validación administrativa
+            $docsUnderReview = $collegiate->documents()->whereIn('compliance_requirement_id', $requirements->pluck('id'))
+                                          ->where('status', 'pending')->count();
+
+            // Documentos restantes que aún faltan subir
+            $docsPending = max(0, $docsTotal - $docsApproved);
+            $docsMissing = max(0, $docsTotal - ($docsApproved + $docsUnderReview));
 
             $duesTotalCount = $collegiate->dues()->count();
             $pendingDues = $collegiate->dues()->where('status', '!=', 'paid')->get();
@@ -205,7 +215,9 @@ class HomeController extends Controller
             'onboardingTask',
             'docsTotal',
             'docsApproved',
+            'docsUnderReview',
             'docsPending',
+            'docsMissing',
             'duesTotalCount',
             'duesPendingCount',
             'duesPendingAmount'
