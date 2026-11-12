@@ -123,7 +123,7 @@
         </div>
 
         <h4 class="text-center fw-bold mb-2">Primer Ingreso / Activar Cuenta</h4>
-        <p class="text-center text-muted-custom mb-4 small">¿Es tu primera vez aquí? Para identificarte y configurar tu código de validación PIN de 4 dígitos, ingresa tu <strong>N° de Legajo o Matrícula</strong> y tu <strong>Apellido</strong>.</p>
+        <p class="text-center mb-4 small" style="color: #cbd5e1; font-size: 0.88rem; line-height: 1.5;">Entrá, es tu primera vez aquí. Para identificar y configurar el código de validación PIN de cuatro dígitos, ingresá tu número de matrícula y tu apellido.</p>
 
         @if(session('error'))
             <div class="alert alert-danger mb-4 p-3 rounded-3 text-center small">
@@ -140,10 +140,10 @@
         <form method="POST" action="{{ route('activate.search') }}">
             @csrf
             <div class="mb-3">
-                <label for="matricula" class="form-label text-muted-custom small fw-bold">N° de Legajo o Matrícula</label>
+                <label for="matricula" class="form-label text-muted-custom small fw-bold">N° de Matrícula</label>
                 <div class="input-group">
                     <span class="input-group-text bg-transparent border-end-0 border-secondary"><i class="material-icons text-muted-custom fs-5">badge</i></span>
-                    <input id="matricula" type="text" class="form-control border-start-0 ps-0 @error('matricula') is-invalid @enderror" name="matricula" value="{{ old('matricula') }}" required autofocus placeholder="Ej. 1234">
+                    <input id="matricula" type="text" class="form-control border-start-0 ps-0 @error('matricula') is-invalid @enderror" name="matricula" value="{{ old('matricula') }}" required autofocus placeholder="Ej. 37 o 1234">
                 </div>
                 @error('matricula')
                     <span class="text-danger small mt-1 d-block">

@@ -96,7 +96,7 @@
     <div class="login-box" style="max-height: 90vh; overflow-y: auto;">
         
         <h4 class="text-center fw-bold mb-2">¡Hola, {{ explode(' ', $collegiate->first_name)[0] }}!</h4>
-        <p class="text-center text-muted-custom mb-3 small">Hemos encontrado tu perfil. Configura tu <strong>código PIN de validación de 4 dígitos</strong> para que a partir de ahora ingreses al instante con tu N° de Legajo o Teléfono.</p>
+        <p class="text-center text-muted-custom mb-3 small">Hemos encontrado tu perfil. Configura tu <strong>código PIN de validación de 4 dígitos</strong> para que a partir de ahora ingreses al instante con tu N° de Matrícula o Teléfono.</p>
 
         <div class="user-card mb-3">
             <div class="user-avatar">
@@ -104,7 +104,7 @@
             </div>
             <div>
                 <h6 class="mb-0 fw-bold">{{ $collegiate->first_name }} {{ $collegiate->last_name }}</h6>
-                <p class="mb-0 text-muted-custom small">Legajo / Matrícula: <strong>#{{ $collegiate->registration_number }}</strong></p>
+                <p class="mb-0 text-muted-custom small">N° de Matrícula: <strong>#{{ $collegiate->registration_number }}</strong></p>
             </div>
         </div>
 
@@ -156,7 +156,7 @@
                     <h6 class="fw-bold mb-0 text-white">Código PIN de 4 Dígitos</h6>
                 </div>
                 <p class="x-small text-muted-custom mb-3" style="font-size: 0.78rem;">
-                    Este código numérico de 4 dígitos será tu llave rápida. Podrás ingresar simplemente escribiendo tu Legajo o Teléfono y este PIN.
+                    Este código numérico de 4 dígitos será tu llave rápida. Podrás ingresar simplemente escribiendo tu Matrícula o Teléfono y este PIN.
                 </p>
 
                 <div class="row g-2">

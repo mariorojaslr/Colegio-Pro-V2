@@ -44,8 +44,9 @@ class LoginController extends Controller
     }
 
     /**
-     * Acceso rápido para Colegiados utilizando su N° de Legajo o Teléfono Celular
+     * Acceso rápido para Colegiados utilizando su N° de Matrícula o Teléfono Celular
      * y su Código de Validación PIN de 4 dígitos.
+     * Soporta automáticamente números con o sin ceros a la izquierda (ej. 037 o 37).
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -56,13 +57,17 @@ class LoginController extends Controller
             'identifier' => 'required|string',
             'pin' => ['required', 'regex:/^[0-9]{4}$/'],
         ], [
-            'identifier.required' => 'Ingresa tu N° de Legajo o Teléfono Celular.',
+            'identifier.required' => 'Ingresa tu N° de Matrícula o Teléfono Celular.',
             'pin.required' => 'Ingresa tu código PIN de 4 dígitos.',
             'pin.regex' => 'El código PIN debe ser exactamente de 4 dígitos numéricos.',
         ]);
 
         $rawIdentifier = trim($request->input('identifier'));
         $cleanIdentifier = preg_replace('/[^0-9]/', '', $rawIdentifier);
+        $noZeros = ltrim($cleanIdentifier, '0');
+        if ($noZeros === '') {
+            $noZeros = '0';
+        }
         $pin = trim($request->input('pin'));
         $tenant = app('tenant');
 
@@ -72,10 +77,11 @@ class LoginController extends Controller
             $query->where('school_id', $tenant->id);
         }
 
-        $collegiate = $query->where(function ($q) use ($rawIdentifier, $cleanIdentifier) {
-            // Coincidencia por N° de Legajo / Matrícula
+        $collegiate = $query->where(function ($q) use ($rawIdentifier, $cleanIdentifier, $noZeros) {
+            // Coincidencia por N° de Matrícula (tolerante a ceros a la izquierda)
             $q->where('registration_number', $rawIdentifier)
-              ->orWhere('registration_number', $cleanIdentifier);
+              ->orWhere('registration_number', $cleanIdentifier)
+              ->orWhere('registration_number', $noZeros);
 
             // Coincidencia por Teléfono celular
             if (!empty($rawIdentifier)) {
@@ -153,7 +159,7 @@ class LoginController extends Controller
             return redirect()->intended('/home')->with('success', "¡Bienvenido/a {$user->name}!");
         }
 
-        return back()->withInput()->with('error', "No encontramos ningún profesional registrado con el Legajo o Teléfono '{$rawIdentifier}' en esta institución. Si es tu primera vez, haz clic en 'Activa tu cuenta'.");
+        return back()->withInput()->with('error', "No encontramos ningún profesional registrado con la Matrícula o Teléfono '{$rawIdentifier}' en esta institución. Si es tu primera vez, haz clic en 'Activa tu cuenta'.");
     }
 
     /**

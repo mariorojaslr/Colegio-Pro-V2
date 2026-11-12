@@ -55,7 +55,7 @@
                         </div>
                         <div class="card-body p-3">
                             <p class="x-small text-muted mb-3" style="font-size: 0.8rem;">
-                                Configura tu código PIN de 4 dígitos para ingresar velozmente con tu Legajo o Teléfono Celular.
+                                Configura tu código PIN de 4 dígitos para ingresar velozmente con tu Matrícula o Teléfono Celular.
                             </p>
                             <form action="{{ route('profile.pin') }}" method="POST">
                                 @csrf

@@ -21,6 +21,7 @@ class AccountActivationController extends Controller
 
     /**
      * Process step 1: Search for the collegiate.
+     * Permite buscar por N° de Matrícula y Apellido, tolerando ceros a la izquierda (ej. 037 encuentra a 37).
      */
     public function search(Request $request)
     {
@@ -30,13 +31,25 @@ class AccountActivationController extends Controller
                 'apellido' => 'required|string|min:2'
             ]);
 
-            $matricula = trim($request->input('matricula'));
+            $rawMatricula = trim($request->input('matricula'));
+            // Extraer solo dígitos numéricos si los hay
+            $matriculaSoloNumeros = preg_replace('/[^0-9]/', '', $rawMatricula);
+            // Normalizar eliminando ceros a la izquierda (ej. 037 -> 37, 0042 -> 42)
+            $baseParaNormalizar = $matriculaSoloNumeros !== '' ? $matriculaSoloNumeros : $rawMatricula;
+            $matriculaSinCeros = ltrim($baseParaNormalizar, '0');
+            if ($matriculaSinCeros === '') {
+                $matriculaSinCeros = '0';
+            }
+
             $apellido = trim(strtolower($request->input('apellido')));
 
             // Buscamos de forma segura aislando al tenant actual
             $tenant = app('tenant');
             
-            $query = Collegiate::where('registration_number', $matricula)
+            // Creamos un listado con todas las variantes de matrícula posibles para máxima compatibilidad
+            $posiblesMatriculas = array_unique(array_filter([$rawMatricula, $matriculaSoloNumeros, $matriculaSinCeros]));
+
+            $query = Collegiate::whereIn('registration_number', $posiblesMatriculas)
                 ->whereRaw('LOWER(last_name) LIKE ?', ["%{$apellido}%"]);
                 
             if ($tenant) {
@@ -53,12 +66,12 @@ class AccountActivationController extends Controller
             if ($collegiate->user_id) {
                 $user = User::find($collegiate->user_id);
                 if ($user && !empty($user->login_pin)) {
-                    return redirect()->route('login')->with('info', "¡Hola {$collegiate->first_name}! Tu cuenta ya está activada y protegida con tu PIN de 4 dígitos. Puedes ingresar directamente con tu N° de Legajo ({$collegiate->registration_number}) o tu teléfono y tu PIN.");
+                    return redirect()->route('login')->with('info', "¡Hola {$collegiate->first_name}! Tu cuenta ya está activada y protegida con tu PIN de 4 dígitos. Puedes ingresar directamente con tu N° de Matrícula ({$collegiate->registration_number}) o tu teléfono y tu PIN.");
                 }
                 
                 // Si tiene usuario pero aún no configuró su PIN de 4 dígitos, le permitimos configurarlo
                 session(['activation_collegiate_id' => $collegiate->id]);
-                return redirect()->route('activate.step2')->with('info', "¡Hola {$collegiate->first_name}! Vamos a configurar tu código PIN de 4 dígitos para que puedas ingresar rápidamente con tu legajo o celular.");
+                return redirect()->route('activate.step2')->with('info', "¡Hola {$collegiate->first_name}! Vamos a configurar tu código PIN de 4 dígitos para que puedas ingresar rápidamente con tu matrícula o celular.");
             }
 
             // Store collegiate ID in session to allow them to proceed to step 2
@@ -161,7 +174,7 @@ class AccountActivationController extends Controller
             // Autenticamos automáticamente al usuario
             Auth::login($user);
 
-            return redirect()->route('home')->with('success', '¡Cuenta activada exitosamente con tu código PIN de 4 dígitos! A partir de ahora podrás ingresar siempre con tu N° de Legajo o tu Teléfono y tu PIN.');
+            return redirect()->route('home')->with('success', '¡Cuenta activada exitosamente con tu código PIN de 4 dígitos! A partir de ahora podrás ingresar siempre con tu N° de Matrícula o tu Teléfono y tu PIN.');
             
         } catch (\Illuminate\Validation\ValidationException $e) {
             throw $e;

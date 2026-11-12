@@ -116,12 +116,19 @@ class PublicLandingController extends Controller
             return response()->json(['success' => false, 'message' => 'Por favor, ingrese un DNI, matrícula o nombre para buscar.']);
         }
 
+        $cleanDigits = preg_replace('/[^0-9]/', '', $query);
+        $cleanNum = ltrim($cleanDigits, '0');
+
         $collegiate = \App\Models\Collegiate::where('school_id', $school->id ?? 1)
-            ->where(function($q) use ($query) {
+            ->where(function($q) use ($query, $cleanNum) {
                 $q->where('dni', $query)
                   ->orWhere('registration_number', $query)
                   ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$query}%"])
                   ->orWhereRaw("CONCAT(last_name, ' ', first_name) LIKE ?", ["%{$query}%"]);
+
+                if (!empty($cleanNum)) {
+                    $q->orWhere('registration_number', $cleanNum);
+                }
             })
             ->first();
 

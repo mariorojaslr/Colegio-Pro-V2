@@ -48,15 +48,24 @@ class CollegiateController extends Controller
         $query = clone $baseQuery;
 
         // 🔍 Búsqueda General por Texto (Nombre, Apellido, Matrícula, DNI, Email, Teléfono)
+        // Soporta búsqueda inteligente sin ceros a la izquierda (ej. 037 encuentra 37)
         if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $search = trim($request->search);
+            $cleanDigits = preg_replace('/[^0-9]/', '', $search);
+            $cleanNum = ltrim($cleanDigits, '0');
+            $query->where(function($q) use ($search, $cleanNum) {
                 $q->where('first_name', 'like', "%$search%")
                   ->orWhere('last_name', 'like', "%$search%")
                   ->orWhere('registration_number', 'like', "%$search%")
                   ->orWhere('dni', 'like', "%$search%")
                   ->orWhere('email', 'like', "%$search%")
                   ->orWhere('phone', 'like', "%$search%");
+                
+                // Si buscó números con ceros a la izquierda, buscar también por el número limpio
+                if (!empty($cleanNum)) {
+                    $q->orWhere('registration_number', $cleanNum)
+                      ->orWhere('registration_number', 'like', "%$cleanNum%");
+                }
             });
         }
 

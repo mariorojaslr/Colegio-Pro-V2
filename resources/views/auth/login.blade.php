@@ -232,15 +232,15 @@
             </button>
         </div>
 
-        <!-- FORMULARIO 1: ACCESO RÁPIDO CON LEGAJO/TELÉFONO Y PIN DE 4 DÍGITOS -->
+        <!-- FORMULARIO 1: ACCESO RÁPIDO CON MATRÍCULA/TELÉFONO Y PIN DE 4 DÍGITOS -->
         <div id="formSectionPin">
             <form method="POST" action="{{ route('login.pin') }}">
                 @csrf
                 <div class="mb-3">
-                    <label class="form-label text-muted-custom small fw-bold">N° de Legajo o Teléfono Celular</label>
+                    <label class="form-label text-muted-custom small fw-bold">N° de Matrícula o Teléfono Celular</label>
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary text-white"><i class="material-icons fs-5">badge</i></span>
-                        <input id="identifier" type="text" class="form-control @error('identifier') is-invalid @enderror" name="identifier" value="{{ old('identifier') }}" required autofocus placeholder="Ej. 220 o 3804123456">
+                        <input id="identifier" type="text" class="form-control @error('identifier') is-invalid @enderror" name="identifier" value="{{ old('identifier') }}" required autofocus placeholder="Ej. 37 o 3804123456">
                     </div>
                     @error('identifier')
                         <span class="text-danger small mt-1 d-block">
@@ -328,7 +328,7 @@
         <!-- ENLACES DE ACCIÓN Y PRIMER INGRESO -->
         <div class="mt-3">
             <a href="{{ route('activate.step1') }}" class="btn btn-demo py-2">
-                <i class="material-icons fs-5">how_to_reg</i> ¿Primer ingreso? Activa tu cuenta con tu Legajo
+                <i class="material-icons fs-5">how_to_reg</i> ¿Primer ingreso? Activá tu cuenta con tu matrícula
             </a>
             
             <a href="{{ route('demo.fast') }}" class="btn-demo py-2 mt-2">

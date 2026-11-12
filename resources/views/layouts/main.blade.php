@@ -569,7 +569,7 @@
                     <div class="modal-body p-4">
                         <div class="alert alert-success bg-success bg-opacity-10 border border-success border-opacity-25 rounded-3 p-3 mb-3 small text-dark">
                             <i class="bi bi-info-circle-fill text-success me-2"></i>
-                            El <strong>PIN de 4 dígitos</strong> te permite ingresar velozmente a la plataforma desde tu celular o computadora escribiendo solo tu <strong>N° de Legajo</strong> o <strong>Teléfono</strong> y este código numérico.
+                            El <strong>PIN de 4 dígitos</strong> te permite ingresar velozmente a la plataforma desde tu celular o computadora escribiendo solo tu <strong>N° de Matrícula</strong> o <strong>Teléfono</strong> y este código numérico.
                         </div>
                         <div class="mb-3 text-center">
                             <label class="form-label small fw-bold text-muted d-block text-start">Nuevo PIN (4 dígitos)</label>
