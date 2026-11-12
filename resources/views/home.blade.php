@@ -264,6 +264,28 @@
                 </div>
             </div>
 
+            {{-- RECORDATORIO DE CONFIGURAR PIN SI AÚN NO LO TIENE --}}
+            @if(auth()->check() && empty(auth()->user()->login_pin))
+            <div class="col-12 mt-1 mb-2 animate__animated animate__fadeInDown">
+                <div class="p-4 border-2 rounded-4 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-3" style="background: linear-gradient(135deg, #ecfdf5, #f0fdf4); border: 2px dashed #10b981;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 55px; height: 55px;">
+                            <i class="bi bi-shield-lock-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-1">¡Activa tu PIN de Acceso Rápido!</h5>
+                            <p class="mb-0 text-muted small fw-medium">Configura un código de 4 números para ingresar directamente desde tu celular con tu N° de Legajo, sin tener que escribir tu contraseña completa cada vez.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#changePinModal">
+                            <i class="bi bi-key-fill me-1"></i> Configurar PIN Ahora <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             {{-- BANNERS DE ONBOARDING / PERFILADO PROGRESIVO --}}
             @if(isset($onboardingTask) && $onboardingTask)
             <div class="col-12 mt-1 mb-2 animate__animated animate__fadeInDown">

@@ -310,8 +310,9 @@
                             {{ explode(' ', auth()->user()->name)[0] }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 animate__animated animate__fadeIn">
-                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('home') }}"><i class="bi bi-person me-2"></i> Perfil</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="bi bi-key me-2 text-warning"></i> Cambiar Contraseña <span class="text-success ms-1" title="Actualizado">*</span></a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('profile.index') }}"><i class="bi bi-person me-2 text-primary"></i> Mi Perfil</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold text-success" href="#" data-bs-toggle="modal" data-bs-target="#changePinModal"><i class="bi bi-shield-lock-fill me-2"></i> Configurar PIN (4 Dígitos)</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="bi bi-key me-2 text-warning"></i> Cambiar Contraseña</a></li>
                             @if(in_array(auth()->user()->role, ['ADMIN_COLEGIO', 'OWNER']))
                                 <li><a class="dropdown-item rounded-3 py-2 x-small fw-bold" href="{{ route('admin.chatbot.index') }}">
                                     <i class="bi bi-robot me-2 text-primary"></i> Asistente IA (Chatbot)
@@ -551,6 +552,42 @@
                     <button type="button" class="btn btn-warning rounded-pill px-5 fw-bold" data-bs-dismiss="modal">Entendido</button>
                 </div>
             </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Configurar PIN de 4 Dígitos (Acceso Rápido) -->
+    <div class="modal fade" id="changePinModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header border-bottom py-3 px-4 bg-light text-dark" style="border-radius: 1rem 1rem 0 0;">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-shield-lock-fill text-success me-2"></i>PIN de Acceso Rápido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('profile.pin') }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div class="alert alert-success bg-success bg-opacity-10 border border-success border-opacity-25 rounded-3 p-3 mb-3 small text-dark">
+                            <i class="bi bi-info-circle-fill text-success me-2"></i>
+                            El <strong>PIN de 4 dígitos</strong> te permite ingresar velozmente a la plataforma desde tu celular o computadora escribiendo solo tu <strong>N° de Legajo</strong> o <strong>Teléfono</strong> y este código numérico.
+                        </div>
+                        <div class="mb-3 text-center">
+                            <label class="form-label small fw-bold text-muted d-block text-start">Nuevo PIN (4 dígitos)</label>
+                            <input type="password" name="pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" class="form-control text-center fw-bold fs-3 @error('pin') is-invalid @enderror" placeholder="••••" required style="letter-spacing: 12px;">
+                            @error('pin') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="mb-3 text-center">
+                            <label class="form-label small fw-bold text-muted d-block text-start">Confirmar PIN (4 dígitos)</label>
+                            <input type="password" name="pin_confirmation" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" class="form-control text-center fw-bold fs-3" placeholder="••••" required style="letter-spacing: 12px;">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-3 px-4 bg-light">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                            <i class="bi bi-check-circle-fill me-1"></i> Guardar mi PIN
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
