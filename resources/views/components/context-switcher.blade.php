@@ -5,13 +5,16 @@
     $hasAdminAccess = $user->hasAnyAdminPermission();
     if (!$hasAdminAccess) return; // Si es un usuario normal sin permisos, no mostramos la barra
 
-    $activeContext = session('active_role_context', 'user');
+    $activeContext = session('active_role_context', 'admin_general');
 
-    $availableContexts = [
-        'user' => ['label' => 'Usuario', 'icon' => 'bi-person-badge', 'color' => 'success'],
-    ];
+    $availableContexts = [];
 
-    if ($user->role === 'OWNER' || $user->role === 'ADMIN_COLEGIO' || $user->role === 'ADMIN_INTERNO' || in_array('admin_general', $user->permissions ?? [])) {
+    // Solo mostramos el botón "Usuario" si la cuenta tiene un legajo de colegiado asociado
+    if ($user->collegiate) {
+        $availableContexts['user'] = ['label' => 'Usuario (Mi Legajo)', 'icon' => 'bi-person-badge', 'color' => 'success'];
+    }
+
+    if ($user->isOwner() || $user->role === 'ADMIN_COLEGIO' || $user->role === 'ADMIN_INTERNO' || in_array('admin_general', $user->permissions ?? [])) {
         $availableContexts['admin_general'] = ['label' => 'Administrador General', 'icon' => 'bi-diagram-3-fill', 'color' => 'primary'];
     }
 

@@ -21,7 +21,13 @@ class PaymentController extends Controller
         $collegiate = Collegiate::where('user_id', $user->id)->first();
 
         if (!$collegiate) {
-            return back()->with('error', 'No tiene un perfil de colegiado asociado.');
+            if ($user->isOwner() || strtoupper($user->role) === 'ADMIN_INTERNO') {
+                return redirect()->route('admin.dashboard');
+            }
+            if ($user->role === 'ADMIN_COLEGIO' || $user->hasAnyAdminPermission()) {
+                return redirect()->route('admin.billing.index')->with('info', 'Como cuenta institucional general no posees cuotas personales; te redirigimos a Facturación y Cobranzas del colegio.');
+            }
+            return redirect()->route('home')->with('error', 'No tiene un perfil de colegiado asociado.');
         }
 
         $pendingDues = $collegiate->pendingDues;

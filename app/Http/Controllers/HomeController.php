@@ -57,7 +57,7 @@ class HomeController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'OWNER' || $user->role === 'ADMIN_INTERNO') {
+        if ($user->isOwner() || strtoupper($user->role) === 'ADMIN_INTERNO') {
             return redirect()->route('admin.dashboard');
         }
 

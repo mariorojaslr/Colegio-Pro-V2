@@ -18,6 +18,12 @@ class CollegiateCertificateStoreController extends Controller
         $collegiate = $user->collegiate;
         
         if (!$collegiate) {
+            if ($user->isOwner() || strtoupper($user->role) === 'ADMIN_INTERNO') {
+                return redirect()->route('admin.dashboard');
+            }
+            if ($user->role === 'ADMIN_COLEGIO' || $user->hasAnyAdminPermission()) {
+                return redirect()->route('admin.certificate_types.index')->with('info', 'Como cuenta institucional general no posees legajo personal; te redirigimos a la Gestión de Trámites y Certificados del colegio.');
+            }
             return redirect()->route('home')->with('error', 'Debe estar registrado como colegiado para acceder a esta sección.');
         }
 

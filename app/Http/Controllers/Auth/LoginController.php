@@ -182,9 +182,21 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        if ($user->role === 'OWNER' || $user->role === 'ADMIN_COLEGIO' || $user->role === 'ADMIN_INTERNO' || $user->hasAnyAdminPermission()) {
+        // Si es OWNER o ADMIN_INTERNO, va directo al Panel Global sin pasar por una URL previa de colegiado
+        if ($user->isOwner() || strtoupper($user->role) === 'ADMIN_INTERNO') {
+            session()->forget('url.intended');
             session(['active_role_context' => 'admin_general']);
-            return redirect()->intended('/home');
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->role === 'ADMIN_COLEGIO' || $user->hasAnyAdminPermission()) {
+            session(['active_role_context' => 'admin_general']);
+            // Evitamos enviar a un administrador que no tenga ficha de colegiado hacia rutas exclusivas de colegiado
+            $intended = session()->pull('url.intended', '/home');
+            if (!$user->collegiate && (str_contains($intended, 'mi-legajo') || str_contains($intended, 'mis-pagos') || str_contains($intended, 'tramites'))) {
+                return redirect('/home');
+            }
+            return redirect($intended);
         }
 
         // Para usuarios normales, fijamos el modo usuario y los enviamos siempre al home

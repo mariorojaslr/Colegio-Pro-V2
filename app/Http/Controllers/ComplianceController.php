@@ -28,7 +28,17 @@ class ComplianceController extends Controller
         $school = $user->school;
         $collegiate = Collegiate::where('user_id', $user->id)->first();
 
-        if (!$collegiate) abort(404, 'No se encontró el perfil de colegiado.');
+        // Si entra un OWNER o un Administrador General sin ficha de colegiado (ej. admin@cotolar.com),
+        // lo redirigimos amigablemente a su panel correspondiente en lugar de mostrar error 404
+        if (!$collegiate) {
+            if ($user->isOwner() || strtoupper($user->role) === 'ADMIN_INTERNO') {
+                return redirect()->route('admin.dashboard')->with('info', 'Estás en modo Administrador Global (OWNER).');
+            }
+            if ($user->role === 'ADMIN_COLEGIO' || $user->hasAnyAdminPermission()) {
+                return redirect()->route('admin.compliance.index')->with('info', 'Como cuenta institucional general no posees legajo propio; te redirigimos a la Auditoría de Legajos del colegio.');
+            }
+            return redirect()->route('home')->with('error', 'No se encontró un perfil de matriculado asociado a tu cuenta.');
+        }
 
         // Obtener requisitos del colegio y documentos ya subidos por este usuario indexados por compliance_requirement_id
         $requirements = ComplianceRequirement::where('school_id', $school->id)->get();
