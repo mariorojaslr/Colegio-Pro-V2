@@ -92,7 +92,15 @@ class DashboardController extends Controller
     public function magicImpersonate(Request $request, $userId, $ownerId)
     {
         if (!$request->hasValidSignature()) {
-            abort(403, 'El enlace de acceso ha expirado o es inválido. Vuelva a intentarlo.');
+            // Si el tiempo del enlace expiró, cerramos la sesión actual y enviamos al login sin mostrar pantalla de error
+            if (auth()->check()) {
+                auth()->logout();
+            }
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')
+                ->with('info', 'El tiempo de la sesión ha expirado. Por favor, inicia sesión nuevamente.');
         }
 
         $user = User::findOrFail($userId);

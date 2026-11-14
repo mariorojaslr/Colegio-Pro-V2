@@ -22,7 +22,8 @@ Route::get('/fix-prueba-domain', function () {
 Route::get('change-language/{lang}', [LanguageController::class, 'switch'])->name('lang.switch');
 
 // === Rutas Públicas (Landing Pages y Autenticación) ===
-Route::get('/admin/magic-impersonate/{userId}/{ownerId}', [App\Http\Controllers\Admin\DashboardController::class, 'magicImpersonate'])->name('admin.magic_impersonate')->middleware('signed');
+// La validación de firma se realiza dentro del controlador para redirigir limpiamente al login si el tiempo expiró
+Route::get('/admin/magic-impersonate/{userId}/{ownerId}', [App\Http\Controllers\Admin\DashboardController::class, 'magicImpersonate'])->name('admin.magic_impersonate');
 
 // Ruta de Acceso Rápido a la Demo (Cero Fricción)
 Route::get('/demo-fast', function(\Illuminate\Http\Request $request) {
@@ -30,25 +31,37 @@ Route::get('/demo-fast', function(\Illuminate\Http\Request $request) {
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    // Create a demo school if not exists
-    $school = \App\Models\School::firstOrCreate(
+    // Respetamos la institución actual si estamos en un dominio de colegio (ej. cotolar.com), o usamos el colegio demo por defecto
+    $tenant = app()->bound('tenant') ? app('tenant') : null;
+    $school = $tenant ?: \App\Models\School::firstOrCreate(
         ['slug' => 'demo'],
         ['name' => 'Colegio de Terapistas Ocupacionales', 'status' => 'active']
     );
 
-    // Create a demo admin user
+    // Buscamos o creamos el usuario demo de esta institución
+    $cleanSlug = str_replace('-', '', $school->slug);
+    $demoEmail = $school->slug === 'demo' ? 'admin@demo.com' : 'demo_' . $cleanSlug . '@gentepiola.net';
+
     $user = \App\Models\User::firstOrCreate(
-        ['email' => 'admin@demo.com'],
+        ['email' => $demoEmail],
         [
-            'name' => 'Administrador Demo',
+            'name' => 'Administrador Demo (' . $school->name . ')',
             'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'ADMIN_COLEGIO',
-            'school_id' => $school->id
+            'school_id' => $school->id,
+            'is_active' => true,
         ]
     );
 
+    // Aseguramos que pertenezca al colegio actual y entre en modo Administrador General
+    if ($user->school_id !== $school->id) {
+        $user->school_id = $school->id;
+        $user->save();
+    }
+
     auth()->login($user);
-    return redirect()->route('collegiates.index')->with('status', '¡Bienvenido al modo demostración libre!');
+    session(['active_role_context' => 'admin_general']);
+    return redirect()->route('home')->with('status', '¡Bienvenido al modo demostración libre!');
 })->name('demo.fast');
 
 // Ruta de Emergencia para Acceso Administrativo (OWNER)
