@@ -137,6 +137,12 @@ class AccountActivationController extends Controller
             $pinHash = Hash::make($request->pin);
             $rawPassword = !empty($request->password) ? $request->password : $request->pin;
 
+            // Verificamos si este colegiado es miembro de la Comisión Directiva / Autoridad para preservar su rol ADMIN_COLEGIO
+            $isBoardMember = \App\Models\BoardMember::where('collegiate_id', $collegiate->id)
+                ->where('is_active', true)
+                ->exists();
+            $assignedRole = $isBoardMember ? 'ADMIN_COLEGIO' : 'COLEGIADO';
+
             if ($collegiate->user_id) {
                 // El colegiado ya tenía usuario creado; actualizamos su PIN y sus datos de acceso
                 $user = User::findOrFail($collegiate->user_id);
@@ -145,16 +151,20 @@ class AccountActivationController extends Controller
                 if (!empty($request->password)) {
                     $user->password = Hash::make($request->password);
                 }
+                // Si el colegiado es autoridad o ya tenía rol ADMIN_COLEGIO, lo mantenemos como administrador
+                if ($isBoardMember || $user->role === 'ADMIN_COLEGIO') {
+                    $user->role = 'ADMIN_COLEGIO';
+                }
                 $user->is_active = true;
                 $user->save();
             } else {
-                // Creamos el nuevo usuario para este colegiado
+                // Creamos el nuevo usuario para este colegiado (asignando ADMIN_COLEGIO si es autoridad de la institución)
                 $user = User::create([
                     'name' => $collegiate->first_name . ' ' . $collegiate->last_name,
                     'email' => $request->email,
                     'password' => Hash::make($rawPassword),
                     'login_pin' => $pinHash,
-                    'role' => 'COLEGIADO',
+                    'role' => $assignedRole,
                     'school_id' => $collegiate->school_id,
                     'is_active' => true,
                 ]);
