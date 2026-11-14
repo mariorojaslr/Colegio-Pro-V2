@@ -13,7 +13,8 @@
     </div>
     @endif
 
-    @if(Auth::user()->role === 'ADMIN_COLEGIO')
+    {{-- Si el usuario es ADMIN_COLEGIO y NO entró en modo 'user' (con PIN de 4 dígitos), ve el Panel de Administración; si entró con su Teléfono/Matrícula + PIN (modo 'user'), ve su propio estado de Colegiado --}}
+    @if(Auth::user()->role === 'ADMIN_COLEGIO' && session('active_role_context', 'admin_general') !== 'user')
         {{-- 1. Identidad Institucional (Minimalista / Soberana) --}}
         <div class="row g-4 mb-3">
             <div class="col-lg-12">

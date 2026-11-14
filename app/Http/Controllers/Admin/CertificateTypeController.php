@@ -147,17 +147,25 @@ class CertificateTypeController extends Controller
 
         $school = auth()->user()->school;
 
-        // Create a mock collegiate
-        $collegiate = new \App\Models\Collegiate([
-            'first_name' => 'Karina',
-            'last_name' => 'Arias',
-            'dni' => '12345678',
-            'registration_number' => 'MAT-0001',
-            'status' => 'active',
-            'is_ethics_compliant' => true
-        ]);
+        // Buscamos un colegiado real de la institución (preferentemente Karina Arias) para que el QR de la Vista Previa funcione al escanearlo
+        $realCollegiate = \App\Models\Collegiate::where('school_id', $school->id)
+            ->where('last_name', 'like', '%Arias%')
+            ->first() ?: \App\Models\Collegiate::where('school_id', $school->id)->first();
 
-        if ($certificate_type->background_path) {
+        if ($realCollegiate) {
+            $collegiate = $realCollegiate;
+        } else {
+            $collegiate = new \App\Models\Collegiate([
+                'first_name' => 'Karina Andrea',
+                'last_name' => 'Arias',
+                'dni' => '28.456.789',
+                'registration_number' => '99',
+                'status' => 'active',
+                'is_ethics_compliant' => true
+            ]);
+        }
+
+        if ($certificate_type->background_path && file_exists(public_path($certificate_type->background_path))) {
             $pdf = Pdf::loadView('admin.certificate_types.pdf.certificate_design', [
                 'certificate_type' => $certificate_type,
                 'school' => $school,
@@ -166,10 +174,10 @@ class CertificateTypeController extends Controller
             ]);
             $pdf->setPaper($certificate_type->page_size, $certificate_type->page_orientation);
         } else {
-            // Mock certificate para la plantilla clásica
-            $certificate = new \App\Models\Certificate();
-            $certificate->uuid = Str::uuid();
-            $certificate->code = 'DEMO-123456';
+            // Certificado simulado para la plantilla diplomática institucional
+            $certificate = new \App\Models\ProfessionalCertificate();
+            $certificate->uuid = $realCollegiate ? (string) $realCollegiate->id : (string) Str::uuid();
+            $certificate->code = 'CERT-ETICA-2026';
             $certificate->issued_at = now();
             $certificate->expires_at = $certificate_type->validity_days ? now()->addDays($certificate_type->validity_days) : null;
             $certificate->setRelation('type', $certificate_type);

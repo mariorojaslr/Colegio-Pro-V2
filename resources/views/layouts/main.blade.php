@@ -343,7 +343,8 @@
                         @php $currentRoute = request()->route()->getName(); @endphp
                         {{-- Solo mostramos el menú interno si NO estamos en la Landing Page pública --}}
                         @if(!request()->is('/'))
-                            @if(auth()->user()->role === 'ADMIN_COLEGIO')
+                            {{-- Si es ADMIN_COLEGIO pero ingresó con su Teléfono/Matrícula + PIN (active_role_context = 'user'), le mostramos el menú limpio de Colegiado para evitar confusiones --}}
+                            @if(auth()->user()->role === 'ADMIN_COLEGIO' && session('active_role_context', 'admin_general') !== 'user')
                                 <li class="nav-item"><a class="nav-link px-3 x-small fw-bold ls-1 text-uppercase {{ $currentRoute == 'home' ? 'text-primary' : 'text-muted' }}" href="{{ route('home') }}">{{ __('ui.dashboard') }}</a></li>
                                 
                                 <li class="nav-item dropdown">

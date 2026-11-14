@@ -115,9 +115,23 @@ class CollegiateCertificateStoreController extends Controller
 
         $school = $certificate->collegiate->school;
         $collegiate = $certificate->collegiate;
+        $certificate_type = $certificate->type;
 
-        $pdf = Pdf::loadView('pdf.certificate', compact('certificate', 'school', 'collegiate'));
-        $pdf->setPaper('A4', 'landscape');
+        // Si el certificado tiene una imagen de fondo personalizada y existe en disco, usa el diseñador visual;
+        // de lo contrario, utiliza la plantilla institucional diplomática completa con QR y firmas
+        if ($certificate_type && $certificate_type->background_path && file_exists(public_path($certificate_type->background_path))) {
+            $pdf = Pdf::loadView('admin.certificate_types.pdf.certificate_design', [
+                'certificate_type' => $certificate_type,
+                'school' => $school,
+                'collegiates' => collect([$collegiate]),
+                'is_bulk' => false,
+                'certificate' => $certificate,
+            ]);
+            $pdf->setPaper($certificate_type->page_size ?? 'a4', $certificate_type->page_orientation ?? 'landscape');
+        } else {
+            $pdf = Pdf::loadView('pdf.certificate', compact('certificate', 'school', 'collegiate'));
+            $pdf->setPaper('A4', 'landscape');
+        }
 
         return $pdf->download('Certificado_' . $certificate->code . '.pdf');
     }

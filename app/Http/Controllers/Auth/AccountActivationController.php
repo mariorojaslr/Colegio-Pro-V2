@@ -139,7 +139,6 @@ class AccountActivationController extends Controller
 
             // Verificamos si este colegiado es miembro de la Comisión Directiva / Autoridad para preservar su rol ADMIN_COLEGIO
             $isBoardMember = \App\Models\BoardMember::where('collegiate_id', $collegiate->id)
-                ->where('is_active', true)
                 ->exists();
             $assignedRole = $isBoardMember ? 'ADMIN_COLEGIO' : 'COLEGIADO';
 
@@ -181,8 +180,9 @@ class AccountActivationController extends Controller
             // Limpiamos la sesión de activación
             session()->forget('activation_collegiate_id');
 
-            // Autenticamos automáticamente al usuario
+            // Autenticamos automáticamente al usuario en modo Colegiado/Usuario tras activar su PIN de 4 dígitos
             Auth::login($user);
+            session(['active_role_context' => 'user']);
 
             return redirect()->route('home')->with('success', '¡Cuenta activada exitosamente con tu código PIN de 4 dígitos! A partir de ahora podrás ingresar siempre con tu N° de Matrícula o tu Teléfono y tu PIN.');
             

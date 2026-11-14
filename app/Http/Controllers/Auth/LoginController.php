@@ -125,7 +125,10 @@ class LoginController extends Controller
                     if ($pinValido) {
                         Auth::login($user, $request->boolean('remember'));
                         $request->session()->regenerate();
-                        return redirect()->intended('/home')->with('success', "¡Bienvenido/a {$user->name}!");
+                        // Cuando ingresan con Matrícula o Teléfono + PIN de 4 dígitos, entran siempre en modo Usuario/Colegiado
+                        // para consultar su propia situación personal sin confundirse con las opciones de administrador
+                        session(['active_role_context' => 'user']);
+                        return redirect('/home')->with('success', "¡Bienvenido/a {$user->name}!");
                     } else {
                         if (empty($user->login_pin)) {
                             // Tiene usuario pero nunca generó su PIN
@@ -156,7 +159,9 @@ class LoginController extends Controller
         if ($user && !empty($user->login_pin) && Hash::check($pin, $user->login_pin)) {
             Auth::login($user, $request->boolean('remember'));
             $request->session()->regenerate();
-            return redirect()->intended('/home')->with('success', "¡Bienvenido/a {$user->name}!");
+            // Al ingresar con PIN de 4 dígitos, fijamos el contexto en modo Usuario/Colegiado
+            session(['active_role_context' => 'user']);
+            return redirect('/home')->with('success', "¡Bienvenido/a {$user->name}!");
         }
 
         return back()->withInput()->with('error', "No encontramos ningún profesional registrado con la Matrícula o Teléfono '{$rawIdentifier}' en esta institución. Si es tu primera vez, haz clic en 'Activa tu cuenta'.");
@@ -172,16 +177,18 @@ class LoginController extends Controller
     }
 
     /**
-     * El usuario ha iniciado sesión por formulario tradicional.
+     * El usuario ha iniciado sesión por formulario tradicional (Correo y Contraseña).
+     * Si tiene permisos de administración, inicia automáticamente en modo Administrador General.
      */
     protected function authenticated(Request $request, $user)
     {
-        if ($user->role === 'OWNER' || $user->role === 'ADMIN_COLEGIO' || $user->role === 'ADMIN_INTERNO') {
+        if ($user->role === 'OWNER' || $user->role === 'ADMIN_COLEGIO' || $user->role === 'ADMIN_INTERNO' || $user->hasAnyAdminPermission()) {
+            session(['active_role_context' => 'admin_general']);
             return redirect()->intended('/home');
         }
 
-        // Para usuarios normales, NUNCA usar la URL intended si estaban intentando ver algo de admin.
-        // Los forzamos siempre al home.
+        // Para usuarios normales, fijamos el modo usuario y los enviamos siempre al home
+        session(['active_role_context' => 'user']);
         return redirect('/home');
     }
 }

@@ -2,191 +2,352 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Certificado</title>
+    <title>Certificado Oficial - {{ $certificate->type->name ?? 'Certificado de Ética Profesional' }}</title>
     <style>
+        /* Configuración de página A4 Horizontal (Landscape) sin márgenes exteriores para marco completo */
+        @page {
+            size: A4 landscape;
+            margin: 10mm;
+        }
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            color: #333;
+            color: #1e293b;
+            background-color: #ffffff;
         }
-        .container {
+        /* Marco diplomático institucional */
+        .outer-frame {
             width: 100%;
-            height: 100%;
-            padding: 40px;
+            height: 178mm;
+            border: 4px solid {{ $school->primary_color ?? '#0f172a' }};
+            padding: 6px;
             box-sizing: border-box;
             position: relative;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 20px;
-        }
-        .logo {
-            max-width: 120px;
-            max-height: 120px;
-            margin-bottom: 10px;
-        }
-        .school-name {
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .title {
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 40px;
-            color: #1a1a1a;
-        }
-        .content {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 60px;
-            text-align: justify;
-        }
-        .name {
-            font-size: 22px;
-            font-weight: bold;
-            text-transform: uppercase;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .footer {
-            margin-top: 50px;
-        }
-        .qr-code {
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
-            text-align: center;
-        }
-        .qr-code img {
-            width: 100px;
-            height: 100px;
-        }
-        .qr-code p {
-            font-size: 10px;
-            margin-top: 5px;
-            color: #666;
-        }
-        .signatures {
-            margin-top: 100px;
+        .inner-frame {
             width: 100%;
-            display: table;
+            height: 100%;
+            border: 1.5px solid #cbd5e1;
+            padding: 22px 36px;
+            box-sizing: border-box;
+            position: relative;
         }
-        .signature-box {
-            display: table-cell;
-            width: 50%;
-            text-align: center;
-        }
-        .signature-line {
-            width: 80%;
-            border-bottom: 1px solid #000;
-            margin: 0 auto 5px auto;
-        }
-        .signature-name {
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .signature-role {
-            font-size: 12px;
-            color: #666;
-        }
+        /* Marca de agua central sutil */
         .watermark {
             position: absolute;
-            top: 50%;
+            top: 48%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0.05;
+            opacity: 0.04;
             z-index: -1;
-            max-width: 500px;
+            max-width: 340px;
+            max-height: 340px;
+        }
+        /* Cabecera institucional */
+        .header-table {
+            width: 100%;
+            border-bottom: 2px solid {{ $school->primary_color ?? '#0f172a' }};
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+        .logo {
+            max-width: 82px;
+            max-height: 82px;
+        }
+        .school-name {
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: {{ $school->primary_color ?? '#0f172a' }};
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .school-sub {
+            font-size: 11px;
+            color: #64748b;
+        }
+        .cert-badge {
+            display: inline-block;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #334155;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        /* Título del Certificado */
+        .title-box {
+            text-align: center;
+            margin: 14px 0 18px 0;
+        }
+        .title {
+            font-size: 26px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0f172a;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+        .subtitle-line {
+            width: 120px;
+            height: 3px;
+            background-color: {{ $school->primary_color ?? '#1e3a8a' }};
+            margin: 6px auto 0 auto;
+        }
+        /* Cuerpo legal del certificado */
+        .content {
+            font-size: 14.5px;
+            line-height: 1.65;
+            text-align: justify;
+            color: #1e293b;
+            margin: 0 10px 16px 10px;
+        }
+        .professional-card {
+            background-color: #f8fafc;
+            border-left: 4px solid {{ $school->primary_color ?? '#1e3a8a' }};
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 20px;
+            margin: 14px 0;
+            text-align: center;
+        }
+        .name {
+            font-size: 21px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0f172a;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .credentials-row {
+            font-size: 13.5px;
+            color: #334155;
+        }
+        .credentials-badge {
+            display: inline-block;
+            margin: 0 12px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+        /* Pie con Firmas y QR en tabla de 3 columnas */
+        .footer-table {
+            width: 100%;
+            margin-top: 22px;
+            border-collapse: collapse;
+        }
+        .signature-cell {
+            width: 35%;
+            text-align: center;
+            vertical-align: bottom;
+            padding: 0 10px;
+        }
+        .qr-cell {
+            width: 30%;
+            text-align: center;
+            vertical-align: bottom;
+        }
+        .signature-line {
+            width: 82%;
+            border-bottom: 1.5px solid #0f172a;
+            margin: 0 auto 6px auto;
+        }
+        .signature-name {
+            font-size: 13px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+        .signature-role {
+            font-size: 11px;
+            color: #64748b;
+        }
+        .qr-box {
+            display: inline-block;
+            border: 1px solid #cbd5e1;
+            padding: 6px;
+            background: #ffffff;
+            border-radius: 6px;
+        }
+        .qr-box img {
+            width: 88px;
+            height: 88px;
+            display: block;
+            margin: 0 auto;
+        }
+        .qr-caption {
+            font-size: 9.5px;
+            color: #475569;
+            margin-top: 4px;
+            line-height: 1.25;
+        }
+        .validity-bar {
+            margin-top: 10px;
+            padding-top: 6px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 10.5px;
+            color: #64748b;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        @if($school->logo)
-            <img src="{{ public_path($school->logo) }}" class="watermark" alt="Marca de agua">
-        @endif
-        
-        <div class="header">
-            @if($school->logo)
-                <img src="{{ public_path($school->logo) }}" class="logo" alt="Logo">
+    @php
+        // Preparamos el logo en base64 para que DomPDF lo renderice siempre sin fallos de ruta
+        $logoBase64 = null;
+        if (!empty($school->logo) && file_exists(public_path($school->logo))) {
+            $logoPath = public_path($school->logo);
+            $logoExt = pathinfo($logoPath, PATHINFO_EXTENSION);
+            $logoBase64 = 'data:image/' . $logoExt . ';base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
+        // Obtenemos autoridades firmantes (Presidente y Secretaría) si existen en el padrón de autoridades
+        $presidente = \App\Models\BoardMember::where('school_id', $school->id)
+            ->where('department', 'Comisión Directiva')
+            ->where('role', 'like', '%Presidente%')
+            ->where('role', 'not like', '%Vice%')
+            ->first();
+
+        $secretaria = \App\Models\BoardMember::where('school_id', $school->id)
+            ->where('department', 'Comisión Directiva')
+            ->where('role', 'like', '%Secretari%')
+            ->first();
+
+        $presidenteEtica = \App\Models\BoardMember::where('school_id', $school->id)
+            ->where('department', 'like', '%Ética%')
+            ->where('role', 'like', '%Presidente%')
+            ->first();
+
+        $isEthicsCert = str_contains(mb_strtolower($certificate->type->name ?? ''), 'ética') || str_contains(mb_strtolower($certificate->type->name ?? ''), 'etica');
+        $fechaEmisionTexto = \Carbon\Carbon::parse($certificate->issued_at ?? now())->locale('es')->translatedFormat('d \d\e F \d\e Y');
+        $validoHastaTexto = $certificate->expires_at ? \Carbon\Carbon::parse($certificate->expires_at)->format('d/m/Y') : 'Ilimitada';
+    @endphp
+
+    <div class="outer-frame">
+        <div class="inner-frame">
+            @if($logoBase64)
+                <img src="{{ $logoBase64 }}" class="watermark" alt="Marca de agua">
             @endif
-            <div class="school-name">{{ $school->name }}</div>
-            <div style="font-size: 12px; color: #666;">C.U.I.T.: {{ $school->cuit ?? 'No registrado' }} | {{ $school->address }}</div>
-        </div>
 
-        <div class="title">
-            {{ strtoupper($certificate->type->name) }}
-        </div>
+            {{-- Cabecera con Logo, Nombre del Colegio y Código de Verificación --}}
+            <table class="header-table">
+                <tr>
+                    <td style="width: 15%; text-align: left; vertical-align: middle;">
+                        @if($logoBase64)
+                            <img src="{{ $logoBase64 }}" class="logo" alt="Logo Institucional">
+                        @endif
+                    </td>
+                    <td style="width: 60%; text-align: left; vertical-align: middle; padding-left: 10px;">
+                        <div class="school-name">{{ $school->name }}</div>
+                        <div class="school-sub">
+                            Personería Jurídica y Jurisdicción Oficial — Provincia de La Rioja, República Argentina
+                            @if($school->cuit) | C.U.I.T.: {{ $school->cuit }} @endif
+                            @if($school->address) | {{ $school->address }} @endif
+                        </div>
+                    </td>
+                    <td style="width: 25%; text-align: right; vertical-align: middle;">
+                        <div class="cert-badge">
+                            DOCUMENTO OFICIAL<br>
+                            <span style="color: #0f172a;">CÓD: {{ $certificate->code ?? 'OFICIAL' }}</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-        <div class="content">
-            @if($certificate->type->template_content)
-                @php
-                    $content = $certificate->type->template_content;
-                    $content = str_replace('@{{nombre}}', $collegiate->first_name . ' ' . $collegiate->last_name, $content);
-                    $content = str_replace('@{{dni}}', $collegiate->dni ?? 'No registrado', $content);
-                    $content = str_replace('@{{matricula}}', $collegiate->registration_number ?? 'EN TRÁMITE', $content);
-                    $content = str_replace('@{{fecha_emision}}', \Carbon\Carbon::parse($certificate->issued_at)->translatedFormat('d \d\e F \d\e Y'), $content);
-                    $content = str_replace('@{{valido_hasta}}', $certificate->expires_at ? \Carbon\Carbon::parse($certificate->expires_at)->format('d/m/Y') : 'Ilimitada', $content);
-                @endphp
-                {!! $content !!}
-            @else
-                Por la presente, el Consejo Directivo del <strong>{{ $school->name }}</strong> certifica y hace constar que el/la profesional:
-                
-                <div class="name">{{ $collegiate->first_name }} {{ $collegiate->last_name }}</div>
-                
-                @if($collegiate->dni)
-                    con documento de identidad Nº <strong>{{ $collegiate->dni }}</strong>, 
+            {{-- Título Principal --}}
+            <div class="title-box">
+                <h1 class="title">
+                    {{ $isEthicsCert ? 'CERTIFICADO DE ÉTICA PROFESIONAL' : strtoupper($certificate->type->name ?? 'CERTIFICADO OFICIAL') }}
+                </h1>
+                <div class="subtitle-line"></div>
+            </div>
+
+            {{-- Cuerpo Legal --}}
+            <div class="content">
+                @if(!empty($certificate->type->template_content))
+                    @php
+                        $content = $certificate->type->template_content;
+                        $fullName = trim($collegiate->first_name . ' ' . $collegiate->last_name);
+                        $dniFormatted = $collegiate->dni ?: 'Sin especificar';
+                        $matFormatted = $collegiate->registration_number ?: 'En trámite';
+
+                        // Soporta tanto @{{variable}} como {{variable}}
+                        $replacements = [
+                            '@{{nombre}}' => $fullName,
+                            '{{nombre}}' => $fullName,
+                            '@{{dni}}' => $dniFormatted,
+                            '{{dni}}' => $dniFormatted,
+                            '@{{matricula}}' => $matFormatted,
+                            '{{matricula}}' => $matFormatted,
+                            '@{{fecha_emision}}' => $fechaEmisionTexto,
+                            '{{fecha_emision}}' => $fechaEmisionTexto,
+                            '@{{valido_hasta}}' => $validoHastaTexto,
+                            '{{valido_hasta}}' => $validoHastaTexto,
+                        ];
+                        $content = strtr($content, $replacements);
+                    @endphp
+                    {!! $content !!}
+                @else
+                    Por la presente, la Comisión Directiva y el Tribunal de Ética y Disciplina del <strong>{{ $school->name }}</strong> certifican y hacen constar que el/la profesional:
+
+                    <div class="professional-card">
+                        <div class="name">{{ $collegiate->first_name }} {{ $collegiate->last_name }}</div>
+                        <div class="credentials-row">
+                            <span class="credentials-badge">D.N.I. N°: {{ $collegiate->dni ?: 'Registrado en Legajo' }}</span>
+                            |
+                            <span class="credentials-badge">MATRÍCULA PROFESIONAL N°: {{ $collegiate->registration_number }}</span>
+                        </div>
+                    </div>
+
+                    se encuentra debidamente inscripto/a y con matrícula <strong>ACTIVA Y HABILITADA</strong> para el ejercicio profesional de la Terapia Ocupacional en todo el ámbito de la Provincia de La Rioja.
+                    <br><br>
+                    Asimismo, se deja expresa constancia de que a la fecha de expedición del presente documento, el/la profesional mencionado/a <strong>NO REGISTRA SANCIONES ÉTICAS NI DISCIPLINARIAS</strong> firmes ni causas inhabilitantes en trámite ante el Tribunal de Ética y Disciplina de esta Institución, encontrándose en pleno goce de sus derechos colegiales y con sus obligaciones arancelarias regulares.
+                    <br><br>
+                    A solicitud del/de la interesado/a y para ser presentado ante las autoridades, obras sociales, instituciones de salud o entidades que así lo requieran, se expide, sella y firma digitalmente el presente certificado en la Ciudad de La Rioja, a los <strong>{{ $fechaEmisionTexto }}</strong>.
                 @endif
-                se encuentra debidamente registrado/a en esta Institución bajo la matrícula profesional número <strong>{{ $collegiate->registration_number ?? 'EN TRÁMITE' }}</strong>.
+            </div>
 
-                <p style="margin-top: 20px;">
-                    @if($certificate->type->requires_no_sanctions && $collegiate->is_ethics_compliant)
-                        Asimismo, se certifica que a la fecha de expedición, el/la mencionado/a profesional <strong>no registra sanciones éticas ni disciplinarias</strong> vigentes que inhabiliten el ejercicio de su profesión.
-                    @endif
-                </p>
-                
-                <p style="margin-top: 20px;">
-                    @if($certificate->type->requires_clearance && $collegiate->is_fees_compliant)
-                        De igual manera, se deja constancia de que se encuentra <strong>al día con el cumplimiento de sus obligaciones arancelarias</strong> e institucionales.
-                    @endif
-                </p>
+            {{-- Pie de firmas y Código QR de Validación en Tiempo Real --}}
+            <table class="footer-table">
+                <tr>
+                    <td class="signature-cell">
+                        <div style="height: 40px;"></div>
+                        <div class="signature-line"></div>
+                        <div class="signature-name">{{ $isEthicsCert && $presidenteEtica ? $presidenteEtica->name : ($secretaria ? $secretaria->name : 'Secretaría General') }}</div>
+                        <div class="signature-role">{{ $isEthicsCert && $presidenteEtica ? 'Presidente Tribunal de Ética' : 'Secretaría - Comisión Directiva' }}<br>{{ $school->name }}</div>
+                    </td>
 
-                <p style="margin-top: 30px;">
-                    Se expide el presente certificado a solicitud del interesado/a en la ciudad de La Rioja, a los {{ \Carbon\Carbon::parse($certificate->issued_at)->translatedFormat('d \d\i\a\s d\e F \d\e Y') }}.
-                </p>
-                
+                    <td class="qr-cell">
+                        @if($certificate->type->has_qr ?? true)
+                            <div class="qr-box">
+                                <img src="data:image/png;base64,{{ base64_encode(QrCode::format('png')->size(180)->margin(1)->generate(route('validation.show', $certificate->uuid))) }}" alt="QR de Validación Oficial">
+                            </div>
+                            <div class="qr-caption">
+                                <strong>VALIDACIÓN QR EN TIEMPO REAL</strong><br>
+                                Escanee con su celular para verificar autenticidad<br>
+                                Código Único: <strong>{{ $certificate->code }}</strong>
+                            </div>
+                        @endif
+                    </td>
+
+                    <td class="signature-cell">
+                        <div style="height: 40px;"></div>
+                        <div class="signature-line"></div>
+                        <div class="signature-name">{{ $presidente ? $presidente->name : 'Presidencia' }}</div>
+                        <div class="signature-role">Presidente - Comisión Directiva<br>{{ $school->name }}</div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="validity-bar">
+                Documento electrónico oficial emitido por <strong>{{ $school->name }}</strong> con firma y sello digital verificable mediante código QR.
                 @if($certificate->expires_at)
-                <p style="font-size: 12px; font-weight: bold; margin-top: 20px;">
-                    Válido hasta: {{ \Carbon\Carbon::parse($certificate->expires_at)->format('d/m/Y') }}
-                </p>
+                    | <strong>Validez oficial hasta el: {{ $validoHastaTexto }}</strong> (30 días desde su emisión).
                 @endif
-            @endif
-        </div>
-
-        <div class="signatures">
-            <div class="signature-box">
-                <div class="signature-line"></div>
-                <div class="signature-name">Secretario/a General</div>
-                <div class="signature-role">{{ $school->name }}</div>
-            </div>
-            <div class="signature-box">
-                <div class="signature-line"></div>
-                <div class="signature-name">Presidente/a</div>
-                <div class="signature-role">{{ $school->name }}</div>
             </div>
         </div>
-
-        @if($certificate->type->has_qr ?? true)
-        <div class="qr-code">
-            <img src="data:image/png;base64,{{ base64_encode(QrCode::format('png')->size(200)->generate(route('validation.show', $certificate->uuid))) }}" alt="QR Code">
-            <p>Escanear para validar<br><strong>CÓDIGO: {{ $certificate->code }}</strong></p>
-        </div>
-        @endif
     </div>
 </body>
 </html>

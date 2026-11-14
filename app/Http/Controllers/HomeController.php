@@ -29,7 +29,7 @@ class HomeController extends Controller
             session(['active_role_context' => $context]);
             
             if ($context === 'admin_general') {
-                return redirect()->route('collegiates.index'); // O la ruta principal para admin colegio
+                return redirect()->route('home');
             } elseif ($context === 'manage_users') {
                 return redirect()->route('collegiates.index');
             } elseif ($context === 'manage_finances') {

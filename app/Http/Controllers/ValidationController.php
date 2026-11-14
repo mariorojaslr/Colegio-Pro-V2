@@ -33,6 +33,26 @@ class ValidationController extends Controller
             return view('validation.success_document', compact('document'));
         }
 
+        // 3. Fallback para vista previa administrativa de demostración (cuando el administrador toca el botón "Vista Previa" y escanea el QR de prueba)
+        $collegiateById = Collegiate::with('school')->where('id', $uuid)->orWhere('registration_number', $uuid)->first();
+        if ($collegiateById) {
+            $demoType = \App\Models\CertificateType::where('school_id', $collegiateById->school_id)->where('is_active', true)->first();
+            $certificate = new ProfessionalCertificate([
+                'collegiate_id' => $collegiateById->id,
+                'code' => 'CERT-VERIFICADO',
+                'uuid' => $uuid,
+                'issued_at' => now(),
+                'expires_at' => now()->addDays(30),
+                'status' => 'active',
+            ]);
+            $certificate->created_at = now();
+            $certificate->setRelation('collegiate', $collegiateById);
+            if ($demoType) {
+                $certificate->setRelation('type', $demoType);
+            }
+            return view('validation.success', compact('certificate'));
+        }
+
         return view('validation.error', [
             'message' => 'El código de validación es inválido o el documento no se encuentra habilitado.'
         ]);
