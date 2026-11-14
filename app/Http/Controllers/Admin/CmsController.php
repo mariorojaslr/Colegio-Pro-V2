@@ -180,15 +180,29 @@ class CmsController extends Controller
             'collegiate_id' => 'required|exists:collegiates,id',
             'department' => 'required|string',
             'role' => 'required|string',
+            'signature_image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         $collegiate = \App\Models\Collegiate::where('id', $request->collegiate_id)->where('school_id', auth()->user()->school_id)->firstOrFail();
 
+        $signaturePath = null;
+        if ($request->hasFile('signature_image')) {
+            $file = $request->file('signature_image');
+            $filename = 'sig_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            if (!file_exists(public_path('signatures'))) {
+                @mkdir(public_path('signatures'), 0755, true);
+            }
+            $file->move(public_path('signatures'), $filename);
+            $signaturePath = 'signatures/' . $filename;
+        }
+
         BoardMember::create([
             'school_id' => auth()->user()->school_id,
             'collegiate_id' => $collegiate->id,
+            'name' => $collegiate->first_name . ' ' . $collegiate->last_name,
             'role' => $request->role,
             'department' => $request->department,
+            'signature_path' => $signaturePath,
             'is_substitute' => $request->has('is_substitute'),
             'order' => $request->order ?? 0
         ]);
@@ -214,14 +228,27 @@ class CmsController extends Controller
             'collegiate_id' => 'required|exists:collegiates,id',
             'department' => 'required|string',
             'role' => 'required|string',
+            'signature_image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         $collegiate = \App\Models\Collegiate::where('id', $request->collegiate_id)->where('school_id', auth()->user()->school_id)->firstOrFail();
+
+        $signaturePath = $boardMember->signature_path;
+        if ($request->hasFile('signature_image')) {
+            $file = $request->file('signature_image');
+            $filename = 'sig_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            if (!file_exists(public_path('signatures'))) {
+                @mkdir(public_path('signatures'), 0755, true);
+            }
+            $file->move(public_path('signatures'), $filename);
+            $signaturePath = 'signatures/' . $filename;
+        }
 
         $boardMember->update([
             'collegiate_id' => $collegiate->id,
             'role' => $request->role,
             'department' => $request->department,
+            'signature_path' => $signaturePath,
             'is_substitute' => $request->has('is_substitute'),
             'order' => $request->order ?? 0
         ]);

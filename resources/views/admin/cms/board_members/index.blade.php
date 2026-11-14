@@ -25,6 +25,7 @@
                             <th class="ps-4 py-3">Nombre</th>
                             <th class="py-3">Cargo (Rol)</th>
                             <th class="py-3">Departamento/Sección</th>
+                            <th class="py-3">Firma Digital</th>
                             <th class="py-3">Tipo</th>
                             <th class="text-end pe-4 py-3">Acciones</th>
                         </tr>
@@ -40,6 +41,13 @@
                             </td>
                             <td>{{ $m->role }}</td>
                             <td>{{ $m->department }}</td>
+                            <td>
+                                @if(!empty($m->signature_path) && file_exists(public_path($m->signature_path)))
+                                    <img src="{{ asset($m->signature_path) }}" alt="Firma" style="max-height: 36px; max-width: 110px; object-fit: contain;" class="border rounded bg-white p-1">
+                                @else
+                                    <span class="badge bg-light text-muted border">Sin firma escaneada</span>
+                                @endif
+                            </td>
                             <td>
                                 @if($m->is_substitute)
                                     <span class="badge bg-secondary">Suplente</span>
@@ -122,6 +130,17 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small fw-bold"><i class="bi bi-pen me-1"></i> Firma Escaneada (PNG/JPG transparente o fondo blanco)</label>
+                                                @if(!empty($m->signature_path) && file_exists(public_path($m->signature_path)))
+                                                    <div class="mb-2 p-2 bg-light rounded text-center">
+                                                        <img src="{{ asset($m->signature_path) }}" alt="Firma actual" style="max-height: 45px; object-fit: contain;">
+                                                        <div class="x-small text-success fw-bold mt-1">Firma cargada actualmente</div>
+                                                    </div>
+                                                @endif
+                                                <input type="file" name="signature_image" class="form-control rounded-pill" accept="image/png,image/jpeg,image/jpg">
+                                                <small class="text-muted" style="font-size: 11px;">Se imprimirá automáticamente arriba de su nombre en los certificados oficiales.</small>
+                                            </div>
                                             <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-bold">Actualizar</button>
                                         </form>
                                     </div>
@@ -199,6 +218,10 @@
                                 <label class="form-check-label text-muted small" for="isSub">Es suplente</label>
                             </div>
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold"><i class="bi bi-pen me-1"></i> Firma Escaneada (Opcional - PNG/JPG)</label>
+                        <input type="file" name="signature_image" class="form-control rounded-pill" accept="image/png,image/jpeg,image/jpg">
                     </div>
                     <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-bold">Guardar</button>
                 </form>

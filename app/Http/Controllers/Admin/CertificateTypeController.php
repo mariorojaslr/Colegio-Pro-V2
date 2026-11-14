@@ -183,7 +183,7 @@ class CertificateTypeController extends Controller
             $certificate->setRelation('type', $certificate_type);
 
             $pdf = Pdf::loadView('pdf.certificate', compact('certificate', 'school', 'collegiate'));
-            $pdf->setPaper('A4', 'landscape');
+            $pdf->setPaper('A4', 'portrait');
         }
 
         return $pdf->stream('Vista_Previa_Certificado.pdf');

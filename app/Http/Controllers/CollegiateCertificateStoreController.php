@@ -136,7 +136,7 @@ class CollegiateCertificateStoreController extends Controller
             $pdf->setPaper($certificate_type->page_size ?? 'a4', $certificate_type->page_orientation ?? 'landscape');
         } else {
             $pdf = Pdf::loadView('pdf.certificate', compact('certificate', 'school', 'collegiate'));
-            $pdf->setPaper('A4', 'landscape');
+            $pdf->setPaper('A4', 'portrait');
         }
 
         return $pdf->download('Certificado_' . $certificate->code . '.pdf');

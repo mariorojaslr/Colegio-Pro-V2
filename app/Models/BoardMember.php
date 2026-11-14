@@ -16,6 +16,7 @@ class BoardMember extends Model
         'role',
         'name',
         'image_path',
+        'signature_path',
         'is_substitute',
         'order'
     ];
